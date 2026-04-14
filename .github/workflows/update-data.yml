@@ -3,7 +3,6 @@ name: Update Cotton Data
 on:
   schedule:
     - cron: '0 20 * 4-11 1'  # Mondays 4PM ET
-    - cron: '0 20 * 4-11 2'  # Tuesday retry
   workflow_dispatch:
 
 jobs:
@@ -13,156 +12,27 @@ jobs:
       contents: write
     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
-      - name: Install dependencies
-        run: pip install requests pandas
+      - run: pip install requests pandas
       
-      - name: Download existing CSV
+      - name: Download existing CSV from release
         run: |
-          mkdir -p data
-          curl -L -o data/cotton_historical.csv \
-            "https://github.com/${{ github.repository }}/releases/download/data/cotton_historical.csv"
-          ls -lh data/cotton_historical.csv
+          curl -L -o cotton_historical.csv \
+            "https://github.com/${{ github.repository }}/releases/download/data/cotton_historical.csv" || echo "No existing file"
       
       - name: Fetch new data and append
         env:
           USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
-        run: |
-          python << 'EOF'
-          import os, requests, pandas as pd
-          from io import StringIO
-          import time
-          from datetime import datetime
-
-          API_KEY = os.environ['USDA_API_KEY']
-          BASE_URL = "https://quickstats.nass.usda.gov/api/api_GET"
-          CSV_PATH = 'data/cotton_historical.csv'
-
-          # Load existing data
-          existing = pd.read_csv(CSV_PATH)
-          print(f"Loaded existing: {len(existing)} records")
-          
-          # Get latest year in CSV
-          max_year = int(existing['year'].max()) if 'year' in existing.columns else 2000
-          current_year = datetime.now().year
-          
-          # Only fetch current year (respect 50k limit)
-          if current_year < max_year:
-              print(f"No new year to fetch (current: {current_year}, max in CSV: {max_year})")
-              exit(0)
-
-          print(f"Fetching year {current_year}...")
-
-          DATA_ITEMS = {
-              "condition_current_excellent": "COTTON, UPLAND - CONDITION, MEASURED IN PCT EXCELLENT",
-              "condition_current_fair": "COTTON, UPLAND - CONDITION, MEASURED IN PCT FAIR",
-              "condition_current_good": "COTTON, UPLAND - CONDITION, MEASURED IN PCT GOOD",
-              "condition_current_poor": "COTTON, UPLAND - CONDITION, MEASURED IN PCT POOR",
-              "condition_current_very_poor": "COTTON, UPLAND - CONDITION, MEASURED IN PCT VERY POOR",
-              "condition_5yr_excellent": "COTTON, UPLAND - CONDITION, 5 YEAR AVG, MEASURED IN PCT EXCELLENT",
-              "condition_5yr_fair": "COTTON, UPLAND - CONDITION, 5 YEAR AVG, MEASURED IN PCT FAIR",
-              "condition_5yr_good": "COTTON, UPLAND - CONDITION, 5 YEAR AVG, MEASURED IN PCT GOOD",
-              "condition_5yr_poor": "COTTON, UPLAND - CONDITION, 5 YEAR AVG, MEASURED IN PCT POOR",
-              "condition_5yr_very_poor": "COTTON, UPLAND - CONDITION, 5 YEAR AVG, MEASURED IN PCT VERY POOR",
-              "condition_prev_excellent": "COTTON, UPLAND - CONDITION, PREVIOUS YEAR, MEASURED IN PCT EXCELLENT",
-              "condition_prev_fair": "COTTON, UPLAND - CONDITION, PREVIOUS YEAR, MEASURED IN PCT FAIR",
-              "condition_prev_good": "COTTON, UPLAND - CONDITION, PREVIOUS YEAR, MEASURED IN PCT GOOD",
-              "condition_prev_poor": "COTTON, UPLAND - CONDITION, PREVIOUS YEAR, MEASURED IN PCT POOR",
-              "condition_prev_very_poor": "COTTON, UPLAND - CONDITION, PREVIOUS YEAR, MEASURED IN PCT VERY POOR",
-              "progress_current_bolls_opening": "COTTON, UPLAND - PROGRESS, MEASURED IN PCT BOLLS OPENING",
-              "progress_current_harvested": "COTTON, UPLAND - PROGRESS, MEASURED IN PCT HARVESTED",
-              "progress_current_planted": "COTTON, UPLAND - PROGRESS, MEASURED IN PCT PLANTED",
-              "progress_current_setting_bolls": "COTTON, UPLAND - PROGRESS, MEASURED IN PCT SETTING BOLLS",
-              "progress_current_squaring": "COTTON, UPLAND - PROGRESS, MEASURED IN PCT SQUARING",
-              "progress_current_emerged": "COTTON, UPLAND - PROGRESS, MEASURED IN PCT EMERGED",
-              "progress_5yr_bolls_opening": "COTTON, UPLAND - PROGRESS, 5 YEAR AVG, MEASURED IN PCT BOLLS OPENING",
-              "progress_5yr_harvested": "COTTON, UPLAND - PROGRESS, 5 YEAR AVG, MEASURED IN PCT HARVESTED",
-              "progress_5yr_planted": "COTTON, UPLAND - PROGRESS, 5 YEAR AVG, MEASURED IN PCT PLANTED",
-              "progress_5yr_setting_bolls": "COTTON, UPLAND - PROGRESS, 5 YEAR AVG, MEASURED IN PCT SETTING BOLLS",
-              "progress_5yr_squaring": "COTTON, UPLAND - PROGRESS, 5 YEAR AVG, MEASURED IN PCT SQUARING",
-              "progress_5yr_emerged": "COTTON, UPLAND - PROGRESS, 5 YEAR AVG, MEASURED IN PCT EMERGED",
-              "progress_prev_bolls_opening": "COTTON, UPLAND - PROGRESS, PREVIOUS YEAR, MEASURED IN PCT BOLLS OPENING",
-              "progress_prev_harvested": "COTTON, UPLAND - PROGRESS, PREVIOUS YEAR, MEASURED IN PCT HARVESTED",
-              "progress_prev_planted": "COTTON, UPLAND - PROGRESS, PREVIOUS YEAR, MEASURED IN PCT PLANTED",
-              "progress_prev_setting_bolls": "COTTON, UPLAND - PROGRESS, PREVIOUS YEAR, MEASURED IN PCT SETTING BOLLS",
-              "progress_prev_squaring": "COTTON, UPLAND - PROGRESS, PREVIOUS YEAR, MEASURED IN PCT SQUARING",
-              "progress_prev_emerged": "COTTON, UPLAND - PROGRESS, PREVIOUS YEAR, MEASURED IN PCT EMERGED",
-          }
-
-          def fetch_item(year, item_key, item_desc):
-              all_dfs = []
-              for level in ['NATIONAL', 'STATE']:
-                  params = {
-                      "key": API_KEY,
-                      "program_desc": "SURVEY",
-                      "sector_desc": "CROPS",
-                      "group_desc": "FIELD CROPS",
-                      "commodity_desc": "COTTON",
-                      "domain_desc": "TOTAL",
-                      "year": year,
-                      "period_type": "WEEKLY",
-                      "short_desc": item_desc,
-                      "agg_level_desc": level,
-                      "format": "CSV"
-                  }
-                  try:
-                      resp = requests.get(BASE_URL, params=params, timeout=60)
-                      if resp.status_code == 200:
-                          df = pd.read_csv(StringIO(resp.text))
-                          if len(df) > 0:
-                              df['data_item_key'] = item_key
-                              df['level'] = level
-                              all_dfs.append(df)
-                  except:
-                      pass
-                  time.sleep(0.2)
-              return pd.concat(all_dfs) if all_dfs else None
-
-          # Fetch only current year
-          all_new = []
-          for key, desc in DATA_ITEMS.items():
-              df = fetch_item(current_year, key, desc)
-              if df is not None:
-                  all_new.append(df)
-
-          if not all_new:
-              print("No new data")
-              exit(0)
-
-          new_df = pd.concat(all_new, ignore_index=True)
-          print(f"Fetched {len(new_df)} new records")
-
-          # Merge and deduplicate
-          combined = pd.concat([existing, new_df], ignore_index=True)
-          dup_cols = ['year', 'week_ending', 'state_name', 'short_desc', 'data_item_key']
-          dup_cols = [c for c in dup_cols if c in combined.columns]
-          combined = combined.drop_duplicates(subset=dup_cols, keep='last')
-
-          print(f"Final dataset: {len(combined)} records")
-
-          # Save
-          combined.to_csv(CSV_PATH, index=False)
-          print(f"Saved: {CSV_PATH} ({os.path.getsize(CSV_PATH)/1024/1024:.2f} MB)")
-          EOF
+        run: python update_data.py
       
-      - name: Delete old release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        continue-on-error: true
-        run: gh release delete data --yes || true
-      
-      - name: Create new release with updated CSV
+      - name: Upload to release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create data \
-            data/cotton_historical.csv \
-            --title "Cotton Historical Data" \
-            --notes "Updated: $(date -u +%Y-%m-%d %H:%M UTC)"
+          gh release delete data --yes 2>/dev/null || true
+          gh release create data cotton_historical.csv --title "Cotton Data" --notes "Updated $(date)"
