@@ -85,8 +85,9 @@
         const USERNAME = 'BMR-Com';
         const REPO = 'cotton-crop-progress';
         
-        // Use GitHub raw URL with release tag - works with CORS
-        const CSV_URL = `https://raw.githubusercontent.com/${USERNAME}/${REPO}/data/cotton_historical.csv`;
+        // Use reliable CORS proxy
+        const CSV_URL = 'https://api.allorigins.win/raw?url=' + 
+            encodeURIComponent(`https://github.com/${USERNAME}/${REPO}/releases/download/data/cotton_historical.csv`);
 
         function showError(msg) {
             document.getElementById('loading').style.display = 'none';
@@ -174,7 +175,7 @@
             });
         }
 
-        // Load data
+        // Load data with error handling
         Papa.parse(CSV_URL, {
             download: true,
             header: true,
@@ -195,8 +196,8 @@
                 createTexasChart(data);
             },
             error: function(err) {
-                showError('Failed to load data. Check console for details.');
-                console.error('PapaParse error:', err);
+                console.error('Parse error:', err);
+                showError('Failed to load data. See browser console (F12) for details.');
             }
         });
     </script>
