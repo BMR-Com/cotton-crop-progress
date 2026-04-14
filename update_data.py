@@ -53,7 +53,6 @@ FILE_RANGES = [
     ('data/cotton_2021_2025.csv', 2021, 2025),
 ]
 
-
 def fetch_item(year, key, desc):
     all_dfs = []
     for level in ['NATIONAL', 'STATE']:
@@ -83,7 +82,6 @@ def fetch_item(year, key, desc):
         time.sleep(0.2)
     return pd.concat(all_dfs) if all_dfs else None
 
-
 def main():
     os.makedirs('data', exist_ok=True)
     current_year = datetime.now().year
@@ -91,13 +89,12 @@ def main():
     for filename, start_year, end_year in FILE_RANGES:
         print(f"\nProcessing {filename}...")
         
-        # Load existing
         if os.path.exists(filename):
             existing = pd.read_csv(filename)
-            print(f"  Loaded existing: {len(existing)} rows")
+            print(f"  Loaded: {len(existing)} rows")
         else:
             existing = pd.DataFrame()
-            print(f"  Creating new file")
+            print(f"  Creating new")
         
         # Fetch current year if in range
         if start_year <= current_year <= end_year:
@@ -110,9 +107,8 @@ def main():
             
             if new_data:
                 new_df = pd.concat(new_data, ignore_index=True)
-                print(f"  Fetched {len(new_df)} new rows")
+                print(f"  Fetched: {len(new_df)} rows")
                 
-                # Merge and dedup
                 combined = pd.concat([existing, new_df], ignore_index=True)
                 dup_cols = ['year', 'week_ending', 'state_name', 'short_desc', 'data_item_key']
                 dup_cols = [c for c in dup_cols if c in combined.columns]
@@ -123,13 +119,12 @@ def main():
                 print(f"  No new data")
                 existing.to_csv(filename, index=False)
         else:
-            print(f"  Year {current_year} not in range, skipping")
+            print(f"  {current_year} not in range, skipping")
             if not existing.empty:
                 existing.to_csv(filename, index=False)
         
         if os.path.exists(filename):
             print(f"  Size: {os.path.getsize(filename)/1024/1024:.1f} MB")
-
 
 if __name__ == '__main__':
     main()
