@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-"""
-Fetch latest week data from USDA API and append to existing CSV files.
-Each file covers 5-year block to stay under 25MB limit.
-"""
-
 import os
 import requests
 import pandas as pd
@@ -51,16 +46,15 @@ DATA_ITEMS = {
 }
 
 FILE_RANGES = [
-    ('cotton_2001_2005.csv', 2001, 2005),
-    ('cotton_2006_2010.csv', 2006, 2010),
-    ('cotton_2011_2015.csv', 2011, 2015),
-    ('cotton_2016_2020.csv', 2016, 2020),
-    ('cotton_2021_2025.csv', 2021, 2025),
+    ('data/cotton_2001_2005.csv', 2001, 2005),
+    ('data/cotton_2006_2010.csv', 2006, 2010),
+    ('data/cotton_2011_2015.csv', 2011, 2015),
+    ('data/cotton_2016_2020.csv', 2016, 2020),
+    ('data/cotton_2021_2025.csv', 2021, 2025),
 ]
 
 
 def fetch_item(year, key, desc):
-    """Fetch data for one item and year"""
     all_dfs = []
     for level in ['NATIONAL', 'STATE']:
         params = {
@@ -90,62 +84,53 @@ def fetch_item(year, key, desc):
     return pd.concat(all_dfs) if all_dfs else None
 
 
-def update_file(filename, start_year, end_year):
-    """Update one 5-year CSV file"""
-    
-    # Load existing
-    if os.path.exists(filename):
-        existing = pd.read_csv(filename)
-        print(f"{filename}: Loaded {len(existing)} existing rows")
-    else:
-        existing = pd.DataFrame()
-        print(f"{filename}: Creating new")
-    
-    # Fetch current year if in range
-    current_year = datetime.now().year
-    if start_year <= current_year <= end_year:
-        print(f"  Fetching {current_year}...")
-        
-        new_data = []
-        for key, desc in DATA_ITEMS.items():
-            df = fetch_item(current_year, key, desc)
-            if df is not None:
-                new_data.append(df)
-        
-        if new_data:
-            new_df = pd.concat(new_data, ignore_index=True)
-            print(f"  Fetched {len(new_df)} new rows")
-            
-            # Merge and dedup
-            combined = pd.concat([existing, new_df], ignore_index=True)
-            dup_cols = ['year', 'week_ending', 'state_name', 'short_desc', 'data_item_key']
-            dup_cols = [c for c in dup_cols if c in combined.columns]
-            combined = combined.drop_duplicates(subset=dup_cols, keep='last')
-            
-            print(f"  Final: {len(combined)} rows")
-            combined.to_csv(filename, index=False)
-            return
-    else:
-        print(f"  Current year {current_year} not in range {start_year}-{end_year}, no update needed")
-    
-    # Just save existing if no new data
-    if not existing.empty:
-        existing.to_csv(filename, index=False)
-
-
 def main():
-    print(f"Updating cotton data files at {datetime.now()}")
+    os.makedirs('data', exist_ok=True)
+    current_year = datetime.now().year
     
     for filename, start_year, end_year in FILE_RANGES:
-        print(f"\n{'='*50}")
-        update_file(filename, start_year, end_year)
+        print(f"\nProcessing {filename}...")
+        
+        # Load existing
         if os.path.exists(filename):
-            size_mb = os.path.getsize(filename) / (1024 * 1024)
-            print(f"  Size: {size_mb:.1f} MB")
-    
-    print(f"\n{'='*50}")
-    print("Update complete")
+            existing = pd.read_csv(filename)
+            print(f"  Loaded existing: {len(existing)} rows")
+        else:
+            existing = pd.DataFrame()
+            print(f"  Creating new file")
+        
+        # Fetch current year if in range
+        if start_year <= current_year <= end_year:
+            print(f"  Fetching {current_year}...")
+            new_data = []
+            for key, desc in DATA_ITEMS.items():
+                df = fetch_item(current_year, key, desc)
+                if df is not None:
+                    new_data.append(df)
+            
+            if new_data:
+                new_df = pd.concat(new_data, ignore_index=True)
+                print(f"  Fetched {len(new_df)} new rows")
+                
+                # Merge and dedup
+                combined = pd.concat([existing, new_df], ignore_index=True)
+                dup_cols = ['year', 'week_ending', 'state_name', 'short_desc', 'data_item_key']
+                dup_cols = [c for c in dup_cols if c in combined.columns]
+                combined = combined.drop_duplicates(subset=dup_cols, keep='last')
+                print(f"  Final: {len(combined)} rows")
+                combined.to_csv(filename, index=False)
+            else:
+                print(f"  No new data")
+                existing.to_csv(filename, index=False)
+        else:
+            print(f"  Year {current_year} not in range, skipping")
+            if not existing.empty:
+                existing.to_csv(filename, index=False)
+        
+        if os.path.exists(filename):
+            print(f"  Size: {os.path.getsize(filename)/1024/1024:.1f} MB")
 
 
 if __name__ == '__main__':
     main()
+    print("\nDone!")
