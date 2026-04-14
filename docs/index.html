@@ -304,7 +304,6 @@
         var BRANCH = 'main';
         var BASE_URL = 'https://cdn.jsdelivr.net/gh/' + USERNAME + '/' + REPO + '@' + BRANCH + '/data';
 
-        // FIXED: Use cotton_2026_2030.csv to get 2026 data
         var FILES = [
             'cotton_2001_2005.csv',
             'cotton_2006_2010.csv',
@@ -332,7 +331,6 @@
             'CALIFORNIA', 'ARIZONA', 'NEW MEXICO'
         ];
 
-        // FIXED: Full year range 1-52
         var CONTINUUM_WEEK_MIN = 1;
         var CONTINUUM_WEEK_MAX = 52;
 
@@ -347,7 +345,6 @@
             document.getElementById('nav-' + tabName).classList.add('active');
             if (tabName === 'dashboard') {
                 updateDashboardCharts();
-                // Resize plots after tab becomes visible
                 setTimeout(function() {
                     ['chart-national-continuum', 'chart-texas-continuum', 'chart-national-good-excellent', 
                      'chart-texas-good-excellent', 'chart-national-poor-verypoor', 'chart-texas-poor-verypoor']
@@ -358,7 +355,6 @@
                 }, 100);
             } else {
                 updateSeasonalityCharts();
-                // Resize plots after tab becomes visible
                 setTimeout(function() {
                     ['chart-combined', 'chart-planted', 'chart-squaring', 'chart-setting', 
                      'chart-opening', 'chart-harvested'].forEach(function(id) {
@@ -406,15 +402,20 @@
             return labels;
         }
 
+        // FIXED: Improved location matching for both national and state data
+        function matchesLocation(r, stateName) {
+            if (stateName === 'NATIONAL' || stateName === 'US TOTAL') {
+                return r.level === 'NATIONAL' || r.state_name === 'US TOTAL' || r.state_name === 'UNITED STATES';
+            }
+            return r.state_name === stateName;
+        }
+
         function getYearDataForStageFixedRange(stageKey, stateName, year) {
-            var isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
             var yearData = allData.filter(function(r) {
                 var matchesStage = r.data_item_key === stageKey;
-                var matchesLocation = isNational 
-                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                    : r.state_name === stateName;
+                var matchesLoc = matchesLocation(r, stateName);
                 var matchesYear = r.year.toString() === year.toString();
-                return matchesStage && matchesLocation && matchesYear;
+                return matchesStage && matchesLoc && matchesYear;
             });
 
             var weekMap = {};
@@ -434,17 +435,14 @@
         }
 
         function calculateAverageFixedRange(stageKey, stateName, avgYears) {
-            var isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
             var dataByWeek = {};
 
             avgYears.forEach(function(year) {
                 var yearData = allData.filter(function(r) {
                     var matchesStage = r.data_item_key === stageKey;
-                    var matchesLocation = isNational 
-                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                        : r.state_name === stateName;
+                    var matchesLoc = matchesLocation(r, stateName);
                     var matchesYear = r.year.toString() === year.toString();
-                    return matchesStage && matchesLocation && matchesYear;
+                    return matchesStage && matchesLoc && matchesYear;
                 });
 
                 yearData.forEach(function(r) {
@@ -579,11 +577,8 @@
         }
 
         function createGoodExcellentChart(elementId, stateName) {
-            var isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
             var filtered = allData.filter(function(r) {
-                var isLocationMatch = isNational 
-                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                    : r.state_name === stateName;
+                var isLocationMatch = matchesLocation(r, stateName);
                 var isCondition = r.data_item_key && 
                     (r.data_item_key.indexOf('condition_current_good') !== -1 || 
                      r.data_item_key.indexOf('condition_current_excellent') !== -1);
@@ -642,11 +637,8 @@
         }
 
         function createPoorVeryPoorChart(elementId, stateName) {
-            var isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
             var filtered = allData.filter(function(r) {
-                var isLocationMatch = isNational 
-                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                    : r.state_name === stateName;
+                var isLocationMatch = matchesLocation(r, stateName);
                 var isCondition = r.data_item_key && 
                     (r.data_item_key.indexOf('condition_current_poor') !== -1 || 
                      r.data_item_key.indexOf('condition_current_very_poor') !== -1);
@@ -704,7 +696,6 @@
             });
         }
 
-        // FIXED: Create latest table with National at the bottom, all states visible, no toggle
         function createLatestTableDashboard() {
             var states = ALL_STATES.slice();
 
@@ -736,7 +727,6 @@
                     '<th>Yearly<br>Change</th>' +
                 '</tr>';
 
-            // First show all individual states
             states.forEach(function(state) {
                 var curr = allData.find(function(r) {
                     return r.state_name === state && r.year.toString() === '2026' && 
@@ -750,7 +740,6 @@
                            getWeekNumber(r.reference_period_desc) === prevWeek;
                 });
 
-                // FIXED: Properly get 2025 data
                 var yr2025 = allData.find(function(r) {
                     return r.state_name === state && r.year.toString() === '2025' && 
                            r.data_item_key === 'progress_current_planted' &&
@@ -786,21 +775,20 @@
                 '</tr>';
             });
 
-            // Then show National (US TOTAL) at the bottom
             var currNat = allData.find(function(r) {
-                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year.toString() === '2026' && 
+                return matchesLocation(r, 'NATIONAL') && r.year.toString() === '2026' && 
                        r.data_item_key === 'progress_current_planted' &&
                        getWeekNumber(r.reference_period_desc) === latestWeek;
             });
 
             var prevNat = allData.find(function(r) {
-                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year.toString() === '2026' && 
+                return matchesLocation(r, 'NATIONAL') && r.year.toString() === '2026' && 
                        r.data_item_key === 'progress_current_planted' &&
                        getWeekNumber(r.reference_period_desc) === prevWeek;
             });
 
             var yr2025Nat = allData.find(function(r) {
-                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year.toString() === '2025' && 
+                return matchesLocation(r, 'NATIONAL') && r.year.toString() === '2025' && 
                        r.data_item_key === 'progress_current_planted' &&
                        getWeekNumber(r.reference_period_desc) === latestWeek;
             });
@@ -808,7 +796,7 @@
             var avgYears = ['2021', '2022', '2023', '2024', '2025'];
             var avgValuesNat = avgYears.map(function(y) {
                 var r = allData.find(function(x) {
-                    return (x.level === 'NATIONAL' || x.state_name === 'US TOTAL') && x.year.toString() === y.toString() && 
+                    return matchesLocation(x, 'NATIONAL') && x.year.toString() === y.toString() && 
                            x.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(x.reference_period_desc) === latestWeek;
                 });
@@ -888,7 +876,6 @@
             if (state2) createPoorVeryPoorChart('chart-state2-poor-verypoor', state2);
         }
 
-        // SEASONALITY FUNCTIONS
         function populateYearCheckboxes() {
             var years = [...new Set(allData.map(function(r) { return r.year; }))]
                 .filter(function(y) { return y && y.trim() !== ''; })
@@ -919,14 +906,11 @@
         }
 
         function getWeekRangeForStage(stageKey, stateName, years) {
-            var isNational = stateName === 'US TOTAL';
             var filtered = allData.filter(function(r) {
                 var matchesStage = r.data_item_key === stageKey;
-                var matchesLocation = isNational 
-                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                    : r.state_name === stateName;
+                var matchesLoc = matchesLocation(r, stateName);
                 var matchesYear = years.indexOf(r.year.toString()) !== -1;
-                return matchesStage && matchesLocation && matchesYear;
+                return matchesStage && matchesLoc && matchesYear;
             });
 
             var weeks = filtered.map(function(r) { return getWeekNumber(r.reference_period_desc); })
@@ -943,17 +927,14 @@
         }
 
         function calculateAverage(stageKey, stateName, avgYears, weekRange) {
-            var isNational = stateName === 'US TOTAL';
             var dataByWeek = {};
 
             avgYears.forEach(function(year) {
                 var yearData = allData.filter(function(r) {
                     var matchesStage = r.data_item_key === stageKey;
-                    var matchesLocation = isNational 
-                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                        : r.state_name === stateName;
+                    var matchesLoc = matchesLocation(r, stateName);
                     var matchesYear = r.year.toString() === year.toString();
-                    return matchesStage && matchesLocation && matchesYear;
+                    return matchesStage && matchesLoc && matchesYear;
                 });
 
                 yearData.forEach(function(r) {
@@ -988,17 +969,14 @@
 
             var currentYear = '2026';
             var prevYear = '2025';
-            var isNational = stateName === 'US TOTAL';
 
             STAGES.forEach(function(stage) {
                 var currentData = allData.filter(function(r) {
-                    var matchesLocation = isNational 
-                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                        : r.state_name === stateName;
+                    var matchesLoc = matchesLocation(r, stateName);
                     var weekNum = getWeekNumber(r.reference_period_desc);
                     return r.year.toString() === currentYear.toString() && 
                            r.data_item_key === stage.key &&
-                           matchesLocation &&
+                           matchesLoc &&
                            weekNum >= CONTINUUM_WEEK_MIN && 
                            weekNum <= CONTINUUM_WEEK_MAX;
                 });
@@ -1041,13 +1019,11 @@
                 }
 
                 var prevData = allData.filter(function(r) {
-                    var matchesLocation = isNational 
-                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                        : r.state_name === stateName;
+                    var matchesLoc = matchesLocation(r, stateName);
                     var weekNum = getWeekNumber(r.reference_period_desc);
                     return r.year.toString() === prevYear.toString() && 
                            r.data_item_key === stage.key &&
-                           matchesLocation &&
+                           matchesLoc &&
                            weekNum >= CONTINUUM_WEEK_MIN && 
                            weekNum <= CONTINUUM_WEEK_MAX;
                 });
@@ -1090,13 +1066,11 @@
 
                     avgYears.forEach(function(year) {
                         var yearData = allData.filter(function(r) {
-                            var matchesLocation = isNational 
-                                ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                                : r.state_name === stateName;
+                            var matchesLoc = matchesLocation(r, stateName);
                             var weekNum = getWeekNumber(r.reference_period_desc);
                             return r.year.toString() === year.toString() && 
                                    r.data_item_key === stage.key &&
-                                   matchesLocation &&
+                                   matchesLoc &&
                                    weekNum >= CONTINUUM_WEEK_MIN && 
                                    weekNum <= CONTINUUM_WEEK_MAX;
                         });
@@ -1178,7 +1152,6 @@
         function createStageChart(stage, stateName, years) {
             console.log('createStageChart called for:', stage.display, 'state:', stateName, 'years:', years);
 
-            var isNational = stateName === 'US TOTAL';
             var weekRange = getWeekRangeForStage(stage.key, stateName, years);
             console.log('Week range for', stage.display, ':', weekRange);
             var weekLabels = generateWeekLabelsForRange(weekRange.min, weekRange.max);
@@ -1207,16 +1180,13 @@
             }
 
             var traces = [];
-            var isNational = stateName === 'US TOTAL';
 
             years.forEach(function(year) {
                 var yearData = allData.filter(function(r) {
                     var matchesStage = r.data_item_key === stage.key;
-                    var matchesLocation = isNational 
-                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                        : r.state_name === stateName;
+                    var matchesLoc = matchesLocation(r, stateName);
                     var matchesYear = r.year.toString() === year.toString();
-                    return matchesStage && matchesLocation && matchesYear;
+                    return matchesStage && matchesLoc && matchesYear;
                 });
 
                 var weekMap = {};
@@ -1368,16 +1338,14 @@
             };
         }
 
+        // FIXED: Removed double toString() and improved location matching
         function getValueForComparison(state, year, weekNum, stageKey) {
-            var isNational = state === 'US TOTAL';
             var data = allData.filter(function(r) {
-                var matchesLocation = isNational 
-                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                    : r.state_name === state;
-                var matchesYear = r.year.toString() === year.toString().toString();
+                var matchesLoc = matchesLocation(r, state);
+                var matchesYear = r.year.toString() === year.toString();
                 var matchesStage = r.data_item_key === stageKey;
                 var matchesWeek = getWeekNumber(r.reference_period_desc) === weekNum;
-                return matchesLocation && matchesYear && matchesStage && matchesWeek;
+                return matchesLoc && matchesYear && matchesStage && matchesWeek;
             });
 
             if (data.length > 0) {
@@ -1426,13 +1394,11 @@
 
             var weekNum = latestInfo.weekNum;
 
-            // Create table with all states + national at bottom
             var html = '<table><thead><tr>' +
                 '<th>Region</th><th>Stage</th><th>2026 Current</th>' +
                 '<th>vs Previous Week</th><th>vs Previous Year</th><th>vs 5-Year Avg</th>' +
                 '</tr></thead><tbody>';
 
-            // First all states
             ALL_STATES.forEach(function(state) {
                 var current = getValueForComparison(state, '2026', weekNum, 'progress_current_planted');
                 var prevWeek = getValueForComparison(state, '2026', weekNum - 1, 'progress_current_planted');
@@ -1451,7 +1417,6 @@
                 }
             });
 
-            // Then national at bottom
             var currentNat = getValueForComparison('US TOTAL', '2026', weekNum, 'progress_current_planted');
             var prevWeekNat = getValueForComparison('US TOTAL', '2026', weekNum - 1, 'progress_current_planted');
             var prevYearNat = getValueForComparison('US TOTAL', '2025', weekNum, 'progress_current_planted');
