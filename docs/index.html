@@ -18,7 +18,6 @@
             background: #1a5490; 
             color: white; 
             padding: 20px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .header h1 { margin: 0; font-size: 24px; }
         .header p { margin: 5px 0 0 0; opacity: 0.9; font-size: 14px; }
@@ -40,7 +39,6 @@
             color: #1a5490; 
             font-size: 16px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         .loading { 
             text-align: center; 
@@ -62,8 +60,8 @@
 <body>
     <div class="header">
         <div class="container">
-            <h1>🌱 USDA NASS Cotton Analytics Dashboard</h1>
-            <p id="status">Initializing...</p>
+            <h1>USDA NASS Cotton Analytics Dashboard</h1>
+            <p id="status">Loading...</p>
         </div>
     </div>
     
@@ -83,13 +81,12 @@
     </div>
 
     <script>
-        // CONFIG: Replace with your GitHub username/repo
-        const REPO = 'BMR-Com/cotton-crop-progress';
+        // REPLACE WITH YOUR REPO
+        const USERNAME = 'YOUR_USERNAME';
+        const REPO = 'cotton-analytics';
         
-        // CORS proxy for GitHub Releases
-        const CSV_URL = 'https://corsproxy.io/?' + encodeURIComponent(
-            `https://github.com/${REPO}/releases/download/data/cotton_historical.csv`
-        );
+        // Use GitHub raw URL with release tag - works with CORS
+        const CSV_URL = `https://raw.githubusercontent.com/${USERNAME}/${REPO}/data/cotton_historical.csv`;
 
         function showError(msg) {
             document.getElementById('loading').style.display = 'none';
@@ -192,13 +189,14 @@
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('charts').style.display = 'grid';
                 document.getElementById('status').textContent = 
-                    `Last updated: ${new Date().toLocaleString()} | ${data.length.toLocaleString()} records`;
+                    `Loaded ${data.length.toLocaleString()} records`;
 
                 createNationalChart(data);
                 createTexasChart(data);
             },
             error: function(err) {
-                showError('Failed to load data: ' + err.message);
+                showError('Failed to load data. Check console for details.');
+                console.error('PapaParse error:', err);
             }
         });
     </script>
