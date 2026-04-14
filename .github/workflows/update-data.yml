@@ -2,7 +2,7 @@ name: Update Cotton Data
 
 on:
   schedule:
-    - cron: '0 20 * 4-11 1'  # Mondays 4PM ET
+    - cron: '0 20 * 4-11 1'
   workflow_dispatch:
 
 jobs:
@@ -20,12 +20,12 @@ jobs:
       
       - run: pip install requests pandas
       
-      - name: Fetch latest data and update CSVs
+      - name: Fetch and update data
         env:
           USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
         run: python update_data.py
       
-      - name: Commit updated CSVs
+      - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
