@@ -27,7 +27,7 @@
         .year-checkboxes label { display: flex; align-items: center; gap: 5px; font-size: 13px; white-space: nowrap; }
         .avg-toggles { display: flex; gap: 15px; flex-wrap: wrap; }
         .avg-toggles label { display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; background: #f0f4f8; padding: 5px 10px; border-radius: 3px; }
-        .chart-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); gap: 20px; }
         .chart-box { background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
         .chart-box.full-width { grid-column: 1 / -1; }
         .chart-header { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #ddd; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
@@ -35,9 +35,13 @@
         .week-range { font-size: 11px; color: #666; font-weight: normal; }
         .chart-content { padding: 15px; height: 400px; }
         .chart-content.large { height: 550px; }
+        .chart-content.standard { height: 400px; }
         .loading { text-align: center; padding: 100px; color: #666; }
         .error { color: #c0392b; padding: 20px; background: #fee; display: none; }
         .data-status { background: #e8f4f8; padding: 10px 15px; margin-bottom: 15px; border-radius: 4px; font-size: 13px; }
+        .diagnostics { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 4px; font-size: 12px; max-height: 300px; overflow-y: auto; }
+        .diagnostics h4 { margin: 0 0 10px 0; color: #856404; }
+        .diagnostics pre { margin: 5px 0; white-space: pre-wrap; word-wrap: break-word; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 11px; background: white; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
         th { background: #1a5490; color: white; }
@@ -73,6 +77,10 @@
         <div id="loading" class="loading">Loading data...</div>
         <div id="error" class="error"></div>
         <div id="data-status" class="data-status" style="display: none;"></div>
+        <div id="diagnostics" class="diagnostics" style="display: none;">
+            <h4>Data Diagnostics</h4>
+            <div id="diagnostics-content"></div>
+        </div>
         <div id="tab-dashboard" class="tab-content active">
             <div class="controls" id="controls-dashboard">
                 <div class="control-row">
@@ -80,6 +88,7 @@
                         <label>Additional State 1</label>
                         <select id="state1-selector" onchange="updateDashboardCharts()">
                             <option value="">-- Select State --</option>
+                            <option value="TEXAS">Texas</option>
                             <option value="GEORGIA" selected>Georgia</option>
                             <option value="MISSISSIPPI">Mississippi</option>
                             <option value="ALABAMA">Alabama</option>
@@ -102,6 +111,7 @@
                         <label>Additional State 2</label>
                         <select id="state2-selector" onchange="updateDashboardCharts()">
                             <option value="">-- Select State --</option>
+                            <option value="TEXAS">Texas</option>
                             <option value="GEORGIA">Georgia</option>
                             <option value="MISSISSIPPI" selected>Mississippi</option>
                             <option value="ALABAMA">Alabama</option>
@@ -121,15 +131,16 @@
                         </select>
                     </div>
                     <button onclick="updateDashboardCharts()">Refresh Charts</button>
+                    <button onclick="runDiagnostics()" style="background: #28a745;">Run Diagnostics</button>
                 </div>
             </div>
             <div class="section-title">Latest Week Data - Cotton Planted (2026)</div>
             <div id="latest-table-dashboard"></div>
-            <div class="section-title">Crop Progress Continuum (All Stages) - Weeks 1-52</div>
+            <div class="section-title">Crop Progress Continuum (All Stages) - Weeks 9-48</div>
             <div class="chart-box full-width">
                 <div class="chart-header">
                     <h3>National - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="national-continuum-range">Weeks 1-52</span>
+                    <span class="week-range" id="national-continuum-range">Weeks 9-48</span>
                 </div>
                 <div id="chart-national-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
@@ -137,7 +148,7 @@
             <div class="chart-box full-width">
                 <div class="chart-header">
                     <h3>Texas - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="texas-continuum-range">Weeks 1-52</span>
+                    <span class="week-range" id="texas-continuum-range">Weeks 9-48</span>
                 </div>
                 <div id="chart-texas-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
@@ -145,7 +156,7 @@
             <div class="chart-box full-width" id="state1-continuum-container" style="display: none;">
                 <div class="chart-header">
                     <h3 id="state1-continuum-title">State 1 - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="state1-continuum-range">Weeks 1-52</span>
+                    <span class="week-range" id="state1-continuum-range">Weeks 9-48</span>
                 </div>
                 <div id="chart-state1-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
@@ -153,7 +164,7 @@
             <div class="chart-box full-width" id="state2-continuum-container" style="display: none;">
                 <div class="chart-header">
                     <h3 id="state2-continuum-title">State 2 - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="state2-continuum-range">Weeks 1-52</span>
+                    <span class="week-range" id="state2-continuum-range">Weeks 9-48</span>
                 </div>
                 <div id="chart-state2-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
@@ -264,35 +275,35 @@
                         <h3>Planted</h3>
                         <span class="week-range" id="planted-week-range"></span>
                     </div>
-                    <div id="chart-planted" class="chart-content"></div>
+                    <div id="chart-planted" class="chart-content standard"></div>
                 </div>
                 <div class="chart-box">
                     <div class="chart-header">
                         <h3>Squaring</h3>
                         <span class="week-range" id="squaring-week-range"></span>
                     </div>
-                    <div id="chart-squaring" class="chart-content"></div>
+                    <div id="chart-squaring" class="chart-content standard"></div>
                 </div>
                 <div class="chart-box">
                     <div class="chart-header">
                         <h3>Setting Bolls</h3>
                         <span class="week-range" id="setting-week-range"></span>
                     </div>
-                    <div id="chart-setting" class="chart-content"></div>
+                    <div id="chart-setting" class="chart-content standard"></div>
                 </div>
                 <div class="chart-box">
                     <div class="chart-header">
                         <h3>Bolls Opening</h3>
                         <span class="week-range" id="opening-week-range"></span>
                     </div>
-                    <div id="chart-opening" class="chart-content"></div>
+                    <div id="chart-opening" class="chart-content standard"></div>
                 </div>
                 <div class="chart-box">
                     <div class="chart-header">
                         <h3>Harvested</h3>
                         <span class="week-range" id="harvested-week-range"></span>
                     </div>
-                    <div id="chart-harvested" class="chart-content"></div>
+                    <div id="chart-harvested" class="chart-content standard"></div>
                 </div>
             </div>
         </div>
@@ -331,6 +342,10 @@
             'CALIFORNIA', 'ARIZONA', 'NEW MEXICO'
         ];
 
+        // Dashboard continuum charts: weeks 9-48
+        var DASHBOARD_WEEK_MIN = 9;
+        var DASHBOARD_WEEK_MAX = 48;
+        // Seasonality continuum: full range
         var CONTINUUM_WEEK_MIN = 1;
         var CONTINUUM_WEEK_MAX = 52;
 
@@ -402,7 +417,6 @@
             return labels;
         }
 
-        // FIXED: Improved location matching for both national and state data
         function matchesLocation(r, stateName) {
             if (stateName === 'NATIONAL' || stateName === 'US TOTAL') {
                 return r.level === 'NATIONAL' || r.state_name === 'US TOTAL' || r.state_name === 'UNITED STATES';
@@ -410,7 +424,81 @@
             return r.state_name === stateName;
         }
 
-        function getYearDataForStageFixedRange(stageKey, stateName, year) {
+        // DIAGNOSTICS FUNCTION
+        function runDiagnostics() {
+            var diagDiv = document.getElementById('diagnostics');
+            var diagContent = document.getElementById('diagnostics-content');
+            diagDiv.style.display = 'block';
+            
+            var output = [];
+            output.push('=== DATA DIAGNOSTICS ===\n');
+            
+            // Check available years
+            var years = [...new Set(allData.map(function(r) { return r.year; }))].sort();
+            output.push('Available years: ' + years.join(', '));
+            
+            // Check 2025 data specifically
+            var data2025 = allData.filter(function(r) { return r.year.toString() === '2025'; });
+            output.push('\n2025 Records: ' + data2025.length);
+            
+            // Check weeks available for 2025
+            var weeks2025 = [...new Set(data2025.map(function(r) { 
+                return getWeekNumber(r.reference_period_desc); 
+            }))].filter(function(w) { return w !== null; }).sort(function(a, b) { return a - b; });
+            output.push('2025 Weeks with data: ' + weeks2025.join(', '));
+            
+            // Check for week 14, 15 specifically
+            var week14 = data2025.filter(function(r) { 
+                return getWeekNumber(r.reference_period_desc) === 14; 
+            });
+            var week15 = data2025.filter(function(r) { 
+                return getWeekNumber(r.reference_period_desc) === 15; 
+            });
+            output.push('\nWeek 14 records: ' + week14.length);
+            output.push('Week 15 records: ' + week15.length);
+            
+            // Sample week 14 data
+            if (week14.length > 0) {
+                output.push('\nSample Week 14 data:');
+                week14.slice(0, 3).forEach(function(r) {
+                    output.push('  - ' + r.state_name + ' | ' + r.data_item_key + ' | ' + r.Value + '%');
+                });
+            }
+            
+            // Check state names in 2025 data
+            var states2025 = [...new Set(data2025.map(function(r) { return r.state_name; }))].sort();
+            output.push('\nStates in 2025 data: ' + states2025.join(', '));
+            
+            // Check data_item_keys for 2025
+            var keys2025 = [...new Set(data2025.map(function(r) { return r.data_item_key; }))].sort();
+            output.push('\nData item keys in 2025: ' + keys2025.slice(0, 10).join(', ') + (keys2025.length > 10 ? '...' : ''));
+            
+            // Check for planted data specifically
+            var planted2025 = data2025.filter(function(r) { 
+                return r.data_item_key === 'progress_current_planted'; 
+            });
+            output.push('\n2025 Planted records: ' + planted2025.length);
+            
+            // Check Texas specifically
+            var texas2025 = data2025.filter(function(r) { 
+                return r.state_name === 'TEXAS' && r.data_item_key === 'progress_current_planted'; 
+            });
+            output.push('Texas 2025 Planted records: ' + texas2025.length);
+            if (texas2025.length > 0) {
+                var texasWeeks = [...new Set(texas2025.map(function(r) { 
+                    return getWeekNumber(r.reference_period_desc); 
+                }))].sort(function(a, b) { return a - b; });
+                output.push('Texas 2025 weeks: ' + texasWeeks.join(', '));
+            }
+            
+            // Check for level field values
+            var levels = [...new Set(data2025.map(function(r) { return r.level; }))].sort();
+            output.push('\nLevel field values: ' + levels.join(', '));
+            
+            diagContent.innerHTML = '<pre>' + output.join('\n') + '</pre>';
+        }
+
+        function getYearDataForStageFixedRange(stageKey, stateName, year, weekMin, weekMax) {
             var yearData = allData.filter(function(r) {
                 var matchesStage = r.data_item_key === stageKey;
                 var matchesLoc = matchesLocation(r, stateName);
@@ -421,20 +509,20 @@
             var weekMap = {};
             yearData.forEach(function(r) {
                 var weekNum = getWeekNumber(r.reference_period_desc);
-                if (weekNum && weekNum >= CONTINUUM_WEEK_MIN && weekNum <= CONTINUUM_WEEK_MAX) {
+                if (weekNum && weekNum >= weekMin && weekNum <= weekMax) {
                     var val = parseFloat(r.Value);
                     if (!isNaN(val)) weekMap[weekNum] = val;
                 }
             });
 
             var values = [];
-            for (var w = CONTINUUM_WEEK_MIN; w <= CONTINUUM_WEEK_MAX; w++) {
+            for (var w = weekMin; w <= weekMax; w++) {
                 values.push(weekMap[w] !== undefined ? weekMap[w] : null);
             }
             return values;
         }
 
-        function calculateAverageFixedRange(stageKey, stateName, avgYears) {
+        function calculateAverageFixedRange(stageKey, stateName, avgYears, weekMin, weekMax) {
             var dataByWeek = {};
 
             avgYears.forEach(function(year) {
@@ -447,7 +535,7 @@
 
                 yearData.forEach(function(r) {
                     var weekNum = getWeekNumber(r.reference_period_desc);
-                    if (weekNum && weekNum >= CONTINUUM_WEEK_MIN && weekNum <= CONTINUUM_WEEK_MAX) {
+                    if (weekNum && weekNum >= weekMin && weekNum <= weekMax) {
                         var val = parseFloat(r.Value);
                         if (!isNaN(val)) {
                             if (!dataByWeek[weekNum]) dataByWeek[weekNum] = [];
@@ -458,7 +546,7 @@
             });
 
             var avgValues = [];
-            for (var w = CONTINUUM_WEEK_MIN; w <= CONTINUUM_WEEK_MAX; w++) {
+            for (var w = weekMin; w <= weekMax; w++) {
                 var vals = dataByWeek[w] || [];
                 if (vals.length > 0) {
                     var sum = vals.reduce(function(a, b) { return a + b; }, 0);
@@ -470,8 +558,8 @@
             return avgValues;
         }
 
-        function createContinuumChart(elementId, stateName) {
-            var weekLabels = generateWeekLabelsForRange(CONTINUUM_WEEK_MIN, CONTINUUM_WEEK_MAX);
+        function createContinuumChart(elementId, stateName, weekMin, weekMax) {
+            var weekLabels = generateWeekLabelsForRange(weekMin, weekMax);
             var traces = [];
             var availableYears = [...new Set(allData.map(function(r) { return r.year; }))].sort();
 
@@ -479,7 +567,7 @@
             var prevYear = '2025';
 
             STAGES.forEach(function(stage) {
-                var currentValues = getYearDataForStageFixedRange(stage.key, stateName, currentYear);
+                var currentValues = getYearDataForStageFixedRange(stage.key, stateName, currentYear, weekMin, weekMax);
                 var hasCurrentData = currentValues.some(function(v) { return v !== null; });
 
                 if (hasCurrentData) {
@@ -503,7 +591,7 @@
                     });
                 }
 
-                var prevValues = getYearDataForStageFixedRange(stage.key, stateName, prevYear);
+                var prevValues = getYearDataForStageFixedRange(stage.key, stateName, prevYear, weekMin, weekMax);
                 var hasPrevData = prevValues.some(function(v) { return v !== null; });
 
                 if (hasPrevData) {
@@ -524,7 +612,7 @@
                 if (availableYears.length >= 5) {
                     var avgYears = availableYears.slice(-6, -1);
                     if (avgYears.length < 5) avgYears = availableYears.slice(0, 5);
-                    var avgValues = calculateAverageFixedRange(stage.key, stateName, avgYears);
+                    var avgValues = calculateAverageFixedRange(stage.key, stateName, avgYears, weekMin, weekMax);
                     var hasAvgData = avgValues.some(function(v) { return v !== null; });
 
                     if (hasAvgData) {
@@ -549,7 +637,7 @@
                 margin: { t: 30, b: 80, l: 60, r: 30 },
                 xaxis: { 
                     title: 'Week Number',
-                    range: [CONTINUUM_WEEK_MIN, CONTINUUM_WEEK_MAX],
+                    range: [weekMin, weekMax],
                     showgrid: true, 
                     gridcolor: '#e0e0e0', 
                     tickfont: { size: 11 },
@@ -859,11 +947,12 @@
                 document.getElementById('state2-poor-verypoor-title').textContent = state2 + ' - Poor + Very Poor Condition';
             }
 
-            createContinuumChart('chart-national-continuum', 'NATIONAL');
-            createContinuumChart('chart-texas-continuum', 'TEXAS');
+            // Use weeks 9-48 for dashboard continuum charts
+            createContinuumChart('chart-national-continuum', 'NATIONAL', DASHBOARD_WEEK_MIN, DASHBOARD_WEEK_MAX);
+            createContinuumChart('chart-texas-continuum', 'TEXAS', DASHBOARD_WEEK_MIN, DASHBOARD_WEEK_MAX);
 
-            if (state1) createContinuumChart('chart-state1-continuum', state1);
-            if (state2) createContinuumChart('chart-state2-continuum', state2);
+            if (state1) createContinuumChart('chart-state1-continuum', state1, DASHBOARD_WEEK_MIN, DASHBOARD_WEEK_MAX);
+            if (state2) createContinuumChart('chart-state2-continuum', state2, DASHBOARD_WEEK_MIN, DASHBOARD_WEEK_MAX);
 
             createGoodExcellentChart('chart-national-good-excellent', 'NATIONAL');
             createGoodExcellentChart('chart-texas-good-excellent', 'TEXAS');
@@ -1167,7 +1256,8 @@
 
             if (weekRange.actualMin === null) {
                 Plotly.newPlot(chartId, [], {
-                    height: 320,
+                    height: 400,
+                    margin: { t: 20, b: 60, l: 50, r: 20 },
                     annotations: [{ 
                         text: 'No data', 
                         xref: 'paper', 
@@ -1267,8 +1357,9 @@
                 }
             }
 
+            // FIXED: Consistent height of 400px for all seasonality charts
             Plotly.newPlot(chartId, traces, {
-                height: 320,
+                height: 400,
                 margin: { t: 20, b: 60, l: 50, r: 20 },
                 xaxis: { 
                     title: 'Week',
@@ -1338,7 +1429,6 @@
             };
         }
 
-        // FIXED: Removed double toString() and improved location matching
         function getValueForComparison(state, year, weekNum, stageKey) {
             var data = allData.filter(function(r) {
                 var matchesLoc = matchesLocation(r, state);
