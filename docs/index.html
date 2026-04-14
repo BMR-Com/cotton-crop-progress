@@ -54,14 +54,6 @@
             border-radius: 8px;
             margin: 20px;
         }
-        .debug-info {
-            background: #f8f9fa;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 12px;
-        }
         @media (max-width: 768px) { 
             .chart-grid { grid-template-columns: 1fr; } 
         }
@@ -78,7 +70,6 @@
     <div class="container">
         <div id="loading" class="loading">Loading cotton data...</div>
         <div id="error" class="error" style="display: none;"></div>
-        <div id="debug" class="debug-info" style="display: none;"></div>
         <div id="charts" class="chart-grid" style="display: none;">
             <div class="chart-box">
                 <h3>National Cotton Condition</h3>
@@ -92,12 +83,11 @@
     </div>
 
     <script>
-        // CONFIG: Update with your repo details
+        // Use jsDelivr to load from data folder (no CORS issues)
         const USERNAME = 'BMR-Com';
         const REPO = 'cotton-crop-progress';
-        const BRANCH = 'dataset';  // Branch where CSV files are stored
+        const BRANCH = 'main';  // or 'master' depending on your default branch
         
-        // 5 CSV files - each under 25MB
         const FILES = [
             'cotton_2001_2005.csv',
             'cotton_2006_2010.csv',
@@ -106,17 +96,16 @@
             'cotton_2021_2025.csv'
         ];
         
-        // jsDelivr CDN URL (no CORS issues)
-        const BASE_URL = `https://cdn.jsdelivr.net/gh/${USERNAME}/${REPO}@${BRANCH}`;
+        // jsDelivr URL format
+        const BASE_URL = `https://cdn.jsdelivr.net/gh/${USERNAME}/${REPO}@${BRANCH}/data`;
         
         let allData = [];
         let loadedCount = 0;
         
-        function showError(msg, details) {
+        function showError(msg) {
             document.getElementById('loading').style.display = 'none';
-            const errorDiv = document.getElementById('error');
-            errorDiv.textContent = msg + (details ? '\n\n' + details : '');
-            errorDiv.style.display = 'block';
+            document.getElementById('error').textContent = msg;
+            document.getElementById('error').style.display = 'block';
             document.getElementById('status').textContent = 'Error';
         }
         
@@ -132,16 +121,14 @@
                         const data = results.data.filter(r => r.year && r.Value);
                         allData = allData.concat(data);
                         loadedCount++;
-                        
                         document.getElementById('status').textContent = 
                             `Loading... ${loadedCount}/${FILES.length} files (${allData.length.toLocaleString()} records)`;
-                        
                         console.log(`✓ ${filename}: ${data.length} rows`);
                         resolve();
                     },
                     error: function(err) {
                         console.error(`✗ ${filename}:`, err);
-                        reject(new Error(`${filename}: ${err.message || err}`));
+                        reject(new Error(`${filename}: Failed to load`));
                     }
                 });
             });
@@ -153,11 +140,6 @@
                 r.data_item_key && 
                 r.data_item_key.includes('condition_current')
             );
-            
-            if (filtered.length === 0) {
-                console.log('No national condition data');
-                return;
-            }
             
             const ratings = [
                 {key: 'excellent', color: '#27ae60', label: 'Excellent'},
@@ -186,8 +168,7 @@
                 xaxis: { title: 'Week Ending', tickangle: -45 },
                 yaxis: { title: 'Percentage', range: [0, 100] },
                 legend: { orientation: 'h', y: -0.2 },
-                margin: { t: 20, b: 80 },
-                template: 'plotly_white'
+                margin: { t: 20, b: 80 }
             });
         }
         
@@ -197,11 +178,6 @@
                 r.data_item_key && 
                 r.data_item_key.includes('progress_current')
             );
-            
-            if (filtered.length === 0) {
-                console.log('No Texas progress data');
-                return;
-            }
             
             const stages = [
                 {key: 'planted', color: '#3498db', label: 'Planted'},
@@ -230,8 +206,7 @@
                 xaxis: { title: 'Week Ending', tickangle: -45 },
                 yaxis: { title: 'Percentage Complete', range: [0, 100] },
                 legend: { orientation: 'h', y: -0.2 },
-                margin: { t: 20, b: 80 },
-                template: 'plotly_white'
+                margin: { t: 20, b: 80 }
             });
         }
         
@@ -241,14 +216,14 @@
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('charts').style.display = 'grid';
                 document.getElementById('status').textContent = 
-                    `Last updated: ${new Date().toLocaleString()} | ${allData.length.toLocaleString()} total records`;
+                    `Loaded ${allData.length.toLocaleString()} records | Last updated: ${new Date().toLocaleString()}`;
                 
                 createNationalChart();
                 createTexasChart();
             })
             .catch(err => {
-                console.error('Failed to load:', err);
-                showError('Failed to load data files', err.message);
+                console.error('Failed:', err);
+                showError('Failed to load data: ' + err.message);
             });
     </script>
 </body>
