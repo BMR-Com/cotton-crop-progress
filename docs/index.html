@@ -36,6 +36,46 @@
             margin: 0 auto; 
             padding: 20px; 
         }
+        .controls {
+            background: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .control-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .control-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        select, button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        button {
+            background: #1a5490;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background: #144070;
+        }
         .chart-grid { 
             display: grid; 
             grid-template-columns: 1fr; 
@@ -43,33 +83,49 @@
         }
         .chart-box { 
             background: white; 
-            border: 2px solid #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             margin-bottom: 20px;
         }
+        .chart-box.full-width {
+            grid-column: 1 / -1;
+        }
         .chart-header {
-            background: #f0f0f0;
-            padding: 8px 15px;
-            border-bottom: 2px solid #333;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
             font-weight: bold;
             font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .chart-content {
-            padding: 10px;
-            height: 400px;
-        }
-        .state-selector {
-            padding: 5px;
+        .chart-header select {
             margin-left: 10px;
             font-size: 13px;
+        }
+        .week-range {
+            font-size: 11px;
+            color: #666;
+            font-weight: normal;
+        }
+        .chart-content {
+            padding: 15px;
+            height: 400px;
+        }
+        .chart-content.large {
+            height: 550px;
         }
         .loading { 
             text-align: center; 
             padding: 100px; 
+            color: #666;
         }
         .error { 
             color: #c0392b; 
             padding: 20px; 
             background: #fee; 
+            display: none;
         }
         table {
             width: 100%;
@@ -79,8 +135,8 @@
             background: white;
         }
         th, td {
-            border: 1px solid #333;
-            padding: 6px;
+            border: 1px solid #ddd;
+            padding: 8px;
             text-align: center;
         }
         th {
@@ -94,87 +150,43 @@
         .section-title {
             background: #1a5490;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 15px;
             margin: 30px 0 10px 0;
             font-weight: bold;
+            font-size: 16px;
         }
+        .legend-info {
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+            padding: 0 15px 15px;
+        }
+        .positive { color: #28a745; }
+        .negative { color: #dc3545; }
     </style>
+<base target="_blank">
 </head>
 <body>
     <div class="header">
         <h1>USDA NASS Cotton Analytics Dashboard</h1>
     </div>
-    
+
     <div class="nav">
         <a href="index.html" style="font-weight: bold;">Dashboard</a>
         <a href="seasonality.html">Seasonality</a>
     </div>
-    
+
     <div class="container">
         <div id="loading" class="loading">Loading data...</div>
-        <div id="error" class="error" style="display: none;"></div>
-        
-        <!-- Latest Week Data Table -->
-        <div class="section-title">Latest Week Data - Cotton Planted (2026)</div>
-        <div id="latest-table"></div>
-        
-        <div id="charts" style="display: none;">
-            <!-- Chart 1: National Good + Excellent -->
-            <div class="chart-box">
-                <div class="chart-header">National - Good + Excellent Condition</div>
-                <div id="chart-national-condition" class="chart-content"></div>
-            </div>
-            
-            <!-- Chart 2: Texas Good + Excellent -->
-            <div class="chart-box">
-                <div class="chart-header">Texas - Good + Excellent Condition</div>
-                <div id="chart-texas-condition" class="chart-content"></div>
-            </div>
-            
-            <!-- Chart 3: National Crop Progress -->
-            <div class="chart-box">
-                <div class="chart-header">National - Crop Progress</div>
-                <div id="chart-national-progress" class="chart-content"></div>
-            </div>
-            
-            <!-- Chart 4: Texas Crop Progress -->
-            <div class="chart-box">
-                <div class="chart-header">Texas - Crop Progress</div>
-                <div id="chart-texas-progress" class="chart-content"></div>
-            </div>
-            
-            <!-- Chart 5: State 1 Progress -->
-            <div class="chart-box">
-                <div class="chart-header">
-                    <select id="state1-selector" class="state-selector" onchange="updateState1()">
-                        <option value="TEXAS" selected>Texas</option>
-                        <option value="GEORGIA">Georgia</option>
-                        <option value="MISSISSIPPI">Mississippi</option>
-                        <option value="ALABAMA">Alabama</option>
-                        <option value="ARKANSAS">Arkansas</option>
-                        <option value="LOUISIANA">Louisiana</option>
-                        <option value="NORTH CAROLINA">North Carolina</option>
-                        <option value="SOUTH CAROLINA">South Carolina</option>
-                        <option value="TENNESSEE">Tennessee</option>
-                        <option value="OKLAHOMA">Oklahoma</option>
-                        <option value="KANSAS">Kansas</option>
-                        <option value="MISSOURI">Missouri</option>
-                        <option value="FLORIDA">Florida</option>
-                        <option value="VIRGINIA">Virginia</option>
-                        <option value="CALIFORNIA">California</option>
-                        <option value="ARIZONA">Arizona</option>
-                        <option value="NEW MEXICO">New Mexico</option>
-                    </select>
-                    - Crop Progress
-                </div>
-                <div id="chart-state1-progress" class="chart-content"></div>
-            </div>
-            
-            <!-- Chart 6: State 2 Progress -->
-            <div class="chart-box">
-                <div class="chart-header">
-                    <select id="state2-selector" class="state-selector" onchange="updateState2()">
-                        <option value="TEXAS">Texas</option>
+        <div id="error" class="error"></div>
+
+        <!-- Controls -->
+        <div class="controls" id="controls" style="display: none;">
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Additional State 1</label>
+                    <select id="state1-selector" onchange="updateCharts()">
+                        <option value="">-- Select State --</option>
                         <option value="GEORGIA" selected>Georgia</option>
                         <option value="MISSISSIPPI">Mississippi</option>
                         <option value="ALABAMA">Alabama</option>
@@ -192,10 +204,151 @@
                         <option value="ARIZONA">Arizona</option>
                         <option value="NEW MEXICO">New Mexico</option>
                     </select>
-                    - Crop Progress
                 </div>
+                <div class="control-group">
+                    <label>Additional State 2</label>
+                    <select id="state2-selector" onchange="updateCharts()">
+                        <option value="">-- Select State --</option>
+                        <option value="GEORGIA">Georgia</option>
+                        <option value="MISSISSIPPI" selected>Mississippi</option>
+                        <option value="ALABAMA">Alabama</option>
+                        <option value="ARKANSAS">Arkansas</option>
+                        <option value="LOUISIANA">Louisiana</option>
+                        <option value="NORTH CAROLINA">North Carolina</option>
+                        <option value="SOUTH CAROLINA">South Carolina</option>
+                        <option value="TENNESSEE">Tennessee</option>
+                        <option value="OKLAHOMA">Oklahoma</option>
+                        <option value="KANSAS">Kansas</option>
+                        <option value="MISSOURI">Missouri</option>
+                        <option value="FLORIDA">Florida</option>
+                        <option value="VIRGINIA">Virginia</option>
+                        <option value="CALIFORNIA">California</option>
+                        <option value="ARIZONA">Arizona</option>
+                        <option value="NEW MEXICO">New Mexico</option>
+                    </select>
+                </div>
+                <button onclick="updateAllCharts()">Refresh Charts</button>
+            </div>
+        </div>
+
+        <!-- Latest Week Data Table -->
+        <div class="section-title">Latest Week Data - Cotton Planted (2026)</div>
+        <div id="latest-table"></div>
+
+        <div id="charts" style="display: none;">
+
+            <!-- CONTINUUM CHARTS -->
+            <div class="section-title">Crop Progress Continuum (All Stages)</div>
+
+            <!-- National Continuum -->
+            <div class="chart-box full-width">
+                <div class="chart-header">
+                    <h3>National - Cotton Crop Progress Continuum</h3>
+                    <span class="week-range" id="national-continuum-range"></span>
+                </div>
+                <div id="chart-national-continuum" class="chart-content large"></div>
+                <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
+            </div>
+
+            <!-- Texas Continuum -->
+            <div class="chart-box full-width">
+                <div class="chart-header">
+                    <h3>Texas - Cotton Crop Progress Continuum</h3>
+                    <span class="week-range" id="texas-continuum-range"></span>
+                </div>
+                <div id="chart-texas-continuum" class="chart-content large"></div>
+                <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
+            </div>
+
+            <!-- State 1 Continuum -->
+            <div class="chart-box full-width" id="state1-continuum-container" style="display: none;">
+                <div class="chart-header">
+                    <h3 id="state1-continuum-title">State 1 - Cotton Crop Progress Continuum</h3>
+                    <span class="week-range" id="state1-continuum-range"></span>
+                </div>
+                <div id="chart-state1-continuum" class="chart-content large"></div>
+                <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
+            </div>
+
+            <!-- State 2 Continuum -->
+            <div class="chart-box full-width" id="state2-continuum-container" style="display: none;">
+                <div class="chart-header">
+                    <h3 id="state2-continuum-title">State 2 - Cotton Crop Progress Continuum</h3>
+                    <span class="week-range" id="state2-continuum-range"></span>
+                </div>
+                <div id="chart-state2-continuum" class="chart-content large"></div>
+                <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
+            </div>
+
+            <!-- CONDITION CHARTS - GOOD + EXCELLENT -->
+            <div class="section-title">Crop Condition - Good + Excellent (Weeks 20-47)</div>
+
+            <div class="chart-box">
+                <div class="chart-header">National - Good + Excellent Condition</div>
+                <div id="chart-national-good-excellent" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-header">Texas - Good + Excellent Condition</div>
+                <div id="chart-texas-good-excellent" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box" id="state1-good-excellent-container" style="display: none;">
+                <div class="chart-header" id="state1-good-excellent-title">State 1 - Good + Excellent Condition</div>
+                <div id="chart-state1-good-excellent" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box" id="state2-good-excellent-container" style="display: none;">
+                <div class="chart-header" id="state2-good-excellent-title">State 2 - Good + Excellent Condition</div>
+                <div id="chart-state2-good-excellent" class="chart-content"></div>
+            </div>
+
+            <!-- CONDITION CHARTS - POOR + VERY POOR -->
+            <div class="section-title">Crop Condition - Poor + Very Poor (Weeks 20-47)</div>
+
+            <div class="chart-box">
+                <div class="chart-header">National - Poor + Very Poor Condition</div>
+                <div id="chart-national-poor-verypoor" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-header">Texas - Poor + Very Poor Condition</div>
+                <div id="chart-texas-poor-verypoor" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box" id="state1-poor-verypoor-container" style="display: none;">
+                <div class="chart-header" id="state1-poor-verypoor-title">State 1 - Poor + Very Poor Condition</div>
+                <div id="chart-state1-poor-verypoor" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box" id="state2-poor-verypoor-container" style="display: none;">
+                <div class="chart-header" id="state2-poor-verypoor-title">State 2 - Poor + Very Poor Condition</div>
+                <div id="chart-state2-poor-verypoor" class="chart-content"></div>
+            </div>
+
+            <!-- INDIVIDUAL PROGRESS CHARTS -->
+            <div class="section-title">Individual Crop Progress by Stage</div>
+
+            <div class="chart-box">
+                <div class="chart-header">National - Crop Progress</div>
+                <div id="chart-national-progress" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-header">Texas - Crop Progress</div>
+                <div id="chart-texas-progress" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box" id="state1-progress-container" style="display: none;">
+                <div class="chart-header" id="state1-progress-title">State 1 - Crop Progress</div>
+                <div id="chart-state1-progress" class="chart-content"></div>
+            </div>
+
+            <div class="chart-box" id="state2-progress-container" style="display: none;">
+                <div class="chart-header" id="state2-progress-title">State 2 - Crop Progress</div>
                 <div id="chart-state2-progress" class="chart-content"></div>
             </div>
+
         </div>
     </div>
 
@@ -203,19 +356,34 @@
         const USERNAME = 'BMR-Com';
         const REPO = 'cotton-crop-progress';
         const BRANCH = 'main';
-        
+        const BASE_URL = `https://cdn.jsdelivr.net/gh/${USERNAME}/${REPO}@${BRANCH}/data`;
+
         const FILES = [
             'cotton_2001_2005.csv',
             'cotton_2006_2010.csv',
             'cotton_2011_2015.csv',
             'cotton_2016_2020.csv',
-            'cotton_2021_2025.csv'
+            'cotton_2021_2025.csv',
+            'cotton_2026.csv'
         ];
-        
-        const BASE_URL = `https://cdn.jsdelivr.net/gh/${USERNAME}/${REPO}@${BRANCH}/data`;
-        
+
         let allData = [];
-        
+
+        const STAGES = [
+            { key: 'progress_current_planted', display: 'Planted', color: '#C62828' },
+            { key: 'progress_current_squaring', display: 'Squaring', color: '#1565C0' },
+            { key: 'progress_current_setting_bolls', display: 'Setting Bolls', color: '#2E7D32' },
+            { key: 'progress_current_bolls_opening', display: 'Bolls Opening', color: '#F57C00' },
+            { key: 'progress_current_harvested', display: 'Harvested', color: '#6A1B9A' }
+        ];
+
+        const ALL_STATES = [
+            'TEXAS', 'GEORGIA', 'MISSISSIPPI', 'ALABAMA', 'ARKANSAS', 
+            'LOUISIANA', 'NORTH CAROLINA', 'SOUTH CAROLINA', 'TENNESSEE',
+            'OKLAHOMA', 'KANSAS', 'MISSOURI', 'FLORIDA', 'VIRGINIA',
+            'CALIFORNIA', 'ARIZONA', 'NEW MEXICO'
+        ];
+
         function loadFile(filename) {
             return new Promise((resolve, reject) => {
                 Papa.parse(`${BASE_URL}/${filename}`, {
@@ -230,131 +398,244 @@
                 });
             });
         }
-        
-        // Extract week number from reference_period_desc (e.g., "WEEK #15" -> 15)
+
         function getWeekNumber(refPeriod) {
             if (!refPeriod) return null;
-            const match = refPeriod.match(/(\d+)/);
+            const match = refPeriod.toString().match(/WEEK\s*#?(\d+)/i);
             return match ? parseInt(match[1]) : null;
         }
-        
-        // Create latest week data table for all states
-        function createLatestTable() {
-            const states = ['US TOTAL', 'TEXAS', 'GEORGIA', 'MISSISSIPPI', 'ALABAMA', 'ARKANSAS', 
-                          'LOUISIANA', 'NORTH CAROLINA', 'SOUTH CAROLINA', 'TENNESSEE', 'OKLAHOMA',
-                          'KANSAS', 'MISSOURI', 'FLORIDA', 'VIRGINIA', 'CALIFORNIA', 'ARIZONA', 'NEW MEXICO'];
-            
-            // Get latest 2026 week for planted
-            const latest2026 = allData.filter(r => r.year === '2026' && r.data_item_key === 'progress_current_planted')
-                .sort((a,b) => new Date(b.week_ending) - new Date(a.week_ending))[0];
-            
-            if (!latest2026) {
-                document.getElementById('latest-table').innerHTML = '<p>No 2026 data available yet</p>';
+
+        function getWeekRangeForStage(stageKey, stateName, years) {
+            const isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
+            const filtered = allData.filter(r => {
+                const matchesStage = r.data_item_key === stageKey;
+                const matchesLocation = isNational 
+                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                    : r.state_name === stateName;
+                const matchesYear = years.includes(r.year);
+                return matchesStage && matchesLocation && matchesYear;
+            });
+
+            const weeks = filtered.map(r => getWeekNumber(r.reference_period_desc))
+                .filter(w => w !== null && !isNaN(w));
+
+            if (weeks.length === 0) return { min: 1, max: 52, actualMin: null, actualMax: null };
+
+            const actualMin = Math.min(...weeks);
+            const actualMax = Math.max(...weeks);
+            const min = Math.max(1, actualMin - 2);
+            const max = Math.min(52, actualMax + 2);
+
+            return { min, max, actualMin, actualMax };
+        }
+
+        function generateWeekLabelsForRange(min, max) {
+            const labels = [];
+            for (let w = min; w <= max; w++) {
+                labels.push(`W${w.toString().padStart(2, '0')}`);
+            }
+            return labels;
+        }
+
+        function getYearDataForStage(stageKey, stateName, year, weekRange) {
+            const isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
+            const yearData = allData.filter(r => {
+                const matchesStage = r.data_item_key === stageKey;
+                const matchesLocation = isNational 
+                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                    : r.state_name === stateName;
+                const matchesYear = r.year === year;
+                return matchesStage && matchesLocation && matchesYear;
+            });
+
+            const weekMap = {};
+            yearData.forEach(r => {
+                const weekNum = getWeekNumber(r.reference_period_desc);
+                if (weekNum && weekNum >= weekRange.min && weekNum <= weekRange.max) {
+                    const val = parseFloat(r.Value);
+                    if (!isNaN(val)) weekMap[weekNum] = val;
+                }
+            });
+
+            const values = [];
+            for (let w = weekRange.min; w <= weekRange.max; w++) {
+                values.push(weekMap[w] !== undefined ? weekMap[w] : null);
+            }
+            return values;
+        }
+
+        function calculateAverage(stageKey, stateName, avgYears, weekRange) {
+            const isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
+            const dataByWeek = {};
+
+            avgYears.forEach(year => {
+                const yearData = allData.filter(r => {
+                    const matchesStage = r.data_item_key === stageKey;
+                    const matchesLocation = isNational 
+                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                        : r.state_name === stateName;
+                    const matchesYear = r.year === year;
+                    return matchesStage && matchesLocation && matchesYear;
+                });
+
+                yearData.forEach(r => {
+                    const weekNum = getWeekNumber(r.reference_period_desc);
+                    if (weekNum && weekNum >= weekRange.min && weekNum <= weekRange.max) {
+                        const val = parseFloat(r.Value);
+                        if (!isNaN(val)) {
+                            if (!dataByWeek[weekNum]) dataByWeek[weekNum] = [];
+                            dataByWeek[weekNum].push(val);
+                        }
+                    }
+                });
+            });
+
+            const avgValues = [];
+            for (let w = weekRange.min; w <= weekRange.max; w++) {
+                const vals = dataByWeek[w] || [];
+                if (vals.length > 0) {
+                    avgValues.push(vals.reduce((a,b) => a+b, 0) / vals.length);
+                } else {
+                    avgValues.push(null);
+                }
+            }
+            return avgValues;
+        }
+
+        /**
+         * Create continuum chart with 3 lines per stage (current, prev, 5yr avg)
+         */
+        function createContinuumChart(elementId, rangeId, stateName) {
+            let globalMin = 52;
+            let globalMax = 1;
+
+            const years = ['2025', '2026'];
+            STAGES.forEach(stage => {
+                const range = getWeekRangeForStage(stage.key, stateName, years);
+                if (range.actualMin !== null) {
+                    globalMin = Math.min(globalMin, range.min);
+                    globalMax = Math.max(globalMax, range.max);
+                }
+            });
+
+            if (globalMin > globalMax) {
+                document.getElementById(rangeId).textContent = 'No data';
+                Plotly.newPlot(elementId, [], { height: 530 });
                 return;
             }
-            
-            const latestWeek = getWeekNumber(latest2026.reference_period_desc);
-            const prevWeek = latestWeek ? latestWeek - 1 : null;
-            
-            let html = `<table>
-                <tr>
-                    <th>State</th>
-                    <th>Week ${latestWeek}<br>2026</th>
-                    <th>Week ${prevWeek}<br>2026</th>
-                    <th>Week ${latestWeek}<br>2025</th>
-                    <th>5-Yr Avg<br>Week ${latestWeek}</th>
-                    <th>Yearly<br>Change</th>
-                </tr>`;
-            
-            states.forEach(state => {
-                const isNational = state === 'US TOTAL';
-                
-                // Current week 2026
-                const curr = allData.filter(r => 
-                    (isNational ? r.level === 'NATIONAL' : r.state_name === state) &&
-                    r.year === '2026' && 
-                    r.data_item_key === 'progress_current_planted' &&
-                    getWeekNumber(r.reference_period_desc) === latestWeek
-                )[0];
-                
-                // Previous week 2026
-                const prev = allData.filter(r => 
-                    (isNational ? r.level === 'NATIONAL' : r.state_name === state) &&
-                    r.year === '2026' && 
-                    r.data_item_key === 'progress_current_planted' &&
-                    getWeekNumber(r.reference_period_desc) === prevWeek
-                )[0];
-                
-                // Same week 2025
-                const yr2025 = allData.filter(r => 
-                    (isNational ? r.level === 'NATIONAL' : r.state_name === state) &&
-                    r.year === '2025' && 
-                    r.data_item_key === 'progress_current_planted' &&
-                    getWeekNumber(r.reference_period_desc) === latestWeek
-                )[0];
-                
-                // 5-year average (2021-2025)
-                const avgYears = ['2021', '2022', '2023', '2024', '2025'];
-                const avgValues = avgYears.map(y => {
-                    const r = allData.find(x => 
-                        (isNational ? x.level === 'NATIONAL' : x.state_name === state) &&
-                        x.year === y && 
-                        x.data_item_key === 'progress_current_planted' &&
-                        getWeekNumber(x.reference_period_desc) === latestWeek
-                    );
-                    return r ? parseFloat(r.Value) : null;
-                }).filter(v => v !== null);
-                
-                const avg = avgValues.length > 0 ? (avgValues.reduce((a,b) => a+b, 0) / avgValues.length).toFixed(0) : '-';
-                
-                const currVal = curr ? parseFloat(curr.Value) : 0;
-                const prevVal = prev ? parseFloat(prev.Value) : 0;
-                const yr2025Val = yr2025 ? parseFloat(yr2025.Value) : 0;
-                
-                const change = currVal - yr2025Val;
-                const changeStr = change > 0 ? `+${change}` : change.toString();
-                
-                html += `<tr>
-                    <td>${state}</td>
-                    <td>${curr ? curr.Value + '%' : '-'}</td>
-                    <td>${prev ? prev.Value + '%' : '-'}</td>
-                    <td>${yr2025 ? yr2025.Value + '%' : '-'}</td>
-                    <td>${avg}%</td>
-                    <td style="color: ${change >= 0 ? 'green' : 'red'}">${changeStr}</td>
-                </tr>`;
+
+            document.getElementById(rangeId).textContent = `Weeks ${globalMin}-${globalMax}`;
+
+            const weekLabels = generateWeekLabelsForRange(globalMin, globalMax);
+            const traces = [];
+            const availableYears = [...new Set(allData.map(r => r.year))].sort().reverse();
+
+            const currentYear = '2026';
+            const prevYear = '2025';
+            const show5yr = true;
+
+            STAGES.forEach((stage) => {
+                const weekRange = { min: globalMin, max: globalMax };
+
+                // Current Year - Solid line
+                const currentValues = getYearDataForStage(stage.key, stateName, currentYear, weekRange);
+                if (currentValues.some(v => v !== null)) {
+                    const maxVal = Math.max(...currentValues.filter(x => x !== null));
+                    traces.push({
+                        x: weekLabels,
+                        y: currentValues,
+                        name: `${stage.display} ${currentYear}`,
+                        type: 'scatter',
+                        mode: 'lines+text',
+                        line: { color: stage.color, width: 2, shape: 'spline', smoothing: 1.3 },
+                        text: currentValues.map((v) => v === maxVal ? stage.display : ''),
+                        textposition: 'top center',
+                        textfont: { color: stage.color, size: 11, weight: 'bold' },
+                        connectgaps: true,
+                        legendgroup: stage.display,
+                        hovertemplate: `<b>${stage.display} ${currentYear}</b><br>Week %{x}<br>%{y:.1f}%<extra></extra>`
+                    });
+                }
+
+                // Previous Year - Dashed line
+                const prevValues = getYearDataForStage(stage.key, stateName, prevYear, weekRange);
+                if (prevValues.some(v => v !== null)) {
+                    traces.push({
+                        x: weekLabels,
+                        y: prevValues,
+                        name: `${stage.display} ${prevYear}`,
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { color: stage.color, width: 2, dash: 'dash', opacity: 0.7 },
+                        connectgaps: true,
+                        legendgroup: stage.display,
+                        showlegend: false,
+                        hovertemplate: `<b>${stage.display} ${prevYear}</b><br>Week %{x}<br>%{y:.1f}%<extra></extra>`
+                    });
+                }
+
+                // 5-Year Average - Thick line
+                if (show5yr && availableYears.length >= 5) {
+                    const avgYears = availableYears.slice(0, 5);
+                    const avgValues = calculateAverage(stage.key, stateName, avgYears, weekRange);
+                    if (avgValues.some(v => v !== null)) {
+                        traces.push({
+                            x: weekLabels,
+                            y: avgValues,
+                            name: `${stage.display} 5yr Avg`,
+                            type: 'scatter',
+                            mode: 'lines',
+                            line: { color: stage.color, width: 4, opacity: 0.9 },
+                            connectgaps: true,
+                            legendgroup: stage.display,
+                            showlegend: false,
+                            hovertemplate: `<b>${stage.display} 5yr Avg</b><br>Week %{x}<br>%{y:.1f}%<extra></extra>`
+                        });
+                    }
+                }
             });
-            
-            html += '</table>';
-            document.getElementById('latest-table').innerHTML = html;
+
+            Plotly.newPlot(elementId, traces, {
+                height: 530,
+                margin: { t: 30, b: 80, l: 60, r: 30 },
+                xaxis: { title: 'Week Number', showgrid: true, gridcolor: '#e0e0e0', tickfont: { size: 11 } },
+                yaxis: { title: 'Percent Complete', range: [0, 100], ticksuffix: '%', showgrid: true, gridcolor: '#e0e0e0' },
+                legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.25, font: { size: 10 }, traceorder: 'grouped' },
+                plot_bgcolor: '#fafafa',
+                paper_bgcolor: 'white',
+                hovermode: 'x unified'
+            });
         }
-        
-        // Create Good + Excellent condition chart
-        function createConditionChart(elementId, stateFilter) {
-            const isNational = stateFilter === 'NATIONAL';
+
+        /**
+         * Create Good + Excellent condition chart (Weeks 20-47)
+         */
+        function createGoodExcellentChart(elementId, stateName) {
+            const isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
             const filtered = allData.filter(r => 
-                (isNational ? r.level === 'NATIONAL' : r.state_name === stateFilter) &&
+                (isNational ? r.level === 'NATIONAL' : r.state_name === stateName) &&
                 r.data_item_key && 
                 (r.data_item_key.includes('condition_current_good') || r.data_item_key.includes('condition_current_excellent'))
             );
-            
+
             const years = [...new Set(filtered.map(r => r.year))].sort();
-            const colors = ['#6b4c9a', '#4a90d9', '#5a9a5a', '#d4a574', '#c44e4e', '#8b4513', '#2f4f4f'];
-            
+            const colors = ['#6b4c9a', '#4a90d9', '#5a9a5a', '#d4a574', '#c44e4e', '#8b4513', '#2f4f4f', '#ff6b6b', '#4ecdc4', '#45b7d1'];
+
             const traces = years.map((year, i) => {
                 const yearData = filtered.filter(r => r.year === year);
-                
+
                 const weekGroups = {};
                 yearData.forEach(r => {
                     const week = getWeekNumber(r.reference_period_desc);
-                    if (!week) return;
+                    if (!week || week < 20 || week > 47) return;
                     if (!weekGroups[week]) weekGroups[week] = { good: 0, excellent: 0 };
                     if (r.data_item_key === 'condition_current_good') weekGroups[week].good = parseFloat(r.Value) || 0;
                     if (r.data_item_key === 'condition_current_excellent') weekGroups[week].excellent = parseFloat(r.Value) || 0;
                 });
-                
-                const weeks = Object.keys(weekGroups).sort((a,b) => a-b);
+
+                const weeks = Object.keys(weekGroups).sort((a,b) => parseInt(a)-parseInt(b));
                 const values = weeks.map(w => weekGroups[w].good + weekGroups[w].excellent);
-                
+
                 return {
                     x: weeks,
                     y: values,
@@ -364,16 +645,17 @@
                     line: { color: colors[i % colors.length], width: 2 },
                     marker: { size: 4 }
                 };
-            });
-            
+            }).filter(t => t.x.length > 0);
+
             Plotly.newPlot(elementId, traces, {
-                height: 350,
+                height: 380,
                 margin: { t: 30, b: 60, l: 60, r: 30 },
                 xaxis: { 
                     title: 'Week Number',
+                    range: [20, 47],
                     tickmode: 'linear',
-                    tick0: 1,
-                    dtick: 2,
+                    tick0: 20,
+                    dtick: 3,
                     showgrid: true
                 },
                 yaxis: { 
@@ -386,8 +668,72 @@
                 plot_bgcolor: '#fafafa'
             });
         }
-        
-        // Create progress chart
+
+        /**
+         * Create Poor + Very Poor condition chart (Weeks 20-47)
+         */
+        function createPoorVeryPoorChart(elementId, stateName) {
+            const isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
+            const filtered = allData.filter(r => 
+                (isNational ? r.level === 'NATIONAL' : r.state_name === stateName) &&
+                r.data_item_key && 
+                (r.data_item_key.includes('condition_current_poor') || r.data_item_key.includes('condition_current_very_poor'))
+            );
+
+            const years = [...new Set(filtered.map(r => r.year))].sort();
+            const colors = ['#c44e4e', '#8b4513', '#d4a574', '#6b4c9a', '#4a90d9', '#5a9a5a', '#2f4f4f', '#ff6b6b', '#4ecdc4', '#45b7d1'];
+
+            const traces = years.map((year, i) => {
+                const yearData = filtered.filter(r => r.year === year);
+
+                const weekGroups = {};
+                yearData.forEach(r => {
+                    const week = getWeekNumber(r.reference_period_desc);
+                    if (!week || week < 20 || week > 47) return;
+                    if (!weekGroups[week]) weekGroups[week] = { poor: 0, verypoor: 0 };
+                    if (r.data_item_key === 'condition_current_poor') weekGroups[week].poor = parseFloat(r.Value) || 0;
+                    if (r.data_item_key === 'condition_current_very_poor') weekGroups[week].verypoor = parseFloat(r.Value) || 0;
+                });
+
+                const weeks = Object.keys(weekGroups).sort((a,b) => parseInt(a)-parseInt(b));
+                const values = weeks.map(w => weekGroups[w].poor + weekGroups[w].verypoor);
+
+                return {
+                    x: weeks,
+                    y: values,
+                    name: year,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    line: { color: colors[i % colors.length], width: 2 },
+                    marker: { size: 4 }
+                };
+            }).filter(t => t.x.length > 0);
+
+            Plotly.newPlot(elementId, traces, {
+                height: 380,
+                margin: { t: 30, b: 60, l: 60, r: 30 },
+                xaxis: { 
+                    title: 'Week Number',
+                    range: [20, 47],
+                    tickmode: 'linear',
+                    tick0: 20,
+                    dtick: 3,
+                    showgrid: true
+                },
+                yaxis: { 
+                    title: 'Poor + Very Poor (%)',
+                    range: [0, 60],
+                    ticksuffix: '%',
+                    showgrid: true
+                },
+                legend: { orientation: 'v', x: 1.02, y: 1, xanchor: 'left' },
+                plot_bgcolor: '#fafafa'
+            });
+        }
+
+        /**
+         * Create individual progress chart
+         */
         function createProgressChart(elementId, stateName) {
             const isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
             const filtered = allData.filter(r => 
@@ -395,83 +741,79 @@
                 r.data_item_key && 
                 r.data_item_key.includes('progress_current')
             );
-            
-            const stages = ['planted', 'squaring', 'setting_bolls', 'bolls_opening', 'harvested'];
-            const stageLabels = ['Planted', 'Squaring', 'Setting Bolls', 'Bolls Opening', 'Harvested'];
-            const stageColors = ['#8b0000', '#228b22', '#daa520', '#4682b4', '#800080'];
-            
+
             const currentYear = '2026';
             const prevYear = '2025';
             const avgYears = ['2021', '2022', '2023', '2024', '2025'];
-            
+
             const traces = [];
-            
-            stages.forEach((stage, i) => {
+
+            STAGES.forEach((stage, i) => {
                 // Current year
-                const currentData = filtered.filter(r => r.year === currentYear && r.data_item_key === `progress_current_${stage}`);
+                const currentData = filtered.filter(r => r.year === currentYear && r.data_item_key === stage.key);
                 if (currentData.length > 0) {
                     traces.push({
                         x: currentData.map(r => getWeekNumber(r.reference_period_desc)),
                         y: currentData.map(r => parseFloat(r.Value) || 0),
-                        name: `${stageLabels[i]} ${currentYear}`,
+                        name: `${stage.display} ${currentYear}`,
                         type: 'scatter',
                         mode: 'lines',
-                        line: { color: stageColors[i], width: 3 }
+                        line: { color: stage.color, width: 3 }
                     });
                 }
-                
+
                 // Previous year
-                const prevData = filtered.filter(r => r.year === prevYear && r.data_item_key === `progress_current_${stage}`);
+                const prevData = filtered.filter(r => r.year === prevYear && r.data_item_key === stage.key);
                 if (prevData.length > 0) {
                     traces.push({
                         x: prevData.map(r => getWeekNumber(r.reference_period_desc)),
                         y: prevData.map(r => parseFloat(r.Value) || 0),
-                        name: `${stageLabels[i]} ${prevYear}`,
+                        name: `${stage.display} ${prevYear}`,
                         type: 'scatter',
                         mode: 'lines',
-                        line: { color: stageColors[i], width: 2, dash: 'dash' },
+                        line: { color: stage.color, width: 2, dash: 'dash' },
                         showlegend: false
                     });
                 }
-                
+
                 // 5-year average
                 const avgData = [];
                 const weekSet = new Set();
                 avgYears.forEach(y => {
-                    filtered.filter(r => r.year === y && r.data_item_key === `progress_current_${stage}`)
+                    filtered.filter(r => r.year === y && r.data_item_key === stage.key)
                         .forEach(r => {
                             const w = getWeekNumber(r.reference_period_desc);
                             if (w) weekSet.add(w);
                         });
                 });
-                
+
                 const weeks = [...weekSet].sort((a,b) => a-b);
                 weeks.forEach(w => {
                     const values = avgYears.map(y => {
-                        const r = filtered.find(x => x.year === y && x.data_item_key === `progress_current_${stage}` && getWeekNumber(x.reference_period_desc) === w);
+                        const r = filtered.find(x => x.year === y && x.data_item_key === stage.key && getWeekNumber(x.reference_period_desc) === w);
                         return r ? parseFloat(r.Value) : null;
                     }).filter(v => v !== null);
-                    
+
                     if (values.length > 0) {
                         avgData.push({ week: w, value: values.reduce((a,b) => a+b, 0) / values.length });
                     }
                 });
-                
+
                 if (avgData.length > 0) {
                     traces.push({
                         x: avgData.map(d => d.week),
                         y: avgData.map(d => d.value),
-                        name: `${stageLabels[i]} 5-Yr Avg`,
+                        name: `${stage.display} 5-Yr Avg`,
                         type: 'scatter',
                         mode: 'lines',
-                        line: { color: stageColors[i], width: 1.5, dash: 'dot' },
+                        line: { color: stage.color, width: 1.5, dash: 'dot' },
                         showlegend: false
                     });
                 }
             });
-            
+
             Plotly.newPlot(elementId, traces, {
-                height: 350,
+                height: 380,
                 margin: { t: 30, b: 60, l: 60, r: 30 },
                 xaxis: { 
                     title: 'Week Number',
@@ -490,29 +832,173 @@
                 plot_bgcolor: '#fafafa'
             });
         }
-        
-        function updateState1() {
-            const state = document.getElementById('state1-selector').value;
-            createProgressChart('chart-state1-progress', state);
+
+        /**
+         * Create latest week data table
+         */
+        function createLatestTable() {
+            const states = ['US TOTAL', 'TEXAS', ...ALL_STATES];
+
+            const latest2026 = allData.filter(r => r.year === '2026' && r.data_item_key === 'progress_current_planted')
+                .sort((a,b) => new Date(b.week_ending) - new Date(a.week_ending))[0];
+
+            if (!latest2026) {
+                document.getElementById('latest-table').innerHTML = '<p>No 2026 data available yet</p>';
+                return;
+            }
+
+            const latestWeek = getWeekNumber(latest2026.reference_period_desc);
+            const prevWeek = latestWeek ? latestWeek - 1 : null;
+
+            let html = `<table>
+                <tr>
+                    <th>State</th>
+                    <th>Week ${latestWeek}<br>2026</th>
+                    <th>Week ${prevWeek}<br>2026</th>
+                    <th>Week ${latestWeek}<br>2025</th>
+                    <th>5-Yr Avg<br>Week ${latestWeek}</th>
+                    <th>Yearly<br>Change</th>
+                </tr>`;
+
+            states.forEach(state => {
+                const isNational = state === 'US TOTAL';
+
+                const curr = allData.filter(r => 
+                    (isNational ? r.level === 'NATIONAL' : r.state_name === state) &&
+                    r.year === '2026' && 
+                    r.data_item_key === 'progress_current_planted' &&
+                    getWeekNumber(r.reference_period_desc) === latestWeek
+                )[0];
+
+                const prev = allData.filter(r => 
+                    (isNational ? r.level === 'NATIONAL' : r.state_name === state) &&
+                    r.year === '2026' && 
+                    r.data_item_key === 'progress_current_planted' &&
+                    getWeekNumber(r.reference_period_desc) === prevWeek
+                )[0];
+
+                const yr2025 = allData.filter(r => 
+                    (isNational ? r.level === 'NATIONAL' : r.state_name === state) &&
+                    r.year === '2025' && 
+                    r.data_item_key === 'progress_current_planted' &&
+                    getWeekNumber(r.reference_period_desc) === latestWeek
+                )[0];
+
+                const avgYears = ['2021', '2022', '2023', '2024', '2025'];
+                const avgValues = avgYears.map(y => {
+                    const r = allData.find(x => 
+                        (isNational ? x.level === 'NATIONAL' : x.state_name === state) &&
+                        x.year === y && 
+                        x.data_item_key === 'progress_current_planted' &&
+                        getWeekNumber(x.reference_period_desc) === latestWeek
+                    );
+                    return r ? parseFloat(r.Value) : null;
+                }).filter(v => v !== null);
+
+                const avg = avgValues.length > 0 ? (avgValues.reduce((a,b) => a+b, 0) / avgValues.length).toFixed(0) : '-';
+
+                const currVal = curr ? parseFloat(curr.Value) : 0;
+                const yr2025Val = yr2025 ? parseFloat(yr2025.Value) : 0;
+
+                const change = currVal - yr2025Val;
+                const changeClass = change > 0 ? 'positive' : (change < 0 ? 'negative' : '');
+                const changeStr = change > 0 ? `+${change}` : change.toString();
+
+                html += `<tr>
+                    <td>${state}</td>
+                    <td>${curr ? curr.Value + '%' : '-'}</td>
+                    <td>${prev ? prev.Value + '%' : '-'}</td>
+                    <td>${yr2025 ? yr2025.Value + '%' : '-'}</td>
+                    <td>${avg}%</td>
+                    <td class="${changeClass}">${changeStr}</td>
+                </tr>`;
+            });
+
+            html += '</table>';
+            document.getElementById('latest-table').innerHTML = html;
         }
-        
-        function updateState2() {
-            const state = document.getElementById('state2-selector').value;
-            createProgressChart('chart-state2-progress', state);
+
+        /**
+         * Update all charts
+         */
+        function updateAllCharts() {
+            const state1 = document.getElementById('state1-selector').value;
+            const state2 = document.getElementById('state2-selector').value;
+
+            // Show/hide state 1 containers
+            const state1Containers = [
+                'state1-continuum-container',
+                'state1-good-excellent-container',
+                'state1-poor-verypoor-container',
+                'state1-progress-container'
+            ];
+            state1Containers.forEach(id => {
+                document.getElementById(id).style.display = state1 ? 'block' : 'none';
+            });
+
+            // Show/hide state 2 containers
+            const state2Containers = [
+                'state2-continuum-container',
+                'state2-good-excellent-container',
+                'state2-poor-verypoor-container',
+                'state2-progress-container'
+            ];
+            state2Containers.forEach(id => {
+                document.getElementById(id).style.display = state2 ? 'block' : 'none';
+            });
+
+            // Update titles
+            if (state1) {
+                document.getElementById('state1-continuum-title').textContent = `${state1} - Cotton Crop Progress Continuum`;
+                document.getElementById('state1-good-excellent-title').textContent = `${state1} - Good + Excellent Condition`;
+                document.getElementById('state1-poor-verypoor-title').textContent = `${state1} - Poor + Very Poor Condition`;
+                document.getElementById('state1-progress-title').textContent = `${state1} - Crop Progress`;
+            }
+
+            if (state2) {
+                document.getElementById('state2-continuum-title').textContent = `${state2} - Cotton Crop Progress Continuum`;
+                document.getElementById('state2-good-excellent-title').textContent = `${state2} - Good + Excellent Condition`;
+                document.getElementById('state2-poor-verypoor-title').textContent = `${state2} - Poor + Very Poor Condition`;
+                document.getElementById('state2-progress-title').textContent = `${state2} - Crop Progress`;
+            }
+
+            // Create all charts
+            createContinuumChart('chart-national-continuum', 'national-continuum-range', 'NATIONAL');
+            createContinuumChart('chart-texas-continuum', 'texas-continuum-range', 'TEXAS');
+
+            if (state1) createContinuumChart('chart-state1-continuum', 'state1-continuum-range', state1);
+            if (state2) createContinuumChart('chart-state2-continuum', 'state2-continuum-range', state2);
+
+            createGoodExcellentChart('chart-national-good-excellent', 'NATIONAL');
+            createGoodExcellentChart('chart-texas-good-excellent', 'TEXAS');
+            if (state1) createGoodExcellentChart('chart-state1-good-excellent', state1);
+            if (state2) createGoodExcellentChart('chart-state2-good-excellent', state2);
+
+            createPoorVeryPoorChart('chart-national-poor-verypoor', 'NATIONAL');
+            createPoorVeryPoorChart('chart-texas-poor-verypoor', 'TEXAS');
+            if (state1) createPoorVeryPoorChart('chart-state1-poor-verypoor', state1);
+            if (state2) createPoorVeryPoorChart('chart-state2-poor-verypoor', state2);
+
+            createProgressChart('chart-national-progress', 'NATIONAL');
+            createProgressChart('chart-texas-progress', 'TEXAS');
+            if (state1) createProgressChart('chart-state1-progress', state1);
+            if (state2) createProgressChart('chart-state2-progress', state2);
         }
-        
+
+        // Alias for button click
+        function updateCharts() {
+            updateAllCharts();
+        }
+
+        // Initialize
         Promise.all(FILES.map(loadFile))
             .then(() => {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('charts').style.display = 'block';
-                
+                document.getElementById('controls').style.display = 'block';
+
                 createLatestTable();
-                createConditionChart('chart-national-condition', 'NATIONAL');
-                createConditionChart('chart-texas-condition', 'TEXAS');
-                createProgressChart('chart-national-progress', 'NATIONAL');
-                createProgressChart('chart-texas-progress', 'TEXAS');
-                createProgressChart('chart-state1-progress', 'TEXAS');
-                createProgressChart('chart-state2-progress', 'GEORGIA');
+                updateAllCharts();
             })
             .catch(err => {
                 document.getElementById('loading').style.display = 'none';
