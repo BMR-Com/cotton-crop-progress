@@ -318,11 +318,11 @@
         var dataLoadErrors = [];
 
         var STAGES = [
-            { key: 'progress_current_planted', display: 'Planted', color: '#C62828' },
-            { key: 'progress_current_squaring', display: 'Squaring', color: '#1565C0' },
-            { key: 'progress_current_setting_bolls', display: 'Setting Bolls', color: '#2E7D32' },
-            { key: 'progress_current_bolls_opening', display: 'Bolls Opening', color: '#F57C00' },
-            { key: 'progress_current_harvested', display: 'Harvested', color: '#6A1B9A' }
+            { key: 'progress_current_planted', display: 'Planted', color: '#C62828', chartId: 'chart-planted', rangeId: 'planted-week-range' },
+            { key: 'progress_current_squaring', display: 'Squaring', color: '#1565C0', chartId: 'chart-squaring', rangeId: 'squaring-week-range' },
+            { key: 'progress_current_setting_bolls', display: 'Setting Bolls', color: '#2E7D32', chartId: 'chart-setting', rangeId: 'setting-week-range' },
+            { key: 'progress_current_bolls_opening', display: 'Bolls Opening', color: '#F57C00', chartId: 'chart-opening', rangeId: 'opening-week-range' },
+            { key: 'progress_current_harvested', display: 'Harvested', color: '#6A1B9A', chartId: 'chart-harvested', rangeId: 'harvested-week-range' }
         ];
 
         var ALL_STATES = [
@@ -347,8 +347,25 @@
             document.getElementById('nav-' + tabName).classList.add('active');
             if (tabName === 'dashboard') {
                 updateDashboardCharts();
+                // Resize plots after tab becomes visible
+                setTimeout(function() {
+                    ['chart-national-continuum', 'chart-texas-continuum', 'chart-national-good-excellent', 
+                     'chart-texas-good-excellent', 'chart-national-poor-verypoor', 'chart-texas-poor-verypoor']
+                    .forEach(function(id) {
+                        var el = document.getElementById(id);
+                        if (el) Plotly.Plots.resize(el);
+                    });
+                }, 100);
             } else {
                 updateSeasonalityCharts();
+                // Resize plots after tab becomes visible
+                setTimeout(function() {
+                    ['chart-combined', 'chart-planted', 'chart-squaring', 'chart-setting', 
+                     'chart-opening', 'chart-harvested'].forEach(function(id) {
+                        var el = document.getElementById(id);
+                        if (el) Plotly.Plots.resize(el);
+                    });
+                }, 100);
             }
         }
 
@@ -396,7 +413,7 @@
                 var matchesLocation = isNational 
                     ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                     : r.state_name === stateName;
-                var matchesYear = r.year === year;
+                var matchesYear = r.year.toString() === year.toString();
                 return matchesStage && matchesLocation && matchesYear;
             });
 
@@ -426,7 +443,7 @@
                     var matchesLocation = isNational 
                         ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                         : r.state_name === stateName;
-                    var matchesYear = r.year === year;
+                    var matchesYear = r.year.toString() === year.toString();
                     return matchesStage && matchesLocation && matchesYear;
                 });
 
@@ -577,7 +594,7 @@
             var colors = ['#6b4c9a', '#4a90d9', '#5a9a5a', '#d4a574', '#c44e4e', '#8b4513', '#2f4f4f', '#ff6b6b', '#4ecdc4', '#45b7d1'];
 
             var traces = years.map(function(year, i) {
-                var yearData = filtered.filter(function(r) { return r.year === year; });
+                var yearData = filtered.filter(function(r) { return r.year.toString() === year.toString(); });
 
                 var weekGroups = {};
                 yearData.forEach(function(r) {
@@ -640,7 +657,7 @@
             var colors = ['#c44e4e', '#8b4513', '#d4a574', '#6b4c9a', '#4a90d9', '#5a9a5a', '#2f4f4f', '#ff6b6b', '#4ecdc4', '#45b7d1'];
 
             var traces = years.map(function(year, i) {
-                var yearData = filtered.filter(function(r) { return r.year === year; });
+                var yearData = filtered.filter(function(r) { return r.year.toString() === year.toString(); });
 
                 var weekGroups = {};
                 yearData.forEach(function(r) {
@@ -692,7 +709,7 @@
             var states = ALL_STATES.slice();
 
             var planted2026 = allData.filter(function(r) { 
-                return r.year === '2026' && r.data_item_key === 'progress_current_planted'; 
+                return r.year.toString() === '2026' && r.data_item_key === 'progress_current_planted'; 
             });
 
             var sortedByDate = planted2026.sort(function(a, b) { 
@@ -722,20 +739,20 @@
             // First show all individual states
             states.forEach(function(state) {
                 var curr = allData.find(function(r) {
-                    return r.state_name === state && r.year === '2026' && 
+                    return r.state_name === state && r.year.toString() === '2026' && 
                            r.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(r.reference_period_desc) === latestWeek;
                 });
 
                 var prev = allData.find(function(r) {
-                    return r.state_name === state && r.year === '2026' && 
+                    return r.state_name === state && r.year.toString() === '2026' && 
                            r.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(r.reference_period_desc) === prevWeek;
                 });
 
                 // FIXED: Properly get 2025 data
                 var yr2025 = allData.find(function(r) {
-                    return r.state_name === state && r.year === '2025' && 
+                    return r.state_name === state && r.year.toString() === '2025' && 
                            r.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(r.reference_period_desc) === latestWeek;
                 });
@@ -743,7 +760,7 @@
                 var avgYears = ['2021', '2022', '2023', '2024', '2025'];
                 var avgValues = avgYears.map(function(y) {
                     var r = allData.find(function(x) {
-                        return x.state_name === state && x.year === y && 
+                        return x.state_name === state && x.year.toString() === y.toString() && 
                                x.data_item_key === 'progress_current_planted' &&
                                getWeekNumber(x.reference_period_desc) === latestWeek;
                     });
@@ -771,19 +788,19 @@
 
             // Then show National (US TOTAL) at the bottom
             var currNat = allData.find(function(r) {
-                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year === '2026' && 
+                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year.toString() === '2026' && 
                        r.data_item_key === 'progress_current_planted' &&
                        getWeekNumber(r.reference_period_desc) === latestWeek;
             });
 
             var prevNat = allData.find(function(r) {
-                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year === '2026' && 
+                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year.toString() === '2026' && 
                        r.data_item_key === 'progress_current_planted' &&
                        getWeekNumber(r.reference_period_desc) === prevWeek;
             });
 
             var yr2025Nat = allData.find(function(r) {
-                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year === '2025' && 
+                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year.toString() === '2025' && 
                        r.data_item_key === 'progress_current_planted' &&
                        getWeekNumber(r.reference_period_desc) === latestWeek;
             });
@@ -791,7 +808,7 @@
             var avgYears = ['2021', '2022', '2023', '2024', '2025'];
             var avgValuesNat = avgYears.map(function(y) {
                 var r = allData.find(function(x) {
-                    return (x.level === 'NATIONAL' || x.state_name === 'US TOTAL') && x.year === y && 
+                    return (x.level === 'NATIONAL' || x.state_name === 'US TOTAL') && x.year.toString() === y.toString() && 
                            x.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(x.reference_period_desc) === latestWeek;
                 });
@@ -908,7 +925,7 @@
                 var matchesLocation = isNational 
                     ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                     : r.state_name === stateName;
-                var matchesYear = years.indexOf(r.year) !== -1;
+                var matchesYear = years.indexOf(r.year.toString()) !== -1;
                 return matchesStage && matchesLocation && matchesYear;
             });
 
@@ -935,7 +952,7 @@
                     var matchesLocation = isNational 
                         ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                         : r.state_name === stateName;
-                    var matchesYear = r.year === year;
+                    var matchesYear = r.year.toString() === year.toString();
                     return matchesStage && matchesLocation && matchesYear;
                 });
 
@@ -979,7 +996,7 @@
                         ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                         : r.state_name === stateName;
                     var weekNum = getWeekNumber(r.reference_period_desc);
-                    return r.year === currentYear && 
+                    return r.year.toString() === currentYear.toString() && 
                            r.data_item_key === stage.key &&
                            matchesLocation &&
                            weekNum >= CONTINUUM_WEEK_MIN && 
@@ -1028,7 +1045,7 @@
                         ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                         : r.state_name === stateName;
                     var weekNum = getWeekNumber(r.reference_period_desc);
-                    return r.year === prevYear && 
+                    return r.year.toString() === prevYear.toString() && 
                            r.data_item_key === stage.key &&
                            matchesLocation &&
                            weekNum >= CONTINUUM_WEEK_MIN && 
@@ -1077,7 +1094,7 @@
                                 ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                                 : r.state_name === stateName;
                             var weekNum = getWeekNumber(r.reference_period_desc);
-                            return r.year === year && 
+                            return r.year.toString() === year.toString() && 
                                    r.data_item_key === stage.key &&
                                    matchesLocation &&
                                    weekNum >= CONTINUUM_WEEK_MIN && 
@@ -1159,17 +1176,21 @@
         }
 
         function createStageChart(stage, stateName, years) {
+            console.log('createStageChart called for:', stage.display, 'state:', stateName, 'years:', years);
+
+            var isNational = stateName === 'US TOTAL';
             var weekRange = getWeekRangeForStage(stage.key, stateName, years);
+            console.log('Week range for', stage.display, ':', weekRange);
             var weekLabels = generateWeekLabelsForRange(weekRange.min, weekRange.max);
 
-            var rangeId = stage.key.replace('progress_current_', '') + '-week-range';
+            var rangeId = stage.rangeId;
             var rangeText = weekRange.actualMin ? 
                 'Weeks ' + weekRange.min + '-' + weekRange.max + ' (data: ' + weekRange.actualMin + '-' + weekRange.actualMax + ')' : 
                 'No data';
             var rangeEl = document.getElementById(rangeId);
             if (rangeEl) rangeEl.textContent = rangeText;
 
-            var chartId = 'chart-' + stage.key.replace('progress_current_', '');
+            var chartId = stage.chartId;
 
             if (weekRange.actualMin === null) {
                 Plotly.newPlot(chartId, [], {
@@ -1194,7 +1215,7 @@
                     var matchesLocation = isNational 
                         ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                         : r.state_name === stateName;
-                    var matchesYear = r.year === year;
+                    var matchesYear = r.year.toString() === year.toString();
                     return matchesStage && matchesLocation && matchesYear;
                 });
 
@@ -1212,7 +1233,10 @@
                     values.push(weekMap[w] !== undefined ? weekMap[w] : null);
                 }
 
+                var nonNullCount = values.filter(function(v) { return v !== null; }).length;
+                console.log('Year', year, 'has', nonNullCount, 'non-null values out of', values.length);
                 if (values.some(function(v) { return v !== null; })) {
+                    console.log('Creating trace for', year, 'with', nonNullCount, 'data points');
                     traces.push({
                         x: weekLabels,
                         y: values,
@@ -1319,7 +1343,7 @@
 
         function getLatestWeekInfo2026() {
             var plantedData = allData.filter(function(r) { 
-                return r.year === '2026' && r.data_item_key === 'progress_current_planted';
+                return r.year.toString() === '2026' && r.data_item_key === 'progress_current_planted';
             });
 
             if (plantedData.length === 0) return null;
@@ -1350,7 +1374,7 @@
                 var matchesLocation = isNational 
                     ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
                     : r.state_name === state;
-                var matchesYear = r.year === year.toString();
+                var matchesYear = r.year.toString() === year.toString().toString();
                 var matchesStage = r.data_item_key === stageKey;
                 var matchesWeek = getWeekNumber(r.reference_period_desc) === weekNum;
                 return matchesLocation && matchesYear && matchesStage && matchesWeek;
