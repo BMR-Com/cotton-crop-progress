@@ -45,12 +45,14 @@ DATA_ITEMS = {
     "progress_prev_emerged": "COTTON, UPLAND - PROGRESS, PREVIOUS YEAR, MEASURED IN PCT EMERGED",
 }
 
+# UPDATED FILE RANGES - Added 2026-2030 range
 FILE_RANGES = [
     ('data/cotton_2001_2005.csv', 2001, 2005),
     ('data/cotton_2006_2010.csv', 2006, 2010),
     ('data/cotton_2011_2015.csv', 2011, 2015),
     ('data/cotton_2016_2020.csv', 2016, 2020),
     ('data/cotton_2021_2025.csv', 2021, 2025),
+    ('data/cotton_2026_2030.csv', 2026, 2030),  # NEW: Added 2026-2030 range
 ]
 
 def fetch_item(year, key, desc):
@@ -85,30 +87,30 @@ def fetch_item(year, key, desc):
 def main():
     os.makedirs('data', exist_ok=True)
     current_year = datetime.now().year
-    
+
     for filename, start_year, end_year in FILE_RANGES:
         print(f"\nProcessing {filename}...")
-        
+
         if os.path.exists(filename):
             existing = pd.read_csv(filename)
             print(f"  Loaded: {len(existing)} rows")
         else:
             existing = pd.DataFrame()
-            print(f"  Creating new")
-        
+            print(f"  Creating new file")
+
         # Fetch current year if in range
         if start_year <= current_year <= end_year:
-            print(f"  Fetching {current_year}...")
+            print(f"  Fetching {current_year} data...")
             new_data = []
             for key, desc in DATA_ITEMS.items():
                 df = fetch_item(current_year, key, desc)
                 if df is not None:
                     new_data.append(df)
-            
+
             if new_data:
                 new_df = pd.concat(new_data, ignore_index=True)
                 print(f"  Fetched: {len(new_df)} rows")
-                
+
                 combined = pd.concat([existing, new_df], ignore_index=True)
                 dup_cols = ['year', 'week_ending', 'state_name', 'short_desc', 'data_item_key']
                 dup_cols = [c for c in dup_cols if c in combined.columns]
@@ -116,15 +118,16 @@ def main():
                 print(f"  Final: {len(combined)} rows")
                 combined.to_csv(filename, index=False)
             else:
-                print(f"  No new data")
-                existing.to_csv(filename, index=False)
+                print(f"  No new data fetched")
+                if not existing.empty:
+                    existing.to_csv(filename, index=False)
         else:
-            print(f"  {current_year} not in range, skipping")
+            print(f"  {current_year} not in range {start_year}-{end_year}, skipping fetch")
             if not existing.empty:
                 existing.to_csv(filename, index=False)
-        
+
         if os.path.exists(filename):
-            print(f"  Size: {os.path.getsize(filename)/1024/1024:.1f} MB")
+            print(f"  File size: {os.path.getsize(filename)/1024/1024:.1f} MB")
 
 if __name__ == '__main__':
     main()
