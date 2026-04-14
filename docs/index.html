@@ -12,35 +12,79 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
             padding: 0; 
-            background: #f0f2f5; 
+            background: #f5f5f5; 
         }
         .header { 
             background: #1a5490; 
             color: white; 
-            padding: 20px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px 20px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .header h1 { margin: 0; font-size: 24px; }
-        .header p { margin: 5px 0 0 0; opacity: 0.9; font-size: 14px; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .header h1 { 
+            margin: 0; 
+            font-size: 20px; 
+            font-weight: 600;
+        }
+        .header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .nav {
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+        }
+        .nav a {
+            color: #1a5490;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
         .chart-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             gap: 20px; 
-            margin-top: 20px;
         }
         .chart-box { 
             background: white; 
-            padding: 20px; 
-            border-radius: 8px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+            border: 1px solid #ddd;
+            border-radius: 4px; 
+            overflow: hidden;
         }
-        .chart-box h3 { 
-            margin: 0 0 15px 0; 
-            color: #1a5490; 
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .chart-header {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chart-header h3 { 
+            margin: 0; 
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .state-selector {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+            background: white;
+        }
+        .chart-content {
+            padding: 15px;
+            height: 400px;
         }
         .loading { 
             text-align: center; 
@@ -51,8 +95,11 @@
             color: #c0392b; 
             padding: 20px; 
             background: #fee; 
-            border-radius: 8px;
+            border-radius: 4px;
             margin: 20px;
+        }
+        .usda-style {
+            font-family: Arial, sans-serif;
         }
         @media (max-width: 768px) { 
             .chart-grid { grid-template-columns: 1fr; } 
@@ -61,32 +108,103 @@
 </head>
 <body>
     <div class="header">
-        <div class="container">
-            <h1>🌱 USDA NASS Cotton Analytics Dashboard</h1>
-            <p id="status">Loading 5 data files...</p>
+        <div>
+            <h1>USDA NASS Cotton Analytics Dashboard</h1>
+            <div class="subtitle">Crop Progress and Condition: Cotton in United States</div>
         </div>
+        <div id="status">Loading...</div>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html" style="color: #1a5490; font-weight: bold;">Dashboard</a>
+        <a href="seasonality.html">Seasonality Analysis</a>
     </div>
     
     <div class="container">
         <div id="loading" class="loading">Loading cotton data...</div>
         <div id="error" class="error" style="display: none;"></div>
+        
         <div id="charts" class="chart-grid" style="display: none;">
+            <!-- Chart 1: National Condition (Fixed) -->
             <div class="chart-box">
-                <h3>National Cotton Condition</h3>
-                <div id="national-chart"></div>
+                <div class="chart-header">
+                    <h3>National - Good + Excellent Condition</h3>
+                </div>
+                <div id="chart-national-condition" class="chart-content"></div>
             </div>
+            
+            <!-- Chart 2: Texas Condition (Fixed) -->
             <div class="chart-box">
-                <h3>Texas Cotton Progress</h3>
-                <div id="texas-chart"></div>
+                <div class="chart-header">
+                    <h3>Texas - Good + Excellent Condition</h3>
+                </div>
+                <div id="chart-texas-condition" class="chart-content"></div>
+            </div>
+            
+            <!-- Chart 3: State 1 Progress (Selectable) -->
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h3>
+                        <select id="state1-selector" class="state-selector" onchange="updateState1()">
+                            <option value="TEXAS" selected>Texas</option>
+                            <option value="GEORGIA">Georgia</option>
+                            <option value="MISSISSIPPI">Mississippi</option>
+                            <option value="ALABAMA">Alabama</option>
+                            <option value="ARKANSAS">Arkansas</option>
+                            <option value="LOUISIANA">Louisiana</option>
+                            <option value="NORTH CAROLINA">North Carolina</option>
+                            <option value="SOUTH CAROLINA">South Carolina</option>
+                            <option value="TENNESSEE">Tennessee</option>
+                            <option value="OKLAHOMA">Oklahoma</option>
+                            <option value="KANSAS">Kansas</option>
+                            <option value="MISSOURI">Missouri</option>
+                            <option value="FLORIDA">Florida</option>
+                            <option value="VIRGINIA">Virginia</option>
+                            <option value="CALIFORNIA">California</option>
+                            <option value="ARIZONA">Arizona</option>
+                            <option value="NEW MEXICO">New Mexico</option>
+                        </select>
+                        - Crop Progress
+                    </h3>
+                </div>
+                <div id="chart-state1-progress" class="chart-content"></div>
+            </div>
+            
+            <!-- Chart 4: State 2 Progress (Selectable) -->
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h3>
+                        <select id="state2-selector" class="state-selector" onchange="updateState2()">
+                            <option value="TEXAS">Texas</option>
+                            <option value="GEORGIA" selected>Georgia</option>
+                            <option value="MISSISSIPPI">Mississippi</option>
+                            <option value="ALABAMA">Alabama</option>
+                            <option value="ARKANSAS">Arkansas</option>
+                            <option value="LOUISIANA">Louisiana</option>
+                            <option value="NORTH CAROLINA">North Carolina</option>
+                            <option value="SOUTH CAROLINA">South Carolina</option>
+                            <option value="TENNESSEE">Tennessee</option>
+                            <option value="OKLAHOMA">Oklahoma</option>
+                            <option value="KANSAS">Kansas</option>
+                            <option value="MISSOURI">Missouri</option>
+                            <option value="FLORIDA">Florida</option>
+                            <option value="VIRGINIA">Virginia</option>
+                            <option value="CALIFORNIA">California</option>
+                            <option value="ARIZONA">Arizona</option>
+                            <option value="NEW MEXICO">New Mexico</option>
+                        </select>
+                        - Crop Progress
+                    </h3>
+                </div>
+                <div id="chart-state2-progress" class="chart-content"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Use jsDelivr to load from data folder (no CORS issues)
         const USERNAME = 'BMR-Com';
         const REPO = 'cotton-crop-progress';
-        const BRANCH = 'main';  // or 'master' depending on your default branch
+        const BRANCH = 'main';
         
         const FILES = [
             'cotton_2001_2005.csv',
@@ -96,7 +214,6 @@
             'cotton_2021_2025.csv'
         ];
         
-        // jsDelivr URL format
         const BASE_URL = `https://cdn.jsdelivr.net/gh/${USERNAME}/${REPO}@${BRANCH}/data`;
         
         let allData = [];
@@ -106,15 +223,11 @@
             document.getElementById('loading').style.display = 'none';
             document.getElementById('error').textContent = msg;
             document.getElementById('error').style.display = 'block';
-            document.getElementById('status').textContent = 'Error';
         }
         
         function loadFile(filename) {
-            const url = `${BASE_URL}/${filename}`;
-            console.log('Loading:', url);
-            
             return new Promise((resolve, reject) => {
-                Papa.parse(url, {
+                Papa.parse(`${BASE_URL}/${filename}`, {
                     download: true,
                     header: true,
                     complete: function(results) {
@@ -122,104 +235,227 @@
                         allData = allData.concat(data);
                         loadedCount++;
                         document.getElementById('status').textContent = 
-                            `Loading... ${loadedCount}/${FILES.length} files (${allData.length.toLocaleString()} records)`;
-                        console.log(`✓ ${filename}: ${data.length} rows`);
+                            `Loading ${loadedCount}/${FILES.length}...`;
                         resolve();
                     },
-                    error: function(err) {
-                        console.error(`✗ ${filename}:`, err);
-                        reject(new Error(`${filename}: Failed to load`));
-                    }
+                    error: reject
                 });
             });
         }
         
-        function createNationalChart() {
+        // USDA Style Colors
+        const YEAR_COLORS = {
+            '2021': '#6b4c9a', // Purple
+            '2022': '#4a90d9', // Blue
+            '2023': '#5a9a5a', // Green
+            '2024': '#d4a574', // Tan
+            '2025': '#c44e4e'  // Red
+        };
+        
+        const PROGRESS_COLORS = {
+            'planted': '#8b4513',
+            'emerged': '#d2691e',
+            'squaring': '#cd853f',
+            'setting_bolls': '#daa520',
+            'bolls_opening': '#b8860b',
+            'harvested': '#d2b48c'
+        };
+        
+        function createConditionChart(elementId, stateFilter) {
             const filtered = allData.filter(r => 
-                r.level === 'NATIONAL' && 
+                (stateFilter === 'NATIONAL' ? r.level === 'NATIONAL' : r.state_name === stateFilter) &&
                 r.data_item_key && 
-                r.data_item_key.includes('condition_current')
+                (r.data_item_key.includes('condition_current_good') || r.data_item_key.includes('condition_current_excellent'))
             );
             
-            const ratings = [
-                {key: 'excellent', color: '#27ae60', label: 'Excellent'},
-                {key: 'good', color: '#2ecc71', label: 'Good'},
-                {key: 'fair', color: '#f1c40f', label: 'Fair'},
-                {key: 'poor', color: '#e67e22', label: 'Poor'},
-                {key: 'very_poor', color: '#c0392b', label: 'Very Poor'}
-            ];
+            // Group by year and week
+            const years = [...new Set(filtered.map(r => r.year))].sort();
             
-            const traces = ratings.map(r => {
-                const items = filtered.filter(x => x.data_item_key === `condition_current_${r.key}`);
+            const traces = years.map(year => {
+                const yearData = filtered.filter(r => r.year === year);
+                // Sum good + excellent
+                const weeks = [...new Set(yearData.map(r => r.week_ending))].sort();
+                const values = weeks.map(week => {
+                    const weekData = yearData.filter(r => r.week_ending === week);
+                    const good = weekData.find(r => r.data_item_key === 'condition_current_good');
+                    const excellent = weekData.find(r => r.data_item_key === 'condition_current_excellent');
+                    return (parseFloat(good?.Value) || 0) + (parseFloat(excellent?.Value) || 0);
+                });
+                
                 return {
-                    x: items.map(x => x.week_ending),
-                    y: items.map(x => parseFloat(x.Value) || 0),
-                    name: r.label,
+                    x: weeks.map(w => {
+                        const d = new Date(w);
+                        return `${d.getMonth()+1}/${d.getDate()}`;
+                    }),
+                    y: values,
+                    name: year,
                     type: 'scatter',
-                    mode: 'lines+markers',
-                    stackgroup: 'one',
-                    line: { color: r.color, width: 2 },
-                    marker: { size: 4 }
+                    mode: 'lines',
+                    line: { 
+                        color: YEAR_COLORS[year] || '#999', 
+                        width: year === '2025' ? 3 : 2 
+                    }
                 };
-            }).filter(t => t.x.length > 0);
+            });
             
-            Plotly.newPlot('national-chart', traces, {
-                height: 400,
-                xaxis: { title: 'Week Ending', tickangle: -45 },
-                yaxis: { title: 'Percentage', range: [0, 100] },
-                legend: { orientation: 'h', y: -0.2 },
-                margin: { t: 20, b: 80 }
+            Plotly.newPlot(elementId, traces, {
+                height: 350,
+                margin: { t: 30, b: 50, l: 60, r: 30 },
+                xaxis: { 
+                    title: '',
+                    tickangle: 0,
+                    showgrid: true,
+                    gridcolor: '#eee'
+                },
+                yaxis: { 
+                    title: 'Good + Excellent (percent)',
+                    range: [0, 80],
+                    ticksuffix: '%',
+                    showgrid: true,
+                    gridcolor: '#eee'
+                },
+                legend: {
+                    orientation: 'v',
+                    x: 0.02,
+                    y: 0.98,
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    bordercolor: '#ccc',
+                    borderwidth: 1
+                },
+                plot_bgcolor: '#fafafa',
+                paper_bgcolor: 'white',
+                font: { family: 'Arial, sans-serif', size: 11 }
             });
         }
         
-        function createTexasChart() {
+        function createProgressChart(elementId, stateName) {
             const filtered = allData.filter(r => 
-                r.state_name === 'TEXAS' && 
+                r.state_name === stateName && 
                 r.data_item_key && 
                 r.data_item_key.includes('progress_current')
             );
             
             const stages = [
-                {key: 'planted', color: '#3498db', label: 'Planted'},
-                {key: 'emerged', color: '#9b59b6', label: 'Emerged'},
-                {key: 'squaring', color: '#1abc9c', label: 'Squaring'},
-                {key: 'setting_bolls', color: '#f39c12', label: 'Setting Bolls'},
-                {key: 'bolls_opening', color: '#e67e22', label: 'Bolls Opening'},
-                {key: 'harvested', color: '#e74c3c', label: 'Harvested'}
+                {key: 'planted', label: 'Planted', color: '#8b4513'},
+                {key: 'emerged', label: 'Emerged', color: '#d2691e'},
+                {key: 'squaring', label: 'Squaring', color: '#cd853f'},
+                {key: 'setting_bolls', label: 'Setting bolls', color: '#daa520'},
+                {key: 'bolls_opening', label: 'Bolls opening', color: '#b8860b'},
+                {key: 'harvested', label: 'Harvested', color: '#d2b48c'}
             ];
             
-            const traces = stages.map(s => {
-                const items = filtered.filter(x => x.data_item_key === `progress_current_${s.key}`);
-                return {
-                    x: items.map(x => x.week_ending),
-                    y: items.map(x => parseFloat(x.Value) || 0),
-                    name: s.label,
-                    type: 'scatter',
-                    mode: 'lines+markers',
-                    line: { color: s.color, width: 2 },
-                    marker: { size: 4 }
-                };
-            }).filter(t => t.x.length > 0);
+            // Get 2025 data (solid lines) and 2024 data (dashed)
+            const traces = [];
             
-            Plotly.newPlot('texas-chart', traces, {
-                height: 400,
-                xaxis: { title: 'Week Ending', tickangle: -45 },
-                yaxis: { title: 'Percentage Complete', range: [0, 100] },
-                legend: { orientation: 'h', y: -0.2 },
-                margin: { t: 20, b: 80 }
+            // 2025 data - solid lines
+            const data2025 = filtered.filter(r => r.year === '2025');
+            stages.forEach(stage => {
+                const items = data2025.filter(r => r.data_item_key === `progress_current_${stage.key}`);
+                if (items.length > 0) {
+                    traces.push({
+                        x: items.map(r => {
+                            const d = new Date(r.week_ending);
+                            return `${d.getMonth()+1}/${d.getDate()}`;
+                        }),
+                        y: items.map(r => parseFloat(r.Value) || 0),
+                        name: stage.label,
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { 
+                            color: stage.color, 
+                            width: 2,
+                            dash: 'solid'
+                        }
+                    });
+                }
+            });
+            
+            // 2024 data - dashed lines (for comparison)
+            const data2024 = filtered.filter(r => r.year === '2024');
+            stages.forEach(stage => {
+                const items = data2024.filter(r => r.data_item_key === `progress_current_${stage.key}`);
+                if (items.length > 0) {
+                    traces.push({
+                        x: items.map(r => {
+                            const d = new Date(r.week_ending);
+                            return `${d.getMonth()+1}/${d.getDate()}`;
+                        }),
+                        y: items.map(r => parseFloat(r.Value) || 0),
+                        name: stage.label + ' (2024)',
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { 
+                            color: stage.color, 
+                            width: 1.5,
+                            dash: 'dot'
+                        },
+                        showlegend: false,
+                        opacity: 0.6
+                    });
+                }
+            });
+            
+            Plotly.newPlot(elementId, traces, {
+                height: 350,
+                margin: { t: 30, b: 50, l: 60, r: 30 },
+                xaxis: { 
+                    title: '',
+                    showgrid: true,
+                    gridcolor: '#eee'
+                },
+                yaxis: { 
+                    title: 'Percent',
+                    range: [0, 100],
+                    ticksuffix: '%',
+                    showgrid: true,
+                    gridcolor: '#eee'
+                },
+                legend: {
+                    orientation: 'v',
+                    x: 0.02,
+                    y: 0.5,
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    bordercolor: '#ccc',
+                    borderwidth: 1
+                },
+                plot_bgcolor: '#fafafa',
+                paper_bgcolor: 'white',
+                annotations: stages.map((s, i) => ({
+                    x: 0.5,
+                    y: 50 + (i * 10),
+                    xref: 'paper',
+                    yref: 'y',
+                    text: s.label,
+                    showarrow: false,
+                    font: { color: s.color, size: 12, weight: 'bold' }
+                })),
+                font: { family: 'Arial, sans-serif', size: 11 }
             });
         }
         
-        // Load all 5 files
+        function updateState1() {
+            const state = document.getElementById('state1-selector').value;
+            createProgressChart('chart-state1-progress', state);
+        }
+        
+        function updateState2() {
+            const state = document.getElementById('state2-selector').value;
+            createProgressChart('chart-state2-progress', state);
+        }
+        
+        // Load all files
         Promise.all(FILES.map(loadFile))
             .then(() => {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('charts').style.display = 'grid';
                 document.getElementById('status').textContent = 
-                    `Loaded ${allData.length.toLocaleString()} records | Last updated: ${new Date().toLocaleString()}`;
+                    `Updated: ${new Date().toLocaleDateString()} | ${allData.length.toLocaleString()} records`;
                 
-                createNationalChart();
-                createTexasChart();
+                // Create charts
+                createConditionChart('chart-national-condition', 'NATIONAL');
+                createConditionChart('chart-texas-condition', 'TEXAS');
+                createProgressChart('chart-state1-progress', 'TEXAS');
+                createProgressChart('chart-state2-progress', 'GEORGIA');
             })
             .catch(err => {
                 console.error('Failed:', err);
