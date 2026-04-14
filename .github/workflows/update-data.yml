@@ -13,8 +13,6 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       
       - uses: actions/setup-python@v5
         with:
@@ -22,38 +20,15 @@ jobs:
       
       - run: pip install requests pandas
       
-      - name: Download existing CSVs from dataset branch
-        run: |
-          git fetch origin dataset
-          for file in cotton_2001_2005.csv cotton_2006_2010.csv cotton_2011_2015.csv cotton_2016_2020.csv cotton_2021_2025.csv; do
-            git show origin/dataset:$file > $file 2>/dev/null || echo "No $file"
-          done
-      
-      - name: Fetch new data and update files
+      - name: Fetch latest data and update CSVs
         env:
           USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
         run: python update_data.py
       
-      - name: Push updated CSVs to dataset branch
+      - name: Commit updated CSVs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Store updated files
-          mkdir -p /tmp/cotton-data
-          cp cotton_*.csv /tmp/cotton-data/
-          
-          # Switch to dataset branch
-          git fetch origin dataset
-          git checkout dataset
-          
-          # Replace files
-          cp /tmp/cotton-data/cotton_*.csv .
-          
-          # Commit and push
-          git add cotton_*.csv
+          git add data/*.csv
           git commit -m "Update cotton data $(date -u +%Y-%m-%d)" || echo "No changes"
-          git push origin dataset
-          
-          # Back to main
-          git checkout main
+          git push
