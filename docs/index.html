@@ -8,168 +8,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         * { box-sizing: border-box; }
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            background: #f5f5f5; 
-        }
-        .header { 
-            background: #1a5490; 
-            color: white; 
-            padding: 15px 20px; 
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .header { background: #1a5490; color: white; padding: 15px 20px; }
         .header h1 { margin: 0; font-size: 20px; }
-        .nav {
-            background: #fff;
-            border-bottom: 1px solid #ddd;
-            padding: 10px 20px;
-        }
-        .nav a {
-            color: #1a5490;
-            text-decoration: none;
-            margin-right: 20px;
-            font-weight: 500;
-        }
-        .container { 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            padding: 20px; 
-        }
-        .controls {
-            background: white;
-            padding: 15px;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-        .control-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .control-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .control-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        select, button {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 13px;
-        }
-        button {
-            background: #1a5490;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background: #144070;
-        }
-        .chart-grid { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 20px; 
-        }
-        .chart-box { 
-            background: white; 
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .chart-box.full-width {
-            grid-column: 1 / -1;
-        }
-        .chart-header {
-            background: #f8f9fa;
-            padding: 10px 15px;
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chart-header select {
-            margin-left: 10px;
-            font-size: 13px;
-        }
-        .week-range {
-            font-size: 11px;
-            color: #666;
-            font-weight: normal;
-        }
-        .chart-content {
-            padding: 15px;
-            height: 400px;
-        }
-        .chart-content.large {
-            height: 550px;
-        }
-        .loading { 
-            text-align: center; 
-            padding: 100px; 
-            color: #666;
-        }
-        .error { 
-            color: #c0392b; 
-            padding: 20px; 
-            background: #fee; 
-            display: none;
-        }
-        .data-status {
-            background: #e8f4f8;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 11px;
-            background: white;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background: #1a5490;
-            color: white;
-        }
-        td:first-child {
-            text-align: left;
-            font-weight: bold;
-        }
-        .section-title {
-            background: #1a5490;
-            color: white;
-            padding: 12px 15px;
-            margin: 30px 0 10px 0;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .legend-info {
-            font-size: 11px;
-            color: #666;
-            font-style: italic;
-            padding: 0 15px 15px;
-        }
+        .nav { background: #fff; border-bottom: 1px solid #ddd; padding: 10px 20px; }
+        .nav a { color: #1a5490; text-decoration: none; margin-right: 20px; font-weight: 500; cursor: pointer; padding: 5px 10px; border-radius: 3px; }
+        .nav a:hover { background: #f0f4f8; }
+        .nav a.active { background: #1a5490; color: white; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .controls { background: white; padding: 15px; border: 1px solid #ddd; margin-bottom: 20px; border-radius: 4px; }
+        .control-row { display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
+        .control-group { display: flex; flex-direction: column; }
+        .control-group label { font-size: 12px; font-weight: 600; color: #555; margin-bottom: 5px; text-transform: uppercase; }
+        select, button { padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; }
+        button { background: #1a5490; color: white; cursor: pointer; border: none; }
+        button:hover { background: #144070; }
+        .year-checkboxes { display: flex; gap: 15px; flex-wrap: wrap; max-height: 120px; overflow-y: auto; padding: 5px; border: 1px solid #eee; border-radius: 3px; }
+        .year-checkboxes label { display: flex; align-items: center; gap: 5px; font-size: 13px; white-space: nowrap; }
+        .avg-toggles { display: flex; gap: 15px; flex-wrap: wrap; }
+        .avg-toggles label { display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; background: #f0f4f8; padding: 5px 10px; border-radius: 3px; }
+        .chart-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .chart-box { background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; }
+        .chart-box.full-width { grid-column: 1 / -1; }
+        .chart-header { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #ddd; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .chart-header select { margin-left: 10px; font-size: 13px; }
+        .week-range { font-size: 11px; color: #666; font-weight: normal; }
+        .chart-content { padding: 15px; height: 400px; }
+        .chart-content.large { height: 550px; }
+        .loading { text-align: center; padding: 100px; color: #666; }
+        .error { color: #c0392b; padding: 20px; background: #fee; display: none; }
+        .data-status { background: #e8f4f8; padding: 10px 15px; margin-bottom: 15px; border-radius: 4px; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 11px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background: #1a5490; color: white; }
+        td:first-child { text-align: left; font-weight: bold; }
+        .section-title { background: #1a5490; color: white; padding: 12px 15px; margin: 30px 0 10px 0; font-weight: bold; font-size: 16px; }
+        .legend-info { font-size: 11px; color: #666; font-style: italic; padding: 0 15px 15px; }
         .positive { color: #28a745; }
         .negative { color: #dc3545; }
+        .neutral { color: #6c757d; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .latest-week-section { background: white; border: 1px solid #ddd; margin-bottom: 20px; border-radius: 4px; }
+        .latest-week-header { background: #1a5490; color: white; padding: 12px 15px; font-size: 16px; font-weight: 600; }
+        .latest-week-content { padding: 15px; overflow-x: auto; }
+        .latest-week-info { display: flex; gap: 30px; margin-bottom: 15px; flex-wrap: wrap; }
+        .info-item { font-size: 14px; }
+        .info-item strong { color: #1a5490; }
+        tr:nth-child(even) { background: #fafafa; }
+        .national-row { background: #e8f4f8 !important; font-weight: bold; }
+        .national-row td { font-weight: bold; }
     </style>
 <base target="_blank">
 </head>
@@ -177,205 +65,253 @@
     <div class="header">
         <h1>USDA NASS Cotton Analytics Dashboard</h1>
     </div>
-
     <div class="nav">
-        <a href="index.html" style="font-weight: bold;">Dashboard</a>
-        <a href="seasonality.html">Seasonality</a>
+        <a onclick="switchTab('dashboard')" id="nav-dashboard" class="active">Dashboard</a>
+        <a onclick="switchTab('seasonality')" id="nav-seasonality">Seasonality Analysis</a>
     </div>
-
     <div class="container">
         <div id="loading" class="loading">Loading data...</div>
         <div id="error" class="error"></div>
-
         <div id="data-status" class="data-status" style="display: none;"></div>
-
-        <!-- Controls -->
-        <div class="controls" id="controls" style="display: none;">
-            <div class="control-row">
-                <div class="control-group">
-                    <label>Additional State 1</label>
-                    <select id="state1-selector" onchange="updateCharts()">
-                        <option value="">-- Select State --</option>
-                        <option value="GEORGIA" selected>Georgia</option>
-                        <option value="MISSISSIPPI">Mississippi</option>
-                        <option value="ALABAMA">Alabama</option>
-                        <option value="ARKANSAS">Arkansas</option>
-                        <option value="LOUISIANA">Louisiana</option>
-                        <option value="NORTH CAROLINA">North Carolina</option>
-                        <option value="SOUTH CAROLINA">South Carolina</option>
-                        <option value="TENNESSEE">Tennessee</option>
-                        <option value="OKLAHOMA">Oklahoma</option>
-                        <option value="KANSAS">Kansas</option>
-                        <option value="MISSOURI">Missouri</option>
-                        <option value="FLORIDA">Florida</option>
-                        <option value="VIRGINIA">Virginia</option>
-                        <option value="CALIFORNIA">California</option>
-                        <option value="ARIZONA">Arizona</option>
-                        <option value="NEW MEXICO">New Mexico</option>
-                    </select>
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="controls" id="controls-dashboard">
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>Additional State 1</label>
+                        <select id="state1-selector" onchange="updateDashboardCharts()">
+                            <option value="">-- Select State --</option>
+                            <option value="GEORGIA" selected>Georgia</option>
+                            <option value="MISSISSIPPI">Mississippi</option>
+                            <option value="ALABAMA">Alabama</option>
+                            <option value="ARKANSAS">Arkansas</option>
+                            <option value="LOUISIANA">Louisiana</option>
+                            <option value="NORTH CAROLINA">North Carolina</option>
+                            <option value="SOUTH CAROLINA">South Carolina</option>
+                            <option value="TENNESSEE">Tennessee</option>
+                            <option value="OKLAHOMA">Oklahoma</option>
+                            <option value="KANSAS">Kansas</option>
+                            <option value="MISSOURI">Missouri</option>
+                            <option value="FLORIDA">Florida</option>
+                            <option value="VIRGINIA">Virginia</option>
+                            <option value="CALIFORNIA">California</option>
+                            <option value="ARIZONA">Arizona</option>
+                            <option value="NEW MEXICO">New Mexico</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Additional State 2</label>
+                        <select id="state2-selector" onchange="updateDashboardCharts()">
+                            <option value="">-- Select State --</option>
+                            <option value="GEORGIA">Georgia</option>
+                            <option value="MISSISSIPPI" selected>Mississippi</option>
+                            <option value="ALABAMA">Alabama</option>
+                            <option value="ARKANSAS">Arkansas</option>
+                            <option value="LOUISIANA">Louisiana</option>
+                            <option value="NORTH CAROLINA">North Carolina</option>
+                            <option value="SOUTH CAROLINA">South Carolina</option>
+                            <option value="TENNESSEE">Tennessee</option>
+                            <option value="OKLAHOMA">Oklahoma</option>
+                            <option value="KANSAS">Kansas</option>
+                            <option value="MISSOURI">Missouri</option>
+                            <option value="FLORIDA">Florida</option>
+                            <option value="VIRGINIA">Virginia</option>
+                            <option value="CALIFORNIA">California</option>
+                            <option value="ARIZONA">Arizona</option>
+                            <option value="NEW MEXICO">New Mexico</option>
+                        </select>
+                    </div>
+                    <button onclick="updateDashboardCharts()">Refresh Charts</button>
                 </div>
-                <div class="control-group">
-                    <label>Additional State 2</label>
-                    <select id="state2-selector" onchange="updateCharts()">
-                        <option value="">-- Select State --</option>
-                        <option value="GEORGIA">Georgia</option>
-                        <option value="MISSISSIPPI" selected>Mississippi</option>
-                        <option value="ALABAMA">Alabama</option>
-                        <option value="ARKANSAS">Arkansas</option>
-                        <option value="LOUISIANA">Louisiana</option>
-                        <option value="NORTH CAROLINA">North Carolina</option>
-                        <option value="SOUTH CAROLINA">South Carolina</option>
-                        <option value="TENNESSEE">Tennessee</option>
-                        <option value="OKLAHOMA">Oklahoma</option>
-                        <option value="KANSAS">Kansas</option>
-                        <option value="MISSOURI">Missouri</option>
-                        <option value="FLORIDA">Florida</option>
-                        <option value="VIRGINIA">Virginia</option>
-                        <option value="CALIFORNIA">California</option>
-                        <option value="ARIZONA">Arizona</option>
-                        <option value="NEW MEXICO">New Mexico</option>
-                    </select>
-                </div>
-                <button onclick="updateCharts()">Refresh Charts</button>
             </div>
-        </div>
-
-        <!-- Latest Week Data Table -->
-        <div class="section-title">Latest Week Data - Cotton Planted (2026)</div>
-        <div id="latest-table"></div>
-
-        <div id="charts" style="display: none;">
-
-            <!-- CONTINUUM CHARTS -->
-            <div class="section-title">Crop Progress Continuum (All Stages) - Weeks 12-49</div>
-
-            <!-- National Continuum -->
+            <div class="section-title">Latest Week Data - Cotton Planted (2026)</div>
+            <div id="latest-table-dashboard"></div>
+            <div class="section-title">Crop Progress Continuum (All Stages) - Weeks 1-52</div>
             <div class="chart-box full-width">
                 <div class="chart-header">
                     <h3>National - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="national-continuum-range">Weeks 12-49</span>
+                    <span class="week-range" id="national-continuum-range">Weeks 1-52</span>
                 </div>
                 <div id="chart-national-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
             </div>
-
-            <!-- Texas Continuum -->
             <div class="chart-box full-width">
                 <div class="chart-header">
                     <h3>Texas - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="texas-continuum-range">Weeks 12-49</span>
+                    <span class="week-range" id="texas-continuum-range">Weeks 1-52</span>
                 </div>
                 <div id="chart-texas-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
             </div>
-
-            <!-- State 1 Continuum -->
             <div class="chart-box full-width" id="state1-continuum-container" style="display: none;">
                 <div class="chart-header">
                     <h3 id="state1-continuum-title">State 1 - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="state1-continuum-range">Weeks 12-49</span>
+                    <span class="week-range" id="state1-continuum-range">Weeks 1-52</span>
                 </div>
                 <div id="chart-state1-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
             </div>
-
-            <!-- State 2 Continuum -->
             <div class="chart-box full-width" id="state2-continuum-container" style="display: none;">
                 <div class="chart-header">
                     <h3 id="state2-continuum-title">State 2 - Cotton Crop Progress Continuum</h3>
-                    <span class="week-range" id="state2-continuum-range">Weeks 12-49</span>
+                    <span class="week-range" id="state2-continuum-range">Weeks 1-52</span>
                 </div>
                 <div id="chart-state2-continuum" class="chart-content large"></div>
                 <div class="legend-info">Solid = Current Year (2026), Dashed = Previous Year (2025), Thick = 5-Year Average</div>
             </div>
-
-            <!-- CONDITION CHARTS - GOOD + EXCELLENT -->
             <div class="section-title">Crop Condition - Good + Excellent (Weeks 20-47)</div>
-
             <div class="chart-box">
                 <div class="chart-header">National - Good + Excellent Condition</div>
                 <div id="chart-national-good-excellent" class="chart-content"></div>
             </div>
-
             <div class="chart-box">
                 <div class="chart-header">Texas - Good + Excellent Condition</div>
                 <div id="chart-texas-good-excellent" class="chart-content"></div>
             </div>
-
             <div class="chart-box" id="state1-good-excellent-container" style="display: none;">
                 <div class="chart-header" id="state1-good-excellent-title">State 1 - Good + Excellent Condition</div>
                 <div id="chart-state1-good-excellent" class="chart-content"></div>
             </div>
-
             <div class="chart-box" id="state2-good-excellent-container" style="display: none;">
                 <div class="chart-header" id="state2-good-excellent-title">State 2 - Good + Excellent Condition</div>
                 <div id="chart-state2-good-excellent" class="chart-content"></div>
             </div>
-
-            <!-- CONDITION CHARTS - POOR + VERY POOR -->
             <div class="section-title">Crop Condition - Poor + Very Poor (Weeks 20-47)</div>
-
             <div class="chart-box">
                 <div class="chart-header">National - Poor + Very Poor Condition</div>
                 <div id="chart-national-poor-verypoor" class="chart-content"></div>
             </div>
-
             <div class="chart-box">
                 <div class="chart-header">Texas - Poor + Very Poor Condition</div>
                 <div id="chart-texas-poor-verypoor" class="chart-content"></div>
             </div>
-
             <div class="chart-box" id="state1-poor-verypoor-container" style="display: none;">
                 <div class="chart-header" id="state1-poor-verypoor-title">State 1 - Poor + Very Poor Condition</div>
                 <div id="chart-state1-poor-verypoor" class="chart-content"></div>
             </div>
-
             <div class="chart-box" id="state2-poor-verypoor-container" style="display: none;">
                 <div class="chart-header" id="state2-poor-verypoor-title">State 2 - Poor + Very Poor Condition</div>
                 <div id="chart-state2-poor-verypoor" class="chart-content"></div>
             </div>
+        </div>
 
-            <!-- INDIVIDUAL PROGRESS CHARTS -->
-            <div class="section-title">Individual Crop Progress by Stage</div>
-
-            <div class="chart-box">
-                <div class="chart-header">National - Crop Progress</div>
-                <div id="chart-national-progress" class="chart-content"></div>
+        <div id="tab-seasonality" class="tab-content">
+            <div class="latest-week-section">
+                <div class="latest-week-header">Latest Week Data - 2026 Cotton Crop Progress</div>
+                <div class="latest-week-content">
+                    <div class="latest-week-info">
+                        <div class="info-item"><strong>Latest Week:</strong> <span id="latest-week-num">--</span></div>
+                        <div class="info-item"><strong>Week Ending:</strong> <span id="latest-week-date">--</span></div>
+                        <div class="info-item"><strong>Report Date:</strong> <span id="report-date">--</span></div>
+                    </div>
+                    <div id="latest-table-seasonality"></div>
+                </div>
             </div>
-
-            <div class="chart-box">
-                <div class="chart-header">Texas - Crop Progress</div>
-                <div id="chart-texas-progress" class="chart-content"></div>
+            <div class="controls">
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>State</label>
+                        <select id="state-selector" onchange="updateSeasonalityCharts()">
+                            <option value="US TOTAL" selected>National (US Total)</option>
+                            <option value="TEXAS">Texas</option>
+                            <option value="GEORGIA">Georgia</option>
+                            <option value="MISSISSIPPI">Mississippi</option>
+                            <option value="ALABAMA">Alabama</option>
+                            <option value="ARKANSAS">Arkansas</option>
+                            <option value="LOUISIANA">Louisiana</option>
+                            <option value="NORTH CAROLINA">North Carolina</option>
+                            <option value="SOUTH CAROLINA">South Carolina</option>
+                            <option value="TENNESSEE">Tennessee</option>
+                            <option value="OKLAHOMA">Oklahoma</option>
+                            <option value="KANSAS">Kansas</option>
+                            <option value="MISSOURI">Missouri</option>
+                            <option value="FLORIDA">Florida</option>
+                            <option value="VIRGINIA">Virginia</option>
+                            <option value="CALIFORNIA">California</option>
+                            <option value="ARIZONA">Arizona</option>
+                            <option value="NEW MEXICO">New Mexico</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>Select Years to Display</label>
+                        <div class="year-checkboxes" id="year-checkboxes"></div>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>Show Averages</label>
+                        <div class="avg-toggles">
+                            <label><input type="checkbox" id="avg-5yr" checked onchange="updateSeasonalityCharts()"> <span>5-Year Avg</span></label>
+                            <label><input type="checkbox" id="avg-10yr" onchange="updateSeasonalityCharts()"> <span>10-Year Avg</span></label>
+                            <label><input type="checkbox" id="avg-20yr" onchange="updateSeasonalityCharts()"> <span>20-Year Avg</span></label>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="updateSeasonalityCharts()">Update Charts</button>
             </div>
-
-            <div class="chart-box" id="state1-progress-container" style="display: none;">
-                <div class="chart-header" id="state1-progress-title">State 1 - Crop Progress</div>
-                <div id="chart-state1-progress" class="chart-content"></div>
+            <div class="chart-box full-width">
+                <div class="chart-header">
+                    <h3>Cotton Crop Progress Continuum (All Stages)</h3>
+                    <span class="week-range" id="combined-week-range">Weeks 1-52</span>
+                </div>
+                <div id="chart-combined" class="chart-content large"></div>
+                <div class="legend-info">Shows current year (solid), previous year (dashed), and 5-year average (thick) for each stage</div>
             </div>
-
-            <div class="chart-box" id="state2-progress-container" style="display: none;">
-                <div class="chart-header" id="state2-progress-title">State 2 - Crop Progress</div>
-                <div id="chart-state2-progress" class="chart-content"></div>
+            <div class="chart-grid" id="individual-charts">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Planted</h3>
+                        <span class="week-range" id="planted-week-range"></span>
+                    </div>
+                    <div id="chart-planted" class="chart-content"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Squaring</h3>
+                        <span class="week-range" id="squaring-week-range"></span>
+                    </div>
+                    <div id="chart-squaring" class="chart-content"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Setting Bolls</h3>
+                        <span class="week-range" id="setting-week-range"></span>
+                    </div>
+                    <div id="chart-setting" class="chart-content"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Bolls Opening</h3>
+                        <span class="week-range" id="opening-week-range"></span>
+                    </div>
+                    <div id="chart-opening" class="chart-content"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h3>Harvested</h3>
+                        <span class="week-range" id="harvested-week-range"></span>
+                    </div>
+                    <div id="chart-harvested" class="chart-content"></div>
+                </div>
             </div>
-
         </div>
     </div>
 
     <script>
-        // GitHub repository configuration
         var USERNAME = 'BMR-Com';
         var REPO = 'cotton-crop-progress';
         var BRANCH = 'main';
         var BASE_URL = 'https://cdn.jsdelivr.net/gh/' + USERNAME + '/' + REPO + '@' + BRANCH + '/data';
 
-        // Data files - include all historical files plus 2026
+        // FIXED: Use cotton_2026_2030.csv to get 2026 data
         var FILES = [
             'cotton_2001_2005.csv',
             'cotton_2006_2010.csv',
             'cotton_2011_2015.csv',
             'cotton_2016_2020.csv',
             'cotton_2021_2025.csv',
-            'cotton_2026.csv'  // Added 2026 file
+            'cotton_2026_2030.csv'
         ];
 
         var allData = [];
@@ -396,9 +332,25 @@
             'CALIFORNIA', 'ARIZONA', 'NEW MEXICO'
         ];
 
-        // FIXED WEEK RANGE FOR CONTINUUM CHARTS
-        var CONTINUUM_WEEK_MIN = 12;
-        var CONTINUUM_WEEK_MAX = 49;
+        // FIXED: Full year range 1-52
+        var CONTINUUM_WEEK_MIN = 1;
+        var CONTINUUM_WEEK_MAX = 52;
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.nav a').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.getElementById('nav-' + tabName).classList.add('active');
+            if (tabName === 'dashboard') {
+                updateDashboardCharts();
+            } else {
+                updateSeasonalityCharts();
+            }
+        }
 
         function loadFile(filename) {
             return new Promise(function(resolve, reject) {
@@ -416,7 +368,7 @@
                     error: function(err) {
                         console.warn('Failed to load ' + filename + ':', err);
                         dataLoadErrors.push(filename);
-                        resolve(); // Continue even if one file fails
+                        resolve();
                     }
                 });
             });
@@ -511,12 +463,7 @@
             var currentYear = '2026';
             var prevYear = '2025';
 
-            // Check if we have 2026 data
-            var has2026Data = allData.some(function(r) { return r.year === '2026'; });
-            var has2025Data = allData.some(function(r) { return r.year === '2025'; });
-
             STAGES.forEach(function(stage) {
-                // Current Year - Solid line
                 var currentValues = getYearDataForStageFixedRange(stage.key, stateName, currentYear);
                 var hasCurrentData = currentValues.some(function(v) { return v !== null; });
 
@@ -541,7 +488,6 @@
                     });
                 }
 
-                // Previous Year - Dashed line
                 var prevValues = getYearDataForStageFixedRange(stage.key, stateName, prevYear);
                 var hasPrevData = prevValues.some(function(v) { return v !== null; });
 
@@ -560,9 +506,9 @@
                     });
                 }
 
-                // 5-Year Average - Thick line
                 if (availableYears.length >= 5) {
-                    var avgYears = availableYears.slice(0, 5);
+                    var avgYears = availableYears.slice(-6, -1);
+                    if (avgYears.length < 5) avgYears = availableYears.slice(0, 5);
                     var avgValues = calculateAverageFixedRange(stage.key, stateName, avgYears);
                     var hasAvgData = avgValues.some(function(v) { return v !== null; });
 
@@ -591,7 +537,8 @@
                     range: [CONTINUUM_WEEK_MIN, CONTINUUM_WEEK_MAX],
                     showgrid: true, 
                     gridcolor: '#e0e0e0', 
-                    tickfont: { size: 11 }
+                    tickfont: { size: 11 },
+                    dtick: 4
                 },
                 yaxis: { 
                     title: 'Percent Complete', 
@@ -614,7 +561,6 @@
             });
         }
 
-        // Other chart functions remain the same...
         function createGoodExcellentChart(elementId, stateName) {
             var isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
             var filtered = allData.filter(function(r) {
@@ -741,116 +687,9 @@
             });
         }
 
-        function createProgressChart(elementId, stateName) {
-            var isNational = stateName === 'NATIONAL' || stateName === 'US TOTAL';
-            var filtered = allData.filter(function(r) {
-                var isLocationMatch = isNational 
-                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
-                    : r.state_name === stateName;
-                return isLocationMatch && r.data_item_key && r.data_item_key.indexOf('progress_current') !== -1;
-            });
-
-            var currentYear = '2026';
-            var prevYear = '2025';
-            var avgYears = ['2021', '2022', '2023', '2024', '2025'];
-
-            var traces = [];
-
-            STAGES.forEach(function(stage, i) {
-                // Current year
-                var currentData = filtered.filter(function(r) { 
-                    return r.year === currentYear && r.data_item_key === stage.key; 
-                });
-                if (currentData.length > 0) {
-                    traces.push({
-                        x: currentData.map(function(r) { return getWeekNumber(r.reference_period_desc); }),
-                        y: currentData.map(function(r) { return parseFloat(r.Value) || 0; }),
-                        name: stage.display + ' ' + currentYear,
-                        type: 'scatter',
-                        mode: 'lines',
-                        line: { color: stage.color, width: 3 }
-                    });
-                }
-
-                // Previous year
-                var prevData = filtered.filter(function(r) { 
-                    return r.year === prevYear && r.data_item_key === stage.key; 
-                });
-                if (prevData.length > 0) {
-                    traces.push({
-                        x: prevData.map(function(r) { return getWeekNumber(r.reference_period_desc); }),
-                        y: prevData.map(function(r) { return parseFloat(r.Value) || 0; }),
-                        name: stage.display + ' ' + prevYear,
-                        type: 'scatter',
-                        mode: 'lines',
-                        line: { color: stage.color, width: 2, dash: 'dash' },
-                        showlegend: false
-                    });
-                }
-
-                // 5-year average
-                var avgData = [];
-                var weekSet = new Set();
-                avgYears.forEach(function(y) {
-                    filtered.filter(function(r) { 
-                        return r.year === y && r.data_item_key === stage.key; 
-                    }).forEach(function(r) {
-                        var w = getWeekNumber(r.reference_period_desc);
-                        if (w) weekSet.add(w);
-                    });
-                });
-
-                var weeks = [...weekSet].sort(function(a, b) { return a - b; });
-                weeks.forEach(function(w) {
-                    var values = avgYears.map(function(y) {
-                        var r = filtered.find(function(x) { 
-                            return x.year === y && x.data_item_key === stage.key && getWeekNumber(x.reference_period_desc) === w; 
-                        });
-                        return r ? parseFloat(r.Value) : null;
-                    }).filter(function(v) { return v !== null; });
-
-                    if (values.length > 0) {
-                        var sum = values.reduce(function(a, b) { return a + b; }, 0);
-                        avgData.push({ week: w, value: sum / values.length });
-                    }
-                });
-
-                if (avgData.length > 0) {
-                    traces.push({
-                        x: avgData.map(function(d) { return d.week; }),
-                        y: avgData.map(function(d) { return d.value; }),
-                        name: stage.display + ' 5-Yr Avg',
-                        type: 'scatter',
-                        mode: 'lines',
-                        line: { color: stage.color, width: 1.5, dash: 'dot' },
-                        showlegend: false
-                    });
-                }
-            });
-
-            Plotly.newPlot(elementId, traces, {
-                height: 380,
-                margin: { t: 30, b: 60, l: 60, r: 30 },
-                xaxis: { 
-                    title: 'Week Number',
-                    tickmode: 'linear',
-                    tick0: 1,
-                    dtick: 2,
-                    showgrid: true
-                },
-                yaxis: { 
-                    title: 'Percent',
-                    range: [0, 100],
-                    ticksuffix: '%',
-                    showgrid: true
-                },
-                legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.2 },
-                plot_bgcolor: '#fafafa'
-            });
-        }
-
-        function createLatestTable() {
-            var states = ['US TOTAL', 'TEXAS'].concat(ALL_STATES);
+        // FIXED: Create latest table with National at the bottom, all states visible, no toggle
+        function createLatestTableDashboard() {
+            var states = ALL_STATES.slice();
 
             var planted2026 = allData.filter(function(r) { 
                 return r.year === '2026' && r.data_item_key === 'progress_current_planted'; 
@@ -863,7 +702,7 @@
             var latest2026 = sortedByDate[0];
 
             if (!latest2026) {
-                document.getElementById('latest-table').innerHTML = '<p>No 2026 data available yet. The Python script may need to be updated to fetch 2026 data.</p>';
+                document.getElementById('latest-table-dashboard').innerHTML = '<p>No 2026 data available yet.</p>';
                 return;
             }
 
@@ -880,35 +719,31 @@
                     '<th>Yearly<br>Change</th>' +
                 '</tr>';
 
+            // First show all individual states
             states.forEach(function(state) {
-                var isNational = state === 'US TOTAL';
-
-                var curr = allData.filter(function(r) {
-                    var isMatch = isNational ? r.level === 'NATIONAL' : r.state_name === state;
-                    return isMatch && r.year === '2026' && 
+                var curr = allData.find(function(r) {
+                    return r.state_name === state && r.year === '2026' && 
                            r.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(r.reference_period_desc) === latestWeek;
-                })[0];
+                });
 
-                var prev = allData.filter(function(r) {
-                    var isMatch = isNational ? r.level === 'NATIONAL' : r.state_name === state;
-                    return isMatch && r.year === '2026' && 
+                var prev = allData.find(function(r) {
+                    return r.state_name === state && r.year === '2026' && 
                            r.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(r.reference_period_desc) === prevWeek;
-                })[0];
+                });
 
-                var yr2025 = allData.filter(function(r) {
-                    var isMatch = isNational ? r.level === 'NATIONAL' : r.state_name === state;
-                    return isMatch && r.year === '2025' && 
+                // FIXED: Properly get 2025 data
+                var yr2025 = allData.find(function(r) {
+                    return r.state_name === state && r.year === '2025' && 
                            r.data_item_key === 'progress_current_planted' &&
                            getWeekNumber(r.reference_period_desc) === latestWeek;
-                })[0];
+                });
 
                 var avgYears = ['2021', '2022', '2023', '2024', '2025'];
                 var avgValues = avgYears.map(function(y) {
                     var r = allData.find(function(x) {
-                        var isMatch = isNational ? x.level === 'NATIONAL' : x.state_name === state;
-                        return isMatch && x.year === y && 
+                        return x.state_name === state && x.year === y && 
                                x.data_item_key === 'progress_current_planted' &&
                                getWeekNumber(x.reference_period_desc) === latestWeek;
                     });
@@ -917,12 +752,12 @@
 
                 var avg = avgValues.length > 0 ? (avgValues.reduce(function(a, b) { return a + b; }, 0) / avgValues.length).toFixed(0) : '-';
 
-                var currVal = curr ? parseFloat(curr.Value) : 0;
-                var yr2025Val = yr2025 ? parseFloat(yr2025.Value) : 0;
+                var currVal = curr ? parseFloat(curr.Value) : null;
+                var yr2025Val = yr2025 ? parseFloat(yr2025.Value) : null;
 
-                var change = currVal - yr2025Val;
+                var change = (currVal !== null && yr2025Val !== null) ? currVal - yr2025Val : null;
                 var changeClass = change > 0 ? 'positive' : (change < 0 ? 'negative' : '');
-                var changeStr = change > 0 ? '+' + change : change.toString();
+                var changeStr = change !== null ? (change > 0 ? '+' + change.toFixed(0) : change.toFixed(0)) : '-';
 
                 html += '<tr>' +
                     '<td>' + state + '</td>' +
@@ -934,52 +769,91 @@
                 '</tr>';
             });
 
+            // Then show National (US TOTAL) at the bottom
+            var currNat = allData.find(function(r) {
+                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year === '2026' && 
+                       r.data_item_key === 'progress_current_planted' &&
+                       getWeekNumber(r.reference_period_desc) === latestWeek;
+            });
+
+            var prevNat = allData.find(function(r) {
+                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year === '2026' && 
+                       r.data_item_key === 'progress_current_planted' &&
+                       getWeekNumber(r.reference_period_desc) === prevWeek;
+            });
+
+            var yr2025Nat = allData.find(function(r) {
+                return (r.level === 'NATIONAL' || r.state_name === 'US TOTAL') && r.year === '2025' && 
+                       r.data_item_key === 'progress_current_planted' &&
+                       getWeekNumber(r.reference_period_desc) === latestWeek;
+            });
+
+            var avgYears = ['2021', '2022', '2023', '2024', '2025'];
+            var avgValuesNat = avgYears.map(function(y) {
+                var r = allData.find(function(x) {
+                    return (x.level === 'NATIONAL' || x.state_name === 'US TOTAL') && x.year === y && 
+                           x.data_item_key === 'progress_current_planted' &&
+                           getWeekNumber(x.reference_period_desc) === latestWeek;
+                });
+                return r ? parseFloat(r.Value) : null;
+            }).filter(function(v) { return v !== null; });
+
+            var avgNat = avgValuesNat.length > 0 ? (avgValuesNat.reduce(function(a, b) { return a + b; }, 0) / avgValuesNat.length).toFixed(0) : '-';
+
+            var currNatVal = currNat ? parseFloat(currNat.Value) : null;
+            var yr2025NatVal = yr2025Nat ? parseFloat(yr2025Nat.Value) : null;
+
+            var changeNat = (currNatVal !== null && yr2025NatVal !== null) ? currNatVal - yr2025NatVal : null;
+            var changeClassNat = changeNat > 0 ? 'positive' : (changeNat < 0 ? 'negative' : '');
+            var changeStrNat = changeNat !== null ? (changeNat > 0 ? '+' + changeNat.toFixed(0) : changeNat.toFixed(0)) : '-';
+
+            html += '<tr class="national-row">' +
+                '<td>US TOTAL (National)</td>' +
+                '<td>' + (currNat ? currNat.Value + '%' : '-') + '</td>' +
+                '<td>' + (prevNat ? prevNat.Value + '%' : '-') + '</td>' +
+                '<td>' + (yr2025Nat ? yr2025Nat.Value + '%' : '-') + '</td>' +
+                '<td>' + avgNat + '%</td>' +
+                '<td class="' + changeClassNat + '">' + changeStrNat + '</td>' +
+            '</tr>';
+
             html += '</table>';
-            document.getElementById('latest-table').innerHTML = html;
+            document.getElementById('latest-table-dashboard').innerHTML = html;
         }
 
-        function updateCharts() {
+        function updateDashboardCharts() {
             var state1 = document.getElementById('state1-selector').value;
             var state2 = document.getElementById('state2-selector').value;
 
-            // Show/hide state 1 containers
             var state1Containers = [
                 'state1-continuum-container',
                 'state1-good-excellent-container',
-                'state1-poor-verypoor-container',
-                'state1-progress-container'
+                'state1-poor-verypoor-container'
             ];
             state1Containers.forEach(function(id) {
                 document.getElementById(id).style.display = state1 ? 'block' : 'none';
             });
 
-            // Show/hide state 2 containers
             var state2Containers = [
                 'state2-continuum-container',
                 'state2-good-excellent-container',
-                'state2-poor-verypoor-container',
-                'state2-progress-container'
+                'state2-poor-verypoor-container'
             ];
             state2Containers.forEach(function(id) {
                 document.getElementById(id).style.display = state2 ? 'block' : 'none';
             });
 
-            // Update titles
             if (state1) {
                 document.getElementById('state1-continuum-title').textContent = state1 + ' - Cotton Crop Progress Continuum';
                 document.getElementById('state1-good-excellent-title').textContent = state1 + ' - Good + Excellent Condition';
                 document.getElementById('state1-poor-verypoor-title').textContent = state1 + ' - Poor + Very Poor Condition';
-                document.getElementById('state1-progress-title').textContent = state1 + ' - Crop Progress';
             }
 
             if (state2) {
                 document.getElementById('state2-continuum-title').textContent = state2 + ' - Cotton Crop Progress Continuum';
                 document.getElementById('state2-good-excellent-title').textContent = state2 + ' - Good + Excellent Condition';
                 document.getElementById('state2-poor-verypoor-title').textContent = state2 + ' - Poor + Very Poor Condition';
-                document.getElementById('state2-progress-title').textContent = state2 + ' - Crop Progress';
             }
 
-            // Create all charts
             createContinuumChart('chart-national-continuum', 'NATIONAL');
             createContinuumChart('chart-texas-continuum', 'TEXAS');
 
@@ -995,49 +869,624 @@
             createPoorVeryPoorChart('chart-texas-poor-verypoor', 'TEXAS');
             if (state1) createPoorVeryPoorChart('chart-state1-poor-verypoor', state1);
             if (state2) createPoorVeryPoorChart('chart-state2-poor-verypoor', state2);
-
-            createProgressChart('chart-national-progress', 'NATIONAL');
-            createProgressChart('chart-texas-progress', 'TEXAS');
-            if (state1) createProgressChart('chart-state1-progress', state1);
-            if (state2) createProgressChart('chart-state2-progress', state2);
         }
 
-        // Initialize
-        Promise.all(FILES.map(loadFile))
-            .then(function() {
-                document.getElementById('loading').style.display = 'none';
+        // SEASONALITY FUNCTIONS
+        function populateYearCheckboxes() {
+            var years = [...new Set(allData.map(function(r) { return r.year; }))]
+                .filter(function(y) { return y && y.trim() !== ''; })
+                .sort()
+                .reverse();
 
-                // Show data status
-                var statusDiv = document.getElementById('data-status');
-                var yearsFound = [...new Set(allData.map(function(r) { return r.year; }))].sort();
-                var has2026 = yearsFound.indexOf('2026') !== -1;
+            var container = document.getElementById('year-checkboxes');
+            if (years.length === 0) {
+                container.innerHTML = '<span style="color: #666;">No years available</span>';
+                return;
+            }
 
-                if (dataLoadErrors.length > 0) {
-                    statusDiv.innerHTML = 'Warning: Could not load: ' + dataLoadErrors.join(', ') + 
-                        '<br>Years available: ' + yearsFound.join(', ');
-                    statusDiv.style.background = '#fff3cd';
-                } else {
-                    statusDiv.innerHTML = 'Data loaded successfully. Years available: ' + yearsFound.join(', ');
-                    statusDiv.style.background = '#d4edda';
-                }
-                statusDiv.style.display = 'block';
-
-                if (!has2026) {
-                    statusDiv.innerHTML += '<br><strong>Note:</strong> 2026 data not found. The Python script needs to be updated to fetch 2026 data.';
-                    statusDiv.style.background = '#f8d7da';
-                }
-
-                document.getElementById('charts').style.display = 'block';
-                document.getElementById('controls').style.display = 'block';
-
-                createLatestTable();
-                updateCharts();
-            })
-            .catch(function(err) {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('error').style.display = 'block';
-                document.getElementById('error').textContent = 'Error: ' + err.message;
+            var defaultYears = years.filter(function(y) { 
+                return ['2022','2023','2024','2025','2026'].indexOf(y) !== -1; 
             });
+
+            container.innerHTML = years.map(function(year) {
+                return '<label>' +
+                    '<input type="checkbox" value="' + year + '" ' + (defaultYears.indexOf(year) !== -1 ? 'checked' : '') + '>' +
+                    year +
+                '</label>';
+            }).join('');
+        }
+
+        function getSelectedYears() {
+            var checkboxes = document.querySelectorAll('#year-checkboxes input:checked');
+            return [...checkboxes].map(function(cb) { return cb.value; });
+        }
+
+        function getWeekRangeForStage(stageKey, stateName, years) {
+            var isNational = stateName === 'US TOTAL';
+            var filtered = allData.filter(function(r) {
+                var matchesStage = r.data_item_key === stageKey;
+                var matchesLocation = isNational 
+                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                    : r.state_name === stateName;
+                var matchesYear = years.indexOf(r.year) !== -1;
+                return matchesStage && matchesLocation && matchesYear;
+            });
+
+            var weeks = filtered.map(function(r) { return getWeekNumber(r.reference_period_desc); })
+                .filter(function(w) { return w !== null && !isNaN(w); });
+
+            if (weeks.length === 0) return { min: 1, max: 52, actualMin: null, actualMax: null };
+
+            var actualMin = Math.min.apply(null, weeks);
+            var actualMax = Math.max.apply(null, weeks);
+            var min = Math.max(1, actualMin - 2);
+            var max = Math.min(52, actualMax + 2);
+
+            return { min: min, max: max, actualMin: actualMin, actualMax: actualMax };
+        }
+
+        function calculateAverage(stageKey, stateName, avgYears, weekRange) {
+            var isNational = stateName === 'US TOTAL';
+            var dataByWeek = {};
+
+            avgYears.forEach(function(year) {
+                var yearData = allData.filter(function(r) {
+                    var matchesStage = r.data_item_key === stageKey;
+                    var matchesLocation = isNational 
+                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                        : r.state_name === stateName;
+                    var matchesYear = r.year === year;
+                    return matchesStage && matchesLocation && matchesYear;
+                });
+
+                yearData.forEach(function(r) {
+                    var weekNum = getWeekNumber(r.reference_period_desc);
+                    if (weekNum && weekNum >= weekRange.min && weekNum <= weekRange.max) {
+                        var val = parseFloat(r.Value);
+                        if (!isNaN(val)) {
+                            if (!dataByWeek[weekNum]) dataByWeek[weekNum] = [];
+                            dataByWeek[weekNum].push(val);
+                        }
+                    }
+                });
+            });
+
+            var avgValues = [];
+            for (var w = weekRange.min; w <= weekRange.max; w++) {
+                var vals = dataByWeek[w] || [];
+                if (vals.length > 0) {
+                    var sum = vals.reduce(function(a, b) { return a + b; }, 0);
+                    avgValues.push(sum / vals.length);
+                } else {
+                    avgValues.push(null);
+                }
+            }
+            return avgValues;
+        }
+
+        function createCombinedChart(stateName, years) {
+            var weekLabels = generateWeekLabelsForRange(CONTINUUM_WEEK_MIN, CONTINUUM_WEEK_MAX);
+            var traces = [];
+            var availableYears = [...new Set(allData.map(function(r) { return r.year; }))].sort();
+
+            var currentYear = '2026';
+            var prevYear = '2025';
+            var isNational = stateName === 'US TOTAL';
+
+            STAGES.forEach(function(stage) {
+                var currentData = allData.filter(function(r) {
+                    var matchesLocation = isNational 
+                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                        : r.state_name === stateName;
+                    var weekNum = getWeekNumber(r.reference_period_desc);
+                    return r.year === currentYear && 
+                           r.data_item_key === stage.key &&
+                           matchesLocation &&
+                           weekNum >= CONTINUUM_WEEK_MIN && 
+                           weekNum <= CONTINUUM_WEEK_MAX;
+                });
+
+                var weekMap = {};
+                currentData.forEach(function(r) {
+                    var weekNum = getWeekNumber(r.reference_period_desc);
+                    if (weekNum) {
+                        var val = parseFloat(r.Value);
+                        if (!isNaN(val)) weekMap[weekNum] = val;
+                    }
+                });
+
+                var currentValues = [];
+                for (var w = CONTINUUM_WEEK_MIN; w <= CONTINUUM_WEEK_MAX; w++) {
+                    currentValues.push(weekMap[w] !== undefined ? weekMap[w] : null);
+                }
+
+                var hasCurrentData = currentValues.some(function(v) { return v !== null; });
+
+                if (hasCurrentData) {
+                    var nonNullValues = currentValues.filter(function(v) { return v !== null; });
+                    var maxVal = nonNullValues.length > 0 ? Math.max.apply(null, nonNullValues) : 0;
+                    var textLabels = currentValues.map(function(v) { return v === maxVal ? stage.display : ''; });
+
+                    traces.push({
+                        x: weekLabels,
+                        y: currentValues,
+                        name: stage.display + ' ' + currentYear,
+                        type: 'scatter',
+                        mode: 'lines+text',
+                        line: { color: stage.color, width: 2, shape: 'spline', smoothing: 1.3 },
+                        text: textLabels,
+                        textposition: 'top center',
+                        textfont: { color: stage.color, size: 11, weight: 'bold' },
+                        connectgaps: true,
+                        legendgroup: stage.display,
+                        hovertemplate: '<b>' + stage.display + ' ' + currentYear + '</b><br>Week %{x}<br>%{y:.1f}%<extra></extra>'
+                    });
+                }
+
+                var prevData = allData.filter(function(r) {
+                    var matchesLocation = isNational 
+                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                        : r.state_name === stateName;
+                    var weekNum = getWeekNumber(r.reference_period_desc);
+                    return r.year === prevYear && 
+                           r.data_item_key === stage.key &&
+                           matchesLocation &&
+                           weekNum >= CONTINUUM_WEEK_MIN && 
+                           weekNum <= CONTINUUM_WEEK_MAX;
+                });
+
+                var prevWeekMap = {};
+                prevData.forEach(function(r) {
+                    var weekNum = getWeekNumber(r.reference_period_desc);
+                    if (weekNum) {
+                        var val = parseFloat(r.Value);
+                        if (!isNaN(val)) prevWeekMap[weekNum] = val;
+                    }
+                });
+
+                var prevValues = [];
+                for (var w2 = CONTINUUM_WEEK_MIN; w2 <= CONTINUUM_WEEK_MAX; w2++) {
+                    prevValues.push(prevWeekMap[w2] !== undefined ? prevWeekMap[w2] : null);
+                }
+
+                var hasPrevData = prevValues.some(function(v) { return v !== null; });
+
+                if (hasPrevData) {
+                    traces.push({
+                        x: weekLabels,
+                        y: prevValues,
+                        name: stage.display + ' ' + prevYear,
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { color: stage.color, width: 2, dash: 'dash', opacity: 0.7 },
+                        connectgaps: true,
+                        legendgroup: stage.display,
+                        showlegend: false,
+                        hovertemplate: '<b>' + stage.display + ' ' + prevYear + '</b><br>Week %{x}<br>%{y:.1f}%<extra></extra>'
+                    });
+                }
+
+                if (availableYears.length >= 5) {
+                    var avgYears = availableYears.slice(-6, -1);
+                    if (avgYears.length < 5) avgYears = availableYears.slice(0, 5);
+                    var avgDataByWeek = {};
+
+                    avgYears.forEach(function(year) {
+                        var yearData = allData.filter(function(r) {
+                            var matchesLocation = isNational 
+                                ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                                : r.state_name === stateName;
+                            var weekNum = getWeekNumber(r.reference_period_desc);
+                            return r.year === year && 
+                                   r.data_item_key === stage.key &&
+                                   matchesLocation &&
+                                   weekNum >= CONTINUUM_WEEK_MIN && 
+                                   weekNum <= CONTINUUM_WEEK_MAX;
+                        });
+
+                        yearData.forEach(function(r) {
+                            var weekNum = getWeekNumber(r.reference_period_desc);
+                            if (weekNum) {
+                                var val = parseFloat(r.Value);
+                                if (!isNaN(val)) {
+                                    if (!avgDataByWeek[weekNum]) avgDataByWeek[weekNum] = [];
+                                    avgDataByWeek[weekNum].push(val);
+                                }
+                            }
+                        });
+                    });
+
+                    var avgValues = [];
+                    for (var w3 = CONTINUUM_WEEK_MIN; w3 <= CONTINUUM_WEEK_MAX; w3++) {
+                        var vals = avgDataByWeek[w3] || [];
+                        if (vals.length > 0) {
+                            var sum = vals.reduce(function(a, b) { return a + b; }, 0);
+                            avgValues.push(sum / vals.length);
+                        } else {
+                            avgValues.push(null);
+                        }
+                    }
+
+                    var hasAvgData = avgValues.some(function(v) { return v !== null; });
+
+                    if (hasAvgData) {
+                        traces.push({
+                            x: weekLabels,
+                            y: avgValues,
+                            name: stage.display + ' 5yr Avg',
+                            type: 'scatter',
+                            mode: 'lines',
+                            line: { color: stage.color, width: 4, opacity: 0.9 },
+                            connectgaps: true,
+                            legendgroup: stage.display,
+                            showlegend: false,
+                            hovertemplate: '<b>' + stage.display + ' 5yr Avg</b><br>Week %{x}<br>%{y:.1f}%<extra></extra>'
+                        });
+                    }
+                }
+            });
+
+            Plotly.newPlot('chart-combined', traces, {
+                height: 530,
+                margin: { t: 30, b: 80, l: 60, r: 30 },
+                xaxis: { 
+                    title: 'Week Number',
+                    range: [CONTINUUM_WEEK_MIN, CONTINUUM_WEEK_MAX],
+                    showgrid: true, 
+                    gridcolor: '#e0e0e0', 
+                    tickfont: { size: 11 },
+                    dtick: 4
+                },
+                yaxis: { 
+                    title: 'Percent Complete', 
+                    range: [0, 100], 
+                    ticksuffix: '%', 
+                    showgrid: true, 
+                    gridcolor: '#e0e0e0' 
+                },
+                legend: { 
+                    orientation: 'h', 
+                    x: 0.5, 
+                    xanchor: 'center', 
+                    y: -0.25, 
+                    font: { size: 10 }, 
+                    traceorder: 'grouped' 
+                },
+                plot_bgcolor: '#fafafa',
+                paper_bgcolor: 'white',
+                hovermode: 'x unified'
+            });
+        }
+
+        function createStageChart(stage, stateName, years) {
+            var weekRange = getWeekRangeForStage(stage.key, stateName, years);
+            var weekLabels = generateWeekLabelsForRange(weekRange.min, weekRange.max);
+
+            var rangeId = stage.key.replace('progress_current_', '') + '-week-range';
+            var rangeText = weekRange.actualMin ? 
+                'Weeks ' + weekRange.min + '-' + weekRange.max + ' (data: ' + weekRange.actualMin + '-' + weekRange.actualMax + ')' : 
+                'No data';
+            var rangeEl = document.getElementById(rangeId);
+            if (rangeEl) rangeEl.textContent = rangeText;
+
+            var chartId = 'chart-' + stage.key.replace('progress_current_', '');
+
+            if (weekRange.actualMin === null) {
+                Plotly.newPlot(chartId, [], {
+                    height: 320,
+                    annotations: [{ 
+                        text: 'No data', 
+                        xref: 'paper', 
+                        yref: 'paper', 
+                        showarrow: false,
+                        font: { size: 14, color: '#999' }
+                    }]
+                });
+                return;
+            }
+
+            var traces = [];
+            var isNational = stateName === 'US TOTAL';
+
+            years.forEach(function(year) {
+                var yearData = allData.filter(function(r) {
+                    var matchesStage = r.data_item_key === stage.key;
+                    var matchesLocation = isNational 
+                        ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                        : r.state_name === stateName;
+                    var matchesYear = r.year === year;
+                    return matchesStage && matchesLocation && matchesYear;
+                });
+
+                var weekMap = {};
+                yearData.forEach(function(r) {
+                    var weekNum = getWeekNumber(r.reference_period_desc);
+                    if (weekNum && weekNum >= weekRange.min && weekNum <= weekRange.max) {
+                        var val = parseFloat(r.Value);
+                        if (!isNaN(val)) weekMap[weekNum] = val;
+                    }
+                });
+
+                var values = [];
+                for (var w = weekRange.min; w <= weekRange.max; w++) {
+                    values.push(weekMap[w] !== undefined ? weekMap[w] : null);
+                }
+
+                if (values.some(function(v) { return v !== null; })) {
+                    traces.push({
+                        x: weekLabels,
+                        y: values,
+                        name: year,
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { width: 1.5 },
+                        connectgaps: true,
+                        opacity: 0.7
+                    });
+                }
+            });
+
+            var show5yr = document.getElementById('avg-5yr').checked;
+            var show10yr = document.getElementById('avg-10yr').checked;
+            var show20yr = document.getElementById('avg-20yr').checked;
+            var availableYears = [...new Set(allData.map(function(r) { return r.year; }))].sort().reverse();
+
+            if (show5yr && availableYears.length >= 5) {
+                var avg5 = calculateAverage(stage.key, stateName, availableYears.slice(0, 5), weekRange);
+                if (avg5.some(function(v) { return v !== null; })) {
+                    traces.push({
+                        x: weekLabels,
+                        y: avg5,
+                        name: '5yr Avg',
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { color: '#1a5490', width: 3 }
+                    });
+                }
+            }
+
+            if (show10yr && availableYears.length >= 10) {
+                var avg10 = calculateAverage(stage.key, stateName, availableYears.slice(0, 10), weekRange);
+                if (avg10.some(function(v) { return v !== null; })) {
+                    traces.push({
+                        x: weekLabels,
+                        y: avg10,
+                        name: '10yr Avg',
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { color: '#FF9800', width: 3, dash: 'dash' }
+                    });
+                }
+            }
+
+            if (show20yr && availableYears.length >= 20) {
+                var avg20 = calculateAverage(stage.key, stateName, availableYears.slice(0, 20), weekRange);
+                if (avg20.some(function(v) { return v !== null; })) {
+                    traces.push({
+                        x: weekLabels,
+                        y: avg20,
+                        name: '20yr Avg',
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { color: '#4CAF50', width: 3, dash: 'dot' }
+                    });
+                }
+            }
+
+            Plotly.newPlot(chartId, traces, {
+                height: 320,
+                margin: { t: 20, b: 60, l: 50, r: 20 },
+                xaxis: { 
+                    title: 'Week',
+                    showgrid: true,
+                    gridcolor: '#eee',
+                    tickfont: { size: 10 }
+                },
+                yaxis: { 
+                    title: 'Percent',
+                    range: [0, 100],
+                    ticksuffix: '%',
+                    showgrid: true,
+                    gridcolor: '#eee'
+                },
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.3,
+                    font: { size: 9 }
+                },
+                plot_bgcolor: '#fafafa',
+                paper_bgcolor: 'white'
+            });
+        }
+
+        function updateSeasonalityCharts() {
+            var state = document.getElementById('state-selector').value;
+            var years = getSelectedYears();
+
+            if (years.length === 0) {
+                alert('Please select at least one year');
+                return;
+            }
+
+            createCombinedChart(state, years);
+
+            STAGES.forEach(function(stage) {
+                createStageChart(stage, state, years);
+            });
+        }
+
+        function getLatestWeekInfo2026() {
+            var plantedData = allData.filter(function(r) { 
+                return r.year === '2026' && r.data_item_key === 'progress_current_planted';
+            });
+
+            if (plantedData.length === 0) return null;
+
+            var latestWeekNum = 0;
+            var latestWeekDate = '';
+            var latestReportDate = '';
+
+            plantedData.forEach(function(r) {
+                var weekNum = getWeekNumber(r.reference_period_desc);
+                if (weekNum && weekNum > latestWeekNum) {
+                    latestWeekNum = weekNum;
+                    latestWeekDate = r.week_ending || '';
+                    latestReportDate = r.load_time || '';
+                }
+            });
+
+            return { 
+                weekNum: latestWeekNum, 
+                weekDate: latestWeekDate,
+                reportDate: latestReportDate
+            };
+        }
+
+        function getValueForComparison(state, year, weekNum, stageKey) {
+            var isNational = state === 'US TOTAL';
+            var data = allData.filter(function(r) {
+                var matchesLocation = isNational 
+                    ? (r.level === 'NATIONAL' || r.state_name === 'US TOTAL')
+                    : r.state_name === state;
+                var matchesYear = r.year === year.toString();
+                var matchesStage = r.data_item_key === stageKey;
+                var matchesWeek = getWeekNumber(r.reference_period_desc) === weekNum;
+                return matchesLocation && matchesYear && matchesStage && matchesWeek;
+            });
+
+            if (data.length > 0) {
+                var val = parseFloat(data[0].Value);
+                return isNaN(val) ? null : val;
+            }
+            return null;
+        }
+
+        function get5YearAvg(state, weekNum, stageKey) {
+            var years = ['2021', '2022', '2023', '2024', '2025'];
+            var values = [];
+            years.forEach(function(year) {
+                var val = getValueForComparison(state, year, weekNum, stageKey);
+                if (val !== null) values.push(val);
+            });
+            if (values.length === 0) return null;
+            var sum = values.reduce(function(a, b) { return a + b; }, 0);
+            return sum / values.length;
+        }
+
+        function formatChange(current, previous) {
+            if (current === null || previous === null) return '<span class="neutral">N/A</span>';
+            var diff = current - previous;
+            var arrow = diff > 0 ? '↑' : (diff < 0 ? '↓' : '→');
+            var cls = diff > 0 ? 'positive' : (diff < 0 ? 'negative' : 'neutral');
+            return '<span class="' + cls + '">' + arrow + ' ' + Math.abs(diff).toFixed(1) + '%</span>';
+        }
+
+        function getStageDisplayName(stageKey) {
+            var stage = STAGES.find(function(s) { return s.key === stageKey; });
+            return stage ? stage.display : stageKey;
+        }
+
+        function populateLatestWeekTable() {
+            var latestInfo = getLatestWeekInfo2026();
+            if (!latestInfo || latestInfo.weekNum === 0) {
+                document.getElementById('latest-week-num').textContent = 'No data';
+                return;
+            }
+
+            document.getElementById('latest-week-num').textContent = 'Week ' + latestInfo.weekNum;
+            document.getElementById('latest-week-date').textContent = latestInfo.weekDate || 'N/A';
+            document.getElementById('report-date').textContent = latestInfo.reportDate ? 
+                new Date(latestInfo.reportDate).toLocaleDateString() : 'N/A';
+
+            var weekNum = latestInfo.weekNum;
+
+            // Create table with all states + national at bottom
+            var html = '<table><thead><tr>' +
+                '<th>Region</th><th>Stage</th><th>2026 Current</th>' +
+                '<th>vs Previous Week</th><th>vs Previous Year</th><th>vs 5-Year Avg</th>' +
+                '</tr></thead><tbody>';
+
+            // First all states
+            ALL_STATES.forEach(function(state) {
+                var current = getValueForComparison(state, '2026', weekNum, 'progress_current_planted');
+                var prevWeek = getValueForComparison(state, '2026', weekNum - 1, 'progress_current_planted');
+                var prevYear = getValueForComparison(state, '2025', weekNum, 'progress_current_planted');
+                var avg5yr = get5YearAvg(state, weekNum, 'progress_current_planted');
+
+                if (current !== null || prevWeek !== null || prevYear !== null) {
+                    html += '<tr>' +
+                        '<td>' + state + '</td>' +
+                        '<td>Planted</td>' +
+                        '<td>' + (current !== null ? current.toFixed(1) + '%' : 'N/A') + '</td>' +
+                        '<td>' + formatChange(current, prevWeek) + '</td>' +
+                        '<td>' + formatChange(current, prevYear) + '</td>' +
+                        '<td>' + formatChange(current, avg5yr) + '</td>' +
+                    '</tr>';
+                }
+            });
+
+            // Then national at bottom
+            var currentNat = getValueForComparison('US TOTAL', '2026', weekNum, 'progress_current_planted');
+            var prevWeekNat = getValueForComparison('US TOTAL', '2026', weekNum - 1, 'progress_current_planted');
+            var prevYearNat = getValueForComparison('US TOTAL', '2025', weekNum, 'progress_current_planted');
+            var avg5yrNat = get5YearAvg('US TOTAL', weekNum, 'progress_current_planted');
+
+            html += '<tr class="national-row">' +
+                '<td><strong>US TOTAL (National)</strong></td>' +
+                '<td>Planted</td>' +
+                '<td><strong>' + (currentNat !== null ? currentNat.toFixed(1) + '%' : 'N/A') + '</strong></td>' +
+                '<td>' + formatChange(currentNat, prevWeekNat) + '</td>' +
+                '<td>' + formatChange(currentNat, prevYearNat) + '</td>' +
+                '<td>' + formatChange(currentNat, avg5yrNat) + '</td>' +
+            '</tr>';
+
+            html += '</tbody></table>';
+            document.getElementById('latest-table-seasonality').innerHTML = html;
+        }
+
+        function init() {
+            Promise.all(FILES.map(loadFile))
+                .then(function() {
+                    if (allData.length === 0) throw new Error('No data loaded');
+
+                    document.getElementById('loading').style.display = 'none';
+
+                    var statusDiv = document.getElementById('data-status');
+                    var yearsFound = [...new Set(allData.map(function(r) { return r.year; }))].sort();
+                    var has2026 = yearsFound.indexOf('2026') !== -1;
+
+                    if (dataLoadErrors.length > 0) {
+                        statusDiv.innerHTML = 'Warning: Could not load: ' + dataLoadErrors.join(', ') + 
+                            '<br>Years available: ' + yearsFound.join(', ');
+                        statusDiv.style.background = '#fff3cd';
+                    } else {
+                        statusDiv.innerHTML = 'Data loaded successfully. Years available: ' + yearsFound.join(', ');
+                        statusDiv.style.background = '#d4edda';
+                    }
+                    statusDiv.style.display = 'block';
+
+                    if (!has2026) {
+                        statusDiv.innerHTML += '<br><strong>Note:</strong> 2026 data not found.';
+                        statusDiv.style.background = '#f8d7da';
+                    }
+
+                    populateYearCheckboxes();
+                    createLatestTableDashboard();
+                    populateLatestWeekTable();
+                    updateDashboardCharts();
+                    updateSeasonalityCharts();
+                })
+                .catch(function(err) {
+                    console.error('Error:', err);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = 'Error: ' + err.message;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
