@@ -13,6 +13,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
       - uses: actions/setup-python@v5
         with:
@@ -20,19 +22,38 @@ jobs:
       
       - run: pip install requests pandas
       
-      - name: Download existing CSV from release
+      - name: Download existing CSVs from dataset branch
         run: |
-          curl -L -o cotton_historical.csv \
-            "https://github.com/${{ github.repository }}/releases/download/data/cotton_historical.csv" || echo "No existing file"
+          git fetch origin dataset
+          for file in cotton_2001_2005.csv cotton_2006_2010.csv cotton_2011_2015.csv cotton_2016_2020.csv cotton_2021_2025.csv; do
+            git show origin/dataset:$file > $file 2>/dev/null || echo "No $file"
+          done
       
-      - name: Fetch new data and append
+      - name: Fetch new data and update files
         env:
           USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
         run: python update_data.py
       
-      - name: Upload to release
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Push updated CSVs to dataset branch
         run: |
-          gh release delete data --yes 2>/dev/null || true
-          gh release create data cotton_historical.csv --title "Cotton Data" --notes "Updated $(date)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Store updated files
+          mkdir -p /tmp/cotton-data
+          cp cotton_*.csv /tmp/cotton-data/
+          
+          # Switch to dataset branch
+          git fetch origin dataset
+          git checkout dataset
+          
+          # Replace files
+          cp /tmp/cotton-data/cotton_*.csv .
+          
+          # Commit and push
+          git add cotton_*.csv
+          git commit -m "Update cotton data $(date -u +%Y-%m-%d)" || echo "No changes"
+          git push origin dataset
+          
+          # Back to main
+          git checkout main
