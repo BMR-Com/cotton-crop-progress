@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotton Seasonality Analysis | USDA NASS</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: #f5f5f5; 
+        }
+        .header { 
+            background: #1a5490; 
+            color: white; 
+            padding: 15px 20px; 
+        }
+        .header h1 { 
+            margin: 0; 
+            font-size: 20px; 
+        }
+        .nav {
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px;
+        }
+        .nav a {
+            color: #1a5490;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .control-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .control-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        select, button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        button {
+            background: #1a5490;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background: #144070;
+        }
+        .year-checkboxes {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .year-checkboxes label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+        }
+        .chart-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+            gap: 20px; 
+        }
+        .chart-box { 
+            background: white; 
+            border: 1px solid #ddd;
+            border-radius: 4px; 
+        }
+        .chart-header {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .chart-header h3 { 
+            margin: 0; 
+            font-size: 14px;
+            color: #333;
+        }
+        .chart-content {
+            padding: 15px;
+            height: 350px;
+        }
+        .loading { 
+            text-align: center; 
+            padding: 100px; 
+            color: #666;
+        }
+        .avg-options {
+            display: flex;
+            gap: 10px;
+        }
+        .avg-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>USDA NASS Cotton Seasonality Analysis</h1>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html">Dashboard</a>
+        <a href="seasonality.html" style="color: #1a5490; font-weight: bold;">Seasonality Analysis</a>
+    </div>
+    
+    <div class="container">
+        <div class="controls">
+            <div class="control-row">
+                <div class="control-group">
+                    <label>State</label>
+                    <select id="state-selector" onchange="updateCharts()">
+                        <option value="US TOTAL" selected>National (US Total)</option>
+                        <option value="TEXAS">Texas</option>
+                        <option value="GEORGIA">Georgia</option>
+                        <option value="MISSISSIPPI">Mississippi</option>
+                        <option value="ALABAMA">Alabama</option>
+                        <option value="ARKANSAS">Arkansas</option>
+                        <option value="LOUISIANA">Louisiana</option>
+                        <option value="NORTH CAROLINA">North Carolina</option>
+                        <option value="SOUTH CAROLINA">South Carolina</option>
+                        <option value="TENNESSEE">Tennessee</option>
+                        <option value="OKLAHOMA">Oklahoma</option>
+                        <option value="KANSAS">Kansas</option>
+                        <option value="MISSOURI">Missouri</option>
+                        <option value="FLORIDA">Florida</option>
+                        <option value="VIRGINIA">Virginia</option>
+                        <option value="CALIFORNIA">California</option>
+                        <option value="ARIZONA">Arizona</option>
+                        <option value="NEW MEXICO">New Mexico</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>View Mode</label>
+                    <div class="avg-options">
+                        <label><input type="radio" name="avgMode" value="individual" checked onchange="updateCharts()"> Individual Years</label>
+                        <label><input type="radio" name="avgMode" value="5yr" onchange="updateCharts()"> 5-Year Avg</label>
+                        <label><input type="radio" name="avgMode" value="10yr" onchange="updateCharts()"> 10-Year Avg</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-row" id="year-selector-row">
+                <div class="control-group">
+                    <label>Select Years (when Individual mode)</label>
+                    <div class="year-checkboxes" id="year-checkboxes">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="updateCharts()">Update Charts</button>
+        </div>
+        
+        <div id="loading" class="loading">Loading data...</div>
+        <div id="charts" class="chart-grid" style="display: none;">
+            <div class="chart-box">
+                <div class="chart-header"><h3>Planted</h3></div>
+                <div id="chart-planted" class="chart-content"></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-header"><h3>Squaring</h3></div>
+                <div id="chart-squaring" class="chart-content"></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-header"><h3>Setting Bolls</h3></div>
+                <div id="chart-setting" class="chart-content"></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-header"><h3>Bolls Opening</h3></div>
+                <div id="chart-opening" class="chart-content"></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-header"><h3>Harvested</h3></div>
+                <div id="chart-harvested" class="chart-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const USERNAME = 'BMR-Com';
+        const REPO = 'cotton-crop-progress';
+        const BRANCH = 'main';
+        
+        const FILES = [
+            'cotton_2001_2005.csv',
+            'cotton_2006_2010.csv',
+            'cotton_2011_2015.csv',
+            'cotton_2016_2020.csv',
+            'cotton_2021_2025.csv'
+        ];
+        
+        const BASE_URL = `https://cdn.jsdelivr.net/gh/${USERNAME}/${REPO}@${BRANCH}/data`;
+        
+        let allData = [];
+        const STAGES = ['planted', 'squaring', 'setting_bolls', 'bolls_opening', 'harvested'];
+        
+        function loadFile(filename) {
+            return new Promise((resolve, reject) => {
+                Papa.parse(`${BASE_URL}/${filename}`, {
+                    download: true,
+                    header: true,
+                    complete: function(results) {
+                        const data = results.data.filter(r => r.year && r.Value);
+                        allData = allData.concat(data);
+                        resolve();
+                    },
+                    error: reject
+                });
+            });
+        }
+        
+        function populateYearCheckboxes() {
+            const years = [...new Set(allData.map(r => r.year))].sort().reverse();
+            const container = document.getElementById('year-checkboxes');
+            container.innerHTML = years.map(year => `
+                <label>
+                    <input type="checkbox" value="${year}" ${['2021','2022','2023','2024','2025'].includes(year) ? 'checked' : ''}>
+                    ${year}
+                </label>
+            `).join('');
+        }
+        
+        function getSelectedYears() {
+            const checkboxes = document.querySelectorAll('#year-checkboxes input:checked');
+            return [...checkboxes].map(cb => cb.value);
+        }
+        
+        function calculateAverage(dataByWeek) {
+            const weeks = Object.keys(dataByWeek).sort();
+            return weeks.map(week => {
+                const values = dataByWeek[week].filter(v => !isNaN(v));
+                return values.length > 0 ? values.reduce((a,b) => a+b, 0) / values.length : null;
+            });
+        }
+        
+        function createStageChart(elementId, stageKey, stateName, years, avgMode) {
+            const isNational = stateName === 'US TOTAL';
+            const filtered = allData.filter(r => 
+                (isNational ? r.level === 'NATIONAL' : r.state_name === stateName) &&
+                r.data_item_key === `progress_current_${stageKey}`
+            );
+            
+            const traces = [];
+            const weeksInOrder = [];
+            
+            // Generate week labels (April to November)
+            for (let month = 4; month <= 11; month++) {
+                for (let day = 1; day <= 28; day += 7) {
+                    weeksInOrder.push(`${month}/${day}`);
+                }
+            }
+            
+            if (avgMode === 'individual') {
+                years.forEach(year => {
+                    const yearData = filtered.filter(r => r.year === year);
+                    const weekMap = {};
+                    yearData.forEach(r => {
+                        const d = new Date(r.week_ending);
+                        const key = `${d.getMonth()+1}/${d.getDate()}`;
+                        weekMap[key] = parseFloat(r.Value);
+                    });
+                    
+                    const values = weeksInOrder.map(w => weekMap[w] || null);
+                    
+                    traces.push({
+                        x: weeksInOrder,
+                        y: values,
+                        name: year,
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { width: 2 },
+                        connectgaps: true
+                    });
+                });
+            } else {
+                // Calculate average
+                const avgYears = avgMode === '5yr' ? years.slice(0, 5) : years.slice(0, 10);
+                const dataByWeek = {};
+                
+                avgYears.forEach(year => {
+                    const yearData = filtered.filter(r => r.year === year);
+                    yearData.forEach(r => {
+                        const d = new Date(r.week_ending);
+                        const key = `${d.getMonth()+1}/${d.getDate()}`;
+                        if (!dataByWeek[key]) dataByWeek[key] = [];
+                        dataByWeek[key].push(parseFloat(r.Value));
+                    });
+                });
+                
+                const avgValues = weeksInOrder.map(w => {
+                    const vals = dataByWeek[w] || [];
+                    const valid = vals.filter(v => !isNaN(v));
+                    return valid.length > 0 ? valid.reduce((a,b) => a+b, 0) / valid.length : null;
+                });
+                
+                const upperBound = avgValues.map((v, i) => v ? v + (dataByWeek[weeksInOrder[i]]?.reduce((a,b) => Math.max(a,b), v) - v) * 0.3 : null);
+                const lowerBound = avgValues.map((v, i) => v ? v - (v - (dataByWeek[weeksInOrder[i]]?.reduce((a,b) => Math.min(a,b), v) || v)) * 0.3 : null);
+                
+                traces.push({
+                    x: weeksInOrder,
+                    y: upperBound,
+                    name: 'Upper',
+                    type: 'scatter',
+                    mode: 'lines',
+                    line: { width: 0 },
+                    showlegend: false,
+                    hoverinfo: 'skip'
+                });
+                
+                traces.push({
+                    x: weeksInOrder,
+                    y: lowerBound,
+                    name: 'Lower',
+                    type: 'scatter',
+                    mode: 'lines',
+                    fill: 'tonexty',
+                    fillcolor: 'rgba(26, 84, 144, 0.2)',
+                    line: { width: 0 },
+                    showlegend: false,
+                    hoverinfo: 'skip'
+                });
+                
+                traces.push({
+                    x: weeksInOrder,
+                    y: avgValues,
+                    name: `${avgMode === '5yr' ? '5' : '10'}-Year Average`,
+                    type: 'scatter',
+                    mode: 'lines',
+                    line: { color: '#1a5490', width: 3 }
+                });
+            }
+            
+            Plotly.newPlot(elementId, traces, {
+                height: 320,
+                margin: { t: 20, b: 40, l: 50, r: 20 },
+                xaxis: { 
+                    title: '',
+                    tickangle: 0,
+                    showgrid: true,
+                    gridcolor: '#eee'
+                },
+                yaxis: { 
+                    title: 'Percent',
+                    range: [0, 100],
+                    ticksuffix: '%',
+                    showgrid: true,
+                    gridcolor: '#eee'
+                },
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.2
+                },
+                plot_bgcolor: '#fafafa',
+                paper_bgcolor: 'white'
+            });
+        }
+        
+        function updateCharts() {
+            const state = document.getElementById('state-selector').value;
+            const avgMode = document.querySelector('input[name="avgMode"]:checked').value;
+            const years = getSelectedYears();
+            
+            document.getElementById('year-selector-row').style.display = 
+                avgMode === 'individual' ? 'flex' : 'none';
+            
+            STAGES.forEach((stage, i) => {
+                const elementId = `chart-${['planted', 'squaring', 'setting', 'opening', 'harvested'][i]}`;
+                createStageChart(elementId, stage, state, years, avgMode);
+            });
+        }
+        
+        // Load data
+        Promise.all(FILES.map(loadFile))
+            .then(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('charts').style.display = 'grid';
+                populateYearCheckboxes();
+                updateCharts();
+            })
+            .catch(err => {
+                document.getElementById('loading').textContent = 'Error loading data: ' + err.message;
+            });
+    </script>
+</body>
+</html>
