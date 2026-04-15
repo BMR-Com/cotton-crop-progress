@@ -1212,10 +1212,31 @@ function init(){
 
 // Handle print events to resize charts properly
 window.addEventListener('beforeprint', function(){
-  // Trigger chart resize
-  Object.values(chartInstances).forEach(function(chart){
-    if(chart && chart.resize){
-      chart.resize();
+  // Store original sizes
+  Object.keys(chartInstances).forEach(function(id){
+    var chart = chartInstances[id];
+    if(chart && chart.canvas){
+      chart.canvas._originalWidth = chart.canvas.width;
+      chart.canvas._originalHeight = chart.canvas.height;
+    }
+  });
+
+  // Force resize after a short delay to let print styles apply
+  setTimeout(function(){
+    Object.values(chartInstances).forEach(function(chart){
+      if(chart && chart.resize){
+        chart.resize();
+      }
+    });
+  }, 100);
+});
+
+window.addEventListener('afterprint', function(){
+  // Restore original sizes
+  Object.keys(chartInstances).forEach(function(id){
+    var chart = chartInstances[id];
+    if(chart && chart.canvas && chart.canvas._originalWidth){
+      chart.resize(chart.canvas._originalWidth, chart.canvas._originalHeight);
     }
   });
 });
