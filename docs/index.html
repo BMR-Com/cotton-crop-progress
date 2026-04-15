@@ -67,71 +67,39 @@ tr:nth-child(even){background:#f8f9fa}
 .leg-key{background:#fff8e1;padding:8px 12px;border-radius:8px;border:1px solid #ffe082;margin-left:auto}
 .leg-key-title{font-size:9px;font-weight:800;color:#f57f17;text-transform:uppercase;margin-bottom:4px}
 
-/* ══ PRINT: 6-page layout ══
-   P1=Planted table  P2=Continuum 1+2  P3=Continuum 3+4
-   P4=G+E 4 charts   P5=PVP 4 charts   P6=Seasonality
-══════════════════════════════════════════════════════*/
+/* ── PRINT: 2 charts per page ── */
 @media print{
   @page{size:A4 portrait;margin:10mm}
   body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .header,.nav,.controls,.btn-pdf,.section-title,.cont-legend,.ychk-wrap{display:none!important}
   .container{max-width:100%;padding:0;margin:0}
   .tab-content{display:block!important}
-  .chart-box{margin:0 0 0 0!important;box-shadow:none!important;border:1px solid #ccc!important;border-radius:2px!important;overflow:hidden;page-break-inside:avoid;break-inside:avoid}
+  .chart-box{box-shadow:none!important;border:1px solid #ccc!important;border-radius:2px!important;overflow:hidden;page-break-inside:avoid;break-inside:avoid;margin:0!important}
   .chart-header{padding:4px 8px!important;font-size:10px!important}
   .chart-header h3{font-size:10px!important;margin:0}
-  svg{width:100%!important}
   table{font-size:7px!important;width:100%!important}
   th{font-size:6px!important;padding:2px 3px!important}
   td{padding:2px 3px!important;font-size:7px!important}
-
-  /* PAGE 1: Planted table */
-  #print-page1{page-break-after:always;break-after:page;padding-bottom:4mm}
-
-  /* PAGE 2: National + Texas continuum — stacked, fill page */
-  #print-page2{page-break-after:always;break-after:page;display:flex!important;flex-direction:column;gap:3mm;height:277mm;overflow:hidden}
-  #print-page2 .chart-box{flex:1;min-height:0}
-  #print-page2 .chart-body-lg{height:calc(50% - 20px)!important;max-height:none!important;padding:1px!important}
-
-  /* PAGE 3: State1 + State2 continuum */
-  #print-page3{page-break-after:always;break-after:page;display:flex!important;flex-direction:column;gap:3mm;height:277mm;overflow:hidden}
-  #print-page3 .chart-box{flex:1;min-height:0}
-  #print-page3 .chart-body-lg{height:calc(50% - 20px)!important;max-height:none!important;padding:1px!important}
-
-  /* PAGE 4: Good+Excellent — 2x2 grid */
-  #print-page4{page-break-after:always;break-after:page;height:277mm;overflow:hidden}
-  #print-page4 .cond-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3mm!important;height:277mm}
-  #print-page4 .chart-box{height:130mm!important}
-  #print-page4 .chart-body-md{height:105mm!important;max-height:105mm!important;padding:1px!important}
-
-  /* PAGE 5: Poor+VeryPoor — 2x2 grid */
-  #print-page5{page-break-after:always;break-after:page;height:277mm;overflow:hidden}
-  #print-page5 .cond-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3mm!important;height:277mm}
-  #print-page5 .chart-box{height:130mm!important}
-  #print-page5 .chart-body-md{height:105mm!important;max-height:105mm!important;padding:1px!important}
-
-  /* PAGE 6: Seasonality — 2x3 grid (5 charts) */
-  #print-page6{page-break-after:auto;break-after:auto;height:277mm;overflow:hidden}
-  #print-page6 .cond-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3mm!important;height:277mm}
-  #print-page6 .chart-box{height:88mm!important}
-  #print-page6 .chart-body-md{height:68mm!important;max-height:68mm!important;padding:1px!important}
-}
-  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .header,.nav,.controls,.btn-pdf,.section-title{display:none!important}
-  .container{max-width:100%;padding:0;margin:0}
-  .tab-content{display:block!important}
-  /* Each .pp wrapper = one printed page with 2 charts */
-  .pp{page-break-after:always;break-after:page;height:267mm;overflow:hidden;display:flex;flex-direction:column;gap:2mm}
-  .pp:last-of-type{page-break-after:auto;break-after:auto}
-  .pp .chart-box{flex:1;margin:0!important;box-shadow:none!important;border:1px solid #ccc!important;border-radius:3px!important;overflow:hidden}
-  .chart-header{padding:5px 10px!important;font-size:11px!important}
-  .chart-body-lg,.chart-body-md{height:100mm!important;max-height:100mm!important;padding:2px!important}
-  .cont-legend,.ychk-wrap{display:none!important}
-  .cond-grid{display:block!important}
-  table{font-size:7px!important}
-  th{font-size:6px!important;padding:3px!important}
-  td{padding:3px!important;font-size:7px!important}
   svg{max-height:95mm!important;width:100%!important}
+
+  /* PAGE 1 — Planted table: wrap in .pp-table, force page break after */
+  .pp-table{page-break-after:always;break-after:page}
+
+  /* PAGES 2+3 — Continuum charts: .pp = 2 stacked full-width charts per page */
+  .pp{page-break-after:always;break-after:page;height:272mm;overflow:hidden;display:flex!important;flex-direction:column;gap:3mm}
+  .pp .chart-box{flex:1;min-height:0}
+  .pp .chart-body-lg{height:calc(50% - 18px)!important;max-height:none!important;padding:1px!important}
+
+  /* State continuum wrapper — same treatment as .pp */
+  #pp-states-cont{page-break-after:always;break-after:page;height:272mm;overflow:hidden;display:flex!important;flex-direction:column;gap:3mm}
+  #pp-states-cont .chart-box{flex:1;min-height:0}
+  #pp-states-cont .chart-body-lg{height:calc(50% - 18px)!important;max-height:none!important;padding:1px!important}
+
+  /* PAGES 4+5+6 — Condition + Seasonality: .cond-grid = 2x2 grid per page */
+  .cond-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3mm!important;page-break-after:always;break-after:page;height:272mm;overflow:hidden}
+  .cond-grid:last-of-type{page-break-after:auto;break-after:auto}
+  .cond-grid .chart-box{height:130mm!important;max-height:130mm!important}
+  .cond-grid .chart-body-md{height:108mm!important;max-height:108mm!important;padding:1px!important}
 }
 </style>
 </head>
@@ -204,15 +172,15 @@ tr:nth-child(even){background:#f8f9fa}
 
     <!-- Latest planted table -->
     <div class="section-title">📊 Latest Week — Cotton Planted</div>
-    <div id="print-page1">
+    <div class="pp-table">
       <div id="tbl-planted"></div>
     </div>
 
     <!-- Continuum charts — each FULL WIDTH stacked -->
     <div class="section-title">🌾 Crop Progress Continuum</div>
 
-    <!-- Print page 2: National + Texas continuum -->
-    <div id="print-page2">
+    <!-- Print page 1 -->
+    <div class="pp">
       <div class="chart-box">
         <div class="chart-header"><h3>🏛️ National — Crop Progress Continuum</h3></div>
         <div id="cc-national" class="chart-body-lg"></div>
@@ -225,8 +193,8 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
     </div>
 
-    <!-- Print page 3: State1 + State2 continuum -->
-    <div id="print-page3">
+    <!-- Print page 2: state 1 + state 2 continuum (hidden until selected) -->
+    <div id="pp-states-cont">
       <div class="chart-box" id="box-s1-cont" style="display:none">
         <div class="chart-header"><h3 id="title-s1-cont">State 1 — Crop Progress Continuum</h3></div>
         <div id="cc-s1" class="chart-body-lg"></div>
@@ -241,7 +209,6 @@ tr:nth-child(even){background:#f8f9fa}
 
     <!-- Good + Excellent — 2 per row -->
     <div class="section-title">✅ Crop Condition — Good + Excellent (Weeks 20–47)</div>
-    <div id="print-page4">
     <div class="cond-grid">
       <div class="chart-box">
         <div class="chart-header">🏛️ National — Good + Excellent</div>
@@ -277,10 +244,8 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
     </div>
 
-    </div><!-- /print-page4 -->
     <!-- Poor + Very Poor — 2 per row -->
     <div class="section-title">⚠️ Crop Condition — Poor + Very Poor (Weeks 20–47)</div>
-    <div id="print-page5">
     <div class="cond-grid">
       <div class="chart-box">
         <div class="chart-header">🏛️ National — Poor + Very Poor</div>
@@ -315,7 +280,6 @@ tr:nth-child(even){background:#f8f9fa}
         </div>
       </div>
     </div>
-    </div><!-- /print-page5 -->
   </div><!-- /tab-dashboard -->
 
   <!-- ════════════════ SEASONALITY ════════════════ -->
@@ -365,7 +329,6 @@ tr:nth-child(even){background:#f8f9fa}
       <button onclick="renderSeasonality()">🔄 Update</button>
     </div>
     <!-- Seasonality charts 2 per row -->
-    <div id="print-page6">
     <div class="cond-grid">
       <div class="chart-box">
         <div class="chart-header"><h3>🌱 Planted</h3><span class="wkrange" id="wr-planted"></span></div>
@@ -388,7 +351,6 @@ tr:nth-child(even){background:#f8f9fa}
         <div id="seas-harvested" class="chart-body-md"></div>
       </div>
     </div>
-    </div><!-- /print-page6 -->
   </div><!-- /tab-seasonality -->
 </div><!-- /container -->
 
@@ -396,16 +358,16 @@ tr:nth-child(even){background:#f8f9fa}
 // ═══════════════════════════════════════════════════════
 //  CONFIG — Real data_item_key values confirmed from CSV
 // ═══════════════════════════════════════════════════════
-var BASE  = 'https://raw.githubusercontent.com/BMR-Com/cotton-crop-progress/main/data';
+var BASE  = 'https://cdn.jsdelivr.net/gh/BMR-Com/cotton-crop-progress@main/data';
 var FILES = ['cotton_2001_2005.csv','cotton_2006_2010.csv','cotton_2011_2015.csv',
              'cotton_2016_2020.csv','cotton_2021_2025.csv','cotton_2026_2030.csv'];
 
 var STAGES = [
-  { key:'progress_pct_planted',        curKey:'progress_current_planted',        prevKey:'progress_prev_planted',        avgKey:'progress_5yr_planted',        id:'planted',  label:'Planted',       color:'#2E7D32', prvClr:'#66BB6A', avgClr:'#1B5E20' },
-  { key:'progress_pct_squaring',       curKey:'progress_current_squaring',       prevKey:'progress_prev_squaring',       avgKey:'progress_5yr_squaring',       id:'squaring', label:'Squaring',      color:'#F57F17', prvClr:'#FFD54F', avgClr:'#E65100' },
-  { key:'progress_pct_setting_bolls',  curKey:'progress_current_setting_bolls',  prevKey:'progress_prev_setting_bolls',  avgKey:'progress_5yr_setting_bolls',  id:'setting',  label:'Setting Bolls', color:'#1565C0', prvClr:'#64B5F6', avgClr:'#0D47A1' },
-  { key:'progress_pct_bolls_opening',  curKey:'progress_current_bolls_opening',  prevKey:'progress_prev_bolls_opening',  avgKey:'progress_5yr_bolls_opening',  id:'opening',  label:'Bolls Opening', color:'#C62828', prvClr:'#EF9A9A', avgClr:'#880E4F' },
-  { key:'progress_pct_harvested',      curKey:'progress_current_harvested',      prevKey:'progress_prev_harvested',      avgKey:'progress_5yr_harvested',      id:'harvested',label:'Harvested',     color:'#6A1B9A', prvClr:'#CE93D8', avgClr:'#311B92' }
+  { key:'progress_pct_planted',        id:'planted',  label:'Planted',       color:'#2E7D32', prvClr:'#66BB6A', avgClr:'#1B5E20' },
+  { key:'progress_pct_squaring',       id:'squaring', label:'Squaring',      color:'#F57F17', prvClr:'#FFD54F', avgClr:'#E65100' },
+  { key:'progress_pct_setting_bolls',  id:'setting',  label:'Setting Bolls', color:'#1565C0', prvClr:'#64B5F6', avgClr:'#0D47A1' },
+  { key:'progress_pct_bolls_opening',  id:'opening',  label:'Bolls Opening', color:'#C62828', prvClr:'#EF9A9A', avgClr:'#880E4F' },
+  { key:'progress_pct_harvested',      id:'harvested',label:'Harvested',     color:'#6A1B9A', prvClr:'#CE93D8', avgClr:'#311B92' }
 ];
 
 var C_MIN=9, C_MAX=48;
@@ -442,10 +404,8 @@ function allYears(){
 function latestYearWith(key,loc){
   var yrs=allYears(); // already sorted newest first
   for(var i=0;i<yrs.length;i++){
-    // Check both 'progress_current_*' (2026 file) and 'progress_pct_*' (historical files)
-    var curKey=key.replace('progress_pct_','progress_current_');
     var has=allData.some(function(r){
-      return (r.data_item_key===key||r.data_item_key===curKey) && locMatch(r,loc) && r.year.toString()===yrs[i];
+      return r.data_item_key===key && locMatch(r,loc) && r.year.toString()===yrs[i];
     });
     if(has) return yrs[i];
   }
@@ -521,48 +481,37 @@ function loadFile(f){
 //  Uses latestYearWith() so 2026 week 14/15 data shows up
 // ═══════════════════════════════════════════════════════
 function buildPlantedTable(){
-  // EXACT same approach as original working code:
-  // The 2026 CSV embeds current, prev-year and 5yr-avg under separate data_item_key values
-  // Find latest week from 2026 file using 'progress_current_planted'
-  var rows2026=allData.filter(function(r){
-    return r.data_item_key==='progress_current_planted' && r.year.toString()==='2026';
-  });
-
-  // If no 2026 current data yet, fall back to most recent year with progress_pct_planted
-  if(!rows2026.length){
-    rows2026=allData.filter(function(r){
-      return r.data_item_key==='progress_pct_planted';
-    });
-  }
-  if(!rows2026.length){
+  // Use national scope to find latest year — states may not all have week 14/15 yet
+  var curYr=latestYearWith('progress_pct_planted','US TOTAL');
+  if(!curYr){
     document.getElementById('tbl-planted').innerHTML='<p style="padding:16px;color:#999">No planted data found.</p>';
     return;
   }
-
-  // Sort by week_ending date to get the very latest week
-  rows2026.sort(function(a,b){ return new Date(b.week_ending)-new Date(a.week_ending); });
-  var latestRow=rows2026[0];
-  var curYr=latestRow.year.toString();
-  var latW=weekNum(latestRow.reference_period_desc);
-  var preW=latW-1;
   var prevYr=String(+curYr-1);
 
-  // Helper: get value from the 2026 file using embedded keys (original pattern)
-  // For current year data: key=progress_current_planted, year=curYr
-  // For prior year data:   key=progress_prev_planted,    year=curYr (stored in same file!)
-  // For 5yr avg data:      key=progress_5yr_planted,     year=curYr (stored in same file!)
-  function gv2026(loc, wk, key){
-    var r=allData.find(function(r){
-      return r.data_item_key===key && locMatch(r,loc)
-        && r.year.toString()===curYr && weekNum(r.reference_period_desc)===wk;
-    });
-    if(!r) return null;
-    var v=parseFloat(r.Value); return isNaN(v)?null:v;
-  }
+  // Latest week number nationally in current year
+  var natRows=filterRows('progress_pct_planted','US TOTAL',curYr);
+  natRows.sort(function(a,b){return(weekNum(b.reference_period_desc)||0)-(weekNum(a.reference_period_desc)||0);});
+  var latW=weekNum(natRows[0].reference_period_desc);
+  var preW=latW-1;
 
   var STATES=['TEXAS','GEORGIA','MISSISSIPPI','ALABAMA','ARKANSAS','LOUISIANA',
     'NORTH CAROLINA','SOUTH CAROLINA','TENNESSEE','OKLAHOMA','KANSAS','MISSOURI',
     'FLORIDA','VIRGINIA','CALIFORNIA','ARIZONA','NEW MEXICO'];
+
+  function gv(loc,wk,yr){
+    var r=allData.find(function(r){
+      return r.data_item_key==='progress_pct_planted'&&locMatch(r,loc)
+        &&r.year.toString()===yr.toString()&&weekNum(r.reference_period_desc)===wk;
+    });
+    if(!r) return null;
+    var v=parseFloat(r.Value); return isNaN(v)?null:v;
+  }
+  function avg5(loc,wk){
+    var base=allYears().filter(function(y){return +y<+curYr;}).slice(0,5);
+    var vals=base.map(function(y){return gv(loc,wk,y);}).filter(function(v){return v!==null;});
+    return vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;
+  }
 
   var html='<table><tr>'
     +'<th style="text-align:left;width:14%">State</th>'
@@ -573,10 +522,7 @@ function buildPlantedTable(){
     +'<th>Δ Last Wk</th><th>Δ Prev Yr</th><th>Δ 5-Yr</th></tr>';
 
   STATES.forEach(function(st){
-    var c=gv2026(st,latW,'progress_current_planted');
-    var p=gv2026(st,preW,'progress_current_planted');
-    var y=gv2026(st,latW,'progress_prev_planted');
-    var a=gv2026(st,latW,'progress_5yr_planted');
+    var c=gv(st,latW,curYr),p=gv(st,preW,curYr),y=gv(st,latW,prevYr),a=avg5(st,latW);
     html+='<tr><td>'+st+'</td>'
       +'<td>'+(c!==null?c.toFixed(0)+'%':'—')+'</td>'
       +'<td>'+(p!==null?p.toFixed(0)+'%':'—')+'</td>'
@@ -584,10 +530,7 @@ function buildPlantedTable(){
       +'<td>'+(a!==null?a.toFixed(0)+'%':'—')+'</td>'
       +'<td>'+fmtArr(c,p)+'</td><td>'+fmtArr(c,y)+'</td><td>'+fmtArr(c,a)+'</td></tr>';
   });
-  var c=gv2026('US TOTAL',latW,'progress_current_planted');
-  var p=gv2026('US TOTAL',preW,'progress_current_planted');
-  var y=gv2026('US TOTAL',latW,'progress_prev_planted');
-  var a=gv2026('US TOTAL',latW,'progress_5yr_planted');
+  var c=gv('US TOTAL',latW,curYr),p=gv('US TOTAL',preW,curYr),y=gv('US TOTAL',latW,prevYr),a=avg5('US TOTAL',latW);
   html+='<tr class="nat-row"><td>🏛️ US TOTAL</td>'
     +'<td>'+(c!==null?c.toFixed(0)+'%':'—')+'</td>'
     +'<td>'+(p!==null?p.toFixed(0)+'%':'—')+'</td>'
@@ -644,15 +587,11 @@ function drawContinuum(divId,legendId,loc){
   STAGES.forEach(function(s){
     var g={label:s.label,color:s.color,prvClr:s.prvClr,avgClr:s.avgClr,curYr:curYr,hasCur:false,hasPrv:false,hasAvg:false};
 
-    // ORIGINAL PATTERN: current year file embeds current, prev, and 5yr avg under separate keys
-    // Try curKey (progress_current_*) first — used in 2026 file
-    // Fall back to key (progress_pct_*) — used in historical files
-    var cv=arrByWeek(filterRows(s.curKey,loc,curYr),C_MIN,C_MAX);
-    if(!cv.some(function(v){return v!==null;}))
-      cv=arrByWeek(filterRows(s.key,loc,curYr),C_MIN,C_MAX);
-
+    // current year
+    var cv=arrByWeek(filterRows(s.key,loc,curYr),C_MIN,C_MAX);
     if(cv.some(function(v){return v!==null;})){
       g.hasCur=true;
+      // label at last non-null point
       var li=-1; cv.forEach(function(v,i){if(v!==null)li=i;});
       var tx=cv.map(function(_,i){return i===li?s.label:'';});
       traces.push({x:lbl,y:cv,type:'scatter',mode:'lines+text',
@@ -661,13 +600,8 @@ function drawContinuum(divId,legendId,loc){
         connectgaps:true,showlegend:false,name:s.label+' '+curYr,
         hovertemplate:'<b>'+s.label+' '+curYr+'</b><br>%{x}: %{y:.1f}%<extra></extra>'});
     }
-
-    // Prior year: read from curYr file via prevKey (original approach — 2026 file has 2025 embedded)
-    // Fall back to reading directly from prvYr using historical key
-    var pv=arrByWeek(filterRows(s.prevKey,loc,curYr),C_MIN,C_MAX);
-    if(!pv.some(function(v){return v!==null;}))
-      pv=arrByWeek(filterRows(s.key,loc,prvYr),C_MIN,C_MAX);
-
+    // prior year
+    var pv=arrByWeek(filterRows(s.key,loc,prvYr),C_MIN,C_MAX);
     if(pv.some(function(v){return v!==null;})){
       g.hasPrv=true;
       traces.push({x:lbl,y:pv,type:'scatter',mode:'lines',
@@ -675,19 +609,16 @@ function drawContinuum(divId,legendId,loc){
         connectgaps:true,showlegend:false,name:s.label+' '+prvYr,
         hovertemplate:'<b>'+s.label+' '+prvYr+'</b><br>%{x}: %{y:.1f}%<extra></extra>'});
     }
-
-    // 5yr avg: read from curYr file via avgKey (original approach — 2026 file has 5yr avg embedded)
-    // Fall back to computing avg from historical files
-    var av=arrByWeek(filterRows(s.avgKey,loc,curYr),C_MIN,C_MAX);
-    if(!av.some(function(v){return v!==null;}) && ayrs.length)
-      av=calcAvg(s.key,loc,ayrs,C_MIN,C_MAX);
-
-    if(av.some(function(v){return v!==null;})){
-      g.hasAvg=true;
-      traces.push({x:lbl,y:av,type:'scatter',mode:'lines',
-        line:{color:s.avgClr,width:2,dash:'dot',shape:'spline',smoothing:1.2},
-        connectgaps:true,showlegend:false,name:s.label+' 5yr Avg',
-        hovertemplate:'<b>'+s.label+' 5yr Avg</b><br>%{x}: %{y:.1f}%<extra></extra>'});
+    // 5-yr avg
+    if(ayrs.length){
+      var av=calcAvg(s.key,loc,ayrs,C_MIN,C_MAX);
+      if(av.some(function(v){return v!==null;})){
+        g.hasAvg=true;
+        traces.push({x:lbl,y:av,type:'scatter',mode:'lines',
+          line:{color:s.avgClr,width:2,dash:'dot',shape:'spline',smoothing:1.2},
+          connectgaps:true,showlegend:false,name:s.label+' 5yr Avg',
+          hovertemplate:'<b>'+s.label+' 5yr Avg</b><br>%{x}: %{y:.1f}%<extra></extra>'});
+      }
     }
     if(g.hasCur||g.hasPrv||g.hasAvg) groups.push(g);
   });
@@ -861,12 +792,8 @@ function renderDashboard(){
 // ═══════════════════════════════════════════════════════
 function buildSeasYearChk(){
   var yrs=allYears();
-  // Check BOTH key naming conventions: 2026 uses 'progress_current_planted', history uses 'progress_pct_planted'
   var withData=yrs.filter(function(yr){
-    return allData.some(function(r){
-      return (r.data_item_key==='progress_pct_planted'||r.data_item_key==='progress_current_planted')
-             && r.year.toString()===yr;
-    });
+    return allData.some(function(r){return (r.data_item_key==='progress_pct_planted'||r.data_item_key==='progress_current_planted')&&r.year.toString()===yr;});
   });
   var def=withData.slice(0,3);
   document.getElementById('seas-ychk').innerHTML=yrs.map(function(y){
@@ -880,19 +807,17 @@ function getSeasYears(){
 }
 
 function drawSeasStage(stage,loc,selYears){
-  // Derive active window from ALL data — check BOTH key naming conventions
+  // derive active window from ALL data for this key+loc across all years
   var allWks=[];
   allData.forEach(function(r){
-    var k=r.data_item_key;
-    if(k!==stage.key && k!==stage.curKey) return;
-    if(!locMatch(r,loc)) return;
+    if(r.data_item_key!==stage.key&&r.data_item_key!==stage.curKey||!locMatch(r,loc)) return;
     var w=weekNum(r.reference_period_desc); if(w) allWks.push(w);
   });
   var wrEl=document.getElementById('wr-'+stage.id);
   if(!allWks.length){
     if(wrEl) wrEl.textContent='No data';
     Plotly.newPlot('seas-'+stage.id,[],{height:420,margin:{t:20,b:60,l:50,r:20},
-      annotations:[{text:'No data for this stage/state',xref:'paper',yref:'paper',x:.5,y:.5,showarrow:false,font:{size:13,color:'#999'}}]});
+      annotations:[{text:'No data',xref:'paper',yref:'paper',x:.5,y:.5,showarrow:false,font:{size:13,color:'#999'}}]});
     return;
   }
   var dataLo=Math.min.apply(null,allWks), dataHi=Math.max.apply(null,allWks);
@@ -902,41 +827,24 @@ function drawSeasStage(stage,loc,selYears){
 
   var traces=[];
   selYears.forEach(function(yr){
-    // Use curKey for 2026 file, key for historical files — try both
     var vals=arrByWeek(filterRows(stage.curKey,loc,yr),wLo,wHi);
-    if(!vals.some(function(v){return v!==null;}))
-      vals=arrByWeek(filterRows(stage.key,loc,yr),wLo,wHi);
+    if(!vals.some(function(v){return v!==null;})) vals=arrByWeek(filterRows(stage.key,loc,yr),wLo,wHi);
     if(vals.some(function(v){return v!==null;}))
       traces.push({x:lbl,y:vals,name:yr,type:'scatter',mode:'lines',line:{width:2},
         connectgaps:true,opacity:.8});
   });
 
-  // Averages — use historical key (progress_pct_*) for avg calculation across all years
-  // Also include curKey rows so 2026 data is part of averages when computing
   var ayrs=allYears();
   var a5=document.getElementById('avg5').checked;
   var a10=document.getElementById('avg10').checked;
   var a20=document.getElementById('avg20').checked;
-  function calcAvgBoth(n,lo,hi){
-    // calcAvg helper that checks both key naming conventions
-    var byW={};
-    ayrs.slice(0,n).forEach(function(yr){
-      [stage.key,stage.curKey].forEach(function(k){
-        filterRows(k,loc,yr).forEach(function(r){
-          var w=weekNum(r.reference_period_desc);
-          if(w&&w>=lo&&w<=hi){var v=parseFloat(r.Value);if(!isNaN(v)){if(!byW[w])byW[w]=[];byW[w].push(v);}}
-        });
-      });
-    });
-    var out=[];
-    for(var w=lo;w<=hi;w++){var a=byW[w];out.push(a&&a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null);}
-    return out;
-  }
   function addAvg(n,color,dash){
     if(ayrs.length>=n){
-      var av=calcAvgBoth(n,wLo,wHi);
+      var av=calcAvg(stage.key,loc,ayrs.slice(0,n),wLo,wHi);
+      if(!av.some(function(v){return v!==null;})) av=calcAvg(stage.curKey,loc,ayrs.slice(0,n),wLo,wHi);
       if(av.some(function(v){return v!==null;})){
-        var ln={color:color,width:3}; if(dash) ln.dash=dash;
+        var ln={color:color,width:3};
+        if(dash) ln.dash=dash;
         traces.push({x:lbl,y:av,name:n+'yr Avg',type:'scatter',mode:'lines',line:ln});
       }
     }
@@ -987,18 +895,6 @@ function init(){
       return;
     }
     document.getElementById('loading').style.display='none';
-
-    // Show load summary banner so user can confirm 2026 data loaded
-    var yrCounts={};
-    allData.forEach(function(r){if(r.year)yrCounts[r.year]=(yrCounts[r.year]||0)+1;});
-    var sortedYrs=Object.keys(yrCounts).sort().reverse();
-    var recent=sortedYrs.slice(0,5).map(function(y){return y+'('+yrCounts[y]+')'}).join(', ');
-    var banner=document.createElement('div');
-    banner.style.cssText='background:#e8f5e9;border-left:4px solid #27ae60;padding:10px 16px;margin-bottom:12px;border-radius:6px;font-size:12px;color:#2c3e50';
-    banner.innerHTML='<b>✅ Data loaded:</b> '+allData.length.toLocaleString()+' total rows | Recent years: '+recent
-      +'<button onclick="this.parentNode.remove()" style="float:right;background:none;border:none;cursor:pointer;color:#999;font-size:14px">✕</button>';
-    document.querySelector('.container').insertBefore(banner,document.querySelector('.container').firstChild);
-
     buildPlantedTable();
     buildCondYearSelectors();
     buildSeasYearChk();
