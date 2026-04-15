@@ -1209,6 +1209,16 @@ function init(){
     renderDashboard();
   });
 }
+
+// Handle print events to resize charts properly
+window.addEventListener('beforeprint', function(){
+  // Trigger chart resize
+  Object.values(chartInstances).forEach(function(chart){
+    if(chart && chart.resize){
+      chart.resize();
+    }
+  });
+});
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
