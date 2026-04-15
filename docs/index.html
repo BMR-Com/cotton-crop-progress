@@ -24,21 +24,21 @@ select,button{padding:9px 14px;border:1px solid #ccc;border-radius:6px;font-size
 button{background:linear-gradient(135deg,#1a5490,#2980b9);color:#fff;cursor:pointer;border:none;font-weight:600}
 .btn-pdf{background:linear-gradient(135deg,#dc3545,#c0392b)}
 
-/* ── Year checkboxes ── */
+/* Year checkboxes */
 .ychk{display:flex;gap:6px;flex-wrap:wrap;max-height:78px;overflow-y:auto;padding:6px;border:1px solid #e0e0e0;border-radius:6px;background:#fafafa}
 .ychk label{display:flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;padding:3px 8px;background:#fff;border-radius:4px;border:1px solid #e0e0e0;cursor:pointer}
 
-/* ── Chart boxes — ALL full width, stacked ── */
+/* Chart boxes */
 .chart-box{background:#fff;border-radius:10px;margin-bottom:22px;box-shadow:0 3px 12px rgba(0,0,0,.08);overflow:hidden;width:100%}
 .chart-header{background:linear-gradient(135deg,#f8f9fa,#e9ecef);padding:13px 18px;border-bottom:2px solid #1a5490;font-weight:700;font-size:14px;color:#1a5490;display:flex;justify-content:space-between;align-items:center}
 .chart-header h3{margin:0;font-size:14px;color:#1a5490}
 .wkrange{font-size:10px;color:#888;font-weight:400}
 
-/* Continuum charts: tall */
+/* Chart body sizes */
 .chart-body-lg{padding:4px;height:500px}
-/* Condition / seasonality charts: medium — two per row */
-.cond-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(560px,1fr));gap:20px;margin-bottom:4px}
 .chart-body-md{padding:4px;height:430px}
+
+.cond-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(560px,1fr));gap:20px;margin-bottom:4px}
 
 .section-title{background:linear-gradient(135deg,#1a5490,#2c3e50);color:#fff;padding:13px 18px;margin:28px 0 12px;font-weight:700;font-size:16px;border-radius:8px}
 .tab-content{display:none}
@@ -58,7 +58,7 @@ tr:nth-child(even){background:#f8f9fa}
 .loading{text-align:center;padding:80px;color:#666;font-size:18px}
 .error{color:#c0392b;padding:18px;background:#fee;display:none;border-radius:8px;margin:16px 0}
 
-/* ── Continuum legend ── */
+/* Continuum legend */
 .cont-legend{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px;background:#f8f9fa;border-top:2px solid #dee2e6}
 .leg-grp{background:#fff;padding:8px 12px;border-radius:8px;border:1px solid #e0e0e0;min-width:130px}
 .leg-grp-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
@@ -67,9 +67,9 @@ tr:nth-child(even){background:#f8f9fa}
 .leg-key{background:#fff8e1;padding:8px 12px;border-radius:8px;border:1px solid #ffe082;margin-left:auto}
 .leg-key-title{font-size:9px;font-weight:800;color:#f57f17;text-transform:uppercase;margin-bottom:4px}
 
-/* ── PRINT: 2 charts per page ── */
+/* Print styles - ONE CHART PER PAGE */
 @media print{
-  @page{size:A4 landscape;margin:8mm}
+  @page{size:A4 landscape;margin:10mm}
 
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 
@@ -82,40 +82,52 @@ tr:nth-child(even){background:#f8f9fa}
   .container{max-width:100%;padding:0;margin:0;width:100%}
 
   /* Show both tabs */
-  .tab-content{display:block!important}
+  .tab-content{display:block!important;position:static!important;visibility:visible!important}
 
-  /* Chart boxes */
+  /* Each chart box gets its own page */
   .chart-box{
     box-shadow:none!important;
-    border:1px solid #999!important;
-    border-radius:2px!important;
-    overflow:hidden!important;
-    break-inside:avoid!important;
+    border:2px solid #333!important;
+    border-radius:4px!important;
+    width:100%!important;
+    height:180mm!important;
+    max-height:180mm!important;
+    page-break-before:always!important;
+    break-before:page!important;
     page-break-inside:avoid!important;
-    margin:0!important;
+    break-inside:avoid!important;
+    margin:0 0 5mm 0!important;
     background:white!important;
+    display:block!important;
+    overflow:hidden!important;
+  }
+
+  /* First chart doesn't need page break before */
+  .pp .chart-box:first-child,
+  #pp-states-cont .chart-box:first-child,
+  .cond-grid .chart-box:first-child,
+  #cond-ge-grid-1 .chart-box:first-child,
+  #cond-pvp-grid-1 .chart-box:first-child,
+  #seasonality-print-grid .chart-box:first-child{
+    page-break-before:auto!important;
+    break-before:auto!important;
   }
 
   .chart-header{
-    padding:3px 8px!important;
-    font-size:9px!important;
-    line-height:1.2!important;
-    border-bottom:1px solid #1a5490!important;
+    padding:5px 10px!important;
+    font-size:12px!important;
+    border-bottom:2px solid #1a5490!important;
+    height:25mm!important;
+    max-height:25mm!important;
   }
 
-  .chart-header h3{font-size:9px!important;margin:0!important}
+  .chart-header h3{font-size:14px!important;margin:0!important}
 
-  /* Chart body sizing */
-  .chart-body-lg{
-    height:130mm!important;
-    max-height:130mm!important;
-    padding:2px!important;
-    overflow:hidden!important;
-  }
-
+  /* Chart body fills remaining space */
+  .chart-body-lg,
   .chart-body-md{
-    height:85mm!important;
-    max-height:85mm!important;
+    height:150mm!important;
+    max-height:150mm!important;
     padding:2px!important;
     overflow:hidden!important;
   }
@@ -129,147 +141,41 @@ tr:nth-child(even){background:#f8f9fa}
   }
 
   /* Table styling */
-  table{font-size:7px!important;width:100%!important}
-  th{font-size:6px!important;padding:2px!important;background:#1a5490!important;color:white!important}
-  td{padding:2px!important;font-size:7px!important;border-bottom:1px solid #ddd!important}
+  table{font-size:9px!important;width:100%!important}
+  th{font-size:8px!important;padding:3px!important;background:#1a5490!important;color:white!important}
+  td{padding:3px!important;font-size:8px!important;border-bottom:1px solid #ddd!important}
 
-  /* PAGE 1: Planted table */
-  .pp-table{
-    display:block!important;
-    page-break-after:always!important;
-    break-after:page!important;
-    width:100%!important;
-  }
-
-  /* PAGE 2: National + Texas continuum (stacked) */
-  .pp{
-    display:block!important;
-    width:100%!important;
-    page-break-after:always!important;
-    break-after:page!important;
-  }
-
-  .pp .chart-box{
-    width:100%!important;
-    height:138mm!important;
-    margin-bottom:4mm!important;
-  }
-
-  /* PAGE 3: Georgia + Mississippi continuum (stacked) */
-  #pp-states-cont{
-    display:block!important;
-    width:100%!important;
-    page-break-after:always!important;
-    break-after:page!important;
-  }
-
-  #pp-states-cont .chart-box{
-    width:100%!important;
-    height:138mm!important;
-    margin-bottom:4mm!important;
-  }
-
-  /* PAGE 4: Good+Excellent - 4 charts (2x2 grid) */
-  #cond-ge-grid-1{
-    display:grid!important;
-    grid-template-columns:1fr 1fr!important;
-    grid-template-rows:1fr 1fr!important;
-    gap:4mm!important;
-    width:100%!important;
-    height:190mm!important;
-    page-break-after:always!important;
-    break-after:page!important;
-    overflow:hidden!important;
-  }
-
-  #cond-ge-grid-1 .chart-box{
-    height:93mm!important;
-    max-height:93mm!important;
-    overflow:hidden!important;
-  }
-
-  #cond-ge-grid-1 .chart-body-md{
-    height:78mm!important;
-    max-height:78mm!important;
-    overflow:hidden!important;
-  }
-
-  /* PAGE 5: Poor+VeryPoor - 4 charts (2x2 grid) */
-  #cond-pvp-grid-1{
-    display:grid!important;
-    grid-template-columns:1fr 1fr!important;
-    grid-template-rows:1fr 1fr!important;
-    gap:4mm!important;
-    width:100%!important;
-    height:190mm!important;
-    page-break-after:always!important;
-    break-after:page!important;
-    overflow:hidden!important;
-  }
-
-  #cond-pvp-grid-1 .chart-box{
-    height:93mm!important;
-    max-height:93mm!important;
-    overflow:hidden!important;
-  }
-
-  #cond-pvp-grid-1 .chart-body-md{
-    height:78mm!important;
-    max-height:78mm!important;
-    overflow:hidden!important;
-  }
-
-  /* PAGE 6: Seasonality - 5 charts (4 in 2x2 grid + 1 full width) */
+  /* Print containers */
+  .pp-table,
+  .pp,
+  #pp-states-cont,
+  .cond-grid,
+  #cond-ge-grid-1,
+  #cond-pvp-grid-1,
   #seasonality-print-grid{
     display:block!important;
     width:100%!important;
   }
 
-  #seasonality-print-grid .seas-row-1{
-    display:grid!important;
-    grid-template-columns:1fr 1fr!important;
-    grid-template-rows:1fr 1fr!important;
-    gap:4mm!important;
-    width:100%!important;
-    height:190mm!important;
-    page-break-after:always!important;
-    break-after:page!important;
-    overflow:hidden!important;
-  }
-
-  #seasonality-print-grid .seas-row-1 .chart-box{
-    height:93mm!important;
-    max-height:93mm!important;
-    overflow:hidden!important;
-  }
-
-  #seasonality-print-grid .seas-row-1 .chart-body-md{
-    height:78mm!important;
-    max-height:78mm!important;
-    overflow:hidden!important;
-  }
-
-  #seasonality-print-grid .seas-row-2{
+  /* Ensure state boxes are visible */
+  #box-s1-cont,#box-s2-cont,
+  #box-s1-ge,#box-s2-ge,
+  #box-s1-pvp,#box-s2-pvp{
     display:block!important;
-    width:100%!important;
-    margin-top:4mm!important;
   }
 
-  #seasonality-print-grid .seas-row-2 .chart-box{
-    width:50%!important;
-    height:93mm!important;
-    max-height:93mm!important;
-    margin:0 auto!important;
-    overflow:hidden!important;
+  /* Seasonality grid */
+  #seasonality-print-grid{
+    display:block!important;
   }
 
-  #seasonality-print-grid .seas-row-2 .chart-body-md{
-    height:78mm!important;
-    max-height:78mm!important;
-    overflow:hidden!important;
+  #seasonality-print-grid .chart-box{
+    page-break-before:always!important;
+    break-before:page!important;
   }
 }
 </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -345,10 +251,8 @@ tr:nth-child(even){background:#f8f9fa}
       <div id="tbl-planted"></div>
     </div>
 
-    <!-- Continuum charts — each FULL WIDTH stacked -->
+    <!-- Continuum charts -->
     <div class="section-title">🌾 Crop Progress Continuum</div>
-
-    <!-- Print page 1 -->
     <div class="pp">
       <div class="chart-box">
         <div class="chart-header"><h3>🏛️ National — Crop Progress Continuum</h3></div>
@@ -362,7 +266,7 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
     </div>
 
-    <!-- Print page 2: state 1 + state 2 continuum (hidden until selected) -->
+    <!-- State continuum charts -->
     <div id="pp-states-cont">
       <div class="chart-box" id="box-s1-cont" style="display:none">
         <div class="chart-header"><h3 id="title-s1-cont">State 1 — Crop Progress Continuum</h3></div>
@@ -376,9 +280,9 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
     </div>
 
-    <!-- Good + Excellent — 2 per row -->
+    <!-- Good + Excellent -->
     <div class="section-title">✅ Crop Condition — Good + Excellent (Weeks 20–47)</div>
-    <div class="cond-grid">
+    <div class="cond-grid" id="cond-ge-grid-1">
       <div class="chart-box">
         <div class="chart-header">🏛️ National — Good + Excellent</div>
         <div id="cond-nat-ge" class="chart-body-md"><canvas id="canvas-cond-nat-ge"></canvas></div>
@@ -413,9 +317,9 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
     </div>
 
-    <!-- Poor + Very Poor — 2 per row -->
+    <!-- Poor + Very Poor -->
     <div class="section-title">⚠️ Crop Condition — Poor + Very Poor (Weeks 20–47)</div>
-    <div class="cond-grid">
+    <div class="cond-grid" id="cond-pvp-grid-1">
       <div class="chart-box">
         <div class="chart-header">🏛️ National — Poor + Very Poor</div>
         <div id="cond-nat-pvp" class="chart-body-md"><canvas id="canvas-cond-nat-pvp"></canvas></div>
@@ -497,8 +401,8 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
       <button onclick="renderSeasonality()">🔄 Update</button>
     </div>
-    <!-- Seasonality charts 2 per row -->
-    <div class="cond-grid">
+    <!-- Seasonality charts -->
+    <div id="seasonality-print-grid">
       <div class="chart-box">
         <div class="chart-header"><h3>🌱 Planted</h3><span class="wkrange" id="wr-planted"></span></div>
         <div id="seas-planted" class="chart-body-md"><canvas id="canvas-seas-planted"></canvas></div>
@@ -525,7 +429,7 @@ tr:nth-child(even){background:#f8f9fa}
 
 <script>
 // ═══════════════════════════════════════════════════════
-//  CONFIG — Real data_item_key values confirmed from CSV
+//  CONFIG
 // ═══════════════════════════════════════════════════════
 var BASE  = 'https://raw.githubusercontent.com/BMR-Com/cotton-crop-progress/main/data';
 var FILES = ['cotton_2001_2005.csv','cotton_2006_2010.csv','cotton_2011_2015.csv',
@@ -543,6 +447,8 @@ var C_MIN=9, C_MAX=48;
 var YCLR=['#1a5490','#e74c3c','#27ae60','#f39c12','#9b59b6','#1abc9c','#e91e63','#ff9800','#00bcd4','#673ab7'];
 var allData=[];
 var chartInstances={};
+var dashboardRendered=false;
+var seasonalityRendered=false;
 
 // ═══════════════════════════════════════════════════════
 //  HELPERS
@@ -553,7 +459,6 @@ function weekNum(ref){
   return m?+m[1]:null;
 }
 
-// Robust location match — handles state_name + level columns from real CSV
 function locMatch(r,loc){
   var sn=(r.state_name||'').trim().toUpperCase();
   var lv=(r.level||'').trim().toUpperCase();
@@ -566,15 +471,12 @@ function locMatch(r,loc){
 function allYears(){
   var s={};
   allData.forEach(function(r){if(r.year&&r.year.trim())s[r.year.trim()]=1;});
-  return Object.keys(s).sort().reverse(); // newest first
+  return Object.keys(s).sort().reverse();
 }
 
-// Find the most recent year that has data for a given key+location
-// CRITICAL FIX: checks NUMERICALLY highest year (handles 2026 correctly)
 function latestYearWith(key,loc){
-  var yrs=allYears(); // already sorted newest first
+  var yrs=allYears();
   for(var i=0;i<yrs.length;i++){
-    // Check both 'progress_current_*' (2026 file) and 'progress_pct_*' (historical files)
     var curKey=key.replace('progress_pct_','progress_current_');
     var has=allData.some(function(r){
       return (r.data_item_key===key||r.data_item_key===curKey) && locMatch(r,loc) && r.year.toString()===yrs[i];
@@ -610,10 +512,7 @@ function calcAvg(key,loc,years,lo,hi){
     });
   });
   var out=[];
-  for(var w=lo;w<=hi;w++){
-    var a=byW[w];
-    out.push(a&&a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null);
-  }
+  for(var w=lo;w<=hi;w++){var a=byW[w];out.push(a&&a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null);}
   return out;
 }
 
@@ -650,17 +549,11 @@ function loadFile(f){
 
 // ═══════════════════════════════════════════════════════
 //  PLANTED TABLE
-//  Uses latestYearWith() so 2026 week 14/15 data shows up
 // ═══════════════════════════════════════════════════════
 function buildPlantedTable(){
-  // EXACT same approach as original working code:
-  // The 2026 CSV embeds current, prev-year and 5yr-avg under separate data_item_key values
-  // Find latest week from 2026 file using 'progress_current_planted'
   var rows2026=allData.filter(function(r){
     return r.data_item_key==='progress_current_planted' && r.year.toString()==='2026';
   });
-
-  // If no 2026 current data yet, fall back to most recent year with progress_pct_planted
   if(!rows2026.length){
     rows2026=allData.filter(function(r){
       return r.data_item_key==='progress_pct_planted';
@@ -670,8 +563,6 @@ function buildPlantedTable(){
     document.getElementById('tbl-planted').innerHTML='<p style="padding:16px;color:#999">No planted data found.</p>';
     return;
   }
-
-  // Sort by week_ending date to get the very latest week
   rows2026.sort(function(a,b){ return new Date(b.week_ending)-new Date(a.week_ending); });
   var latestRow=rows2026[0];
   var curYr=latestRow.year.toString();
@@ -679,10 +570,6 @@ function buildPlantedTable(){
   var preW=latW-1;
   var prevYr=String(+curYr-1);
 
-  // Helper: get value from the 2026 file using embedded keys (original pattern)
-  // For current year data: key=progress_current_planted, year=curYr
-  // For prior year data:   key=progress_prev_planted,    year=curYr (stored in same file!)
-  // For 5yr avg data:      key=progress_5yr_planted,     year=curYr (stored in same file!)
   function gv2026(loc, wk, key){
     var r=allData.find(function(r){
       return r.data_item_key===key && locMatch(r,loc)
@@ -732,7 +619,6 @@ function buildPlantedTable(){
 
 // ═══════════════════════════════════════════════════════
 //  CONTINUUM CHART
-//  X-axis: every week label (no skip) — dense ticks
 // ═══════════════════════════════════════════════════════
 function svgLine(color,style){
   var dsh=style==='dashed'?'stroke-dasharray="8 4"':style==='dotted'?'stroke-dasharray="2 3"':'';
@@ -763,14 +649,11 @@ function drawContinuum(divId,legendId,loc){
   var lbl=wkLabels(C_MIN,C_MAX);
   var traces=[],groups=[];
 
-  // Find the current year with data for THIS location
   var curYr=latestYearWith('progress_pct_planted',loc);
   if(!curYr){
-    // Clear any existing chart
     var canvasId='canvas-'+divId;
     var existing = chartInstances[canvasId];
     if(existing){existing.destroy();delete chartInstances[canvasId];}
-
     var container=document.getElementById(divId);
     container.innerHTML='<div style="padding:40px;text-align:center;color:#999">No data for '+loc+'</div>';
     return;
@@ -780,14 +663,9 @@ function drawContinuum(divId,legendId,loc){
 
   STAGES.forEach(function(s){
     var g={label:s.label,color:s.color,prvClr:s.prvClr,avgClr:s.avgClr,curYr:curYr,hasCur:false,hasPrv:false,hasAvg:false};
-
-    // ORIGINAL PATTERN: current year file embeds current, prev, and 5yr avg under separate keys
-    // Try curKey (progress_current_*) first — used in 2026 file
-    // Fall back to key (progress_pct_*) — used in historical files
     var cv=arrByWeek(filterRows(s.curKey,loc,curYr),C_MIN,C_MAX);
     if(!cv.some(function(v){return v!==null;}))
       cv=arrByWeek(filterRows(s.key,loc,curYr),C_MIN,C_MAX);
-
     if(cv.some(function(v){return v!==null;})){
       g.hasCur=true;
       traces.push({
@@ -802,13 +680,9 @@ function drawContinuum(divId,legendId,loc){
         spanGaps:true
       });
     }
-
-    // Prior year: read from curYr file via prevKey (original approach — 2026 file has 2025 embedded)
-    // Fall back to reading directly from prvYr using historical key
     var pv=arrByWeek(filterRows(s.prevKey,loc,curYr),C_MIN,C_MAX);
     if(!pv.some(function(v){return v!==null;}))
       pv=arrByWeek(filterRows(s.key,loc,prvYr),C_MIN,C_MAX);
-
     if(pv.some(function(v){return v!==null;})){
       g.hasPrv=true;
       traces.push({
@@ -824,13 +698,9 @@ function drawContinuum(divId,legendId,loc){
         spanGaps:true
       });
     }
-
-    // 5yr avg: read from curYr file via avgKey (original approach — 2026 file has 5yr avg embedded)
-    // Fall back to computing avg from historical files
     var av=arrByWeek(filterRows(s.avgKey,loc,curYr),C_MIN,C_MAX);
     if(!av.some(function(v){return v!==null;}) && ayrs.length)
       av=calcAvg(s.key,loc,ayrs,C_MIN,C_MAX);
-
     if(av.some(function(v){return v!==null;})){
       g.hasAvg=true;
       traces.push({
@@ -849,72 +719,42 @@ function drawContinuum(divId,legendId,loc){
     if(g.hasCur||g.hasPrv||g.hasAvg) groups.push(g);
   });
 
-  // X-axis: show every 2 weeks (dense but readable)
-  var tickVals=lbl.filter(function(_,i){return i%2===0;});
-
-  // Create or update Chart.js chart
   var canvasId='canvas-'+divId;
   var ctx=document.getElementById(canvasId).getContext('2d');
-
-  // Destroy existing chart if present
-  if(chartInstances[canvasId]){
-    chartInstances[canvasId].destroy();
-  }
+  if(chartInstances[canvasId]) chartInstances[canvasId].destroy();
 
   chartInstances[canvasId]=new Chart(ctx,{
     type:'line',
-    data:{
-      labels:lbl,
-      datasets:traces
-    },
+    data:{labels:lbl,datasets:traces},
     options:{
       responsive:true,
       maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{display:false},
-        tooltip:{enabled:true,mode:'index',intersect:false}
-      },
+      plugins:{legend:{display:false},tooltip:{enabled:true,mode:'index',intersect:false}},
       scales:{
-        x:{
-          title:{display:true,text:'Week',font:{size:12}},
-          grid:{display:true,color:'#e8e8e8'},
-          ticks:{font:{size:9}}
-        },
-        y:{
-          title:{display:true,text:'% Complete',font:{size:12}},
-          min:0,
-          max:105,
-          ticks:{callback:function(v){return v+'%';}},
-          grid:{display:true,color:'#e8e8e8'}
-        }
+        x:{title:{display:true,text:'Week',font:{size:12}},grid:{display:true,color:'#e8e8e8'},ticks:{font:{size:9}}},
+        y:{title:{display:true,text:'% Complete',font:{size:12}},min:0,max:105,ticks:{callback:function(v){return v+'%';}},grid:{display:true,color:'#e8e8e8'}}
       }
     }
   });
-
   buildLegend(legendId,groups);
 }
 
 // ═══════════════════════════════════════════════════════
 //  CONDITION CHARTS
-//  Year selector defaults to 3 most-recent years WITH actual condition data
-//  Condition season = weeks 20-47, so 2026 won't have data until late May
 // ═══════════════════════════════════════════════════════
 function buildCondYearSelectors(){
   var yrs=allYears();
-  // find years that actually have condition data (not just progress data)
   var withCond=yrs.filter(function(yr){
     return allData.some(function(r){
       return (r.data_item_key==='condition_pct_good'||r.data_item_key==='condition_pct_excellent')
              &&r.year.toString()===yr;
     });
   });
-  var def=withCond.slice(0,3); // e.g. 2025, 2024, 2023
-
+  var def=withCond.slice(0,3);
   var ids=['nat-ge','tx-ge','s1-ge','s2-ge','nat-pvp','tx-pvp','s1-pvp','s2-pvp'];
   ids.forEach(function(id){
     var el=document.getElementById('ychk-'+id); if(!el) return;
-    // Show all years in selector but only default-check those with condition data
     el.innerHTML=yrs.map(function(y){
       return '<label><input type="checkbox" value="'+y+'" '+(def.indexOf(y)!==-1?'checked':'')
         +' onchange="refreshCondCharts()"> '+y+'</label>';
@@ -930,8 +770,6 @@ function getChecked(id){
 function drawCondChart(divId,loc,type,selYears){
   var canvasId='canvas-'+divId;
   var traces=[];
-
-  // 10-yr range band
   var bandYrs=allYears().slice(0,10);
   var bandByW={};
   bandYrs.forEach(function(yr){
@@ -956,33 +794,18 @@ function drawCondChart(divId,loc,type,selYears){
   });
   var bwks=[],bmin=[],bmax=[];
   Object.keys(bandByW).sort(function(a,b){return+a-+b;}).forEach(function(w){
-    var v=bandByW[w];
-    bwks.push(+w);bmin.push(Math.min.apply(null,v));bmax.push(Math.max.apply(null,v));
+    var v=bandByW[w];bwks.push(+w);bmin.push(Math.min.apply(null,v));bmax.push(Math.max.apply(null,v));
   });
   if(bwks.length){
     traces.push({
-      label:'10yr Range (max)',
-      data:bwks.map(function(w,i){return{x:w,y:bmax[i]};}),
-      borderColor:'rgba(173,216,230,0.3)',
-      backgroundColor:'rgba(173,216,230,0.1)',
-      borderWidth:0,
-      fill:'+1',
-      pointRadius:0,
-      tension:0.4
+      label:'10yr Range (max)',data:bwks.map(function(w,i){return{x:w,y:bmax[i]};}),
+      borderColor:'rgba(173,216,230,0.3)',backgroundColor:'rgba(173,216,230,0.1)',borderWidth:0,fill:'+1',pointRadius:0,tension:0.4
     });
     traces.push({
-      label:'10yr Range (min)',
-      data:bwks.map(function(w,i){return{x:w,y:bmin[i]};}),
-      borderColor:'rgba(173,216,230,0.3)',
-      backgroundColor:'rgba(173,216,230,0.2)',
-      borderWidth:0,
-      pointRadius:0,
-      tension:0.4,
-      fill:'-1'
+      label:'10yr Range (min)',data:bwks.map(function(w,i){return{x:w,y:bmin[i]};}),
+      borderColor:'rgba(173,216,230,0.3)',backgroundColor:'rgba(173,216,230,0.2)',borderWidth:0,pointRadius:0,tension:0.4,fill:'-1'
     });
   }
-
-  // Selected year lines
   selYears.forEach(function(yr,i){
     var wk={};
     allData.forEach(function(r){
@@ -1001,53 +824,24 @@ function drawCondChart(divId,loc,type,selYears){
     var vals=wks.map(function(w){return{x:+w,y:type==='ge'?wk[w].good+wk[w].exc:wk[w].poor+wk[w].vpoor};});
     if(vals.length){
       traces.push({
-        label:yr,
-        data:vals,
-        borderColor:YCLR[i%YCLR.length],
-        backgroundColor:YCLR[i%YCLR.length],
-        borderWidth:2.5,
-        pointRadius:4,
-        pointHoverRadius:6,
-        tension:0.3
+        label:yr,data:vals,borderColor:YCLR[i%YCLR.length],backgroundColor:YCLR[i%YCLR.length],
+        borderWidth:2.5,pointRadius:4,pointHoverRadius:6,tension:0.3
       });
     }
   });
-
   var yT=type==='ge'?'Good + Excellent (%)':'Poor + Very Poor (%)';
   var yMax=type==='ge'?100:60;
-
   var ctx=document.getElementById(canvasId).getContext('2d');
-
-  if(chartInstances[canvasId]){
-    chartInstances[canvasId].destroy();
-  }
-
+  if(chartInstances[canvasId]) chartInstances[canvasId].destroy();
   chartInstances[canvasId]=new Chart(ctx,{
     type:'line',
     data:{datasets:traces},
     options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{display:true,position:'bottom',labels:{boxWidth:12,font:{size:10}}},
-        tooltip:{enabled:true,mode:'index',intersect:false}
-      },
+      responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:12,font:{size:10}}},tooltip:{enabled:true,mode:'index',intersect:false}},
       scales:{
-        x:{
-          type:'linear',
-          min:20,
-          max:47,
-          title:{display:true,text:'Week',font:{size:11}},
-          grid:{display:true,color:'#e8e8e8'}
-        },
-        y:{
-          min:0,
-          max:yMax,
-          title:{display:true,text:yT,font:{size:11}},
-          ticks:{callback:function(v){return v+'%';}},
-          grid:{display:true,color:'#e8e8e8'}
-        }
+        x:{type:'linear',min:20,max:47,title:{display:true,text:'Week',font:{size:11}},grid:{display:true,color:'#e8e8e8'}},
+        y:{min:0,max:yMax,title:{display:true,text:yT,font:{size:11}},ticks:{callback:function(v){return v+'%';}},grid:{display:true,color:'#e8e8e8'}}
       }
     }
   });
@@ -1060,10 +854,8 @@ function refreshCondCharts(){
   drawCondChart('cond-tx-ge',  'TEXAS',   'ge', getChecked('ychk-tx-ge'));
   drawCondChart('cond-nat-pvp','NATIONAL','pvp',getChecked('ychk-nat-pvp'));
   drawCondChart('cond-tx-pvp', 'TEXAS',   'pvp',getChecked('ychk-tx-pvp'));
-  if(s1){drawCondChart('cond-s1-ge', s1,'ge', getChecked('ychk-s1-ge'));
-         drawCondChart('cond-s1-pvp',s1,'pvp',getChecked('ychk-s1-pvp'));}
-  if(s2){drawCondChart('cond-s2-ge', s2,'ge', getChecked('ychk-s2-ge'));
-         drawCondChart('cond-s2-pvp',s2,'pvp',getChecked('ychk-s2-pvp'));}
+  if(s1){drawCondChart('cond-s1-ge', s1,'ge', getChecked('ychk-s1-ge'));drawCondChart('cond-s1-pvp',s1,'pvp',getChecked('ychk-s1-pvp'));}
+  if(s2){drawCondChart('cond-s2-ge', s2,'ge', getChecked('ychk-s2-ge'));drawCondChart('cond-s2-pvp',s2,'pvp',getChecked('ychk-s2-pvp'));}
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1072,16 +864,12 @@ function refreshCondCharts(){
 function renderDashboard(){
   var s1=document.getElementById('s1-sel').value;
   var s2=document.getElementById('s2-sel').value;
-
-  // State continuum boxes — full width, stacked
   document.getElementById('box-s1-cont').style.display=s1?'block':'none';
   document.getElementById('box-s2-cont').style.display=s2?'block':'none';
-  // State condition boxes in the grid
   document.getElementById('box-s1-ge').style.display=s1?'block':'none';
   document.getElementById('box-s2-ge').style.display=s2?'block':'none';
   document.getElementById('box-s1-pvp').style.display=s1?'block':'none';
   document.getElementById('box-s2-pvp').style.display=s2?'block':'none';
-
   if(s1){
     document.getElementById('title-s1-cont').textContent=s1+' — Crop Progress Continuum';
     document.getElementById('title-s1-ge').textContent  =s1+' — Good + Excellent';
@@ -1092,20 +880,19 @@ function renderDashboard(){
     document.getElementById('title-s2-ge').textContent  =s2+' — Good + Excellent';
     document.getElementById('title-s2-pvp').textContent =s2+' — Poor + Very Poor';
   }
-
   drawContinuum('cc-national','cl-national','NATIONAL');
   drawContinuum('cc-texas',   'cl-texas',   'TEXAS');
   if(s1) drawContinuum('cc-s1','cl-s1',s1);
   if(s2) drawContinuum('cc-s2','cl-s2',s2);
   refreshCondCharts();
+  dashboardRendered=true;
 }
 
 // ═══════════════════════════════════════════════════════
-//  SEASONALITY — active window from real data ± 2 weeks
+//  SEASONALITY
 // ═══════════════════════════════════════════════════════
 function buildSeasYearChk(){
   var yrs=allYears();
-  // Check BOTH key naming conventions: 2026 uses 'progress_current_planted', history uses 'progress_pct_planted'
   var withData=yrs.filter(function(yr){
     return allData.some(function(r){
       return (r.data_item_key==='progress_pct_planted'||r.data_item_key==='progress_current_planted')
@@ -1125,7 +912,6 @@ function getSeasYears(){
 
 function drawSeasStage(stage,loc,selYears){
   var canvasId='canvas-seas-'+stage.id;
-  // Derive active window from ALL data — check BOTH key naming conventions
   var allWks=[];
   allData.forEach(function(r){
     var k=r.data_item_key;
@@ -1145,38 +931,23 @@ function drawSeasStage(stage,loc,selYears){
   var wLo=Math.max(1,dataLo-2), wHi=Math.min(52,dataHi+2);
   var lbl=wkLabels(wLo,wHi);
   if(wrEl) wrEl.textContent='Weeks '+dataLo+'–'+dataHi;
-
   var traces=[];
   selYears.forEach(function(yr){
-    // Use curKey for 2026 file, key for historical files — try both
     var vals=arrByWeek(filterRows(stage.curKey,loc,yr),wLo,wHi);
     if(!vals.some(function(v){return v!==null;}))
       vals=arrByWeek(filterRows(stage.key,loc,yr),wLo,wHi);
     if(vals.some(function(v){return v!==null;})){
       traces.push({
-        label:yr,
-        data:vals,
-        borderColor:YCLR[selYears.indexOf(yr)%YCLR.length],
-        backgroundColor:YCLR[selYears.indexOf(yr)%YCLR.length],
-        borderWidth:2,
-        pointRadius:0,
-        pointHoverRadius:4,
-        tension:0.3,
-        spanGaps:true,
-        opacity:0.8
+        label:yr,data:vals,borderColor:YCLR[selYears.indexOf(yr)%YCLR.length],backgroundColor:YCLR[selYears.indexOf(yr)%YCLR.length],
+        borderWidth:2,pointRadius:0,pointHoverRadius:4,tension:0.3,spanGaps:true,opacity:0.8
       });
     }
   });
-
-  // Averages — use historical key (progress_pct_*) for avg calculation across all years
-  // Also include curKey rows so 2026 data is part of averages when computing
   var ayrs=allYears();
   var a5=document.getElementById('avg5').checked;
   var a10=document.getElementById('avg10').checked;
   var a20=document.getElementById('avg20').checked;
-
   function calcAvgBoth(n,lo,hi){
-    // calcAvg helper that checks both key naming conventions
     var byW={};
     ayrs.slice(0,n).forEach(function(yr){
       [stage.key,stage.curKey].forEach(function(k){
@@ -1190,64 +961,30 @@ function drawSeasStage(stage,loc,selYears){
     for(var w=lo;w<=hi;w++){var a=byW[w];out.push(a&&a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null);}
     return out;
   }
-
   function addAvg(n,color,dash){
     if(ayrs.length>=n){
       var av=calcAvgBoth(n,wLo,wHi);
       if(av.some(function(v){return v!==null;})){
-        var ds={
-          label:n+'yr Avg',
-          data:av,
-          borderColor:color,
-          backgroundColor:color,
-          borderWidth:3,
-          pointRadius:0,
-          pointHoverRadius:4,
-          tension:0.3,
-          spanGaps:true
-        };
+        var ds={label:n+'yr Avg',data:av,borderColor:color,backgroundColor:color,borderWidth:3,pointRadius:0,pointHoverRadius:4,tension:0.3,spanGaps:true};
         if(dash) ds.borderDash=dash==='dash'?[6,4]:[2,3];
         traces.push(ds);
       }
     }
   }
-
   if(a5)  addAvg(5, '#1a5490',null);
   if(a10) addAvg(10,'#FF9800','dash');
   if(a20) addAvg(20,'#4CAF50','dot');
-
   var ctx=document.getElementById(canvasId).getContext('2d');
-
-  if(chartInstances[canvasId]){
-    chartInstances[canvasId].destroy();
-  }
-
+  if(chartInstances[canvasId]) chartInstances[canvasId].destroy();
   chartInstances[canvasId]=new Chart(ctx,{
     type:'line',
-    data:{
-      labels:lbl,
-      datasets:traces
-    },
+    data:{labels:lbl,datasets:traces},
     options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{display:true,position:'bottom',labels:{boxWidth:12,font:{size:9}}},
-        tooltip:{enabled:true,mode:'index',intersect:false}
-      },
+      responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:12,font:{size:9}}},tooltip:{enabled:true,mode:'index',intersect:false}},
       scales:{
-        x:{
-          title:{display:true,text:'Week',font:{size:11}},
-          grid:{display:true,color:'#eee'},
-          ticks:{font:{size:9}}
-        },
-        y:{
-          min:0,
-          max:105,
-          ticks:{callback:function(v){return v+'%';}},
-          grid:{display:true,color:'#eee'}
-        }
+        x:{title:{display:true,text:'Week',font:{size:11}},grid:{display:true,color:'#eee'},ticks:{font:{size:9}}},
+        y:{min:0,max:105,ticks:{callback:function(v){return v+'%';}},grid:{display:true,color:'#eee'}}
       }
     }
   });
@@ -1258,6 +995,7 @@ function renderSeasonality(){
   var yrs=getSeasYears();
   if(!yrs.length){alert('Select at least one year.');return;}
   STAGES.forEach(function(s){drawSeasStage(s,loc,yrs);});
+  seasonalityRendered=true;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1268,52 +1006,49 @@ function switchTab(name){
   document.querySelectorAll('.nav a').forEach(function(e){e.classList.remove('active');});
   document.getElementById('tab-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if(name==='dashboard') renderDashboard();
-  else renderSeasonality();
+  if(name==='dashboard' && !dashboardRendered) renderDashboard();
+  else if(name==='seasonality' && !seasonalityRendered) renderSeasonality();
+}
+
+// ═══════════════════════════════════════════════════════
+//  PRINT - Renders both tabs before printing
+// ═══════════════════════════════════════════════════════
+function preparePrint(){
+  // Ensure both tabs are fully rendered
+  var activeTab = document.querySelector('.tab-content.active').id;
+
+  // Render dashboard if not already done
+  if(!dashboardRendered) renderDashboard();
+
+  // Render seasonality with default values if not done
+  if(!seasonalityRendered){
+    // Set default state and years if empty
+    var seasState = document.getElementById('seas-state');
+    var seasYchk = document.querySelectorAll('#seas-ychk input:checked');
+    if(seasYchk.length === 0){
+      var firstYr = document.querySelector('#seas-ychk input');
+      if(firstYr) firstYr.checked = true;
+    }
+    renderSeasonality();
+  }
+
+  // Small delay to ensure charts are fully rendered
+  setTimeout(function(){
+    // Force chart updates
+    Object.values(chartInstances).forEach(function(chart){
+      if(chart && chart.update) chart.update('none');
+    });
+
+    // Wait a bit more for canvas rendering, then print
+    setTimeout(function(){
+      window.print();
+    }, 500);
+  }, 300);
 }
 
 // ═══════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════
-function preparePrint(){
-  // First ensure all charts are rendered
-  var charts = Object.values(chartInstances);
-  var renderedCount = 0;
-
-  function checkAndPrint(){
-    renderedCount++;
-    // Wait for all charts to be ready, then print
-    if(renderedCount >= charts.length || charts.length === 0){
-      setTimeout(function(){
-        window.print();
-      }, 500); // Give extra time for final render
-    }
-  }
-
-  if(charts.length === 0){
-    // No charts yet, wait and retry
-    setTimeout(function(){
-      preparePrint();
-    }, 500);
-    return;
-  }
-
-  // Trigger resize/update for each chart
-  charts.forEach(function(chart){
-    if(chart && chart.update){
-      chart.update('none'); // Update without animation
-    }
-    if(chart && chart.resize){
-      chart.resize();
-    }
-  });
-
-  // Wait for render then print
-  setTimeout(function(){
-    window.print();
-  }, 800);
-}
-
 function init(){
   Promise.all(FILES.map(loadFile)).then(function(){
     if(!allData.length){
@@ -1331,36 +1066,6 @@ function init(){
   });
 }
 
-// Handle print events to resize charts properly
-window.addEventListener('beforeprint', function(){
-  // Store original sizes
-  Object.keys(chartInstances).forEach(function(id){
-    var chart = chartInstances[id];
-    if(chart && chart.canvas){
-      chart.canvas._originalWidth = chart.canvas.width;
-      chart.canvas._originalHeight = chart.canvas.height;
-    }
-  });
-
-  // Force resize after a short delay to let print styles apply
-  setTimeout(function(){
-    Object.values(chartInstances).forEach(function(chart){
-      if(chart && chart.resize){
-        chart.resize();
-      }
-    });
-  }, 100);
-});
-
-window.addEventListener('afterprint', function(){
-  // Restore original sizes
-  Object.keys(chartInstances).forEach(function(id){
-    var chart = chartInstances[id];
-    if(chart && chart.canvas && chart.canvas._originalWidth){
-      chart.resize(chart.canvas._originalWidth, chart.canvas._originalHeight);
-    }
-  });
-});
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
