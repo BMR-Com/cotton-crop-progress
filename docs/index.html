@@ -67,9 +67,55 @@ tr:nth-child(even){background:#f8f9fa}
 .leg-key{background:#fff8e1;padding:8px 12px;border-radius:8px;border:1px solid #ffe082;margin-left:auto}
 .leg-key-title{font-size:9px;font-weight:800;color:#f57f17;text-transform:uppercase;margin-bottom:4px}
 
-/* ── PRINT: 2 charts per page ── */
+/* ══ PRINT: 6-page layout ══
+   P1=Planted table  P2=Continuum 1+2  P3=Continuum 3+4
+   P4=G+E 4 charts   P5=PVP 4 charts   P6=Seasonality
+══════════════════════════════════════════════════════*/
 @media print{
   @page{size:A4 portrait;margin:10mm}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .header,.nav,.controls,.btn-pdf,.section-title,.cont-legend,.ychk-wrap{display:none!important}
+  .container{max-width:100%;padding:0;margin:0}
+  .tab-content{display:block!important}
+  .chart-box{margin:0 0 0 0!important;box-shadow:none!important;border:1px solid #ccc!important;border-radius:2px!important;overflow:hidden;page-break-inside:avoid;break-inside:avoid}
+  .chart-header{padding:4px 8px!important;font-size:10px!important}
+  .chart-header h3{font-size:10px!important;margin:0}
+  svg{width:100%!important}
+  table{font-size:7px!important;width:100%!important}
+  th{font-size:6px!important;padding:2px 3px!important}
+  td{padding:2px 3px!important;font-size:7px!important}
+
+  /* PAGE 1: Planted table */
+  #print-page1{page-break-after:always;break-after:page;padding-bottom:4mm}
+
+  /* PAGE 2: National + Texas continuum — stacked, fill page */
+  #print-page2{page-break-after:always;break-after:page;display:flex!important;flex-direction:column;gap:3mm;height:277mm;overflow:hidden}
+  #print-page2 .chart-box{flex:1;min-height:0}
+  #print-page2 .chart-body-lg{height:calc(50% - 20px)!important;max-height:none!important;padding:1px!important}
+
+  /* PAGE 3: State1 + State2 continuum */
+  #print-page3{page-break-after:always;break-after:page;display:flex!important;flex-direction:column;gap:3mm;height:277mm;overflow:hidden}
+  #print-page3 .chart-box{flex:1;min-height:0}
+  #print-page3 .chart-body-lg{height:calc(50% - 20px)!important;max-height:none!important;padding:1px!important}
+
+  /* PAGE 4: Good+Excellent — 2x2 grid */
+  #print-page4{page-break-after:always;break-after:page;height:277mm;overflow:hidden}
+  #print-page4 .cond-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3mm!important;height:277mm}
+  #print-page4 .chart-box{height:130mm!important}
+  #print-page4 .chart-body-md{height:105mm!important;max-height:105mm!important;padding:1px!important}
+
+  /* PAGE 5: Poor+VeryPoor — 2x2 grid */
+  #print-page5{page-break-after:always;break-after:page;height:277mm;overflow:hidden}
+  #print-page5 .cond-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3mm!important;height:277mm}
+  #print-page5 .chart-box{height:130mm!important}
+  #print-page5 .chart-body-md{height:105mm!important;max-height:105mm!important;padding:1px!important}
+
+  /* PAGE 6: Seasonality — 2x3 grid (5 charts) */
+  #print-page6{page-break-after:auto;break-after:auto;height:277mm;overflow:hidden}
+  #print-page6 .cond-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3mm!important;height:277mm}
+  #print-page6 .chart-box{height:88mm!important}
+  #print-page6 .chart-body-md{height:68mm!important;max-height:68mm!important;padding:1px!important}
+}
   body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .header,.nav,.controls,.btn-pdf,.section-title{display:none!important}
   .container{max-width:100%;padding:0;margin:0}
@@ -158,13 +204,15 @@ tr:nth-child(even){background:#f8f9fa}
 
     <!-- Latest planted table -->
     <div class="section-title">📊 Latest Week — Cotton Planted</div>
-    <div id="tbl-planted"></div>
+    <div id="print-page1">
+      <div id="tbl-planted"></div>
+    </div>
 
     <!-- Continuum charts — each FULL WIDTH stacked -->
     <div class="section-title">🌾 Crop Progress Continuum</div>
 
-    <!-- Print page 1 -->
-    <div class="pp">
+    <!-- Print page 2: National + Texas continuum -->
+    <div id="print-page2">
       <div class="chart-box">
         <div class="chart-header"><h3>🏛️ National — Crop Progress Continuum</h3></div>
         <div id="cc-national" class="chart-body-lg"></div>
@@ -177,8 +225,8 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
     </div>
 
-    <!-- Print page 2: state 1 + state 2 continuum (hidden until selected) -->
-    <div id="pp-states-cont">
+    <!-- Print page 3: State1 + State2 continuum -->
+    <div id="print-page3">
       <div class="chart-box" id="box-s1-cont" style="display:none">
         <div class="chart-header"><h3 id="title-s1-cont">State 1 — Crop Progress Continuum</h3></div>
         <div id="cc-s1" class="chart-body-lg"></div>
@@ -193,6 +241,7 @@ tr:nth-child(even){background:#f8f9fa}
 
     <!-- Good + Excellent — 2 per row -->
     <div class="section-title">✅ Crop Condition — Good + Excellent (Weeks 20–47)</div>
+    <div id="print-page4">
     <div class="cond-grid">
       <div class="chart-box">
         <div class="chart-header">🏛️ National — Good + Excellent</div>
@@ -228,8 +277,10 @@ tr:nth-child(even){background:#f8f9fa}
       </div>
     </div>
 
+    </div><!-- /print-page4 -->
     <!-- Poor + Very Poor — 2 per row -->
     <div class="section-title">⚠️ Crop Condition — Poor + Very Poor (Weeks 20–47)</div>
+    <div id="print-page5">
     <div class="cond-grid">
       <div class="chart-box">
         <div class="chart-header">🏛️ National — Poor + Very Poor</div>
@@ -264,6 +315,7 @@ tr:nth-child(even){background:#f8f9fa}
         </div>
       </div>
     </div>
+    </div><!-- /print-page5 -->
   </div><!-- /tab-dashboard -->
 
   <!-- ════════════════ SEASONALITY ════════════════ -->
@@ -313,6 +365,7 @@ tr:nth-child(even){background:#f8f9fa}
       <button onclick="renderSeasonality()">🔄 Update</button>
     </div>
     <!-- Seasonality charts 2 per row -->
+    <div id="print-page6">
     <div class="cond-grid">
       <div class="chart-box">
         <div class="chart-header"><h3>🌱 Planted</h3><span class="wkrange" id="wr-planted"></span></div>
@@ -335,6 +388,7 @@ tr:nth-child(even){background:#f8f9fa}
         <div id="seas-harvested" class="chart-body-md"></div>
       </div>
     </div>
+    </div><!-- /print-page6 -->
   </div><!-- /tab-seasonality -->
 </div><!-- /container -->
 
@@ -807,8 +861,12 @@ function renderDashboard(){
 // ═══════════════════════════════════════════════════════
 function buildSeasYearChk(){
   var yrs=allYears();
+  // Check BOTH key naming conventions: 2026 uses 'progress_current_planted', history uses 'progress_pct_planted'
   var withData=yrs.filter(function(yr){
-    return allData.some(function(r){return r.data_item_key==='progress_pct_planted'&&r.year.toString()===yr;});
+    return allData.some(function(r){
+      return (r.data_item_key==='progress_pct_planted'||r.data_item_key==='progress_current_planted')
+             && r.year.toString()===yr;
+    });
   });
   var def=withData.slice(0,3);
   document.getElementById('seas-ychk').innerHTML=yrs.map(function(y){
@@ -822,17 +880,19 @@ function getSeasYears(){
 }
 
 function drawSeasStage(stage,loc,selYears){
-  // derive active window from ALL data for this key+loc across all years
+  // Derive active window from ALL data — check BOTH key naming conventions
   var allWks=[];
   allData.forEach(function(r){
-    var sk=r.data_item_key; if(sk!==stage.key&&sk!==stage.curKey||!locMatch(r,loc)) return;
+    var k=r.data_item_key;
+    if(k!==stage.key && k!==stage.curKey) return;
+    if(!locMatch(r,loc)) return;
     var w=weekNum(r.reference_period_desc); if(w) allWks.push(w);
   });
   var wrEl=document.getElementById('wr-'+stage.id);
   if(!allWks.length){
     if(wrEl) wrEl.textContent='No data';
     Plotly.newPlot('seas-'+stage.id,[],{height:420,margin:{t:20,b:60,l:50,r:20},
-      annotations:[{text:'No data',xref:'paper',yref:'paper',x:.5,y:.5,showarrow:false,font:{size:13,color:'#999'}}]});
+      annotations:[{text:'No data for this stage/state',xref:'paper',yref:'paper',x:.5,y:.5,showarrow:false,font:{size:13,color:'#999'}}]});
     return;
   }
   var dataLo=Math.min.apply(null,allWks), dataHi=Math.max.apply(null,allWks);
@@ -842,22 +902,41 @@ function drawSeasStage(stage,loc,selYears){
 
   var traces=[];
   selYears.forEach(function(yr){
-    var vals=arrByWeek(filterRows(stage.key,loc,yr),wLo,wHi);
+    // Use curKey for 2026 file, key for historical files — try both
+    var vals=arrByWeek(filterRows(stage.curKey,loc,yr),wLo,wHi);
+    if(!vals.some(function(v){return v!==null;}))
+      vals=arrByWeek(filterRows(stage.key,loc,yr),wLo,wHi);
     if(vals.some(function(v){return v!==null;}))
       traces.push({x:lbl,y:vals,name:yr,type:'scatter',mode:'lines',line:{width:2},
         connectgaps:true,opacity:.8});
   });
 
+  // Averages — use historical key (progress_pct_*) for avg calculation across all years
+  // Also include curKey rows so 2026 data is part of averages when computing
   var ayrs=allYears();
   var a5=document.getElementById('avg5').checked;
   var a10=document.getElementById('avg10').checked;
   var a20=document.getElementById('avg20').checked;
+  function calcAvgBoth(n,lo,hi){
+    // calcAvg helper that checks both key naming conventions
+    var byW={};
+    ayrs.slice(0,n).forEach(function(yr){
+      [stage.key,stage.curKey].forEach(function(k){
+        filterRows(k,loc,yr).forEach(function(r){
+          var w=weekNum(r.reference_period_desc);
+          if(w&&w>=lo&&w<=hi){var v=parseFloat(r.Value);if(!isNaN(v)){if(!byW[w])byW[w]=[];byW[w].push(v);}}
+        });
+      });
+    });
+    var out=[];
+    for(var w=lo;w<=hi;w++){var a=byW[w];out.push(a&&a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null);}
+    return out;
+  }
   function addAvg(n,color,dash){
     if(ayrs.length>=n){
-      var av=calcAvg(stage.key,loc,ayrs.slice(0,n),wLo,wHi);
+      var av=calcAvgBoth(n,wLo,wHi);
       if(av.some(function(v){return v!==null;})){
-        var ln={color:color,width:3};
-        if(dash) ln.dash=dash;
+        var ln={color:color,width:3}; if(dash) ln.dash=dash;
         traces.push({x:lbl,y:av,name:n+'yr Avg',type:'scatter',mode:'lines',line:ln});
       }
     }
