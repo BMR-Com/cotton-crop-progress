@@ -342,16 +342,16 @@ tr:nth-child(even){background:#f8f9fa}
 // ═══════════════════════════════════════════════════════
 //  CONFIG — Real data_item_key values confirmed from CSV
 // ═══════════════════════════════════════════════════════
-var BASE  = 'https://cdn.jsdelivr.net/gh/BMR-Com/cotton-crop-progress@main/data';
+var BASE  = 'https://raw.githubusercontent.com/BMR-Com/cotton-crop-progress/main/data';
 var FILES = ['cotton_2001_2005.csv','cotton_2006_2010.csv','cotton_2011_2015.csv',
              'cotton_2016_2020.csv','cotton_2021_2025.csv','cotton_2026_2030.csv'];
 
 var STAGES = [
-  { key:'progress_pct_planted',        id:'planted',  label:'Planted',       color:'#2E7D32', prvClr:'#66BB6A', avgClr:'#1B5E20' },
-  { key:'progress_pct_squaring',       id:'squaring', label:'Squaring',      color:'#F57F17', prvClr:'#FFD54F', avgClr:'#E65100' },
-  { key:'progress_pct_setting_bolls',  id:'setting',  label:'Setting Bolls', color:'#1565C0', prvClr:'#64B5F6', avgClr:'#0D47A1' },
-  { key:'progress_pct_bolls_opening',  id:'opening',  label:'Bolls Opening', color:'#C62828', prvClr:'#EF9A9A', avgClr:'#880E4F' },
-  { key:'progress_pct_harvested',      id:'harvested',label:'Harvested',     color:'#6A1B9A', prvClr:'#CE93D8', avgClr:'#311B92' }
+  { key:'progress_pct_planted',        curKey:'progress_current_planted',        prevKey:'progress_prev_planted',        avgKey:'progress_5yr_planted',        id:'planted',  label:'Planted',       color:'#2E7D32', prvClr:'#66BB6A', avgClr:'#1B5E20' },
+  { key:'progress_pct_squaring',       curKey:'progress_current_squaring',       prevKey:'progress_prev_squaring',       avgKey:'progress_5yr_squaring',       id:'squaring', label:'Squaring',      color:'#F57F17', prvClr:'#FFD54F', avgClr:'#E65100' },
+  { key:'progress_pct_setting_bolls',  curKey:'progress_current_setting_bolls',  prevKey:'progress_prev_setting_bolls',  avgKey:'progress_5yr_setting_bolls',  id:'setting',  label:'Setting Bolls', color:'#1565C0', prvClr:'#64B5F6', avgClr:'#0D47A1' },
+  { key:'progress_pct_bolls_opening',  curKey:'progress_current_bolls_opening',  prevKey:'progress_prev_bolls_opening',  avgKey:'progress_5yr_bolls_opening',  id:'opening',  label:'Bolls Opening', color:'#C62828', prvClr:'#EF9A9A', avgClr:'#880E4F' },
+  { key:'progress_pct_harvested',      curKey:'progress_current_harvested',      prevKey:'progress_prev_harvested',      avgKey:'progress_5yr_harvested',      id:'harvested',label:'Harvested',     color:'#6A1B9A', prvClr:'#CE93D8', avgClr:'#311B92' }
 ];
 
 var C_MIN=9, C_MAX=48;
@@ -388,8 +388,10 @@ function allYears(){
 function latestYearWith(key,loc){
   var yrs=allYears(); // already sorted newest first
   for(var i=0;i<yrs.length;i++){
+    // Check both 'progress_current_*' (2026 file) and 'progress_pct_*' (historical files)
+    var curKey=key.replace('progress_pct_','progress_current_');
     var has=allData.some(function(r){
-      return r.data_item_key===key && locMatch(r,loc) && r.year.toString()===yrs[i];
+      return (r.data_item_key===key||r.data_item_key===curKey) && locMatch(r,loc) && r.year.toString()===yrs[i];
     });
     if(has) return yrs[i];
   }
@@ -465,37 +467,48 @@ function loadFile(f){
 //  Uses latestYearWith() so 2026 week 14/15 data shows up
 // ═══════════════════════════════════════════════════════
 function buildPlantedTable(){
-  // Use national scope to find latest year — states may not all have week 14/15 yet
-  var curYr=latestYearWith('progress_pct_planted','US TOTAL');
-  if(!curYr){
+  // EXACT same approach as original working code:
+  // The 2026 CSV embeds current, prev-year and 5yr-avg under separate data_item_key values
+  // Find latest week from 2026 file using 'progress_current_planted'
+  var rows2026=allData.filter(function(r){
+    return r.data_item_key==='progress_current_planted' && r.year.toString()==='2026';
+  });
+
+  // If no 2026 current data yet, fall back to most recent year with progress_pct_planted
+  if(!rows2026.length){
+    rows2026=allData.filter(function(r){
+      return r.data_item_key==='progress_pct_planted';
+    });
+  }
+  if(!rows2026.length){
     document.getElementById('tbl-planted').innerHTML='<p style="padding:16px;color:#999">No planted data found.</p>';
     return;
   }
+
+  // Sort by week_ending date to get the very latest week
+  rows2026.sort(function(a,b){ return new Date(b.week_ending)-new Date(a.week_ending); });
+  var latestRow=rows2026[0];
+  var curYr=latestRow.year.toString();
+  var latW=weekNum(latestRow.reference_period_desc);
+  var preW=latW-1;
   var prevYr=String(+curYr-1);
 
-  // Latest week number nationally in current year
-  var natRows=filterRows('progress_pct_planted','US TOTAL',curYr);
-  natRows.sort(function(a,b){return(weekNum(b.reference_period_desc)||0)-(weekNum(a.reference_period_desc)||0);});
-  var latW=weekNum(natRows[0].reference_period_desc);
-  var preW=latW-1;
-
-  var STATES=['TEXAS','GEORGIA','MISSISSIPPI','ALABAMA','ARKANSAS','LOUISIANA',
-    'NORTH CAROLINA','SOUTH CAROLINA','TENNESSEE','OKLAHOMA','KANSAS','MISSOURI',
-    'FLORIDA','VIRGINIA','CALIFORNIA','ARIZONA','NEW MEXICO'];
-
-  function gv(loc,wk,yr){
+  // Helper: get value from the 2026 file using embedded keys (original pattern)
+  // For current year data: key=progress_current_planted, year=curYr
+  // For prior year data:   key=progress_prev_planted,    year=curYr (stored in same file!)
+  // For 5yr avg data:      key=progress_5yr_planted,     year=curYr (stored in same file!)
+  function gv2026(loc, wk, key){
     var r=allData.find(function(r){
-      return r.data_item_key==='progress_pct_planted'&&locMatch(r,loc)
-        &&r.year.toString()===yr.toString()&&weekNum(r.reference_period_desc)===wk;
+      return r.data_item_key===key && locMatch(r,loc)
+        && r.year.toString()===curYr && weekNum(r.reference_period_desc)===wk;
     });
     if(!r) return null;
     var v=parseFloat(r.Value); return isNaN(v)?null:v;
   }
-  function avg5(loc,wk){
-    var base=allYears().filter(function(y){return +y<+curYr;}).slice(0,5);
-    var vals=base.map(function(y){return gv(loc,wk,y);}).filter(function(v){return v!==null;});
-    return vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;
-  }
+
+  var STATES=['TEXAS','GEORGIA','MISSISSIPPI','ALABAMA','ARKANSAS','LOUISIANA',
+    'NORTH CAROLINA','SOUTH CAROLINA','TENNESSEE','OKLAHOMA','KANSAS','MISSOURI',
+    'FLORIDA','VIRGINIA','CALIFORNIA','ARIZONA','NEW MEXICO'];
 
   var html='<table><tr>'
     +'<th style="text-align:left;width:14%">State</th>'
@@ -506,7 +519,10 @@ function buildPlantedTable(){
     +'<th>Δ Last Wk</th><th>Δ Prev Yr</th><th>Δ 5-Yr</th></tr>';
 
   STATES.forEach(function(st){
-    var c=gv(st,latW,curYr),p=gv(st,preW,curYr),y=gv(st,latW,prevYr),a=avg5(st,latW);
+    var c=gv2026(st,latW,'progress_current_planted');
+    var p=gv2026(st,preW,'progress_current_planted');
+    var y=gv2026(st,latW,'progress_prev_planted');
+    var a=gv2026(st,latW,'progress_5yr_planted');
     html+='<tr><td>'+st+'</td>'
       +'<td>'+(c!==null?c.toFixed(0)+'%':'—')+'</td>'
       +'<td>'+(p!==null?p.toFixed(0)+'%':'—')+'</td>'
@@ -514,7 +530,10 @@ function buildPlantedTable(){
       +'<td>'+(a!==null?a.toFixed(0)+'%':'—')+'</td>'
       +'<td>'+fmtArr(c,p)+'</td><td>'+fmtArr(c,y)+'</td><td>'+fmtArr(c,a)+'</td></tr>';
   });
-  var c=gv('US TOTAL',latW,curYr),p=gv('US TOTAL',preW,curYr),y=gv('US TOTAL',latW,prevYr),a=avg5('US TOTAL',latW);
+  var c=gv2026('US TOTAL',latW,'progress_current_planted');
+  var p=gv2026('US TOTAL',preW,'progress_current_planted');
+  var y=gv2026('US TOTAL',latW,'progress_prev_planted');
+  var a=gv2026('US TOTAL',latW,'progress_5yr_planted');
   html+='<tr class="nat-row"><td>🏛️ US TOTAL</td>'
     +'<td>'+(c!==null?c.toFixed(0)+'%':'—')+'</td>'
     +'<td>'+(p!==null?p.toFixed(0)+'%':'—')+'</td>'
@@ -571,11 +590,15 @@ function drawContinuum(divId,legendId,loc){
   STAGES.forEach(function(s){
     var g={label:s.label,color:s.color,prvClr:s.prvClr,avgClr:s.avgClr,curYr:curYr,hasCur:false,hasPrv:false,hasAvg:false};
 
-    // current year
-    var cv=arrByWeek(filterRows(s.key,loc,curYr),C_MIN,C_MAX);
+    // ORIGINAL PATTERN: current year file embeds current, prev, and 5yr avg under separate keys
+    // Try curKey (progress_current_*) first — used in 2026 file
+    // Fall back to key (progress_pct_*) — used in historical files
+    var cv=arrByWeek(filterRows(s.curKey,loc,curYr),C_MIN,C_MAX);
+    if(!cv.some(function(v){return v!==null;}))
+      cv=arrByWeek(filterRows(s.key,loc,curYr),C_MIN,C_MAX);
+
     if(cv.some(function(v){return v!==null;})){
       g.hasCur=true;
-      // label at last non-null point
       var li=-1; cv.forEach(function(v,i){if(v!==null)li=i;});
       var tx=cv.map(function(_,i){return i===li?s.label:'';});
       traces.push({x:lbl,y:cv,type:'scatter',mode:'lines+text',
@@ -584,8 +607,13 @@ function drawContinuum(divId,legendId,loc){
         connectgaps:true,showlegend:false,name:s.label+' '+curYr,
         hovertemplate:'<b>'+s.label+' '+curYr+'</b><br>%{x}: %{y:.1f}%<extra></extra>'});
     }
-    // prior year
-    var pv=arrByWeek(filterRows(s.key,loc,prvYr),C_MIN,C_MAX);
+
+    // Prior year: read from curYr file via prevKey (original approach — 2026 file has 2025 embedded)
+    // Fall back to reading directly from prvYr using historical key
+    var pv=arrByWeek(filterRows(s.prevKey,loc,curYr),C_MIN,C_MAX);
+    if(!pv.some(function(v){return v!==null;}))
+      pv=arrByWeek(filterRows(s.key,loc,prvYr),C_MIN,C_MAX);
+
     if(pv.some(function(v){return v!==null;})){
       g.hasPrv=true;
       traces.push({x:lbl,y:pv,type:'scatter',mode:'lines',
@@ -593,16 +621,19 @@ function drawContinuum(divId,legendId,loc){
         connectgaps:true,showlegend:false,name:s.label+' '+prvYr,
         hovertemplate:'<b>'+s.label+' '+prvYr+'</b><br>%{x}: %{y:.1f}%<extra></extra>'});
     }
-    // 5-yr avg
-    if(ayrs.length){
-      var av=calcAvg(s.key,loc,ayrs,C_MIN,C_MAX);
-      if(av.some(function(v){return v!==null;})){
-        g.hasAvg=true;
-        traces.push({x:lbl,y:av,type:'scatter',mode:'lines',
-          line:{color:s.avgClr,width:2,dash:'dot',shape:'spline',smoothing:1.2},
-          connectgaps:true,showlegend:false,name:s.label+' 5yr Avg',
-          hovertemplate:'<b>'+s.label+' 5yr Avg</b><br>%{x}: %{y:.1f}%<extra></extra>'});
-      }
+
+    // 5yr avg: read from curYr file via avgKey (original approach — 2026 file has 5yr avg embedded)
+    // Fall back to computing avg from historical files
+    var av=arrByWeek(filterRows(s.avgKey,loc,curYr),C_MIN,C_MAX);
+    if(!av.some(function(v){return v!==null;}) && ayrs.length)
+      av=calcAvg(s.key,loc,ayrs,C_MIN,C_MAX);
+
+    if(av.some(function(v){return v!==null;})){
+      g.hasAvg=true;
+      traces.push({x:lbl,y:av,type:'scatter',mode:'lines',
+        line:{color:s.avgClr,width:2,dash:'dot',shape:'spline',smoothing:1.2},
+        connectgaps:true,showlegend:false,name:s.label+' 5yr Avg',
+        hovertemplate:'<b>'+s.label+' 5yr Avg</b><br>%{x}: %{y:.1f}%<extra></extra>'});
     }
     if(g.hasCur||g.hasPrv||g.hasAvg) groups.push(g);
   });
@@ -794,7 +825,7 @@ function drawSeasStage(stage,loc,selYears){
   // derive active window from ALL data for this key+loc across all years
   var allWks=[];
   allData.forEach(function(r){
-    if(r.data_item_key!==stage.key||!locMatch(r,loc)) return;
+    var sk=r.data_item_key; if(sk!==stage.key&&sk!==stage.curKey||!locMatch(r,loc)) return;
     var w=weekNum(r.reference_period_desc); if(w) allWks.push(w);
   });
   var wrEl=document.getElementById('wr-'+stage.id);
@@ -877,6 +908,18 @@ function init(){
       return;
     }
     document.getElementById('loading').style.display='none';
+
+    // Show load summary banner so user can confirm 2026 data loaded
+    var yrCounts={};
+    allData.forEach(function(r){if(r.year)yrCounts[r.year]=(yrCounts[r.year]||0)+1;});
+    var sortedYrs=Object.keys(yrCounts).sort().reverse();
+    var recent=sortedYrs.slice(0,5).map(function(y){return y+'('+yrCounts[y]+')'}).join(', ');
+    var banner=document.createElement('div');
+    banner.style.cssText='background:#e8f5e9;border-left:4px solid #27ae60;padding:10px 16px;margin-bottom:12px;border-radius:6px;font-size:12px;color:#2c3e50';
+    banner.innerHTML='<b>✅ Data loaded:</b> '+allData.length.toLocaleString()+' total rows | Recent years: '+recent
+      +'<button onclick="this.parentNode.remove()" style="float:right;background:none;border:none;cursor:pointer;color:#999;font-size:14px">✕</button>';
+    document.querySelector('.container').insertBefore(banner,document.querySelector('.container').firstChild);
+
     buildPlantedTable();
     buildCondYearSelectors();
     buildSeasYearChk();
