@@ -69,11 +69,11 @@ tr:nth-child(even){background:#f8f9fa}
 
 /* ── PRINT: 2 charts per page ── */
 @media print{
-  @page{size:A4 landscape;margin:10mm}
+  @page{size:A4 landscape;margin:8mm}
 
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 
-  body{background:#fff;margin:0;padding:0;font-size:10pt}
+  body{background:#fff;margin:0;padding:0}
 
   /* Hide UI elements */
   .header,.nav,.controls,.btn-pdf,.section-title,
@@ -92,60 +92,46 @@ tr:nth-child(even){background:#f8f9fa}
     overflow:hidden!important;
     break-inside:avoid!important;
     page-break-inside:avoid!important;
-    margin:0 0 5mm 0!important;
+    margin:0!important;
     background:white!important;
-    box-sizing:border-box!important;
   }
 
   .chart-header{
-    padding:4px 10px!important;
-    font-size:10pt!important;
-    font-weight:bold!important;
+    padding:3px 8px!important;
+    font-size:9px!important;
     line-height:1.2!important;
-    border-bottom:2px solid #1a5490!important;
-    height:25px!important;
-    box-sizing:border-box!important;
+    border-bottom:1px solid #1a5490!important;
   }
 
-  .chart-header h3{font-size:10pt!important;margin:0!important}
+  .chart-header h3{font-size:9px!important;margin:0!important}
 
-  /* Chart body sizing - CRITICAL for Chart.js */
+  /* Chart body sizing */
   .chart-body-lg{
-    height:140mm!important;
-    max-height:140mm!important;
-    min-height:140mm!important;
-    padding:0!important;
-    margin:0!important;
+    height:130mm!important;
+    max-height:130mm!important;
+    padding:2px!important;
     overflow:hidden!important;
-    position:relative!important;
-    box-sizing:border-box!important;
   }
 
   .chart-body-md{
     height:85mm!important;
     max-height:85mm!important;
-    min-height:85mm!important;
-    padding:0!important;
-    margin:0!important;
+    padding:2px!important;
     overflow:hidden!important;
-    position:relative!important;
-    box-sizing:border-box!important;
   }
 
-  /* Canvas MUST fill container */
+  /* Canvas sizing */
   .chart-body-lg canvas,
   .chart-body-md canvas{
     width:100%!important;
     height:100%!important;
     display:block!important;
-    max-width:none!important;
-    max-height:none!important;
   }
 
   /* Table styling */
-  table{font-size:8pt!important;width:100%!important;border-collapse:collapse!important}
-  th{font-size:7pt!important;padding:3px 4px!important;background:#1a5490!important;color:white!important}
-  td{padding:3px 4px!important;font-size:8pt!important;border-bottom:1px solid #ddd!important}
+  table{font-size:7px!important;width:100%!important}
+  th{font-size:6px!important;padding:2px!important;background:#1a5490!important;color:white!important}
+  td{padding:2px!important;font-size:7px!important;border-bottom:1px solid #ddd!important}
 
   /* PAGE 1: Planted table */
   .pp-table{
@@ -155,8 +141,21 @@ tr:nth-child(even){background:#f8f9fa}
     width:100%!important;
   }
 
-  /* PAGE 2-3: Continuum charts */
-  .pp,
+  /* PAGE 2: National + Texas continuum (stacked) */
+  .pp{
+    display:block!important;
+    width:100%!important;
+    page-break-after:always!important;
+    break-after:page!important;
+  }
+
+  .pp .chart-box{
+    width:100%!important;
+    height:138mm!important;
+    margin-bottom:4mm!important;
+  }
+
+  /* PAGE 3: Georgia + Mississippi continuum (stacked) */
   #pp-states-cont{
     display:block!important;
     width:100%!important;
@@ -164,21 +163,18 @@ tr:nth-child(even){background:#f8f9fa}
     break-after:page!important;
   }
 
-  .pp .chart-box,
   #pp-states-cont .chart-box{
-    display:block!important;
     width:100%!important;
-    height:165mm!important;
-    margin-bottom:5mm!important;
+    height:138mm!important;
+    margin-bottom:4mm!important;
   }
 
-  /* PAGE 4-5: Condition charts (2x2 grid) */
-  #cond-ge-grid-1,
-  #cond-pvp-grid-1{
+  /* PAGE 4: Good+Excellent - 4 charts (2x2 grid) */
+  #cond-ge-grid-1{
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
     grid-template-rows:1fr 1fr!important;
-    gap:5mm!important;
+    gap:4mm!important;
     width:100%!important;
     height:190mm!important;
     page-break-after:always!important;
@@ -186,21 +182,44 @@ tr:nth-child(even){background:#f8f9fa}
     overflow:hidden!important;
   }
 
-  #cond-ge-grid-1 .chart-box,
+  #cond-ge-grid-1 .chart-box{
+    height:93mm!important;
+    max-height:93mm!important;
+    overflow:hidden!important;
+  }
+
+  #cond-ge-grid-1 .chart-body-md{
+    height:78mm!important;
+    max-height:78mm!important;
+    overflow:hidden!important;
+  }
+
+  /* PAGE 5: Poor+VeryPoor - 4 charts (2x2 grid) */
+  #cond-pvp-grid-1{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    grid-template-rows:1fr 1fr!important;
+    gap:4mm!important;
+    width:100%!important;
+    height:190mm!important;
+    page-break-after:always!important;
+    break-after:page!important;
+    overflow:hidden!important;
+  }
+
   #cond-pvp-grid-1 .chart-box{
-    height:92mm!important;
-    max-height:92mm!important;
+    height:93mm!important;
+    max-height:93mm!important;
     overflow:hidden!important;
   }
 
-  #cond-ge-grid-1 .chart-body-md,
   #cond-pvp-grid-1 .chart-body-md{
-    height:67mm!important;
-    max-height:67mm!important;
+    height:78mm!important;
+    max-height:78mm!important;
     overflow:hidden!important;
   }
 
-  /* PAGE 6: Seasonality charts */
+  /* PAGE 6: Seasonality - 5 charts (4 in 2x2 grid + 1 full width) */
   #seasonality-print-grid{
     display:block!important;
     width:100%!important;
@@ -210,7 +229,7 @@ tr:nth-child(even){background:#f8f9fa}
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
     grid-template-rows:1fr 1fr!important;
-    gap:5mm!important;
+    gap:4mm!important;
     width:100%!important;
     height:190mm!important;
     page-break-after:always!important;
@@ -219,32 +238,34 @@ tr:nth-child(even){background:#f8f9fa}
   }
 
   #seasonality-print-grid .seas-row-1 .chart-box{
-    height:92mm!important;
-    max-height:92mm!important;
+    height:93mm!important;
+    max-height:93mm!important;
     overflow:hidden!important;
   }
 
   #seasonality-print-grid .seas-row-1 .chart-body-md{
-    height:67mm!important;
-    max-height:67mm!important;
+    height:78mm!important;
+    max-height:78mm!important;
     overflow:hidden!important;
   }
 
   #seasonality-print-grid .seas-row-2{
     display:block!important;
     width:100%!important;
-    margin-top:5mm!important;
+    margin-top:4mm!important;
   }
 
   #seasonality-print-grid .seas-row-2 .chart-box{
-    height:92mm!important;
-    max-height:92mm!important;
+    width:50%!important;
+    height:93mm!important;
+    max-height:93mm!important;
+    margin:0 auto!important;
     overflow:hidden!important;
   }
 
   #seasonality-print-grid .seas-row-2 .chart-body-md{
-    height:67mm!important;
-    max-height:67mm!important;
+    height:78mm!important;
+    max-height:78mm!important;
     overflow:hidden!important;
   }
 }
@@ -1255,16 +1276,42 @@ function switchTab(name){
 //  INIT
 // ═══════════════════════════════════════════════════════
 function preparePrint(){
-  // Trigger resize for all charts before printing
-  Object.values(chartInstances).forEach(function(chart){
+  // First ensure all charts are rendered
+  var charts = Object.values(chartInstances);
+  var renderedCount = 0;
+
+  function checkAndPrint(){
+    renderedCount++;
+    // Wait for all charts to be ready, then print
+    if(renderedCount >= charts.length || charts.length === 0){
+      setTimeout(function(){
+        window.print();
+      }, 500); // Give extra time for final render
+    }
+  }
+
+  if(charts.length === 0){
+    // No charts yet, wait and retry
+    setTimeout(function(){
+      preparePrint();
+    }, 500);
+    return;
+  }
+
+  // Trigger resize/update for each chart
+  charts.forEach(function(chart){
+    if(chart && chart.update){
+      chart.update('none'); // Update without animation
+    }
     if(chart && chart.resize){
       chart.resize();
     }
   });
-  // Small delay to let resize complete
+
+  // Wait for render then print
   setTimeout(function(){
     window.print();
-  }, 200);
+  }, 800);
 }
 
 function init(){
