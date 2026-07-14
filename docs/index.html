@@ -271,7 +271,7 @@ tr:nth-child(even){background:#f8f9fa}
     </div>
 
     <!-- Latest planted table -->
-    <div class="section-title">📊 Latest Week — Cotton Planted</div>
+    <div class="section-title" id="prog-tbl-title">📊 Latest Week — Active Crop Stages</div>
     <div class="pp-table">
       <div id="tbl-planted"></div>
     </div>
@@ -584,72 +584,98 @@ function loadFile(f){
 }
 
 // ═══════════════════════════════════════════════════════
-//  PLANTED TABLE
+//  ACTIVE-STAGE PROGRESS TABLES
+//  Detects which crop stages are being reported in the
+//  latest week and renders one comparison table per stage.
 // ═══════════════════════════════════════════════════════
-function buildPlantedTable(){
-  var rows2026=allData.filter(function(r){
-    return r.data_item_key==='progress_current_planted' && r.year.toString()==='2026';
-  });
-  if(!rows2026.length){
-    rows2026=allData.filter(function(r){
-      return r.data_item_key==='progress_pct_planted';
+var TBL_STAGES=[
+  {id:'planted',       icon:'\uD83C\uDF31', label:'Planted'},
+  {id:'emerged',       icon:'\uD83C\uDF3E', label:'Emerged'},
+  {id:'squaring',      icon:'\uD83C\uDF3F', label:'Squaring'},
+  {id:'setting_bolls', icon:'\uD83D\uDFE2', label:'Setting Bolls'},
+  {id:'bolls_opening', icon:'\u26AA', label:'Bolls Opening'},
+  {id:'harvested',     icon:'\uD83D\uDE9C', label:'Harvested'}
+];
+var TBL_STATES=['TEXAS','GEORGIA','MISSISSIPPI','ALABAMA','ARKANSAS','LOUISIANA',
+  'NORTH CAROLINA','SOUTH CAROLINA','TENNESSEE','OKLAHOMA','KANSAS','MISSOURI',
+  'FLORIDA','VIRGINIA','CALIFORNIA','ARIZONA','NEW MEXICO'];
+
+function progVal(loc,wk,yr,stageId,which){
+  // which: 'cur' | 'prev' | '5yr' — checks new schema first, legacy fallback for 'cur'
+  var keys = which==='cur' ? ['progress_current_'+stageId,'progress_pct_'+stageId]
+           : which==='prev'? ['progress_prev_'+stageId]
+           : ['progress_5yr_'+stageId];
+  for(var i=0;i<keys.length;i++){
+    var k=keys[i];
+    var r=allData.find(function(r){
+      return r.data_item_key===k && locMatch(r,loc)
+        && r.year.toString()===yr && weekNum(r.reference_period_desc)===wk;
     });
+    if(r){ var v=parseFloat(r.Value); if(!isNaN(v)) return v; }
   }
-  if(!rows2026.length){
-    document.getElementById('tbl-planted').innerHTML='<p style="padding:16px;color:#999">No planted data found.</p>';
+  return null;
+}
+
+function buildPlantedTable(){
+  // 1) Find latest year + week with any progress data
+  var progRows=allData.filter(function(r){
+    var k=r.data_item_key;
+    return k && (k.indexOf('progress_current_')===0 || k.indexOf('progress_pct_')===0);
+  });
+  if(!progRows.length){
+    document.getElementById('tbl-planted').innerHTML='<p style="padding:16px;color:#999">No progress data found.</p>';
     return;
   }
-  rows2026.sort(function(a,b){ return new Date(b.week_ending)-new Date(a.week_ending); });
-  var latestRow=rows2026[0];
-  var curYr=latestRow.year.toString();
-  var latW=weekNum(latestRow.reference_period_desc);
-  var preW=latW-1;
-  var prevYr=String(+curYr-1);
-
-  function gv2026(loc, wk, key){
-    var r=allData.find(function(r){
-      return r.data_item_key===key && locMatch(r,loc)
-        && r.year.toString()===curYr && weekNum(r.reference_period_desc)===wk;
-    });
-    if(!r) return null;
-    var v=parseFloat(r.Value); return isNaN(v)?null:v;
-  }
-
-  var STATES=['TEXAS','GEORGIA','MISSISSIPPI','ALABAMA','ARKANSAS','LOUISIANA',
-    'NORTH CAROLINA','SOUTH CAROLINA','TENNESSEE','OKLAHOMA','KANSAS','MISSOURI',
-    'FLORIDA','VIRGINIA','CALIFORNIA','ARIZONA','NEW MEXICO'];
-
-  var html='<table><tr>'
-    +'<th style="text-align:left;width:14%">State</th>'
-    +'<th>Wk '+latW+'<br>'+curYr+'</th>'
-    +'<th>Wk '+preW+'<br>'+curYr+'</th>'
-    +'<th>Wk '+latW+'<br>'+prevYr+'</th>'
-    +'<th>5-Yr Avg</th>'
-    +'<th>Δ Last Wk</th><th>Δ Prev Yr</th><th>Δ 5-Yr</th></tr>';
-
-  STATES.forEach(function(st){
-    var c=gv2026(st,latW,'progress_current_planted');
-    var p=gv2026(st,preW,'progress_current_planted');
-    var y=gv2026(st,latW,'progress_prev_planted');
-    var a=gv2026(st,latW,'progress_5yr_planted');
-    html+='<tr><td>'+st+'</td>'
-      +'<td>'+(c!==null?c.toFixed(0)+'%':'—')+'</td>'
-      +'<td>'+(p!==null?p.toFixed(0)+'%':'—')+'</td>'
-      +'<td>'+(y!==null?y.toFixed(0)+'%':'—')+'</td>'
-      +'<td>'+(a!==null?a.toFixed(0)+'%':'—')+'</td>'
-      +'<td>'+fmtArr(c,p)+'</td><td>'+fmtArr(c,y)+'</td><td>'+fmtArr(c,a)+'</td></tr>';
+  var curYr=progRows.reduce(function(m,r){ return +r.year>m?+r.year:m; },0).toString();
+  var latW=0;
+  progRows.forEach(function(r){
+    if(r.year.toString()!==curYr) return;
+    var w=weekNum(r.reference_period_desc);
+    if(w&&w>latW) latW=w;
   });
-  var c=gv2026('US TOTAL',latW,'progress_current_planted');
-  var p=gv2026('US TOTAL',preW,'progress_current_planted');
-  var y=gv2026('US TOTAL',latW,'progress_prev_planted');
-  var a=gv2026('US TOTAL',latW,'progress_5yr_planted');
-  html+='<tr class="nat-row"><td>🏛️ US TOTAL</td>'
-    +'<td>'+(c!==null?c.toFixed(0)+'%':'—')+'</td>'
-    +'<td>'+(p!==null?p.toFixed(0)+'%':'—')+'</td>'
-    +'<td>'+(y!==null?y.toFixed(0)+'%':'—')+'</td>'
-    +'<td>'+(a!==null?a.toFixed(0)+'%':'—')+'</td>'
-    +'<td>'+fmtArr(c,p)+'</td><td>'+fmtArr(c,y)+'</td><td>'+fmtArr(c,a)+'</td></tr></table>';
+  var preW=latW-1, prevYr=String(+curYr-1);
+  var titleEl=document.getElementById('prog-tbl-title');
+  if(titleEl) titleEl.textContent='\uD83D\uDCCA Week '+latW+', '+curYr+' \u2014 Active Crop Stages';
 
+  // 2) For each stage, find states reporting a current value at latest week
+  var html='', anyStage=false;
+  TBL_STAGES.forEach(function(s){
+    var active=TBL_STATES.filter(function(st){
+      return progVal(st,latW,curYr,s.id,'cur')!==null;
+    });
+    var natCur=progVal('US TOTAL',latW,curYr,s.id,'cur');
+    if(!active.length && natCur===null) return; // stage not active this week
+    anyStage=true;
+
+    html+='<div style="font-weight:700;font-size:13px;color:#1a5490;margin:14px 0 -8px;padding:0 2px">'
+      +s.icon+' '+s.label+' \u2014 '+active.length+(active.length===1?' state':' states')+' reporting</div>';
+    html+='<table><tr>'
+      +'<th style="text-align:left;width:14%">State</th>'
+      +'<th>Wk '+latW+'<br>'+curYr+'</th>'
+      +'<th>Wk '+preW+'<br>'+curYr+'</th>'
+      +'<th>Wk '+latW+'<br>'+prevYr+'</th>'
+      +'<th>5-Yr Avg</th>'
+      +'<th>\u0394 Last Wk</th><th>\u0394 Prev Yr</th><th>\u0394 5-Yr</th></tr>';
+
+    function rowFor(loc,cls,disp){
+      var c=progVal(loc,latW,curYr,s.id,'cur');
+      var p=progVal(loc,preW,curYr,s.id,'cur');
+      var y=progVal(loc,latW,curYr,s.id,'prev');
+      if(y===null) y=progVal(loc,latW,prevYr,s.id,'cur'); // legacy fallback: prior-yr actual
+      var a=progVal(loc,latW,curYr,s.id,'5yr');
+      return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+disp+'</td>'
+        +'<td>'+(c!==null?c.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+(p!==null?p.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+(y!==null?y.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+(a!==null?a.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+fmtArr(c,p)+'</td><td>'+fmtArr(c,y)+'</td><td>'+fmtArr(c,a)+'</td></tr>';
+    }
+    active.forEach(function(st){ html+=rowFor(st,null,st); });
+    if(natCur!==null) html+=rowFor('US TOTAL','nat-row','\uD83C\uDFDB\uFE0F US TOTAL');
+    html+='</table>';
+  });
+
+  if(!anyStage) html='<p style="padding:16px;color:#999">No stage reporting data for week '+latW+', '+curYr+'.</p>';
   document.getElementById('tbl-planted').innerHTML=html;
 }
 
