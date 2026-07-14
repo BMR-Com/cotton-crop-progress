@@ -67,6 +67,31 @@ tr:nth-child(even){background:#f8f9fa}
 .leg-key{background:#fff8e1;padding:8px 12px;border-radius:8px;border:1px solid #ffe082;margin-left:auto}
 .leg-key-title{font-size:9px;font-weight:800;color:#f57f17;text-transform:uppercase;margin-bottom:4px}
 
+/* Condition Intelligence cards */
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:20px;margin-bottom:8px}
+.insight-card{background:#fff;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.08);overflow:hidden;page-break-inside:avoid}
+.ic-head{background:linear-gradient(135deg,#f8f9fa,#e9ecef);border-bottom:2px solid #1a5490;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.ic-head h4{margin:0;font-size:14px;color:#1a5490}
+.ic-week{font-size:10px;color:#888}
+.ic-hero{display:flex;align-items:baseline;gap:14px;padding:14px 16px 4px}
+.ic-hero .big{font-size:34px;font-weight:800;color:#2c3e50}
+.ic-hero .big small{font-size:13px;font-weight:600;color:#888}
+.ic-hero .wow{font-size:14px;font-weight:700}
+.ic-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 16px}
+.chip{background:#f8f9fa;border:1px solid #e8e8e8;border-radius:8px;padding:8px 10px}
+.chip .cl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#777;margin-bottom:2px}
+.chip .cv{font-size:14px;font-weight:700;color:#2c3e50}
+.ic-outlook{margin:6px 16px 14px;padding:10px 12px;border-radius:8px;background:#fffdf5;border:1px solid #ffe082}
+.ic-outlook.bullish{background:#fef5f5;border-color:#f5c6cb}
+.ic-outlook.bearish{background:#f2f9f2;border-color:#c3e6cb}
+.ic-outlook .ol-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#946200;margin-bottom:4px}
+.ic-outlook.bullish .ol-title{color:#b02a37}
+.ic-outlook.bearish .ol-title{color:#1e7b34}
+.ic-outlook .ol-body{font-size:12px;line-height:1.55;color:#333}
+.pctile-bar{position:relative;height:8px;border-radius:4px;margin:6px 16px 2px;background:linear-gradient(90deg,#e74c3c,#f39c12 40%,#f1c40f 55%,#27ae60)}
+.pctile-dot{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#1a5490;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);transform:translateX(-50%)}
+.pctile-cap{display:flex;justify-content:space-between;font-size:9px;color:#999;padding:2px 16px 10px}
+
 /* Print styles - ONE CHART PER PAGE */
 @media print{
   @page{size:A4 landscape;margin:10mm}
@@ -353,6 +378,10 @@ tr:nth-child(even){background:#f8f9fa}
         </div>
       </div>
     </div>
+  <!-- Condition Intelligence -->
+  <div class="section-title">&#129504; Condition Intelligence &mdash; Historical Context &amp; Forward Outlook</div>
+  <div class="insight-grid" id="cond-insights"></div>
+
   </div><!-- /tab-dashboard -->
 
   <!-- ════════════════ SEASONALITY ════════════════ -->
@@ -539,6 +568,13 @@ function loadFile(f){
       complete:function(res){
         allData=allData.concat(res.data.filter(function(r){
           return r.year&&r.Value&&r.Value.trim()!==''&&r.data_item_key;
+        }).map(function(r){
+          // 2026+ files use condition_current_* keys; legacy files use condition_pct_*.
+          // Normalize so all downstream condition logic sees one schema.
+          if(r.data_item_key.indexOf('condition_current_')===0){
+            r.data_item_key='condition_pct_'+r.data_item_key.slice(18);
+          }
+          return r;
         }));
         resolve();
       },
@@ -856,7 +892,195 @@ function refreshCondCharts(){
   drawCondChart('cond-tx-pvp', 'TEXAS',   'pvp',getChecked('ychk-tx-pvp'));
   if(s1){drawCondChart('cond-s1-ge', s1,'ge', getChecked('ychk-s1-ge'));drawCondChart('cond-s1-pvp',s1,'pvp',getChecked('ychk-s1-pvp'));}
   if(s2){drawCondChart('cond-s2-ge', s2,'ge', getChecked('ychk-s2-ge'));drawCondChart('cond-s2-pvp',s2,'pvp',getChecked('ychk-s2-pvp'));}
+  buildCondInsights();
 }
+
+// ═══════════════════════════════════════════════════════
+//  CONDITION INTELLIGENCE ENGINE
+//  Latest week vs history + forward outlook per location
+// ═══════════════════════════════════════════════════════
+function condMap(loc,yr,prefix){
+  // prefix: 'pct' (actuals), 'prev' (prior-yr as published), '5yr' (avg as published)
+  var pfx='condition_'+prefix+'_', wk={};
+  allData.forEach(function(r){
+    if(!locMatch(r,loc)||r.year.toString()!==yr.toString()) return;
+    var k=r.data_item_key; if(!k||k.indexOf(pfx)!==0) return;
+    var w=weekNum(r.reference_period_desc); if(!w) return;
+    var v=parseFloat(r.Value); if(isNaN(v)) return;
+    if(!wk[w])wk[w]={};
+    wk[w][k.slice(pfx.length)]=v;
+  });
+  return wk;
+}
+function mGE(o){ return o&&(o.good!==undefined||o.excellent!==undefined)?(o.good||0)+(o.excellent||0):null; }
+function mPVP(o){ return o&&(o.poor!==undefined||o.very_poor!==undefined)?(o.poor||0)+(o.very_poor||0):null; }
+function mCI(o){ // weighted 0-100 condition index
+  if(!o) return null;
+  var tot=(o.excellent||0)+(o.good||0)+(o.fair||0)+(o.poor||0)+(o.very_poor||0);
+  if(tot<50) return null; // incomplete distribution
+  return ((o.excellent||0)*100+(o.good||0)*75+(o.fair||0)*50+(o.poor||0)*25)/100;
+}
+function nearestWk(map,target,tol){
+  if(map[target]) return target;
+  for(var d=1;d<=tol;d++){ if(map[target-d]) return target-d; if(map[target+d]) return target+d; }
+  return null;
+}
+function fmtD(d,dec){
+  if(d===null) return '<span class="neu">&mdash;</span>';
+  var s=(d>0?'+':'')+d.toFixed(dec===undefined?1:dec);
+  return '<span class="'+(d>0.05?'pos':d<-0.05?'neg':'neu')+'">'+s+'</span>';
+}
+
+function condInsightFor(loc,dispName){
+  var curYr=null, yrs=allYears();
+  for(var i=0;i<yrs.length;i++){
+    var m=condMap(loc,yrs[i],'pct');
+    if(Object.keys(m).length){ curYr=yrs[i]; break; }
+  }
+  if(!curYr) return null;
+
+  var cur=condMap(loc,curYr,'pct');
+  var wks=Object.keys(cur).map(Number).sort(function(a,b){return a-b;});
+  var W=wks[wks.length-1];
+  var ge=mGE(cur[W]), pvpV=mPVP(cur[W]), ci=mCI(cur[W]);
+  if(ge===null) return null;
+
+  // Momentum
+  var wow=cur[W-1]&&mGE(cur[W-1])!==null?ge-mGE(cur[W-1]):null;
+  var w4=cur[W-4]&&mGE(cur[W-4])!==null?ge-mGE(cur[W-4]):(cur[W-3]&&mGE(cur[W-3])!==null?ge-mGE(cur[W-3]):null);
+  var pvpWow=cur[W-1]&&mPVP(cur[W-1])!==null&&pvpV!==null?pvpV-mPVP(cur[W-1]):null;
+
+  // Prior year: prefer USDA-published prev series in current-year file, else raw prior-yr actuals
+  var prevMap=condMap(loc,curYr,'prev');
+  var geLY=prevMap[W]?mGE(prevMap[W]):null;
+  if(geLY===null){
+    var lyMap=condMap(loc,String(+curYr-1),'pct');
+    var lw=nearestWk(lyMap,W,1); geLY=lw?mGE(lyMap[lw]):null;
+  }
+  // 5-yr avg: prefer published series, else compute
+  var a5Map=condMap(loc,curYr,'5yr');
+  var ge5=a5Map[W]?mGE(a5Map[W]):null;
+  if(ge5===null){
+    var acc=[],n=0;
+    for(var y=+curYr-1;y>=+curYr-5;y--){
+      var hm=condMap(loc,String(y),'pct'); var hw=nearestWk(hm,W,1);
+      if(hw&&mGE(hm[hw])!==null){acc.push(mGE(hm[hw]));n++;}
+    }
+    if(n) ge5=acc.reduce(function(a,b){return a+b;},0)/n;
+  }
+
+  // Historical distribution at week W (all prior years)
+  var hist=[]; // {yr, geW, geEnd}
+  yrs.forEach(function(y){
+    if(+y>=+curYr) return;
+    var hm=condMap(loc,y,'pct');
+    var hw=nearestWk(hm,W,1); if(!hw) return;
+    var g=mGE(hm[hw]); if(g===null) return;
+    var ew=nearestWk(hm,40,3); // pre-harvest anchor ~wk40
+    var gEnd=ew?mGE(hm[ew]):null;
+    hist.push({yr:y,geW:g,geEnd:gEnd});
+  });
+  var pctile=null;
+  if(hist.length>=5){
+    var below=hist.filter(function(h){return h.geW<ge;}).length;
+    var equal=hist.filter(function(h){return h.geW===ge;}).length;
+    pctile=Math.round(100*(below+equal*0.5)/hist.length);
+  }
+
+  // Forward drift W -> ~wk40 across history
+  var drifts=hist.filter(function(h){return h.geEnd!==null;}).map(function(h){return h.geEnd-h.geW;});
+  var proj=null,projLo=null,projHi=null;
+  if(drifts.length>=5&&W<40){
+    var mean=drifts.reduce(function(a,b){return a+b;},0)/drifts.length;
+    var sorted=drifts.slice().sort(function(a,b){return a-b;});
+    var q=function(p){var i=(sorted.length-1)*p;var lo=Math.floor(i),hi=Math.ceil(i);return sorted[lo]+(sorted[hi]-sorted[lo])*(i-lo);};
+    proj=ge+mean; projLo=ge+q(0.25); projHi=ge+q(0.75);
+  }
+
+  // Analog years: 3 closest by GE at this week
+  var analogs=hist.filter(function(h){return h.geEnd!==null;})
+    .sort(function(a,b){return Math.abs(a.geW-ge)-Math.abs(b.geW-ge);}).slice(0,3);
+
+  // Verdict
+  var tone='neutral', verdict='';
+  var vsAvg=ge5!==null?ge-ge5:null;
+  var deteriorating=(w4!==null&&w4<=-4)||(wow!==null&&wow<=-3);
+  var improving=(w4!==null&&w4>=4)||(wow!==null&&wow>=3);
+  if(deteriorating&&(vsAvg===null||vsAvg<3)){
+    tone='bullish';
+    verdict='Conditions are deteriorating'+(w4!==null?' ('+w4.toFixed(0)+' pts G/E over ~4 wks)':'')
+      +(pctile!==null&&pctile<=35?' into the weak end of the historical range':'')
+      +'. Sustained slippage at this point of the season historically feeds abandonment/yield cuts &mdash; supply-supportive for price.';
+  } else if(improving&&(vsAvg===null||vsAvg>-3)){
+    tone='bearish';
+    verdict='Conditions are improving'+(w4!==null?' (+'+w4.toFixed(0)+' pts G/E over ~4 wks)':'')
+      +(pctile!==null&&pctile>=65?' and sit in the strong end of the historical range':'')
+      +'. A firming crop at this stage leans yield-friendly &mdash; a supply headwind for price.';
+  } else if((pctile!==null&&pctile<=15)||(vsAvg!==null&&vsAvg<=-8)){
+    tone='bullish';
+    verdict='Weekly momentum is flat, but the absolute level is historically weak'
+      +(pctile!==null?' ('+pctile+'th percentile for this week)':'')
+      +(vsAvg!==null&&vsAvg<=-8?', running '+Math.abs(vsAvg).toFixed(0)+' pts below the 5-yr average':'')
+      +'. A crop starting from this base carries elevated yield risk into the balance of the season &mdash; supply-supportive for price.';
+  } else {
+    verdict='Conditions are broadly stable vs recent weeks'
+      +(vsAvg!==null?(vsAvg>=0?', running '+vsAvg.toFixed(0)+' pts above':', running '+Math.abs(vsAvg).toFixed(0)+' pts below')+' the 5-yr average for this week':'')
+      +'. Watch weekly momentum for the next directional cue.';
+  }
+  var projTxt='';
+  if(proj!==null){
+    projTxt='Historical drift from week '+W+' to ~week 40 implies G/E finishing near <b>'
+      +proj.toFixed(0)+'%</b> (IQR '+projLo.toFixed(0)+'&ndash;'+projHi.toFixed(0)+'%). ';
+  }
+  var anaTxt='';
+  if(analogs.length){
+    anaTxt='Closest analogs at this week: '+analogs.map(function(a){
+      return a.yr+' ('+a.geW.toFixed(0)+'% &rarr; '+a.geEnd.toFixed(0)+'% by wk40)';
+    }).join(', ')+'.';
+  }
+
+  return {loc:loc,disp:dispName,yr:curYr,W:W,ge:ge,pvp:pvpV,ci:ci,wow:wow,w4:w4,pvpWow:pvpWow,
+          geLY:geLY,ge5:ge5,pctile:pctile,nHist:hist.length,tone:tone,verdict:verdict,
+          projTxt:projTxt,anaTxt:anaTxt};
+}
+
+function buildCondInsights(){
+  var el=document.getElementById('cond-insights'); if(!el) return;
+  var s1=document.getElementById('s1-sel').value;
+  var s2=document.getElementById('s2-sel').value;
+  var locs=[['NATIONAL','&#127963;&#65039; National'],['TEXAS','&#129312; Texas']];
+  if(s1&&s1!=='TEXAS') locs.push([s1,s1]);
+  if(s2&&s2!=='TEXAS'&&s2!==s1) locs.push([s2,s2]);
+
+  var html='';
+  locs.forEach(function(L){
+    var d=condInsightFor(L[0],L[1]);
+    if(!d){ html+='<div class="insight-card"><div class="ic-head"><h4>'+L[1]+'</h4></div><div style="padding:20px;color:#999;font-size:12px">No condition data available.</div></div>'; return; }
+    var toneCls=d.tone==='bullish'?'bullish':d.tone==='bearish'?'bearish':'';
+    var toneLbl=d.tone==='bullish'?'Price-supportive (supply risk)':d.tone==='bearish'?'Price headwind (crop firming)':'Neutral / watch momentum';
+    html+='<div class="insight-card">'
+      +'<div class="ic-head"><h4>'+d.disp+'</h4><span class="ic-week">'+d.yr+' &middot; Week '+d.W+(d.nHist?' &middot; '+d.nHist+' yrs history':'')+'</span></div>'
+      +'<div class="ic-hero"><div class="big">'+d.ge.toFixed(0)+'%<small> G/E</small></div>'
+      +'<div class="wow">WoW '+fmtD(d.wow,0)+' pts &nbsp;&middot;&nbsp; 4-wk '+fmtD(d.w4,0)+' pts</div></div>';
+    if(d.pctile!==null){
+      html+='<div class="pctile-bar"><div class="pctile-dot" style="left:'+Math.max(2,Math.min(98,d.pctile))+'%"></div></div>'
+        +'<div class="pctile-cap"><span>Worst on record (wk '+d.W+')</span><span><b>'+d.pctile+'th percentile</b></span><span>Best on record</span></div>';
+    }
+    html+='<div class="ic-chips">'
+      +'<div class="chip"><div class="cl">vs Prior Yr</div><div class="cv">'+(d.geLY!==null?fmtD(d.ge-d.geLY,0)+' pts':'&mdash;')+'</div></div>'
+      +'<div class="chip"><div class="cl">vs 5-Yr Avg</div><div class="cv">'+(d.ge5!==null?fmtD(d.ge-d.ge5,0)+' pts':'&mdash;')+'</div></div>'
+      +'<div class="chip"><div class="cl">Cond. Index</div><div class="cv">'+(d.ci!==null?d.ci.toFixed(1):'&mdash;')+'</div></div>'
+      +'<div class="chip"><div class="cl">Poor + V.Poor</div><div class="cv">'+(d.pvp!==null?d.pvp.toFixed(0)+'%':'&mdash;')+'</div></div>'
+      +'<div class="chip"><div class="cl">P/VP WoW</div><div class="cv">'+fmtD(d.pvpWow,0)+' pts</div></div>'
+      +'<div class="chip"><div class="cl">Prior Yr G/E</div><div class="cv">'+(d.geLY!==null?d.geLY.toFixed(0)+'%':'&mdash;')+'</div></div>'
+      +'</div>'
+      +'<div class="ic-outlook '+toneCls+'"><div class="ol-title">'+toneLbl+'</div>'
+      +'<div class="ol-body">'+d.verdict+'<br>'+d.projTxt+d.anaTxt+'</div></div>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+}
+
 
 // ═══════════════════════════════════════════════════════
 //  DASHBOARD ORCHESTRATION
