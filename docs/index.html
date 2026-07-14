@@ -276,6 +276,12 @@ tr:nth-child(even){background:#f8f9fa}
       <div id="tbl-planted"></div>
     </div>
 
+    <!-- Latest condition tables -->
+    <div class="section-title" id="cond-tbl-title">🩺 Latest Week — Crop Conditions</div>
+    <div class="pp-table">
+      <div id="tbl-cond"></div>
+    </div>
+
     <!-- Continuum charts -->
     <div class="section-title">🌾 Crop Progress Continuum</div>
     <div class="pp">
@@ -569,11 +575,19 @@ function loadFile(f){
         allData=allData.concat(res.data.filter(function(r){
           return r.year&&r.Value&&r.Value.trim()!==''&&r.data_item_key;
         }).map(function(r){
-          // 2026+ files use condition_current_* keys; legacy files use condition_pct_*.
-          // Normalize so all downstream condition logic sees one schema.
-          if(r.data_item_key.indexOf('condition_current_')===0){
-            r.data_item_key='condition_pct_'+r.data_item_key.slice(18);
-          }
+          // Normalize key schemas so all downstream logic sees one naming convention:
+          //   2026+ files:  condition_current_*            -> condition_pct_*
+          //   legacy files: condition,_previous_year_pct_* -> condition_prev_*
+          //                 condition,_5_year_avg_pct_*    -> condition_5yr_*
+          //                 progress,_previous_year_pct_*  -> progress_prev_*
+          //                 progress,_5_year_avg_pct_*     -> progress_5yr_*
+          var k=r.data_item_key;
+          if(k.indexOf('condition_current_')===0)                 k='condition_pct_'+k.slice(18);
+          else if(k.indexOf('condition,_previous_year_pct_')===0) k='condition_prev_'+k.slice(29);
+          else if(k.indexOf('condition,_5_year_avg_pct_')===0)    k='condition_5yr_'+k.slice(26);
+          else if(k.indexOf('progress,_previous_year_pct_')===0)  k='progress_prev_'+k.slice(28);
+          else if(k.indexOf('progress,_5_year_avg_pct_')===0)     k='progress_5yr_'+k.slice(25);
+          r.data_item_key=k;
           return r;
         }));
         resolve();
@@ -677,6 +691,94 @@ function buildPlantedTable(){
 
   if(!anyStage) html='<p style="padding:16px;color:#999">No stage reporting data for week '+latW+', '+curYr+'.</p>';
   document.getElementById('tbl-planted').innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════════════
+//  CONDITION TABLES (G/E and P/VP) — latest week
+// ═══════════════════════════════════════════════════════
+function condVal(loc,wk,yr,series,type){
+  // series: 'pct' (current) | 'prev' | '5yr';  type: 'ge' | 'pvp'
+  var cats=type==='ge'?['good','excellent']:['poor','very_poor'];
+  var sum=0,found=false;
+  cats.forEach(function(cat){
+    var k='condition_'+series+'_'+cat;
+    var r=allData.find(function(r){
+      return r.data_item_key===k && locMatch(r,loc)
+        && r.year.toString()===yr && weekNum(r.reference_period_desc)===wk;
+    });
+    if(r){ var v=parseFloat(r.Value); if(!isNaN(v)){ sum+=v; found=true; } }
+  });
+  return found?sum:null;
+}
+
+function buildCondTables(){
+  var el=document.getElementById('tbl-cond'); if(!el) return;
+  var condRows=allData.filter(function(r){
+    return r.data_item_key==='condition_pct_good';
+  });
+  if(!condRows.length){ el.innerHTML='<p style="padding:16px;color:#999">No condition data found.</p>'; return; }
+  var curYr=condRows.reduce(function(m,r){ return +r.year>m?+r.year:m; },0).toString();
+  var latW=0;
+  condRows.forEach(function(r){
+    if(r.year.toString()!==curYr) return;
+    var w=weekNum(r.reference_period_desc);
+    if(w&&w>latW) latW=w;
+  });
+  var preW=latW-1, prevYr=String(+curYr-1);
+  var titleEl=document.getElementById('cond-tbl-title');
+  if(titleEl) titleEl.textContent='\uD83E\uDE7A Week '+latW+', '+curYr+' \u2014 Crop Conditions';
+
+  var SECTIONS=[
+    {type:'ge', icon:'\u2705', label:'Good + Excellent', goodDir:1},
+    {type:'pvp',icon:'\u26A0\uFE0F', label:'Poor + Very Poor', goodDir:-1}
+  ];
+  var html='';
+  SECTIONS.forEach(function(sec){
+    var active=TBL_STATES.filter(function(st){
+      return condVal(st,latW,curYr,'pct',sec.type)!==null;
+    });
+    var natCur=condVal('US TOTAL',latW,curYr,'pct',sec.type);
+    if(!active.length && natCur===null) return;
+
+    html+='<div style="font-weight:700;font-size:13px;color:#1a5490;margin:14px 0 -8px;padding:0 2px">'
+      +sec.icon+' '+sec.label+' \u2014 '+active.length+(active.length===1?' state':' states')+' reporting'
+      +(sec.type==='pvp'?' <span style="font-weight:400;color:#999;font-size:10px">(green = declining share, i.e. improving)</span>':'')
+      +'</div>';
+    html+='<table><tr>'
+      +'<th style="text-align:left;width:14%">State</th>'
+      +'<th>Wk '+latW+'<br>'+curYr+'</th>'
+      +'<th>Wk '+preW+'<br>'+curYr+'</th>'
+      +'<th>Wk '+latW+'<br>'+prevYr+'</th>'
+      +'<th>5-Yr Avg</th>'
+      +'<th>\u0394 Last Wk</th><th>\u0394 Prev Yr</th><th>\u0394 5-Yr</th></tr>';
+
+    function fmtCond(c,p){
+      // for P/VP, a fall is good — flip colors so green always = crop-friendly
+      if(c===null||p===null) return '<span class="neu">\u2014</span>';
+      var d=c-p;
+      if(d===0) return '<span class="neu">0.0%</span>';
+      var isGood=sec.goodDir===1?d>0:d<0;
+      return '<span class="'+(isGood?'pos':'neg')+' '+(d>0?'up':'dn')+'">'+(d>0?'+':'')+d.toFixed(1)+'%</span>';
+    }
+    function rowFor(loc,cls,disp){
+      var c=condVal(loc,latW,curYr,'pct',sec.type);
+      var p=condVal(loc,preW,curYr,'pct',sec.type);
+      var y=condVal(loc,latW,curYr,'prev',sec.type);
+      if(y===null) y=condVal(loc,latW,prevYr,'pct',sec.type);
+      var a=condVal(loc,latW,curYr,'5yr',sec.type);
+      return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+disp+'</td>'
+        +'<td>'+(c!==null?c.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+(p!==null?p.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+(y!==null?y.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+(a!==null?a.toFixed(0)+'%':'\u2014')+'</td>'
+        +'<td>'+fmtCond(c,p)+'</td><td>'+fmtCond(c,y)+'</td><td>'+fmtCond(c,a)+'</td></tr>';
+    }
+    active.forEach(function(st){ html+=rowFor(st,null,st); });
+    if(natCur!==null) html+=rowFor('US TOTAL','nat-row','\uD83C\uDFDB\uFE0F US TOTAL');
+    html+='</table>';
+  });
+
+  el.innerHTML=html;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1310,6 +1412,7 @@ function init(){
     }
     document.getElementById('loading').style.display='none';
     buildPlantedTable();
+    buildCondTables();
     buildCondYearSelectors();
     buildSeasYearChk();
     renderDashboard();
