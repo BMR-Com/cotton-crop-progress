@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Cotton Production Model — Live</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16324f; --blue:#1a5490; --bg:#f4f3ee; --card:#ffffff;
+  --red:#b02a37; --green:#1e7b34; --gold:#a06b00; --line:#dcd9d0;
+  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);padding:18px;font-size:13px}
+.wrap{max-width:1180px;margin:0 auto}
+header{border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px}
+header h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
+header h1 span{color:var(--blue)}
+.status{font-family:var(--mono);font-size:11px;color:#666}
+.status .ok{color:var(--green)} .status .err{color:var(--red)}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:16px}
+.card h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--blue);margin-bottom:10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+label{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin:7px 0;gap:8px}
+label b{font-family:var(--mono);font-size:12px}
+input[type=number]{width:78px;font-family:var(--mono);font-size:12px;padding:3px 6px;border:1px solid var(--line);border-radius:4px;text-align:right;background:#fcfcfa}
+input[type=range]{flex:1;accent-color:var(--blue)}
+select{font-family:var(--mono);font-size:12px;padding:3px;border:1px solid var(--line);border-radius:4px;background:#fcfcfa}
+.chk{display:flex;align-items:center;gap:6px;font-size:12px;margin:7px 0}
+.hint{font-size:10px;color:#888;line-height:1.4;margin-top:4px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:4px}
+.ro{background:#f8f7f3;border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.ro .l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#777}
+.ro .v{font-family:var(--mono);font-size:20px;font-weight:700;margin-top:2px}
+.ro .s{font-family:var(--mono);font-size:10px;color:#888;margin-top:1px}
+.hero{background:var(--ink);color:#f5f3ec;border-radius:8px;padding:18px 20px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.hero .big{font-family:var(--mono);font-size:44px;font-weight:700;line-height:1}
+.hero .big small{font-size:16px;font-weight:400;opacity:.7}
+.hero .rng{font-family:var(--mono);font-size:13px;opacity:.85;margin-top:6px}
+.hero .side{text-align:right;font-size:12px;line-height:1.6}
+.hero .side b{font-family:var(--mono)}
+.delta-pos{color:#8fd19e}.delta-neg{color:#f1948a}
+/* triangulation rail */
+.rail-wrap{padding:6px 4px 0}
+svg text{font-family:var(--mono)}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+th{background:var(--ink);color:#fff;padding:6px 8px;text-align:right;font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+th:first-child,td:first-child{text-align:left}
+td{padding:5px 8px;text-align:right;border-bottom:1px solid #eee}
+tr.hl td{background:#fdf6e3;font-weight:700}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.note{font-size:11px;color:#666;line-height:1.6;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.foot{font-size:10px;color:#999;margin-top:8px;font-family:var(--mono)}
+.heat td{padding:4px 6px;font-size:11px}
+@media print{body{background:#fff;padding:0}.card{break-inside:avoid;border:none}input[type=range]{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>US COTTON <span>PRODUCTION MODEL</span> — 2026/27</h1>
+    <div style="font-size:11px;color:#777;margin-top:2px">Abandonment triangulation · condition regression × drought regressions × ENSO overlay · live from BMR-Com data</div>
+  </div>
+  <div class="status" id="status">initializing…</div>
+</header>
+
+<div class="hero" id="hero" style="display:none">
+  <div>
+    <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:.6">Median production estimate</div>
+    <div class="big" id="h-prod">—<small> M bales</small></div>
+    <div class="rng" id="h-rng">—</div>
+  </div>
+  <div class="side" id="h-side"></div>
+</div>
+
+<div class="grid">
+<div><!-- LEFT: assumptions -->
+  <div class="card">
+    <h3>Acreage & WASDE anchor</h3>
+    <label>US planted (M ac) <input type="number" id="in-planted" value="9.85" step="0.01"></label>
+    <label>Texas planted (M ac) <input type="number" id="in-txplanted" value="5.65" step="0.01"></label>
+    <label>Non-TX abandonment % <input type="number" id="in-nontx" value="8.0" step="0.5"></label>
+    <label>WASDE production (M bal) <input type="number" id="in-wasde" value="13.7" step="0.1"></label>
+    <div class="hint">Update planted acres after each Acreage report / WASDE. Non-TX abandonment recent 5-yr implied ≈ 8%.</div>
+  </div>
+  <div class="card">
+    <h3>Abandonment blend weights</h3>
+    <label>Condition regression <input type="range" id="w-cond" min="0" max="100" value="50"><b id="wv-cond">50%</b></label>
+    <label>Drought — current wk <input type="range" id="w-wk" min="0" max="100" value="25"><b id="wv-wk">25%</b></label>
+    <label>Drought — cumulative <input type="range" id="w-cu" min="0" max="100" value="25"><b id="wv-cu">25%</b></label>
+    <label>Drought variable
+      <select id="in-dvar"><option>D2-D4</option><option>D1-D4</option><option>D3-D4</option><option>D4</option></select>
+    </label>
+    <div class="chk"><input type="checkbox" id="in-enso" checked><span>El Niño overlay active</span></div>
+    <label>ENSO adj. to TX aband (pts) <input type="number" id="in-ensoadj" value="-3" step="0.5"></label>
+    <div class="hint">Weights are renormalized to 100%. Condition regression is the highest-R² model; cumulative drought overweights the broken spring drought; current-week underweights establishment damage.</div>
+  </div>
+  <div class="card">
+    <h3>Yield model</h3>
+    <label>Base yield — WASDE (lbs/ac) <input type="number" id="in-yield" value="872" step="1"></label>
+    <label>Adj per G/E pt vs 5-yr avg <input type="number" id="in-yadj" value="1.5" step="0.25"></label>
+    <label>Abandonment selection offset <input type="number" id="in-ysel" value="0.35" step="0.05"></label>
+    <div class="hint">Yield = base + adj×(US G/E − 5-yr avg) + offset×(blended US aband − WASDE-implied aband, pts). Selection offset: shedding worst dryland acres raises surviving-acre yield.</div>
+  </div>
+</div>
+
+<div><!-- RIGHT: model output -->
+  <div class="card">
+    <h3>Live inputs — latest week</h3>
+    <div class="readout" id="live-readout"></div>
+    <div class="foot" id="live-foot"></div>
+  </div>
+
+  <div class="card">
+    <h3>Texas abandonment — triangulation</h3>
+    <div class="rail-wrap" id="rail-tx"></div>
+    <div class="note" id="rail-note"></div>
+  </div>
+
+  <div class="card">
+    <h3>Production scenarios</h3>
+    <div style="overflow-x:auto"><table id="scen-tbl"></table></div>
+    <div class="note" id="scen-note"></div>
+  </div>
+
+  <div class="card">
+    <h3>Sensitivity — production (M bales): TX abandonment × yield</h3>
+    <div style="overflow-x:auto"><table class="heat" id="heat-tbl"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Balance sheet impact</h3>
+    <div class="readout" id="bs-readout"></div>
+    <div class="note">Ending stocks = WASDE 4.1M + (model production − WASDE production), demand held constant. S/U on 13.9M offtake. Elevator math only — demand responds in reality.</div>
+  </div>
+</div>
+</div>
+<div class="foot" style="margin-top:4px">Sources: BMR-Com/cotton-crop-progress (NASS conditions) · BMR-Com/Cotton-Texas-Drought-analysis (USDM regressions, abandonment history) · WASDE anchor manual. Research tool, not trading advice.</div>
+</div>
+<script>
+// ═══════════ CONFIG ═══════════
+var COND_BASE='https://raw.githubusercontent.com/BMR-Com/cotton-crop-progress/main/data/';
+var COND_FILES=['cotton_2001_2005.csv','cotton_2006_2010.csv','cotton_2011_2015.csv','cotton_2016_2020.csv','cotton_2021_2025.csv','cotton_2026_2030.csv'];
+var DROUGHT_URL='https://raw.githubusercontent.com/BMR-Com/Cotton-Texas-Drought-analysis/main/docs/index.html';
+
+// ═══════════ STATE ═══════════
+var COND={};      // {'TEXAS'|'US TOTAL' : {year: {week: GE}}}
+var DR=null;      // {WK:[..], CU:[..], WK_US:[..], CU_US:[..]}
+var loaded={cond:false,dr:false};
+
+// ═══════════ DATA LOADING ═══════════
+function setStatus(html){document.getElementById('status').innerHTML=html;}
+function weekOf(s){var m=/#\s*(\d+)/.exec(s||'');return m?+m[1]:null;}
+
+function loadConditions(){
+  var done=0;
+  COND_FILES.forEach(function(f){
+    Papa.parse(COND_BASE+f,{download:true,header:true,skipEmptyLines:true,
+      chunk:function(res){
+        res.data.forEach(function(r){
+          var st=(r.state_name||'').trim().toUpperCase();
+          if(st!=='TEXAS'&&st!=='US TOTAL')return;
+          var k=r.data_item_key||'';
+          if(k==='condition_current_good')k='condition_pct_good';
+          if(k==='condition_current_excellent')k='condition_pct_excellent';
+          if(k!=='condition_pct_good'&&k!=='condition_pct_excellent')return;
+          var w=weekOf(r.reference_period_desc);if(!w)return;
+          var y=+r.year,v=parseFloat(r.Value);if(isNaN(v))return;
+          if(!COND[st])COND[st]={};if(!COND[st][y])COND[st][y]={};
+          COND[st][y][w]=(COND[st][y][w]||0)+v;
+        });
+      },
+      complete:function(){ if(++done===COND_FILES.length){loaded.cond=true;maybeRun();} },
+      error:function(){ setStatus('<span class="err">condition data failed: '+f+'</span>'); }
+    });
+  });
+}
+
+function bracketParse(html,name){
+  var m=new RegExp('var '+name+'\\s*=\\s*').exec(html);if(!m)return null;
+  var start=html.indexOf('[',m.index+m[0].length),depth=0;
+  for(var i=start;i<html.length;i++){
+    if(html[i]==='[')depth++;else if(html[i]===']')depth--;
+    if(depth===0)return JSON.parse(html.slice(start,i+1));
+  }
+  return null;
+}
+function loadDrought(){
+  fetch(DROUGHT_URL).then(function(r){return r.text();}).then(function(h){
+    DR={WK:bracketParse(h,'WK'),CU:bracketParse(h,'CU'),
+        WK_US:bracketParse(h,'WK_US'),CU_US:bracketParse(h,'CU_US')};
+    loaded.dr=true;maybeRun();
+  }).catch(function(e){ setStatus('<span class="err">drought fetch failed: '+e+'</span>'); });
+}
+
+function maybeRun(){
+  setStatus('conditions <span class="'+(loaded.cond?'ok">✓':'">…')+'</span> &nbsp; drought <span class="'+(loaded.dr?'ok">✓':'">…')+'</span>');
+  if(loaded.cond&&loaded.dr)run();
+}
+
+// ═══════════ MODEL ENGINE ═══════════
+function nearW(obj,w,tol){
+  if(obj[w]!==undefined)return w;
+  for(var d=1;d<=tol;d++){if(obj[w-d]!==undefined)return w-d;if(obj[w+d]!==undefined)return w+d;}
+  return null;
+}
+function ols(X,Y){
+  var n=X.length,sx=0,sy=0,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sx+=X[i];sy+=Y[i];sxy+=X[i]*Y[i];sxx+=X[i]*X[i];}
+  var b=(n*sxy-sx*sy)/(n*sxx-sx*sx),a=(sy-b*sx)/n;
+  var ssr=0,sst=0,my=sy/n;
+  for(i=0;i<n;i++){var p=a+b*X[i];ssr+=(Y[i]-p)*(Y[i]-p);sst+=(Y[i]-my)*(Y[i]-my);}
+  return {a:a,b:b,r2:1-ssr/sst,sigma:Math.sqrt(ssr/(n-2)),n:n};
+}
+
+function computeModel(P){
+  // P: all user parameters + data references
+  var out={};
+  // 1) latest condition week (current year)
+  var curYr=Math.max.apply(null,Object.keys(COND['US TOTAL']).map(Number));
+  var txY=COND['TEXAS'][curYr]||{}, usY=COND['US TOTAL'][curYr]||{};
+  var W=Math.max.apply(null,Object.keys(usY).map(Number));
+  out.curYr=curYr;out.W=W;
+  out.txGE=txY[nearW(txY,W,1)];out.usGE=usY[nearW(usY,W,1)];
+  // 5-yr avg GE same week
+  function avg5(st){var s=0,n=0;for(var y=curYr-1;y>=curYr-5;y--){var m=COND[st][y]||{};var w=nearW(m,W,1);if(w!==null){s+=m[w];n++;}}return n?s/n:null;}
+  out.usGE5=avg5('US TOTAL');out.txGE5=avg5('TEXAS');
+
+  // 2) drought reads (latest entry, chosen variable)
+  function dread(arr){var last=arr[arr.length-1];var v=last.vars[P.dvar];return {label:last.label,date:last.date,x:v.curr_x,pt:v.point,lo:v.lo,hi:v.hi,r2:v.r2,scatter_years:v.scatter_years,scatter_y:v.scatter_y};}
+  out.dWK=dread(DR.WK);out.dCU=dread(DR.CU);out.dWK_US=dread(DR.WK_US);out.dCU_US=dread(DR.CU_US);
+
+  // 3) condition regression: historical same-week GE vs abandonment (from drought scatter)
+  function condReg(st,scatter){
+    var X=[],Y=[];
+    scatter.scatter_years.forEach(function(y,i){
+      if(y>=curYr)return;
+      var m=COND[st][y];if(!m)return;
+      var w=nearW(m,W,1);if(w===null)return;
+      X.push(m[w]);Y.push(scatter.scatter_y[i]);
+    });
+    return X.length>=8?ols(X,Y):null;
+  }
+  out.regTX=condReg('TEXAS',out.dWK);
+  out.regUS=condReg('US TOTAL',out.dWK_US);
+  out.condTX=out.regTX?out.regTX.a+out.regTX.b*out.txGE:null;
+  out.condUS=out.regUS?out.regUS.a+out.regUS.b*out.usGE:null;
+
+  // 4) blended TX abandonment
+  var wsum=P.wCond+P.wWK+P.wCU;if(wsum===0)wsum=1;
+  var wc=P.wCond/wsum,ww=P.wWK/wsum,wu=P.wCU/wsum;
+  out.blendTX=wc*out.condTX+ww*out.dWK.pt+wu*out.dCU.pt;
+  if(P.enso)out.blendTX+=P.ensoAdj/100;
+  out.blendTX=Math.max(0.05,Math.min(0.85,out.blendTX));
+  // uncertainty: weighted mix of model sigmas / CI half-widths
+  var sTX=wc*(out.regTX?out.regTX.sigma:0.1)+ww*(out.dWK.hi-out.dWK.lo)/4+wu*(out.dCU.hi-out.dCU.lo)/4;
+  out.sigmaTX=sTX;
+
+  // 5) national build-up
+  out.harv=P.txPlanted*(1-out.blendTX)+(P.planted-P.txPlanted)*(1-P.nonTX/100);
+  out.usAb=1-out.harv/P.planted;
+  var wasdeAb=1-7.54/9.85; // reference implied
+  // 6) yield
+  var geDef=(out.usGE!==null&&out.usGE5!==null)?(out.usGE-out.usGE5):0;
+  out.geDef=geDef;
+  out.yield=P.baseYield+P.yAdj*geDef+P.ySel*((out.usAb-wasdeAb)*100);
+  // 7) production
+  out.prod=out.harv*out.yield/480;
+  // range: +/- sigmaTX on TX abandonment, +/- 8 lbs yield
+  function prodAt(txAb,yld){var h=P.txPlanted*(1-txAb)+(P.planted-P.txPlanted)*(1-P.nonTX/100);return h*yld/480;}
+  out.prodAt=prodAt;
+  out.prodLo=prodAt(out.blendTX+sTX,out.yield-8);
+  out.prodHi=prodAt(out.blendTX-sTX,out.yield+8);
+  return out;
+}
+
+// ═══════════ RENDER ═══════════
+function pget(id){return parseFloat(document.getElementById(id).value);}
+function readParams(){
+  return {planted:pget('in-planted'),txPlanted:pget('in-txplanted'),nonTX:pget('in-nontx'),
+    wasde:pget('in-wasde'),wCond:pget('w-cond'),wWK:pget('w-wk'),wCU:pget('w-cu'),
+    dvar:document.getElementById('in-dvar').value,
+    enso:document.getElementById('in-enso').checked,ensoAdj:pget('in-ensoadj'),
+    baseYield:pget('in-yield'),yAdj:pget('in-yadj'),ySel:pget('in-ysel')};
+}
+function f1(x){return x.toFixed(1);}function f0(x){return x.toFixed(0);}
+
+function run(){
+  var P=readParams(),M;
+  try{M=computeModel(P);}catch(e){setStatus('<span class="err">model error: '+e.message+'</span>');return;}
+  setStatus('live · conditions wk '+M.W+'/'+M.curYr+' <span class="ok">✓</span> · drought '+M.dWK.label+' <span class="ok">✓</span>');
+
+  // hero
+  document.getElementById('hero').style.display='flex';
+  document.getElementById('h-prod').innerHTML=M.prod.toFixed(2)+'<small> M bales</small>';
+  document.getElementById('h-rng').textContent='range '+M.prodLo.toFixed(1)+' – '+M.prodHi.toFixed(1)+' M · vs WASDE '+P.wasde.toFixed(1)+'M';
+  var dP=M.prod-P.wasde;
+  document.getElementById('h-side').innerHTML=
+    'US abandonment <b>'+f1(M.usAb*100)+'%</b><br>'+
+    'TX abandonment <b>'+f1(M.blendTX*100)+'%</b><br>'+
+    'Harvested <b>'+M.harv.toFixed(2)+'M ac</b> · Yield <b>'+f0(M.yield)+' lbs</b><br>'+
+    '<span class="'+(dP<0?'delta-neg':'delta-pos')+'">'+(dP>0?'+':'')+dP.toFixed(2)+'M vs WASDE</span>';
+
+  // live readout
+  document.getElementById('live-readout').innerHTML=
+    ro('TX G/E — wk '+M.W,f0(M.txGE)+'%','5-yr avg '+f0(M.txGE5)+'%')+
+    ro('US G/E — wk '+M.W,f0(M.usGE)+'%','5-yr avg '+f0(M.usGE5)+'%')+
+    ro('TX '+P.dvar+' current',f1(M.dWK.x)+'%',M.dWK.label)+
+    ro('TX '+P.dvar+' cumulative',f1(M.dCU.x)+'%','season avg')+
+    ro('Cond. reg R²',M.regTX?M.regTX.r2.toFixed(2):'—','n='+(M.regTX?M.regTX.n:0)+' yrs')+
+    ro('G/E vs 5-yr (US)',(M.geDef>0?'+':'')+f1(M.geDef)+' pts','yield input');
+  function ro(l,v,s){return '<div class="ro"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';}
+  document.getElementById('live-foot').textContent='conditions: NASS via cotton-crop-progress · drought: USDM via Cotton-Texas-Drought-analysis ('+M.dWK.date+')';
+
+  drawRail(M,P);
+  scenTable(M,P);
+  heatTable(M,P);
+  bsReadout(M,P);
+}
+
+function drawRail(M,P){
+  var est=[
+    {v:M.dWK.pt, lo:M.dWK.lo, hi:M.dWK.hi, c:'#7fa8cc', label:'Drought (current wk)'},
+    {v:M.dCU.pt, lo:M.dCU.lo, hi:M.dCU.hi, c:'#4a7aa8', label:'Drought (cumulative)'},
+    {v:M.condTX, lo:M.condTX-M.regTX.sigma, hi:M.condTX+M.regTX.sigma, c:'#1a5490', label:'Condition regression'},
+  ];
+  var min=0,max=0.85,Wd=1000,H=60+est.length*34+50;
+  function X(v){return 60+(v-min)/(max-min)*(Wd-120);}
+  var s='<svg viewBox="0 0 '+Wd+' '+H+'" style="width:100%;height:auto">';
+  // axis
+  var axY=H-30;
+  s+='<line x1="60" y1="'+axY+'" x2="'+(Wd-60)+'" y2="'+axY+'" stroke="#bbb" stroke-width="1"/>';
+  for(var t=0;t<=0.8;t+=0.1){
+    s+='<line x1="'+X(t)+'" y1="'+(axY-3)+'" x2="'+X(t)+'" y2="'+(axY+3)+'" stroke="#bbb"/>';
+    s+='<text x="'+X(t)+'" y="'+(axY+16)+'" font-size="10" fill="#888" text-anchor="middle">'+(t*100).toFixed(0)+'%</text>';
+  }
+  est.forEach(function(e,i){
+    var y=28+i*34;
+    s+='<line x1="'+X(Math.max(min,e.lo))+'" y1="'+y+'" x2="'+X(Math.min(max,e.hi))+'" y2="'+y+'" stroke="'+e.c+'" stroke-width="4" opacity="0.28" stroke-linecap="round"/>';
+    s+='<circle cx="'+X(e.v)+'" cy="'+y+'" r="6" fill="'+e.c+'"/>';
+    s+='<text x="62" y="'+(y-9)+'" font-size="10.5" fill="#555">'+e.label+' — <tspan font-weight="700">'+(e.v*100).toFixed(1)+'%</tspan></text>';
+    s+='<line x1="'+X(e.v)+'" y1="'+(y+6)+'" x2="'+X(e.v)+'" y2="'+axY+'" stroke="'+e.c+'" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>';
+  });
+  // blended diamond
+  var bx=X(M.blendTX);
+  s+='<path d="M '+bx+' '+(axY-14)+' l 9 -12 l -9 -12 l -9 12 z" transform="translate(0,0)" fill="#a06b00"/>';
+  s+='<path d="M '+(bx-9)+' '+(axY-26)+' L '+bx+' '+(axY-38)+' L '+(bx+9)+' '+(axY-26)+' L '+bx+' '+(axY-14)+' Z" fill="#a06b00"/>';
+  s+='<text x="'+bx+'" y="'+(axY-44)+'" font-size="11" font-weight="700" fill="#a06b00" text-anchor="middle">BLENDED '+(M.blendTX*100).toFixed(1)+'%</text>';
+  s+='</svg>';
+  document.getElementById('rail-tx').innerHTML=s;
+  document.getElementById('rail-note').innerHTML=
+    'Condition regression: TX abandonment = '+M.regTX.a.toFixed(3)+' '+(M.regTX.b<0?'−':'+')+' '+Math.abs(M.regTX.b).toFixed(4)+'×G/E(wk '+M.W+'), R²='+M.regTX.r2.toFixed(2)+', σ='+(M.regTX.sigma*100).toFixed(1)+' pts over '+M.regTX.n+' years. '
+    +(P.enso?'El Niño overlay applied: '+P.ensoAdj+' pts (rains rescue marginal acres; 2023 is the counter-analog — relief must arrive before establishment fails).':'El Niño overlay off.');
+}
+
+function scenTable(M,P){
+  var rows=[
+    ['USDA WASDE anchor', 1-((P.wasde*480/872-(P.planted-P.txPlanted)*(1-P.nonTX/100))/P.txPlanted), 872, null],
+    ['Bull supply — heat re-run', Math.min(0.85,M.blendTX+M.sigmaTX), M.yield-15, null],
+    ['MODEL MEDIAN', M.blendTX, M.yield, 'hl'],
+    ['Bear supply — El Niño rescue', Math.max(0.05,M.blendTX-M.sigmaTX), M.yield+12, null],
+  ];
+  var h='<tr><th>Scenario</th><th>TX ab</th><th>US ab</th><th>Harv (M ac)</th><th>Yield</th><th>Prod (M bal)</th><th>vs WASDE</th></tr>';
+  rows.forEach(function(r){
+    var txa=r[1],yld=r[2];
+    var harv=P.txPlanted*(1-txa)+(P.planted-P.txPlanted)*(1-P.nonTX/100);
+    var prod=(r[0]==='USDA WASDE anchor')?P.wasde:harv*yld/480;
+    if(r[0]==='USDA WASDE anchor'){harv=prod*480/yld;}
+    var usab=1-harv/P.planted, d=prod-P.wasde;
+    h+='<tr'+(r[3]?' class="hl"':'')+'><td>'+r[0]+'</td><td>'+(txa*100).toFixed(0)+'%</td><td>'+(usab*100).toFixed(1)+'%</td><td>'+harv.toFixed(2)+'</td><td>'+yld.toFixed(0)+'</td><td>'+prod.toFixed(2)+'</td><td class="'+(d<-0.05?'neg':d>0.05?'pos':'')+'">'+(d>0?'+':'')+d.toFixed(2)+'</td></tr>';
+  });
+  document.getElementById('scen-tbl').innerHTML=h;
+  document.getElementById('scen-note').textContent='Bull/bear rows shift TX abandonment by ±1σ of the blended estimate and yield by −15/+12 lbs. WASDE anchor row back-solves implied TX abandonment from the anchor production at 872 lbs.';
+}
+
+function heatTable(M,P){
+  var abs=[0.25,0.30,0.35,0.40,0.45,0.50],ylds=[830,845,860,875,890];
+  var h='<tr><th>TX ab \\ yield</th>';ylds.forEach(function(y){h+='<th>'+y+'</th>';});h+='</tr>';
+  abs.forEach(function(a){
+    h+='<tr><td>'+(a*100).toFixed(0)+'%</td>';
+    ylds.forEach(function(y){
+      var p=M.prodAt(a,y);
+      var near=Math.abs(a-M.blendTX)<0.026&&Math.abs(y-M.yield)<8;
+      var bg=p<12.5?'#fbe9e7':p>14?'#e8f5e9':'#fffde7';
+      h+='<td style="background:'+bg+(near?';outline:2px solid #a06b00;font-weight:700':'')+'">'+p.toFixed(2)+'</td>';
+    });
+    h+='</tr>';
+  });
+  document.getElementById('heat-tbl').innerHTML=h;
+}
+
+function bsReadout(M,P){
+  var stocks=4.1+(M.prod-P.wasde),su=stocks/13.9*100;
+  document.getElementById('bs-readout').innerHTML=
+    '<div class="ro"><div class="l">Ending stocks</div><div class="v">'+stocks.toFixed(1)+'M</div><div class="s">WASDE 4.1M</div></div>'+
+    '<div class="ro"><div class="l">Stocks / use</div><div class="v">'+su.toFixed(1)+'%</div><div class="s">WASDE 29.5%</div></div>'+
+    '<div class="ro"><div class="l">Bull-case stocks</div><div class="v">'+(4.1+(M.prodLo-P.wasde)).toFixed(1)+'M</div><div class="s">at range low</div></div>'+
+    '<div class="ro"><div class="l">Bear-case stocks</div><div class="v">'+(4.1+(M.prodHi-P.wasde)).toFixed(1)+'M</div><div class="s">at range high</div></div>';
+}
+
+// wire inputs
+['in-planted','in-txplanted','in-nontx','in-wasde','w-cond','w-wk','w-cu','in-dvar','in-enso','in-ensoadj','in-yield','in-yadj','in-ysel'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){
+    ['cond','wk','cu'].forEach(function(k){document.getElementById('wv-'+k).textContent=document.getElementById('w-'+k).value+'%';});
+    if(loaded.cond&&loaded.dr)run();
+  });
+});
+
+setStatus('loading data…');
+loadConditions();
+loadDrought();
+</script>
+</body>
+</html>
