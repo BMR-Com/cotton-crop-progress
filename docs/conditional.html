@@ -141,6 +141,9 @@ svg text{font-family:var(--mono)}
 <div class="section-title">Conditional scatters — vs US ending stocks (left) and world-ex-China S/U (right) · solid = expiry-weighted fit, dashed = equal-weight</div>
 <div class="scatgrid" id="grid-scat"></div>
 
+<div class="section-title">Implied vol scatters — per contract vs US S/U (left) and WxC S/U (right)</div>
+<div class="scatgrid" id="grid-iv"></div>
+
 <div class="section-title">Managed money scatters</div>
 <div class="scatgrid" id="grid-cot"></div>
 
@@ -350,30 +353,66 @@ function buildAll(){
     C.ocPct=function(v){return pctile(oc.filter(function(o){return o.d.getFullYear()>=2005;}).map(function(o){return o.ratio;}),v);};
   })();
 
-  // IV model — fit ONLY on the Dec1 HIST_CALL_IMP_VOL history in cotton_raw.csv:
-  //   IV = month-effect(Jun–Nov) + b / US-ending-stocks, observations winsorized at 50 vols.
-  //   Low ending stocks => high IV via the 1/stocks term. No HV / world / on-call inputs —
-  //   validated against the current market (~24% at base-case stocks).
+  // IV models — one per contract (Dec1/Mar1/May1/Jul1), fit on each contract's own
+  // HIST_CALL_IMP_VOL history over its traded life, winsorized at 50 vols:
+  //   IV = month-effect + a/US-S/U + b×on-call-ratio + c×|MM z|
+  // US S/U beats raw stocks on R² (0.38 vs 0.28 for Dec). The world-ex-China S/U term was
+  // tested and adds R² in-sample but with a WRONG-SIGNED coefficient (China-reserve artifact:
+  // 2010/11 printed extreme vol with high WxC S/U) — it fails validation vs the current
+  // market (~24%) so it is excluded from the IV models.
   (function(){
-    var months=[6,7,8,9,10,11],A=[],Y=[];
-    for(var y=2005;y<=2025;y++){
-      for(var m=6;m<=11;m++){
-        var s=C.usStk(y,m);if(s===null)continue;
-        var i=idxOn(new Date(y,m-1,11));
-        if(i===null||recs[i].iv===null)continue;
-        if((recs[i].d-new Date(y,m-1,11))/864e5>=8)continue;
-        A.push(months.map(function(m2){return m2===m?1:0;}).concat([1/Math.max(s,0.3)]));
-        Y.push(Math.min(recs[i].iv,50));
-      }
+    // rolling 3-yr MM z at any date (from COT rows, available ~2008+)
+    function mmzAt(t){
+      var idx=-1;
+      for(var i=0;i<COTrows.length;i++){if(new Date(COTrows[i].date)<=t)idx=i;else break;}
+      if(idx<60)return null;
+      var w=[],s=0;
+      for(i=Math.max(0,idx-155);i<=idx;i++){w.push(COTrows[i].mm);s+=COTrows[i].mm;}
+      var mu=s/w.length,v=0;
+      w.forEach(function(x){v+=(x-mu)*(x-mu);});
+      var sd=Math.sqrt(v/w.length);
+      return sd>0?(COTrows[idx].mm-mu)/sd:0;
     }
-    var coef=lstsqW(A,Y,null);
-    var ssr=0,sst=0,mu=Y.reduce(function(a,b){return a+b;},0)/Y.length;
-    for(var q=0;q<Y.length;q++){var pr=0;for(var j2=0;j2<coef.length;j2++)pr+=coef[j2]*A[q][j2];ssr+=(Y[q]-pr)*(Y[q]-pr);sst+=(Y[q]-mu)*(Y[q]-mu);}
-    C.ivModel={coef:coef,months:months,r2:1-ssr/sst,n:Y.length,sigma:Math.sqrt(ssr/(Y.length-coef.length))};
-    C.ivFV=function(m,usStocks){
-      var i=months.indexOf(m);if(i<0)return null;
-      return coef[i]+coef[months.length]/Math.max(usStocks,0.3);
-    };
+    function ocRatioAt(t){var last=null;for(var i=0;i<C.oc.length;i++){if(C.oc[i].d<=t)last=C.oc[i];else break;}return last?last.ratio:null;}
+    C.mmzAt=mmzAt;
+    var IVC=[
+      {id:'ivdec',nm:'Dec IV',col:'CTDEC1 Comdty HIST_CALL_IMP_VOL',life:[6,7,8,9,10,11]},
+      {id:'ivmar',nm:'Mar IV',col:'CTMAR1 Comdty HIST_CALL_IMP_VOL',life:[6,7,8,9,10,11,12,1,2]},
+      {id:'ivmay',nm:'May IV',col:'CTMAY1 Comdty HIST_CALL_IMP_VOL',life:[8,9,10,11,12,1,2,3,4]},
+      {id:'ivjul',nm:'Jul IV',col:'CTJUL1 Comdty HIST_CALL_IMP_VOL',life:[8,9,10,11,12,1,2,3,4,5,6]}
+    ];
+    C.IVC=IVC;
+    IVC.forEach(function(V){
+      var A=[],Y=[],pts=[];
+      for(var y=2005;y<=2026;y++){
+        V.life.forEach(function(m){
+          var cy=m>=6?y:y-1;
+          if(cy<2007||cy>2025)return;
+          var t=new Date(y,m-1,11),i=idxOn(t);
+          if(i===null||(recs[i].d-t)/864e5>=8)return;
+          var iv=num(recs[i].r[V.col]);if(iv===null)return;
+          var su=C.usSU(y,m);var wx=C.wxc(y,m);
+          if(su===null||!wx)return;
+          var ocr=ocRatioAt(recs[i].d),mz=mmzAt(recs[i].d);
+          if(ocr===null||mz===null)return;
+          A.push(V.life.map(function(m2){return m2===m?1:0;}).concat([1/Math.max(su,0.02),ocr,Math.abs(mz)]));
+          Y.push(Math.min(iv,50));
+          pts.push({usSU:su,wxc:wx.su,m:m,iv:Math.min(iv,50),yr:y,cy:cy});
+        });
+      }
+      var coef=lstsqW(A,Y,null);
+      var ssr=0,sst=0,mu=Y.reduce(function(a,b){return a+b;},0)/Y.length;
+      for(var q=0;q<Y.length;q++){var pr=0;for(var j2=0;j2<coef.length;j2++)pr+=coef[j2]*A[q][j2];ssr+=(Y[q]-pr)*(Y[q]-pr);sst+=(Y[q]-mu)*(Y[q]-mu);}
+      V.model={coef:coef,r2:1-ssr/sst,n:Y.length,sigma:Math.sqrt(ssr/(Y.length-coef.length))};
+      V.pts=pts;
+      V.fv=function(m,usSU,wxcSU,ocr,amz){
+        // wxcSU accepted for signature stability but NOT used: the in-sample world term is
+        // wrong-signed (China-reserve artifact) and fails validation vs the current market.
+        var i=V.life.indexOf(m);if(i<0)return null;
+        var nL=V.life.length;
+        return coef[i]+coef[nL]/Math.max(usSU,0.02)+coef[nL+1]*ocr+coef[nL+2]*amz;
+      };
+    });
   })();
 
   // COT
@@ -471,31 +510,38 @@ function run(){
     if(P.useWXC)v+=fit.coef[ml.length+1]*(1/Math.max(wxcSU,0.05));
     return v;
   }
-  var nowM=new Date().getMonth()+1;if(nowM<6)nowM=6;if(nowM>11)nowM=11;
+  var nowM=new Date().getMonth()+1;  // no clamp — front-month logic handles any date
+  var amzNow=C.mmzAt?Math.abs(C.mmzAt(new Date())||0):(C.cot?Math.abs(C.cot.mmZ):0);
   function scen(us,label){
     var wx=wxcOf(us);
     var mmc=mmContribution(us);
     var o={label:label,us:us,wxc:wx,mm:mmc};
     // price = Dec flat FV at current report month, + tilts, floored
-    var pxRaw=fvOf('decf',nowM,us,wx.su);
+    // front flat = first contract alive at the current report month (Dec→Mar→May→Jul)
+    var frontId=null,FRONT=['decf','marf','mayf','julf'];
+    for(var fi=0;fi<FRONT.length;fi++){if(C[FRONT[fi]].S.life.indexOf(nowM)>=0){frontId=FRONT[fi];break;}}
+    o.frontId=frontId;o.frontNm=frontId?C[frontId].S.nm.replace(' flat',''):'—';
+    var pxRaw=frontId?fvOf(frontId,nowM,us,wx.su):null;
     o.pxRaw=pxRaw;
-    o.px=Math.max(pxRaw+ocTilt+mmc.tilt,P.floor);
+    o.px=pxRaw!==null?Math.max(pxRaw+ocTilt+mmc.tilt,P.floor):null;
     // spreads with carry bound + Dec-Mar oncall front tilt is out of scope here (front/def split) — carry bound only
     o.sp={};
     ['decmar','marmay','mayjul','juldec'].forEach(function(id){
-      var m=C[id].S.life.indexOf(nowM)>=0?nowM:C[id].S.life[0];
-      var v=fvOf(id,m,us,wx.su);
-      var fc=-(P.stor+Math.max(o.px,P.floor)*P.rate/1200)*C[id].S.cm;
-      o.sp[id]={v:Math.max(v,fc),m:m,fc:fc};
+      if(C[id].S.life.indexOf(nowM)<0){o.sp[id]={v:null};return;}   // pair not alive this month
+      var v=fvOf(id,nowM,us,wx.su);
+      var fc=-(P.stor+Math.max(o.px||P.floor,P.floor)*P.rate/1200)*C[id].S.cm;
+      o.sp[id]={v:Math.max(v,fc),m:nowM,fc:fc};
     });
     o.flats={};
-    ['marf','mayf','julf'].forEach(function(id){
-      var m=C[id].S.life.indexOf(nowM)>=0?nowM:C[id].S.life[0];
-      o.flats[id]={v:Math.max(fvOf(id,m,us,wx.su)+ocTilt+mmc.tilt,P.floor),m:m};
+    ['decf','marf','mayf','julf'].forEach(function(id){
+      if(C[id].S.life.indexOf(nowM)<0){o.flats[id]={v:null};return;}
+      o.flats[id]={v:Math.max(fvOf(id,nowM,us,wx.su)+ocTilt+mmc.tilt,P.floor),m:nowM};
     });
-    // IV — stocks-driven model
-    o.iv=C.ivFV(nowM,us);
+    // IVs — one per contract alive at nowM
     o.usSU=us/C.usUse;
+    o.ivs={};
+    C.IVC.forEach(function(V){o.ivs[V.id]=V.fv(nowM,o.usSU,wx.su,ratio,amzNow);});
+    o.iv=o.ivs.ivdec!==null?o.ivs.ivdec:(o.ivs.ivmar!==null?o.ivs.ivmar:(o.ivs.ivmay!==null?o.ivs.ivmay:o.ivs.ivjul));
     return o;
   }
   var Sb=scen(P.usb,'BASE'),Sl=scen(P.usl,'BULL'),Sh=scen(P.ush,'BEAR');
@@ -503,27 +549,35 @@ function run(){
   // FV table
   var h='<tr><th>Series</th><th>Bear (US '+f1(P.ush)+'M)</th><th>Base (US '+f1(P.usb)+'M)</th><th>Bull (US '+f1(P.usl)+'M)</th></tr>';
   h+='<tr class="sub"><td>WxC S/U per scenario</td><td>'+f1(Sh.wxc.su*100)+'%</td><td>'+f1(Sb.wxc.su*100)+'%</td><td>'+f1(Sl.wxc.su*100)+'%</td></tr>';
-  h+='<tr class="hl"><td>Dec flat price (¢)</td><td>'+f1(Sh.px)+'</td><td>'+f1(Sb.px)+'</td><td>'+f1(Sl.px)+'</td></tr>';
-  [['marf','Mar flat'],['mayf','May flat'],['julf','Jul flat']].forEach(function(rw){
-    h+='<tr><td>'+rw[1]+' (¢)</td><td>'+f1(Sh.flats[rw[0]].v)+'</td><td>'+f1(Sb.flats[rw[0]].v)+'</td><td>'+f1(Sl.flats[rw[0]].v)+'</td></tr>';
+  h+='<tr class="hl"><td>'+Sb.frontNm+' flat — front (¢)</td><td>'+f1(Sh.px)+'</td><td>'+f1(Sb.px)+'</td><td>'+f1(Sl.px)+'</td></tr>';
+  var dash='<span style="color:#bbb">not alive</span>';
+  [['decf','Dec flat'],['marf','Mar flat'],['mayf','May flat'],['julf','Jul flat']].forEach(function(rw){
+    if(rw[0]===Sb.frontId)return; // already shown as front row
+    var alive=Sb.flats[rw[0]].v!==null;
+    h+='<tr><td>'+rw[1]+' (¢)</td>'+(alive?'<td>'+f1(Sh.flats[rw[0]].v)+'</td><td>'+f1(Sb.flats[rw[0]].v)+'</td><td>'+f1(Sl.flats[rw[0]].v)+'</td>':'<td colspan="3" style="text-align:center">'+dash+'</td>')+'</tr>';
   });
   [['decmar','Dec − Mar'],['marmay','Mar − May'],['mayjul','May − Jul'],['juldec','Jul − Dec']].forEach(function(rw){
-    h+='<tr><td>'+rw[1]+' (¢)</td><td>'+f2(Sh.sp[rw[0]].v)+'</td><td>'+f2(Sb.sp[rw[0]].v)+'</td><td>'+f2(Sl.sp[rw[0]].v)+'</td></tr>';
+    var alive=Sb.sp[rw[0]].v!==null;
+    h+='<tr><td>'+rw[1]+' (¢)</td>'+(alive?'<td>'+f2(Sh.sp[rw[0]].v)+'</td><td>'+f2(Sb.sp[rw[0]].v)+'</td><td>'+f2(Sl.sp[rw[0]].v)+'</td>':'<td colspan="3" style="text-align:center">'+dash+'</td>')+'</tr>';
   });
-  h+='<tr class="hl"><td>Dec26 IV (%)</td><td>'+f1(Sh.iv)+'</td><td>'+f1(Sb.iv)+'</td><td>'+f1(Sl.iv)+'</td></tr>';
+  C.IVC.forEach(function(V){
+    var alive=Sb.ivs[V.id]!==null;
+    var isFront=V.id==='iv'+Sb.frontId.replace('f','');
+    h+='<tr class="'+(alive&&isFront?'hl':'')+'"><td>'+V.nm+' (%)</td>'+(alive?'<td>'+f1(Sh.ivs[V.id])+'</td><td>'+f1(Sb.ivs[V.id])+'</td><td>'+f1(Sl.ivs[V.id])+'</td>':'<td colspan="3" style="text-align:center">'+dash+'</td>')+'</tr>';
+  });
   h+='<tr class="sub"><td>MM flow → tilt</td><td>'+sgn(Sh.mm.dMM,0)+'k → '+sgn(Sh.mm.tilt)+'¢</td><td>'+sgn(Sb.mm.dMM,0)+'k → '+sgn(Sb.mm.tilt)+'¢</td><td>'+sgn(Sl.mm.dMM,0)+'k → '+sgn(Sl.mm.tilt)+'¢</td></tr>';
   document.getElementById('fv-tbl').innerHTML=h;
   var fit=C['decf'][P.wgt?'fitW':'fitE'][P.useWXC?'t':'f'];
   document.getElementById('fv-note').innerHTML=
     'Conditional model: FV = month-effect + '+f1(fit.coef[fit.ml.length])+'/US-stocks'+(P.useWXC?' + '+f1(fit.coef[fit.ml.length+1])+'/WxC-S/U':'')+' (Dec flat, '+(P.wgt?'expiry-weighted':'equal-weight')+', R²='+f2(fit.r2)+'). '
     +(P.useWXC?'<b>Note the WxC coefficient sign:</b> conditional on US stocks, the in-sample world term is negative — a China-reserve-era artifact (2010/11 had record prices with high WxC S/U because China was hoarding) plus US-world collinearity. It acts as a correction term, not a standalone driver; at today’s tight WxC S/U ('+f1(C.wasdeWXC.su*100)+'%) it damps the FV slightly. Untick to run US-only. ':'')
-    +'Price rows include on-call tilt ('+sgn(ocTilt)+'¢ at ratio '+f2(ratio)+', '+ocPct+'th pctile) and MM flow tilt; all flats floored at OBBBA '+P.floor.toFixed(1)+'¢; spreads bounded at full carry. IV model: month-effect + '+f1(C.ivModel.coef[C.ivModel.months.length])+'/US-stocks, fit on '+C.ivModel.n+' Dec1 HIST_CALL_IMP_VOL release observations (winsorized at 50 vols; no realized-vol, world, or on-call inputs), R²='+f2(C.ivModel.r2)+', σ='+f1(C.ivModel.sigma)+' vols — low ending stocks map directly to high implied vol.';
+    +'Price rows include on-call tilt ('+sgn(ocTilt)+'¢ at ratio '+f2(ratio)+', '+ocPct+'th pctile) and MM flow tilt; all flats floored at OBBBA '+P.floor.toFixed(1)+'¢; spreads bounded at full carry. IV models: per-contract (Dec/Mar/May/Jul) on each contract\u2019s own HIST_CALL_IMP_VOL history — IV = month-effect + a/US-S/U + b\u00d7on-call ratio + c\u00d7|MM z| (winsorized at 50). Fit quality: '+C.IVC.map(function(V){return V.nm+' R\u00b2='+f2(V.model.r2)+' (n='+V.model.n+')';}).join(' \u00b7 ')+'. US S/U beats raw stocks as the driver (low S/U \u2192 high IV). World-ex-China S/U was tested per R\u00b2 but its coefficient is wrong-signed in-sample (China-reserve artifact) and fails validation against the current ~24% market, so it is excluded from IV.';
 
   // OBBBA range
   var lo=Math.min(Sh.px,Sb.px,Sl.px),hi=Math.max(Sh.px,Sb.px,Sl.px);
   var loRaw=Math.min(Sh.pxRaw,Sb.pxRaw,Sl.pxRaw);
   document.getElementById('range-out').innerHTML=
-    'Dec26 FV range (bear→bull): <b style="color:var(--gold)">'+f1(lo)+'¢ – '+f1(hi)+'¢</b><br>'
+    'Front-month ('+Sb.frontNm+') FV range (bear→bull): <b style="color:var(--gold)">'+f1(lo)+'¢ – '+f1(hi)+'¢</b><br>'
     +'<span style="font-size:12px;color:#666">pre-OBBBA model low was '+f1(loRaw+ocTilt+Math.min(Sh.mm.tilt,Sb.mm.tilt,Sl.mm.tilt))+'¢ — the '+P.floor.toFixed(1)+'¢ floor '+(loRaw+ocTilt<P.floor?'binds and truncates '+f1(P.floor-(loRaw+ocTilt))+'¢ off the bear tail':'does not bind at these scenarios')+'. Conditioning on current crop progress + drought narrows the range to '+f1(hi-lo)+'¢.</span>';
 
   // scenario grid: US stocks x WxC SU
@@ -552,7 +606,8 @@ function run(){
     var monthsAll=[6,7,8,9,10,11,12,1,2,3,4,5];
     var MN=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var colDefs=[['decf','Dec'],['marf','Mar'],['mayf','May'],['julf','Jul'],['decmar','D−M'],['marmay','M−M'],['mayjul','M−J'],['juldec','J−D']];
-    var g='<tr><th>Report month</th>';colDefs.forEach(function(cd){g+='<th>'+cd[1]+'</th>';});g+='<th>IV %</th></tr>';
+    var g='<tr><th>Report month</th>';colDefs.forEach(function(cd){g+='<th>'+cd[1]+'</th>';});
+    C.IVC.forEach(function(V){g+='<th>'+V.nm+'</th>';});g+='</tr>';
     monthsAll.forEach(function(m){
       g+='<tr'+(m===nowM?' class="hl"':'')+'><td>'+MN[m]+'</td>';
       colDefs.forEach(function(cd){
@@ -563,8 +618,11 @@ function run(){
         }
         g+='<td>'+(v===null?'<span style="color:#ccc">·</span>':(C[cd[0]].S.grp==='flat'?f1(v):f2(v)))+'</td>';
       });
-      var ivv=(m>=6&&m<=11)?C.ivFV(m,evus):null;
-      g+='<td>'+(ivv===null?'<span style="color:#ccc">·</span>':f1(ivv))+'</td></tr>';
+      C.IVC.forEach(function(V){
+        var ivv=V.fv(m,evus/C.usUse,evwxcSU,ratio,amzNow);
+        g+='<td>'+(ivv===null?'<span style="color:#ccc">\u00b7</span>':f1(ivv))+'</td>';
+      });
+      g+='</tr>';
     });
     document.getElementById('evo-tbl').innerHTML=g;
   })();
@@ -587,7 +645,7 @@ function run(){
   document.getElementById('verdict').innerHTML=
     '<b>Base case:</b> Dec26 FV '+f1(Sb.px)+'¢ (US '+f1(P.usb)+'M, WxC S/U '+f1(Sb.wxc.su*100)+'%), Dec−Mar '+f2(Sb.sp.decmar.v)+'¢, Jul−Dec '+f2(Sb.sp.juldec.v)+'¢, IV '+f1(Sb.iv)+'%. '
     +'<b>Range after OBBBA:</b> '+f1(lo)+'–'+f1(hi)+'¢ — the floor compresses the bear tail, so the distribution is right-skewed: '+f1(hi-Sb.px)+'¢ of bull room vs '+f1(Sb.px-lo)+'¢ of bear room. '
-    +'<b>Convexity lives in Jul−Dec</b> ('+f2(Sl.sp.juldec.v)+'¢ at bull stocks vs '+f2(Sh.sp.juldec.v)+'¢ at bear) and in vol ('+f1(Sl.iv)+'% bull vs '+f1(Sh.iv)+'% bear). '
+    +'<b>Convexity lives in Jul−Dec</b> ('+f2(Sl.sp.juldec.v)+'¢ at bull stocks vs '+f2(Sh.sp.juldec.v)+'¢ at bear) and in vol ('+Sb.frontNm+' IV '+f1(Sl.iv)+'% bull vs '+f1(Sh.iv)+'% bear). '
     +'MM positioning adds '+sgn(Sl.mm.tilt)+'¢ of flow kicker in the bull case — specs chase the stocks draw from a '+f1(mmNow)+'k start. On-call at the '+ocPct+'th percentile trims '+sgn(ocTilt)+'¢ throughout.';
 
   // scatters
@@ -595,6 +653,11 @@ function run(){
   SERIES.forEach(function(Sr){
     drawScat(C[Sr.id],'us','US ending stocks (M bales)',P,[P.ush,P.usb,P.usl],gs);
     drawScat(C[Sr.id],'wxc','World-ex-China S/U',P,[Sh.wxc.su,Sb.wxc.su,Sl.wxc.su],gs);
+  });
+  var gi=document.getElementById('grid-iv');gi.innerHTML='';
+  C.IVC.forEach(function(V){
+    drawIVScat(V,'usSU','US stocks-to-use',[Sh.usSU,Sb.usSU,Sl.usSU],gi);
+    drawIVScat(V,'wxc','World-ex-China S/U',[Sh.wxc.su,Sb.wxc.su,Sl.wxc.su],gi);
   });
   var gc=document.getElementById('grid-cot');gc.innerHTML='';
   if(C.cot){drawMMLevel(C,gc);drawMMFlow(C,gc);}
@@ -648,6 +711,45 @@ function drawScat(o,xKey,xLabel,P,marks,parent){
   var card=document.createElement('div');card.className='scat';
   card.innerHTML='<div class="hd"><span class="nm">'+S.nm+' vs '+(xKey==='us'?'US stocks':'WxC S/U')+'</span>'
     +'<span class="fvs">R²(uni): eq '+f2(uniE?uniE.r2:null)+' · point size = expiry weight</span></div>'+s;
+  parent.appendChild(card);
+}
+function drawIVScat(V,xKey,xLabel,marks,parent){
+  var pts=V.pts;
+  var getX=function(p){return xKey==='usSU'?p.usSU:p.wxc;};
+  var xs=pts.map(getX),ys=pts.map(function(p){return p.iv;});
+  var xmin=Math.min.apply(null,xs)*0.92,xmax=Math.max.apply(null,xs)*1.06;
+  var ymin=Math.min.apply(null,ys)-2,ymax=Math.max.apply(null,ys)+2;
+  var W=520,H=260,L=46,R=12,T=12,B=34;
+  function X(v){return L+(v-xmin)/(xmax-xmin)*(W-L-R);}
+  function Y(v){return T+(ymax-v)/(ymax-ymin)*(H-T-B);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto">';
+  for(var g=Math.ceil(ymin/5)*5;g<=ymax;g+=5){
+    s+='<line x1="'+L+'" y1="'+Y(g)+'" x2="'+(W-R)+'" y2="'+Y(g)+'" stroke="#eee"/>';
+    s+='<text x="'+(L-5)+'" y="'+(Y(g)+3)+'" font-size="8.5" fill="#999" text-anchor="end">'+g+'%</text>';
+  }
+  s+='<text x="'+(W/2)+'" y="'+(H-3)+'" font-size="8.5" fill="#777" text-anchor="middle">'+xLabel+'</text>';
+  // univariate 1/x fit for display
+  var fit=ols(xs.map(function(x){return 1/Math.max(x,0.02);}),ys);
+  var p='';
+  for(var i=0;i<=50;i++){
+    var xv=xmin+(xmax-xmin)*i/50,yv=fit.a+fit.b/Math.max(xv,0.02);
+    p+=(i===0?'M':'L')+X(xv).toFixed(1)+' '+Math.max(T,Math.min(H-B,Y(yv))).toFixed(1)+' ';
+  }
+  s+='<path d="'+p+'" fill="none" stroke="#1a5490" stroke-width="2" opacity="0.85"/>';
+  pts.forEach(function(pt){
+    var recent=pt.cy>=2023;
+    s+='<circle cx="'+X(getX(pt))+'" cy="'+Y(pt.iv)+'" r="2.6" fill="'+(recent?'#1a5490':'#9aa7b5')+'" opacity="'+(recent?0.85:0.4)+'"><title>'+pt.cy+'/'+String(pt.cy+1).slice(2)+' \u00b7 '+pt.yr+'-'+String(pt.m).padStart(2,'0')+' \u00b7 '+pt.iv.toFixed(1)+'%</title></circle>';
+  });
+  var mc=['#1e7b34','#a06b00','#b02a37'],ml=['BEAR','BASE','BULL'];
+  marks.forEach(function(mk,i){
+    if(mk<xmin||mk>xmax)return;
+    s+='<line x1="'+X(mk)+'" y1="'+T+'" x2="'+X(mk)+'" y2="'+(H-B)+'" stroke="'+mc[i]+'" stroke-width="1.1" stroke-dasharray="4 3" opacity="0.8"/>';
+    s+='<text x="'+X(mk)+'" y="'+(T+8)+'" font-size="8" fill="'+mc[i]+'" text-anchor="middle" font-weight="700">'+ml[i]+'</text>';
+  });
+  s+='</svg>';
+  var card=document.createElement('div');card.className='scat';
+  card.innerHTML='<div class="hd"><span class="nm">'+V.nm+' vs '+(xKey==='usSU'?'US S/U':'WxC S/U')+'</span>'
+    +'<span class="fvs">multivar R\u00b2='+(V.model?V.model.r2.toFixed(2):'\u2014')+' \u00b7 uni(1/x) R\u00b2='+fit.r2.toFixed(2)+' \u00b7 n='+pts.length+'</span></div>'+s;
   parent.appendChild(card);
 }
 function drawMMLevel(C,parent){
