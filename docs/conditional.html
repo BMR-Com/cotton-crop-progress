@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotton Conditional FV Terminal — US × World-ex-China Models</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16324f; --blue:#1a5490; --bg:#f4f3ee; --card:#fff;
+  --red:#b02a37; --green:#1e7b34; --gold:#a06b00; --line:#dcd9d0;
+  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);padding:18px;font-size:13px}
+.wrap{max-width:1280px;margin:0 auto}
+header{border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px}
+header h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
+header h1 span{color:var(--blue)}
+.status{font-family:var(--mono);font-size:11px;color:#666}
+.status .ok{color:var(--green)}.status .err{color:var(--red)}.status .warn{color:var(--gold)}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:16px}
+.card h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--blue);margin-bottom:10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+label{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin:5px 0;gap:8px}
+input[type=number]{width:72px;font-family:var(--mono);font-size:12px;padding:3px 6px;border:1px solid var(--line);border-radius:4px;text-align:right;background:#fcfcfa}
+.hint{font-size:10px;color:#888;line-height:1.45;margin-top:5px}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+th{background:var(--ink);color:#fff;padding:6px 8px;text-align:right;font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+th:first-child,td:first-child{text-align:left}
+td{padding:5px 8px;text-align:right;border-bottom:1px solid #eee}
+tr.hl td{background:#fdf6e3;font-weight:700}
+tr.sub td{color:#777;font-size:10.5px}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.note{font-size:11px;color:#666;line-height:1.6;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.foot{font-size:10px;color:#999;margin-top:8px;font-family:var(--mono)}
+.verdict{border-left:4px solid var(--gold);background:#fffdf5;padding:10px 14px;border-radius:0 6px 6px 0;font-size:12.5px;line-height:1.7;margin-top:12px}
+.section-title{font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 10px;padding-bottom:4px;border-bottom:2px solid var(--blue)}
+.scatgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px}
+.scat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:11px 13px}
+.scat .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;flex-wrap:wrap;gap:4px}
+.scat .hd .nm{font-weight:700;font-size:12.5px}
+.scat .hd .fvs{font-family:var(--mono);font-size:10px;color:#555}
+svg text{font-family:var(--mono)}
+.heat td{padding:4px 6px;font-size:11px}
+@media print{body{background:#fff;padding:0}.card,.scat{break-inside:avoid;border:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>COTTON <span>CONDITIONAL FV TERMINAL</span> — 2026/27</h1>
+    <div style="font-size:11px;color:#777;margin-top:2px">Fair values only — price · spreads · implied vol, conditioned on US ending stocks × world-ex-China S/U, expiry-weighted fits, on-call &amp; managed-money overlays</div>
+  </div>
+  <div class="status" id="status">initializing…</div>
+</header>
+
+<div class="grid">
+<div><!-- LEFT -->
+  <div class="card">
+    <h3>Scenario stocks — from crop model</h3>
+    <label>US stocks — base (M bal) <input type="number" id="in-usb" value="3.90" step="0.05"></label>
+    <label>US stocks — bull <input type="number" id="in-usl" value="2.70" step="0.05"></label>
+    <label>US stocks — bear <input type="number" id="in-ush" value="5.00" step="0.05"></label>
+    <label>World pass-through <input type="number" id="in-wpass" value="1.0" step="0.1"></label>
+    <div class="hint">Base = crop-model median from current crop progress + drought; bull/bear = its range. World-ex-China stocks per scenario = latest release WxC stocks + pass-through × (US scenario − current WASDE US stocks).</div>
+  </div>
+  <div class="card">
+    <h3>Model settings</h3>
+    <label style="justify-content:flex-start;gap:8px"><input type="checkbox" id="in-wgt" checked> Expiry-weighted fits</label>
+    <label style="justify-content:flex-start;gap:8px"><input type="checkbox" id="in-useWXC" checked> Include world-ex-China term</label>
+    <div class="hint">Weights ramp 0.2→1.0 over each contract's life, ×0.8 in the final month (delivery noise). Untick WxC to fall back to US-only conditioning.</div>
+  </div>
+  <div class="card">
+    <h3>OBBBA floor</h3>
+    <label>Loan rate (¢) <input type="number" id="in-loan" value="55" step="0.5"></label>
+    <label>Futures−AWP wedge <input type="number" id="in-wedge" value="11" step="0.5"></label>
+    <label>3-lowest-quote effect <input type="number" id="in-q3" value="1.5" step="0.25"></label>
+    <label>30-day lookback <input type="number" id="in-lb" value="1.0" step="0.25"></label>
+    <label>Storage ¢/lb/mo <input type="number" id="in-stor" value="0.60" step="0.05"></label>
+    <label>Funding %/yr <input type="number" id="in-rate" value="5.5" step="0.25"></label>
+    <div class="hint">Floor: <b id="floor-out" style="font-family:var(--mono)">—</b>. Flat FVs truncated at floor; spread FVs bounded at full carry.</div>
+  </div>
+  <div class="card">
+    <h3>Flow overlays</h3>
+    <label style="justify-content:flex-start;gap:8px"><input type="checkbox" id="in-useOC" checked> On-call fixations</label>
+    <label>&nbsp;↳ ratio override <input type="number" id="in-ocr" value="" step="0.05" placeholder="auto"></label>
+    <label style="justify-content:flex-start;gap:8px;margin-top:6px"><input type="checkbox" id="in-useMM" checked> Managed money</label>
+    <label>&nbsp;↳ MM net override (k) <input type="number" id="in-mm" value="" step="1" placeholder="auto"></label>
+    <div class="hint">Sign: crop on-call sales &gt; purchases = bullish. MM contribution per scenario = crop-yr flow model (ΔMM from Δstocks &amp; starting MM) × flow beta.</div>
+  </div>
+  <div class="card">
+    <h3>Evolution table inputs</h3>
+    <label>US stocks (M bal) <input type="number" id="in-evus" value="3.90" step="0.05"></label>
+    <label>WxC stocks (M bal) <input type="number" id="in-evwxc" value="" step="0.5" placeholder="auto"></label>
+    <div class="hint">Drives the marketing-year evolution table below. WxC blank = pass-through from US input.</div>
+  </div>
+</div>
+
+<div><!-- MAIN -->
+  <div class="card">
+    <h3>Fair values — base / bull / bear (no market comparison)</h3>
+    <div style="overflow-x:auto"><table id="fv-tbl"></table></div>
+    <div class="note" id="fv-note"></div>
+  </div>
+
+  <div class="card">
+    <h3>Price FV range after OBBBA</h3>
+    <div id="range-out" style="font-family:var(--mono);font-size:15px;line-height:1.9"></div>
+  </div>
+
+  <div class="card">
+    <h3>Scenario grid — Dec flat FV: US stocks × WxC S/U</h3>
+    <div style="overflow-x:auto"><table class="heat" id="grid-tbl"></table></div>
+    <div class="note">Includes OBBBA floor and current on-call / MM overlays. Gold outline = base case.</div>
+  </div>
+
+  <div class="card">
+    <h3>Marketing-year evolution — FV by report month</h3>
+    <div style="overflow-x:auto"><table id="evo-tbl"></table></div>
+    <div class="note">Month fixed-effects from the conditional model at the stocks you set in the left panel — how each FV migrates through the crop year at constant fundamentals. Change US/WxC stocks to see the paths shift.</div>
+  </div>
+
+  <div class="card">
+    <h3>Managed money — scenario flow model</h3>
+    <div style="overflow-x:auto"><table id="mm-tbl"></table></div>
+    <div class="note" id="mm-note"></div>
+  </div>
+
+  <div class="card">
+    <h3>Verdict</h3>
+    <div class="verdict" id="verdict"></div>
+  </div>
+</div>
+</div>
+
+<div class="section-title">Conditional scatters — vs US ending stocks (left) and world-ex-China S/U (right) · solid = expiry-weighted fit, dashed = equal-weight</div>
+<div class="scatgrid" id="grid-scat"></div>
+
+<div class="section-title">Managed money scatters</div>
+<div class="scatgrid" id="grid-cot"></div>
+
+<div class="foot" style="margin-top:12px">Sources: BMR-Com cotton-price · wasde-analytics · cotton-on-call · cftc-cot-full (bcom_cot_master.csv). Fits on load. Note: bcom_cot_master.csv is ~64MB — consider committing a cotton-only extract for faster loads. Research tool, not trading advice.</div>
+</div>
+<script>
+// ═══════════ CONFIG ═══════════
+var PRICE_URL='https://raw.githubusercontent.com/BMR-Com/cotton-price/main/data/cotton_raw.csv';
+var WASDE_URL='https://raw.githubusercontent.com/BMR-Com/wasde-analytics/main/data/Cotton.json';
+var OC_URL='https://raw.githubusercontent.com/BMR-Com/cotton-on-call/main/data/cotton_oncall.csv';
+var COT_URL='https://raw.githubusercontent.com/BMR-Com/cftc-cot-full/main/data/bcom_cot_master.csv';
+var CUR_Y=2026;
+// life = chronological report months over the contract's traded life (for month FE + expiry weights)
+var SERIES=[
+ {id:'decf',nm:'Dec flat',a:'CTDEC1',b:null,life:[6,7,8,9,10,11],grp:'flat'},
+ {id:'marf',nm:'Mar flat',a:'CTMAR1',b:null,life:[6,7,8,9,10,11,12,1,2],grp:'flat'},
+ {id:'mayf',nm:'May flat',a:'CTMAY1',b:null,life:[8,9,10,11,12,1,2,3,4],grp:'flat'},
+ {id:'julf',nm:'Jul flat',a:'CTJUL1',b:null,life:[8,9,10,11,12,1,2,3,4,5,6],grp:'flat'},
+ {id:'decmar',nm:'Dec − Mar',a:'CTDEC1',b:'CTMAR1',life:[6,7,8,9,10,11],grp:'sprd',cm:3},
+ {id:'marmay',nm:'Mar − May',a:'CTMAR1',b:'CTMAY1',life:[6,7,8,9,10,11,12,1,2],grp:'sprd',cm:2},
+ {id:'mayjul',nm:'May − Jul',a:'CTMAY1',b:'CTJUL1',life:[8,9,10,11,12,1,2,3,4],grp:'sprd',cm:2},
+ {id:'juldec',nm:'Jul − Dec',a:'CTJUL1',b:'CTDEC2',life:[8,9,10,11,1,2,3,4,5,6],altFrom:1,altB:'CTDEC1',grp:'sprd',cm:5}
+];
+
+// ═══════════ LOAD ═══════════
+var WJ=null,PXrows=null,OCrows=null,COTrows=[],loaded={w:false,p:false,o:false,c:false},CACHE=null;
+function setStatus(h){document.getElementById('status').innerHTML=h;}
+function maybeRun(){
+  setStatus('px <span class="'+(loaded.p?'ok">✓':'">…')+'</span> wasde <span class="'+(loaded.w?'ok">✓':'">…')+'</span> on-call <span class="'+(loaded.o?'ok">✓':'">…')+'</span> cot <span class="'+(loaded.c?'ok">✓':'">…')+'</span>');
+  if(loaded.w&&loaded.p&&loaded.o&&loaded.c)run();
+}
+fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;maybeRun();}).catch(function(){setStatus('<span class="err">wasde failed</span>');});
+Papa.parse(PRICE_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){PXrows=res.data;loaded.p=true;maybeRun();}});
+Papa.parse(OC_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){OCrows=res.data;loaded.o=true;maybeRun();}});
+Papa.parse(COT_URL,{download:true,header:true,skipEmptyLines:true,
+  chunk:function(res){res.data.forEach(function(r){
+    if(r.commodity==='Cotton'&&r.crop_type==='all')COTrows.push({date:r.date,mm:parseFloat(r.managed_money_net),pm:parseFloat(r.prod_merc_net),oi:parseFloat(r.open_interest)});
+  });},
+  complete:function(){loaded.c=true;maybeRun();},
+  error:function(){loaded.c=true;maybeRun();}});
+
+// ═══════════ HELPERS ═══════════
+function parseD(s){var p=s.split('/');return new Date(2000+(+p[2])%100,+p[0]-1,+p[1]);}
+function num(x){var v=parseFloat(x);return isNaN(v)?null:v;}
+function f1(x){return x===null||x===undefined||isNaN(x)?'—':x.toFixed(1);}
+function f2(x){return x===null||x===undefined||isNaN(x)?'—':x.toFixed(2);}
+function sgn(x,d){if(x===null||isNaN(x))return '—';return (x>0?'+':'')+x.toFixed(d===undefined?1:d);}
+function pctile(arr,v){var s=arr.slice().sort(function(a,b){return a-b;}),c=0;for(var i=0;i<s.length;i++)if(s[i]<v)c++;return Math.round(100*c/s.length);}
+function ols(X,Y){
+  var n=X.length,sx=0,sy=0,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sx+=X[i];sy+=Y[i];sxy+=X[i]*Y[i];sxx+=X[i]*X[i];}
+  var b=(n*sxy-sx*sy)/(n*sxx-sx*sx),a=(sy-b*sx)/n,ssr=0,sst=0,my=sy/n;
+  for(i=0;i<n;i++){var p=a+b*X[i];ssr+=(Y[i]-p)*(Y[i]-p);sst+=(Y[i]-my)*(Y[i]-my);}
+  return {a:a,b:b,r2:1-ssr/sst,sigma:Math.sqrt(ssr/Math.max(n-2,1)),n:n};
+}
+function lstsqW(A,Y,W){ // weighted least squares via normal equations, general k
+  var k=A[0].length,n=Y.length,M=[],v=[];
+  for(var r=0;r<k;r++){M.push(new Array(k).fill(0));v.push(0);}
+  for(var i=0;i<n;i++){var w=W?W[i]:1;
+    for(r=0;r<k;r++){v[r]+=w*A[i][r]*Y[i];for(var c=0;c<k;c++)M[r][c]+=w*A[i][r]*A[i][c];}}
+  for(var col=0;col<k;col++){
+    var piv=col;for(r=col+1;r<k;r++)if(Math.abs(M[r][col])>Math.abs(M[piv][col]))piv=r;
+    var t=M[col];M[col]=M[piv];M[piv]=t;var tv=v[col];v[col]=v[piv];v[piv]=tv;
+    if(Math.abs(M[col][col])<1e-10)return null;
+    for(r=0;r<k;r++){if(r===col)continue;var f=M[r][col]/M[col][col];for(c=col;c<k;c++)M[r][c]-=f*M[col][c];v[r]-=f*v[col];}
+  }
+  var coef=[];for(r=0;r<k;r++)coef.push(v[r]/M[r][r]);
+  return coef;
+}
+
+// ═══════════ BUILD ═══════════
+function buildAll(){
+  var C={};
+  var recs=[];
+  PXrows.forEach(function(r){if(!r['Dates'])return;recs.push({d:parseD(r['Dates']),r:r,px:num(r['CTDEC1 Comdty PX_LAST']),iv:num(r['CTDEC1 Comdty HIST_CALL_IMP_VOL'])});});
+  recs.sort(function(a,b){return a.d-b.d;});
+  C.recs=recs;C.last=recs[recs.length-1];
+  function idxOn(t){for(var i=0;i<recs.length;i++)if(recs[i].d>=t)return i;return null;}
+  function rowOn(y,m){var i=idxOn(new Date(y,m-1,11));return (i!==null&&(recs[i].d-new Date(y,m-1,11))/864e5<8)?recs[i].r:null;}
+  function hv20(i){
+    var rets=[];
+    for(var j=Math.max(1,i-20);j<=i;j++){if(recs[j].px&&recs[j-1].px)rets.push(Math.log(recs[j].px/recs[j-1].px));}
+    if(rets.length<10)return null;
+    var m=rets.reduce(function(a,b){return a+b;},0)/rets.length,s2=0;
+    rets.forEach(function(x){s2+=(x-m)*(x-m);});
+    return Math.sqrt(s2/(rets.length-1)*252)*100;
+  }
+  C.hvNow=hv20(recs.length-1);
+  var hvByM={};
+  for(var i2=25;i2<recs.length;i2+=5){var h=hv20(i2);if(h===null)continue;var mn=recs[i2].d.getMonth()+1;(hvByM[mn]=hvByM[mn]||[]).push(h);}
+  C.hvMed=function(m){var a=hvByM[m];if(!a)return C.hvNow;a=a.slice().sort(function(x,y){return x-y;});return a[Math.floor(a.length/2)];};
+
+  // per-release WASDE
+  function rel(region,attr,my,fy,fm){
+    var k=region+'||'+attr+'||'+my;if(!WJ.data[k])return null;
+    var rl=WJ.data[k];for(var i=0;i<rl.length;i++)if(rl[i].forecastYear===fy&&rl[i].forecastMonth===fm)return rl[i].value;
+    return null;
+  }
+  function myOf(fy,fm){var cy=fm>=6?fy:fy-1;return cy+'/'+String(cy+1).slice(2);}
+  C.usStk=function(fy,fm){return rel('United States','Ending Stocks',myOf(fy,fm),fy,fm);};
+  C.usSU=function(fy,fm){
+    var my=myOf(fy,fm);
+    var s=rel('United States','Ending Stocks',my,fy,fm),d2=rel('United States','Domestic Use',my,fy,fm);
+    var e=rel('United States','Exports',my,fy,fm)||rel('United States','Exports, Total',my,fy,fm);
+    return (s===null||d2===null||e===null)?null:s/(d2+e);
+  };
+  C.wxc=function(fy,fm){
+    var my=myOf(fy,fm);
+    var ws=rel('World','Ending Stocks',my,fy,fm),wu=rel('World','Total Use',my,fy,fm)||rel('World','Use, Total',my,fy,fm);
+    var cs=rel('China','Ending Stocks',my,fy,fm),cu=rel('China','Domestic Use',my,fy,fm)||rel('China','Total Use',my,fy,fm);
+    if(ws===null||wu===null||cs===null||cu===null)return null;
+    return {stk:ws-cs,use:wu-cu,su:(ws-cs)/(wu-cu)};
+  };
+  // current anchors (latest release found for CUR_Y)
+  var curFM=null;
+  for(var mm2=12;mm2>=1;mm2--){if(C.usStk(CUR_Y,mm2)!==null){curFM=mm2;break;}}
+  C.curFM=curFM;
+  C.wasdeUS=C.usStk(CUR_Y,curFM);
+  C.wasdeWXC=C.wxc(CUR_Y,curFM);
+  C.wasdeUSSU=C.usSU(CUR_Y,curFM);
+  var lastUse=C.wasdeUS/(C.wasdeUSSU||0.295);
+  C.usUse=lastUse;
+
+  // series datasets + conditional fits
+  SERIES.forEach(function(S){
+    var pts=[];
+    for(var y=2008;y<=2026;y++){
+      S.life.forEach(function(m){
+        var cy=m>=6?y:y-1;
+        if(cy<2008||cy>2025)return;
+        var s=C.usStk(y,m);if(s===null)return;
+        var wx=C.wxc(y,m);if(!wx)return;
+        var r=rowOn(y,m);if(!r)return;
+        var bId=(S.altFrom!==undefined&&m>=S.altFrom&&m<=6)?S.altB:S.b;
+        var va=num(r[S.a+' Comdty PX_LAST']);if(va===null)return;
+        var yv;
+        if(bId){var vb=num(r[bId+' Comdty PX_LAST']);if(vb===null)return;yv=va-vb;}
+        else yv=va;
+        pts.push({us:s,wxc:wx.su,m:m,y:yv,yr:y,cy:cy});
+      });
+    }
+    S.weight=function(m){
+      var i=S.life.indexOf(m);if(i<0)return 1;
+      var n=S.life.length;
+      var w=0.2+0.8*(i/Math.max(n-1,1));
+      if(i===n-1)w*=0.8;
+      return w;
+    };
+    function fitCond(useWgt,useWXC){
+      var ml=S.life.slice();
+      var A=[],Y=[],W=[];
+      pts.forEach(function(p){
+        var row=ml.map(function(m2){return m2===p.m?1:0;});
+        row.push(1/Math.max(p.us,0.3));
+        if(useWXC)row.push(1/Math.max(p.wxc,0.05));
+        A.push(row);Y.push(p.y);W.push(useWgt?S.weight(p.m):1);
+      });
+      var coef=lstsqW(A,Y,W);if(!coef)return null;
+      var ssr=0,swt=0,mu=0;
+      for(var i=0;i<Y.length;i++){mu+=W[i]*Y[i];swt+=W[i];}mu/=swt;
+      var sst=0;
+      for(i=0;i<Y.length;i++){
+        var pr=0;for(var j=0;j<coef.length;j++)pr+=coef[j]*A[i][j];
+        ssr+=W[i]*(Y[i]-pr)*(Y[i]-pr);sst+=W[i]*(Y[i]-mu)*(Y[i]-mu);
+      }
+      return {ml:ml,coef:coef,useWXC:useWXC,r2:1-ssr/sst,sigma:Math.sqrt(ssr/(swt-coef.length))};
+    }
+    C[S.id]={S:S,pts:pts,
+      fitW:{t:fitCond(true,true),f:fitCond(true,false)},
+      fitE:{t:fitCond(false,true),f:fitCond(false,false)},
+      // univariate display fits per axis
+      uniUS_E:ols(pts.map(function(p){return 1/Math.max(p.us,0.3);}),pts.map(function(p){return p.y;})),
+      uniWX_E:ols(pts.map(function(p){return 1/Math.max(p.wxc,0.05);}),pts.map(function(p){return p.y;}))
+    };
+    // weighted univariate (for scatter lines)
+    (function(){
+      function wols(getX){
+        var A=[],Y=[],W=[];
+        pts.forEach(function(p){A.push([1,getX(p)]);Y.push(p.y);W.push(S.weight(p.m));});
+        var c=lstsqW(A,Y,W);return c?{a:c[0],b:c[1]}:null;
+      }
+      C[S.id].uniUS_W=wols(function(p){return 1/Math.max(p.us,0.3);});
+      C[S.id].uniWX_W=wols(function(p){return 1/Math.max(p.wxc,0.05);});
+    })();
+  });
+
+  // on-call (current crop 'old')
+  (function(){
+    var byDate={};
+    OCrows.forEach(function(r){
+      var dt=r['Report Date'];if(!dt)return;
+      var s=num(r['Unfixed Call Sales']),pu=num(r['Unfixed Call Purchases']);
+      if(s===null||pu===null)return;
+      var o=byDate[dt]=byDate[dt]||{s:0,p:0,rows:0};
+      if(r['Old/New']!=='old')return;
+      if(s===0&&pu===0)return;
+      o.s+=s;o.p+=pu;o.rows++;
+    });
+    var oc=[];
+    Object.keys(byDate).forEach(function(dt){
+      var o=byDate[dt];if(o.s===0&&o.p===0)return;
+      var p=dt.split('/');
+      oc.push({d:new Date(+p[2],+p[0]-1,+p[1]),ratio:o.s/Math.max(o.p,1),s:o.s,p:o.p});
+    });
+    oc.sort(function(a,b){return a.d-b.d;});
+    C.oc=oc;C.ocLast=oc[oc.length-1];
+    C.ocPct=function(v){return pctile(oc.filter(function(o){return o.d.getFullYear()>=2005;}).map(function(o){return o.ratio;}),v);};
+  })();
+
+  // IV model — fit ONLY on the Dec1 HIST_CALL_IMP_VOL history in cotton_raw.csv:
+  //   IV = month-effect(Jun–Nov) + b / US-ending-stocks, observations winsorized at 50 vols.
+  //   Low ending stocks => high IV via the 1/stocks term. No HV / world / on-call inputs —
+  //   validated against the current market (~24% at base-case stocks).
+  (function(){
+    var months=[6,7,8,9,10,11],A=[],Y=[];
+    for(var y=2005;y<=2025;y++){
+      for(var m=6;m<=11;m++){
+        var s=C.usStk(y,m);if(s===null)continue;
+        var i=idxOn(new Date(y,m-1,11));
+        if(i===null||recs[i].iv===null)continue;
+        if((recs[i].d-new Date(y,m-1,11))/864e5>=8)continue;
+        A.push(months.map(function(m2){return m2===m?1:0;}).concat([1/Math.max(s,0.3)]));
+        Y.push(Math.min(recs[i].iv,50));
+      }
+    }
+    var coef=lstsqW(A,Y,null);
+    var ssr=0,sst=0,mu=Y.reduce(function(a,b){return a+b;},0)/Y.length;
+    for(var q=0;q<Y.length;q++){var pr=0;for(var j2=0;j2<coef.length;j2++)pr+=coef[j2]*A[q][j2];ssr+=(Y[q]-pr)*(Y[q]-pr);sst+=(Y[q]-mu)*(Y[q]-mu);}
+    C.ivModel={coef:coef,months:months,r2:1-ssr/sst,n:Y.length,sigma:Math.sqrt(ssr/(Y.length-coef.length))};
+    C.ivFV=function(m,usStocks){
+      var i=months.indexOf(m);if(i<0)return null;
+      return coef[i]+coef[months.length]/Math.max(usStocks,0.3);
+    };
+  })();
+
+  // COT
+  (function(){
+    if(!COTrows.length){C.cot=null;return;}
+    COTrows.sort(function(a,b){return a.date<b.date?-1:1;});
+    var lastC=COTrows[COTrows.length-1];
+    var mmArr=COTrows.map(function(r){return r.mm;});
+    var w=mmArr.slice(-156),mu=w.reduce(function(a,b){return a+b;},0)/w.length;
+    var sd=Math.sqrt(w.reduce(function(a,b){return a+(b-mu)*(b-mu);},0)/w.length);
+    function mmNear(y,m){
+      var t=new Date(y,m-1,11),best=null,bd=1e9;
+      COTrows.forEach(function(r){
+        var d2=new Date(r.date),dd=Math.abs(d2-t)/864e5;
+        if(dd<=6&&dd<bd){bd=dd;best=r;}
+      });
+      return best?best.mm:null;
+    }
+    // crop-yr flow: dMM = a + b*dStocks + c*MM0
+    var A=[],Y=[],pts=[];
+    for(var y=2008;y<2026;y++){
+      var s0=C.usStk(y,6),s1=C.usStk(y,11),m0=mmNear(y,6),m1=mmNear(y,11);
+      if(s0===null||s1===null||m0===null||m1===null)continue;
+      A.push([1,s1-s0,m0/1000]);Y.push((m1-m0)/1000);
+      pts.push({dS:s1-s0,dMM:(m1-m0)/1000,mm0:m0/1000,yr:y});
+    }
+    var coef=lstsqW(A,Y,null);
+    var ssr=0,sst=0,mu2=Y.reduce(function(a,b){return a+b;},0)/Y.length;
+    for(var q=0;q<Y.length;q++){var pr=coef[0]+coef[1]*A[q][1]+coef[2]*A[q][2];ssr+=(Y[q]-pr)*(Y[q]-pr);sst+=(Y[q]-mu2)*(Y[q]-mu2);}
+    // MM level vs Dec price scatter (weekly)
+    var XY=[];
+    COTrows.forEach(function(r){
+      var d2=new Date(r.date),i=idxOn(d2);
+      if(i===null)return;
+      if(Math.abs(recs[i].d-d2)/864e5>4)return;
+      if(recs[i].px)XY.push({mm:r.mm/1000,px:recs[i].px,yr:d2.getFullYear()});
+    });
+    var lvl=ols(XY.map(function(p){return p.mm;}),XY.map(function(p){return p.px;}));
+    // weekly flow beta
+    var Xf=[],Yf=[];
+    for(var q2=1;q2<COTrows.length;q2++){
+      var i4=idxOn(new Date(COTrows[q2-1].date)),i5=idxOn(new Date(COTrows[q2].date));
+      if(i4===null||i5===null||i5<=i4||!recs[i4].px||!recs[i5].px)continue;
+      Xf.push((COTrows[q2].mm-COTrows[q2-1].mm)/10000);Yf.push(recs[i5].px-recs[i4].px);
+    }
+    C.cot={last:lastC,mmZ:sd>0?(lastC.mm-mu)/sd:0,
+      flow:{coef:coef,r2:1-ssr/sst,n:Y.length,pts:pts},
+      lvl:lvl,lvlPts:XY,
+      flowBeta:Xf.length>50?ols(Xf,Yf):null};
+  })();
+
+  return C;
+}
+
+// ═══════════ RUN ═══════════
+function pget(id){return parseFloat(document.getElementById(id).value);}
+function pgetOpt(id){var v=document.getElementById(id).value;return v===''?null:parseFloat(v);}
+
+function run(){
+  if(!CACHE)CACHE=buildAll();
+  var C=CACHE;
+  var P={usb:pget('in-usb'),usl:pget('in-usl'),ush:pget('in-ush'),wpass:pget('in-wpass'),
+    wgt:document.getElementById('in-wgt').checked,useWXC:document.getElementById('in-useWXC').checked,
+    loan:pget('in-loan'),wedge:pget('in-wedge'),q3:pget('in-q3'),lb:pget('in-lb'),stor:pget('in-stor'),rate:pget('in-rate'),
+    useOC:document.getElementById('in-useOC').checked,ocr:pgetOpt('in-ocr'),
+    useMM:document.getElementById('in-useMM').checked,mmOv:pgetOpt('in-mm'),
+    evus:pget('in-evus'),evwxc:pgetOpt('in-evwxc')};
+  P.floor=P.loan+P.wedge+P.q3+P.lb;
+  document.getElementById('floor-out').textContent=P.floor.toFixed(1)+'¢';
+  setStatus('live · px '+((C.last.d.getMonth()+1)+'/'+C.last.d.getDate()+'/'+String(C.last.d.getFullYear()).slice(2))+' · wasde '+(WJ.lastUpdated||'')+' · cot '+(C.cot?C.cot.last.date:'n/a')+' · on-call ✓');
+
+  var ratio=P.ocr!==null?P.ocr:C.ocLast.ratio;
+  var ocPct=C.ocPct(ratio);
+  var ocTilt=P.useOC?1.5*(ocPct-50)/50:0;
+  var mmNow=(P.mmOv!==null?P.mmOv:(C.cot?C.cot.last.mm/1000:0));
+
+  // scenario objects
+  function wxcOf(us){
+    var st=C.wasdeWXC.stk+P.wpass*(us-C.wasdeUS);
+    return {stk:st,su:st/C.wasdeWXC.use};
+  }
+  function mmContribution(us){
+    if(!P.useMM||!C.cot)return {dMM:0,tilt:0};
+    var cf=C.cot.flow.coef;
+    var dS=us-C.wasdeUS;
+    var dMM=cf[0]+cf[1]*dS+cf[2]*mmNow; // k lots over the season
+    var fb=C.cot.flowBeta?C.cot.flowBeta.b:0.35; // c per 10k
+    return {dMM:dMM,tilt:dMM/10*fb};
+  }
+  function fvOf(id,m,us,wxcSU){
+    var o=C[id],fit=(P.wgt?o.fitW:o.fitE)[P.useWXC?'t':'f'];
+    var ml=fit.ml,i=ml.indexOf(m);
+    if(i<0)return null;
+    var v=fit.coef[i]+fit.coef[ml.length]*(1/Math.max(us,0.3));
+    if(P.useWXC)v+=fit.coef[ml.length+1]*(1/Math.max(wxcSU,0.05));
+    return v;
+  }
+  var nowM=new Date().getMonth()+1;if(nowM<6)nowM=6;if(nowM>11)nowM=11;
+  function scen(us,label){
+    var wx=wxcOf(us);
+    var mmc=mmContribution(us);
+    var o={label:label,us:us,wxc:wx,mm:mmc};
+    // price = Dec flat FV at current report month, + tilts, floored
+    var pxRaw=fvOf('decf',nowM,us,wx.su);
+    o.pxRaw=pxRaw;
+    o.px=Math.max(pxRaw+ocTilt+mmc.tilt,P.floor);
+    // spreads with carry bound + Dec-Mar oncall front tilt is out of scope here (front/def split) — carry bound only
+    o.sp={};
+    ['decmar','marmay','mayjul','juldec'].forEach(function(id){
+      var m=C[id].S.life.indexOf(nowM)>=0?nowM:C[id].S.life[0];
+      var v=fvOf(id,m,us,wx.su);
+      var fc=-(P.stor+Math.max(o.px,P.floor)*P.rate/1200)*C[id].S.cm;
+      o.sp[id]={v:Math.max(v,fc),m:m,fc:fc};
+    });
+    o.flats={};
+    ['marf','mayf','julf'].forEach(function(id){
+      var m=C[id].S.life.indexOf(nowM)>=0?nowM:C[id].S.life[0];
+      o.flats[id]={v:Math.max(fvOf(id,m,us,wx.su)+ocTilt+mmc.tilt,P.floor),m:m};
+    });
+    // IV — stocks-driven model
+    o.iv=C.ivFV(nowM,us);
+    o.usSU=us/C.usUse;
+    return o;
+  }
+  var Sb=scen(P.usb,'BASE'),Sl=scen(P.usl,'BULL'),Sh=scen(P.ush,'BEAR');
+
+  // FV table
+  var h='<tr><th>Series</th><th>Bear (US '+f1(P.ush)+'M)</th><th>Base (US '+f1(P.usb)+'M)</th><th>Bull (US '+f1(P.usl)+'M)</th></tr>';
+  h+='<tr class="sub"><td>WxC S/U per scenario</td><td>'+f1(Sh.wxc.su*100)+'%</td><td>'+f1(Sb.wxc.su*100)+'%</td><td>'+f1(Sl.wxc.su*100)+'%</td></tr>';
+  h+='<tr class="hl"><td>Dec flat price (¢)</td><td>'+f1(Sh.px)+'</td><td>'+f1(Sb.px)+'</td><td>'+f1(Sl.px)+'</td></tr>';
+  [['marf','Mar flat'],['mayf','May flat'],['julf','Jul flat']].forEach(function(rw){
+    h+='<tr><td>'+rw[1]+' (¢)</td><td>'+f1(Sh.flats[rw[0]].v)+'</td><td>'+f1(Sb.flats[rw[0]].v)+'</td><td>'+f1(Sl.flats[rw[0]].v)+'</td></tr>';
+  });
+  [['decmar','Dec − Mar'],['marmay','Mar − May'],['mayjul','May − Jul'],['juldec','Jul − Dec']].forEach(function(rw){
+    h+='<tr><td>'+rw[1]+' (¢)</td><td>'+f2(Sh.sp[rw[0]].v)+'</td><td>'+f2(Sb.sp[rw[0]].v)+'</td><td>'+f2(Sl.sp[rw[0]].v)+'</td></tr>';
+  });
+  h+='<tr class="hl"><td>Dec26 IV (%)</td><td>'+f1(Sh.iv)+'</td><td>'+f1(Sb.iv)+'</td><td>'+f1(Sl.iv)+'</td></tr>';
+  h+='<tr class="sub"><td>MM flow → tilt</td><td>'+sgn(Sh.mm.dMM,0)+'k → '+sgn(Sh.mm.tilt)+'¢</td><td>'+sgn(Sb.mm.dMM,0)+'k → '+sgn(Sb.mm.tilt)+'¢</td><td>'+sgn(Sl.mm.dMM,0)+'k → '+sgn(Sl.mm.tilt)+'¢</td></tr>';
+  document.getElementById('fv-tbl').innerHTML=h;
+  var fit=C['decf'][P.wgt?'fitW':'fitE'][P.useWXC?'t':'f'];
+  document.getElementById('fv-note').innerHTML=
+    'Conditional model: FV = month-effect + '+f1(fit.coef[fit.ml.length])+'/US-stocks'+(P.useWXC?' + '+f1(fit.coef[fit.ml.length+1])+'/WxC-S/U':'')+' (Dec flat, '+(P.wgt?'expiry-weighted':'equal-weight')+', R²='+f2(fit.r2)+'). '
+    +(P.useWXC?'<b>Note the WxC coefficient sign:</b> conditional on US stocks, the in-sample world term is negative — a China-reserve-era artifact (2010/11 had record prices with high WxC S/U because China was hoarding) plus US-world collinearity. It acts as a correction term, not a standalone driver; at today’s tight WxC S/U ('+f1(C.wasdeWXC.su*100)+'%) it damps the FV slightly. Untick to run US-only. ':'')
+    +'Price rows include on-call tilt ('+sgn(ocTilt)+'¢ at ratio '+f2(ratio)+', '+ocPct+'th pctile) and MM flow tilt; all flats floored at OBBBA '+P.floor.toFixed(1)+'¢; spreads bounded at full carry. IV model: month-effect + '+f1(C.ivModel.coef[C.ivModel.months.length])+'/US-stocks, fit on '+C.ivModel.n+' Dec1 HIST_CALL_IMP_VOL release observations (winsorized at 50 vols; no realized-vol, world, or on-call inputs), R²='+f2(C.ivModel.r2)+', σ='+f1(C.ivModel.sigma)+' vols — low ending stocks map directly to high implied vol.';
+
+  // OBBBA range
+  var lo=Math.min(Sh.px,Sb.px,Sl.px),hi=Math.max(Sh.px,Sb.px,Sl.px);
+  var loRaw=Math.min(Sh.pxRaw,Sb.pxRaw,Sl.pxRaw);
+  document.getElementById('range-out').innerHTML=
+    'Dec26 FV range (bear→bull): <b style="color:var(--gold)">'+f1(lo)+'¢ – '+f1(hi)+'¢</b><br>'
+    +'<span style="font-size:12px;color:#666">pre-OBBBA model low was '+f1(loRaw+ocTilt+Math.min(Sh.mm.tilt,Sb.mm.tilt,Sl.mm.tilt))+'¢ — the '+P.floor.toFixed(1)+'¢ floor '+(loRaw+ocTilt<P.floor?'binds and truncates '+f1(P.floor-(loRaw+ocTilt))+'¢ off the bear tail':'does not bind at these scenarios')+'. Conditioning on current crop progress + drought narrows the range to '+f1(hi-lo)+'¢.</span>';
+
+  // scenario grid: US stocks x WxC SU
+  (function(){
+    var uss=[2.5,3.0,3.5,3.9,4.5,5.0],wxs=[0.38,0.42,0.446,0.48,0.52];
+    var g='<tr><th>US stk \\ WxC S/U</th>';wxs.forEach(function(w2){g+='<th>'+(w2*100).toFixed(1)+'%</th>';});g+='</tr>';
+    uss.forEach(function(u){
+      g+='<tr><td>'+u.toFixed(1)+'M</td>';
+      wxs.forEach(function(w2){
+        var mmc=mmContribution(u);
+        var v=Math.max(fvOf('decf',nowM,u,w2)+ocTilt+mmc.tilt,P.floor);
+        var near=Math.abs(u-P.usb)<0.25&&Math.abs(w2-Sb.wxc.su)<0.02;
+        var bg=v<P.floor+2?'#fbe9e7':v>85?'#e8f5e9':'#fffde7';
+        g+='<td style="background:'+bg+(near?';outline:2px solid #a06b00;font-weight:700':'')+'">'+v.toFixed(1)+'</td>';
+      });
+      g+='</tr>';
+    });
+    document.getElementById('grid-tbl').innerHTML=g;
+  })();
+
+  // evolution table
+  (function(){
+    var evus=P.evus;
+    var evwxcStk=P.evwxc!==null?P.evwxc:C.wasdeWXC.stk+P.wpass*(evus-C.wasdeUS);
+    var evwxcSU=evwxcStk/C.wasdeWXC.use;
+    var monthsAll=[6,7,8,9,10,11,12,1,2,3,4,5];
+    var MN=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var colDefs=[['decf','Dec'],['marf','Mar'],['mayf','May'],['julf','Jul'],['decmar','D−M'],['marmay','M−M'],['mayjul','M−J'],['juldec','J−D']];
+    var g='<tr><th>Report month</th>';colDefs.forEach(function(cd){g+='<th>'+cd[1]+'</th>';});g+='<th>IV %</th></tr>';
+    monthsAll.forEach(function(m){
+      g+='<tr'+(m===nowM?' class="hl"':'')+'><td>'+MN[m]+'</td>';
+      colDefs.forEach(function(cd){
+        var v=fvOf(cd[0],m,evus,evwxcSU);
+        if(v!==null){
+          if(C[cd[0]].S.grp==='flat')v=Math.max(v+ocTilt,P.floor);
+          else v=Math.max(v,-(P.stor+P.floor*P.rate/1200)*C[cd[0]].S.cm);
+        }
+        g+='<td>'+(v===null?'<span style="color:#ccc">·</span>':(C[cd[0]].S.grp==='flat'?f1(v):f2(v)))+'</td>';
+      });
+      var ivv=(m>=6&&m<=11)?C.ivFV(m,evus):null;
+      g+='<td>'+(ivv===null?'<span style="color:#ccc">·</span>':f1(ivv))+'</td></tr>';
+    });
+    document.getElementById('evo-tbl').innerHTML=g;
+  })();
+
+  // MM table
+  if(C.cot){
+    var cf=C.cot.flow.coef;
+    var mh='<tr><th>Scenario</th><th>ΔStocks vs WASDE</th><th>Implied MM flow</th><th>Ending MM</th><th>Price tilt</th></tr>';
+    [Sh,Sb,Sl].forEach(function(s){
+      mh+='<tr'+(s.label==='BASE'?' class="hl"':'')+'><td>'+s.label+'</td><td>'+sgn(s.us-C.wasdeUS,2)+'M</td><td>'+sgn(s.mm.dMM,0)+'k lots</td><td>'+f1(mmNow+s.mm.dMM)+'k</td><td>'+sgn(s.mm.tilt)+'¢</td></tr>';
+    });
+    document.getElementById('mm-tbl').innerHTML=mh;
+    document.getElementById('mm-note').innerHTML=
+      'Crop-year flow model (Jun→Nov, '+C.cot.flow.n+' yrs): ΔMM(k) = '+f1(cf[0])+' '+sgn(cf[1])+'×ΔStocks(M) '+sgn(cf[2],2)+'×MM₀(k), R²='+f2(C.cot.flow.r2)+'. Starting MM = '+f1(mmNow)+'k (z '+f2(C.cot.mmZ)+'): specs both chase stocks draws (~'+Math.abs(cf[1]).toFixed(0)+'k lots per 1M bales cut) and mean-revert their starting book ('+f2(cf[2])+' per k). Price tilt = flow × '+f2(C.cot.flowBeta?C.cot.flowBeta.b:0.35)+'¢/10k (weekly flow beta). Example: stocks −2M from here → MM '+sgn(cf[0]+cf[1]*(-2)+cf[2]*mmNow,0)+'k lots → '+sgn((cf[0]+cf[1]*(-2)+cf[2]*mmNow)/10*(C.cot.flowBeta?C.cot.flowBeta.b:0.35))+'¢.';
+  } else {
+    document.getElementById('mm-tbl').innerHTML='<tr><td>COT data unavailable</td></tr>';
+  }
+
+  // verdict
+  document.getElementById('verdict').innerHTML=
+    '<b>Base case:</b> Dec26 FV '+f1(Sb.px)+'¢ (US '+f1(P.usb)+'M, WxC S/U '+f1(Sb.wxc.su*100)+'%), Dec−Mar '+f2(Sb.sp.decmar.v)+'¢, Jul−Dec '+f2(Sb.sp.juldec.v)+'¢, IV '+f1(Sb.iv)+'%. '
+    +'<b>Range after OBBBA:</b> '+f1(lo)+'–'+f1(hi)+'¢ — the floor compresses the bear tail, so the distribution is right-skewed: '+f1(hi-Sb.px)+'¢ of bull room vs '+f1(Sb.px-lo)+'¢ of bear room. '
+    +'<b>Convexity lives in Jul−Dec</b> ('+f2(Sl.sp.juldec.v)+'¢ at bull stocks vs '+f2(Sh.sp.juldec.v)+'¢ at bear) and in vol ('+f1(Sl.iv)+'% bull vs '+f1(Sh.iv)+'% bear). '
+    +'MM positioning adds '+sgn(Sl.mm.tilt)+'¢ of flow kicker in the bull case — specs chase the stocks draw from a '+f1(mmNow)+'k start. On-call at the '+ocPct+'th percentile trims '+sgn(ocTilt)+'¢ throughout.';
+
+  // scatters
+  var gs=document.getElementById('grid-scat');gs.innerHTML='';
+  SERIES.forEach(function(Sr){
+    drawScat(C[Sr.id],'us','US ending stocks (M bales)',P,[P.ush,P.usb,P.usl],gs);
+    drawScat(C[Sr.id],'wxc','World-ex-China S/U',P,[Sh.wxc.su,Sb.wxc.su,Sl.wxc.su],gs);
+  });
+  var gc=document.getElementById('grid-cot');gc.innerHTML='';
+  if(C.cot){drawMMLevel(C,gc);drawMMFlow(C,gc);}
+}
+
+// ═══════════ SCATTER RENDERERS ═══════════
+function drawScat(o,xKey,xLabel,P,marks,parent){
+  var pts=o.pts,S=o.S;
+  var getX=function(p){return xKey==='us'?p.us:p.wxc;};
+  var xs=pts.map(getX),ys=pts.map(function(p){return p.y;});
+  var xmin=xKey==='us'?0:Math.min.apply(null,xs)*0.92;
+  var xmax=Math.max.apply(null,xs)*1.06;
+  var ymin=Math.min.apply(null,ys),ymax=Math.max.apply(null,ys);
+  var pad=(ymax-ymin)*0.08;ymin-=pad;ymax+=pad;
+  var W=520,H=270,L=48,R=12,T=12,B=34;
+  function X(v){return L+(v-xmin)/(xmax-xmin)*(W-L-R);}
+  function Y(v){return T+(ymax-v)/(ymax-ymin)*(H-T-B);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto">';
+  var yt=(ymax-ymin)>40?10:(ymax-ymin)>12?4:(ymax-ymin)>4?2:1;
+  for(var g=Math.ceil(ymin/yt)*yt;g<=ymax;g+=yt){
+    s+='<line x1="'+L+'" y1="'+Y(g)+'" x2="'+(W-R)+'" y2="'+Y(g)+'" stroke="#eee"/>';
+    s+='<text x="'+(L-5)+'" y="'+(Y(g)+3)+'" font-size="8.5" fill="#999" text-anchor="end">'+g+'</text>';
+  }
+  s+='<text x="'+(W/2)+'" y="'+(H-3)+'" font-size="8.5" fill="#777" text-anchor="middle">'+xLabel+'</text>';
+  // fit lines: univariate equal (dashed grey) & weighted (solid blue)
+  var uniE=xKey==='us'?o.uniUS_E:o.uniWX_E;
+  var uniW=xKey==='us'?o.uniUS_W:o.uniWX_W;
+  function line(fitAB,color,dash){
+    var p='';
+    for(var i=0;i<=50;i++){
+      var xv=xmin+(xmax-xmin)*i/50;
+      var yv=fitAB.a+fitAB.b*(1/Math.max(xv,xKey==='us'?0.3:0.05));
+      p+=(i===0?'M':'L')+X(xv).toFixed(1)+' '+Math.max(T,Math.min(H-B,Y(yv))).toFixed(1)+' ';
+    }
+    return '<path d="'+p+'" fill="none" stroke="'+color+'" stroke-width="'+(dash?1.3:2)+'"'+(dash?' stroke-dasharray="4 3"':'')+' opacity="0.85"/>';
+  }
+  if(uniE)s+=line(uniE,'#9aa7b5',true);
+  if(uniW)s+=line(uniW,'#1a5490',false);
+  pts.forEach(function(p){
+    var w=S.weight(p.m);
+    s+='<circle cx="'+X(getX(p))+'" cy="'+Y(p.y)+'" r="'+(2+2.2*w)+'" fill="#1a5490" opacity="'+(0.15+0.5*w)+'"><title>'+p.cy+'/'+String(p.cy+1).slice(2)+' · '+p.yr+'-'+String(p.m).padStart(2,'0')+' · w='+w.toFixed(2)+' · '+p.y.toFixed(2)+'¢</title></circle>';
+  });
+  var mc=['#b02a37','#a06b00','#1e7b34'],ml=['BEAR','BASE','BULL'];
+  if(xKey==='us'){mc=['#1e7b34','#a06b00','#b02a37'];ml=['BEAR','BASE','BULL'];}
+  marks.forEach(function(mk,i){
+    if(mk<xmin||mk>xmax)return;
+    s+='<line x1="'+X(mk)+'" y1="'+T+'" x2="'+X(mk)+'" y2="'+(H-B)+'" stroke="'+mc[i]+'" stroke-width="1.1" stroke-dasharray="4 3" opacity="0.8"/>';
+    s+='<text x="'+X(mk)+'" y="'+(T+8)+'" font-size="8" fill="'+mc[i]+'" text-anchor="middle" font-weight="700">'+ml[i]+'</text>';
+  });
+  s+='</svg>';
+  var card=document.createElement('div');card.className='scat';
+  card.innerHTML='<div class="hd"><span class="nm">'+S.nm+' vs '+(xKey==='us'?'US stocks':'WxC S/U')+'</span>'
+    +'<span class="fvs">R²(uni): eq '+f2(uniE?uniE.r2:null)+' · point size = expiry weight</span></div>'+s;
+  parent.appendChild(card);
+}
+function drawMMLevel(C,parent){
+  var pts=C.cot.lvlPts,fit=C.cot.lvl;
+  var xs=pts.map(function(p){return p.mm;}),ys=pts.map(function(p){return p.px;});
+  var xmin=Math.min.apply(null,xs)-5,xmax=Math.max.apply(null,xs)+5;
+  var ymin=Math.min.apply(null,ys)-5,ymax=Math.max.apply(null,ys)+5;
+  var W=520,H=280,L=48,R=12,T=12,B=34;
+  function X(v){return L+(v-xmin)/(xmax-xmin)*(W-L-R);}
+  function Y(v){return T+(ymax-v)/(ymax-ymin)*(H-T-B);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto">';
+  for(var g=Math.ceil(ymin/20)*20;g<=ymax;g+=20){s+='<line x1="'+L+'" y1="'+Y(g)+'" x2="'+(W-R)+'" y2="'+Y(g)+'" stroke="#eee"/><text x="'+(L-5)+'" y="'+(Y(g)+3)+'" font-size="8.5" fill="#999" text-anchor="end">'+g+'</text>';}
+  s+='<text x="'+(W/2)+'" y="'+(H-3)+'" font-size="8.5" fill="#777" text-anchor="middle">MM net (k lots)</text>';
+  pts.forEach(function(p){
+    var recent=p.yr>=2024;
+    s+='<circle cx="'+X(p.mm)+'" cy="'+Y(p.px)+'" r="2.4" fill="'+(recent?'#1a5490':'#9aa7b5')+'" opacity="'+(recent?0.8:0.35)+'"/>';
+  });
+  s+='<line x1="'+X(xmin)+'" y1="'+Y(fit.a+fit.b*xmin)+'" x2="'+X(xmax)+'" y2="'+Y(fit.a+fit.b*xmax)+'" stroke="#1a5490" stroke-width="2"/>';
+  var cur=C.cot.last.mm/1000;
+  s+='<line x1="'+X(cur)+'" y1="'+T+'" x2="'+X(cur)+'" y2="'+(H-B)+'" stroke="#a06b00" stroke-width="1.4" stroke-dasharray="4 3"/>';
+  s+='<text x="'+X(cur)+'" y="'+(T+9)+'" font-size="8.5" fill="#a06b00" font-weight="700" text-anchor="middle">NOW '+cur.toFixed(0)+'k</text>';
+  s+='</svg>';
+  var card=document.createElement('div');card.className='scat';
+  card.innerHTML='<div class="hd"><span class="nm">MM net vs Dec1 price (weekly, 2007–)</span><span class="fvs">'+f2(fit.b*10)+'¢/10k · R²='+f2(fit.r2)+' · n='+fit.n+'</span></div>'+s;
+  parent.appendChild(card);
+}
+function drawMMFlow(C,parent){
+  var pts=C.cot.flow.pts,cf=C.cot.flow.coef;
+  var xs=pts.map(function(p){return p.dS;}),ys=pts.map(function(p){return p.dMM;});
+  var xmin=Math.min.apply(null,xs)-0.4,xmax=Math.max.apply(null,xs)+0.4;
+  var ymin=Math.min.apply(null,ys)-10,ymax=Math.max.apply(null,ys)+10;
+  var W=520,H=280,L=48,R=12,T=12,B=34;
+  function X(v){return L+(v-xmin)/(xmax-xmin)*(W-L-R);}
+  function Y(v){return T+(ymax-v)/(ymax-ymin)*(H-T-B);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto">';
+  for(var g=Math.ceil(ymin/20)*20;g<=ymax;g+=20){s+='<line x1="'+L+'" y1="'+Y(g)+'" x2="'+(W-R)+'" y2="'+Y(g)+'" stroke="#eee"/><text x="'+(L-5)+'" y="'+(Y(g)+3)+'" font-size="8.5" fill="#999" text-anchor="end">'+g+'</text>';}
+  if(Y(0)>T&&Y(0)<H-B)s+='<line x1="'+L+'" y1="'+Y(0)+'" x2="'+(W-R)+'" y2="'+Y(0)+'" stroke="#bbb" stroke-dasharray="3 3"/>';
+  if(X(0)>L&&X(0)<W-R)s+='<line x1="'+X(0)+'" y1="'+T+'" x2="'+X(0)+'" y2="'+(H-B)+'" stroke="#bbb" stroke-dasharray="3 3"/>';
+  s+='<text x="'+(W/2)+'" y="'+(H-3)+'" font-size="8.5" fill="#777" text-anchor="middle">ΔUS stocks Jun→Nov (M bales)</text>';
+  pts.forEach(function(p){
+    s+='<circle cx="'+X(p.dS)+'" cy="'+Y(p.dMM)+'" r="4" fill="#1a5490" opacity="0.75"><title>'+p.yr+' · ΔS '+p.dS.toFixed(2)+'M · ΔMM '+p.dMM.toFixed(0)+'k · MM0 '+p.mm0.toFixed(0)+'k</title></circle>';
+    s+='<text x="'+(X(p.dS)+5)+'" y="'+(Y(p.dMM)-4)+'" font-size="7.5" fill="#888">'+p.yr+'</text>';
+  });
+  // fit line at avg MM0
+  var mm0avg=pts.reduce(function(a,p){return a+p.mm0;},0)/pts.length;
+  s+='<line x1="'+X(xmin)+'" y1="'+Y(cf[0]+cf[1]*xmin+cf[2]*mm0avg)+'" x2="'+X(xmax)+'" y2="'+Y(cf[0]+cf[1]*xmax+cf[2]*mm0avg)+'" stroke="#1a5490" stroke-width="2"/>';
+  s+='</svg>';
+  var card=document.createElement('div');card.className='scat';
+  card.innerHTML='<div class="hd"><span class="nm">Crop-year MM flow vs stocks change</span><span class="fvs">ΔMM = '+f1(cf[0])+' '+sgn(cf[1])+'×ΔS '+sgn(cf[2],2)+'×MM₀ · R²='+f2(C.cot.flow.r2)+'</span></div>'+s;
+  parent.appendChild(card);
+}
+
+['in-usb','in-usl','in-ush','in-wpass','in-wgt','in-useWXC','in-loan','in-wedge','in-q3','in-lb','in-stor','in-rate','in-useOC','in-ocr','in-useMM','in-mm','in-evus','in-evwxc'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){if(loaded.w&&loaded.p&&loaded.o&&loaded.c)run();});
+});
+setStatus('loading data…');
+</script>
+</body>
+</html>
