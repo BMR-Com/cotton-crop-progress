@@ -172,10 +172,18 @@ var SERIES=[
 var WJ=null,PXrows=null,OCrows=null,COTrows=[],loaded={w:false,p:false,o:false,c:false},CACHE=null;
 function setStatus(h){document.getElementById('status').innerHTML=h;}
 function maybeRun(){
-  setStatus('px <span class="'+(loaded.p?'ok">✓':'">…')+'</span> wasde <span class="'+(loaded.w?'ok">✓':'">…')+'</span> on-call <span class="'+(loaded.o?'ok">✓':'">…')+'</span> cot <span class="'+(loaded.c?'ok">✓':'">…')+'</span>');
-  if(loaded.w&&loaded.p&&loaded.o&&loaded.c)run();
+  setStatus('px <span class="'+(loaded.p?'ok">✓':'">…')+'</span> wasde <span class="'+(loaded.w?'ok">✓':'">…')+'</span> on-call <span class="'+(loaded.o?'ok">✓':'">…')+'</span> cot <span class="'+(loaded.c?(COTrows.length?'ok">✓':'warn">empty'):'">…')+'</span>');
+  if(loaded.w&&loaded.p&&loaded.o&&loaded.c){
+    try{run();}
+    catch(e){setStatus('<span class="err">model error: '+(e&&e.message?e.message:e)+'</span>');
+      if(window.console)console.error(e);}
+  }
 }
-fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;maybeRun();}).catch(function(){setStatus('<span class="err">wasde failed</span>');});
+fetch(WASDE_URL).then(function(r){
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(function(j){WJ=j;loaded.w=true;maybeRun();})
+  .catch(function(e){setStatus('<span class="err">wasde fetch failed: '+(e&&e.message?e.message:e)+'</span>');});
 Papa.parse(PRICE_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){PXrows=res.data;loaded.p=true;maybeRun();}});
 Papa.parse(OC_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){OCrows=res.data;loaded.o=true;maybeRun();}});
 Papa.parse(COT_URL,{download:true,header:true,skipEmptyLines:true,
@@ -200,6 +208,7 @@ function ols(X,Y){
   return {a:a,b:b,r2:1-ssr/sst,sigma:Math.sqrt(ssr/Math.max(n-2,1)),n:n};
 }
 function lstsqW(A,Y,W){ // weighted least squares via normal equations, general k
+  if(!A||!A.length||!A[0])return null;
   var k=A[0].length,n=Y.length,M=[],v=[];
   for(var r=0;r<k;r++){M.push(new Array(k).fill(0));v.push(0);}
   for(var i=0;i<n;i++){var w=W?W[i]:1;
@@ -382,7 +391,11 @@ function buildAll(){
       {id:'ivjul',nm:'Jul IV',col:'CTJUL1 Comdty HIST_CALL_IMP_VOL',life:[8,9,10,11,12,1,2,3,4,5,6]}
     ];
     C.IVC=IVC;
+    // adaptive features: a flow column is only included if its source loaded with real
+    // variation — a constant column is collinear with the month dummies (singular matrix)
+    var hasOC=C.oc.length>10, hasMM=COTrows.length>=60;
     IVC.forEach(function(V){
+      V.hasOC=hasOC;V.hasMM=hasMM;
       var A=[],Y=[],pts=[];
       for(var y=2005;y<=2026;y++){
         V.life.forEach(function(m){
@@ -393,14 +406,16 @@ function buildAll(){
           var iv=num(recs[i].r[V.col]);if(iv===null)return;
           var su=C.usSU(y,m);var wx=C.wxc(y,m);
           if(su===null||!wx)return;
-          var ocr=ocRatioAt(recs[i].d),mz=mmzAt(recs[i].d);
-          if(ocr===null||mz===null)return;
-          A.push(V.life.map(function(m2){return m2===m?1:0;}).concat([1/Math.max(su,0.02),ocr,Math.abs(mz)]));
+          var feats=[1/Math.max(su,0.02)];
+          if(hasOC){var ocr=ocRatioAt(recs[i].d);feats.push(ocr!==null?ocr:5);}
+          if(hasMM){var mz=mmzAt(recs[i].d);feats.push(mz!==null?Math.abs(mz):0.8);}
+          A.push(V.life.map(function(m2){return m2===m?1:0;}).concat(feats));
           Y.push(Math.min(iv,50));
           pts.push({usSU:su,wxc:wx.su,m:m,iv:Math.min(iv,50),yr:y,cy:cy});
         });
       }
       var coef=lstsqW(A,Y,null);
+      if(!coef){V.model=null;V.pts=pts;V.fv=function(){return null;};return;}
       var ssr=0,sst=0,mu=Y.reduce(function(a,b){return a+b;},0)/Y.length;
       for(var q=0;q<Y.length;q++){var pr=0;for(var j2=0;j2<coef.length;j2++)pr+=coef[j2]*A[q][j2];ssr+=(Y[q]-pr)*(Y[q]-pr);sst+=(Y[q]-mu)*(Y[q]-mu);}
       V.model={coef:coef,r2:1-ssr/sst,n:Y.length,sigma:Math.sqrt(ssr/(Y.length-coef.length))};
@@ -409,8 +424,11 @@ function buildAll(){
         // wxcSU accepted for signature stability but NOT used: the in-sample world term is
         // wrong-signed (China-reserve artifact) and fails validation vs the current market.
         var i=V.life.indexOf(m);if(i<0)return null;
-        var nL=V.life.length;
-        return coef[i]+coef[nL]/Math.max(usSU,0.02)+coef[nL+1]*ocr+coef[nL+2]*amz;
+        var k=V.life.length;
+        var v=coef[i]+coef[k]/Math.max(usSU,0.02);k++;
+        if(V.hasOC){v+=coef[k]*ocr;k++;}
+        if(V.hasMM){v+=coef[k]*amz;}
+        return v;
       };
     });
   })();
@@ -571,7 +589,7 @@ function run(){
   document.getElementById('fv-note').innerHTML=
     'Conditional model: FV = month-effect + '+f1(fit.coef[fit.ml.length])+'/US-stocks'+(P.useWXC?' + '+f1(fit.coef[fit.ml.length+1])+'/WxC-S/U':'')+' (Dec flat, '+(P.wgt?'expiry-weighted':'equal-weight')+', R²='+f2(fit.r2)+'). '
     +(P.useWXC?'<b>Note the WxC coefficient sign:</b> conditional on US stocks, the in-sample world term is negative — a China-reserve-era artifact (2010/11 had record prices with high WxC S/U because China was hoarding) plus US-world collinearity. It acts as a correction term, not a standalone driver; at today’s tight WxC S/U ('+f1(C.wasdeWXC.su*100)+'%) it damps the FV slightly. Untick to run US-only. ':'')
-    +'Price rows include on-call tilt ('+sgn(ocTilt)+'¢ at ratio '+f2(ratio)+', '+ocPct+'th pctile) and MM flow tilt; all flats floored at OBBBA '+P.floor.toFixed(1)+'¢; spreads bounded at full carry. IV models: per-contract (Dec/Mar/May/Jul) on each contract\u2019s own HIST_CALL_IMP_VOL history — IV = month-effect + a/US-S/U + b\u00d7on-call ratio + c\u00d7|MM z| (winsorized at 50). Fit quality: '+C.IVC.map(function(V){return V.nm+' R\u00b2='+f2(V.model.r2)+' (n='+V.model.n+')';}).join(' \u00b7 ')+'. US S/U beats raw stocks as the driver (low S/U \u2192 high IV). World-ex-China S/U was tested per R\u00b2 but its coefficient is wrong-signed in-sample (China-reserve artifact) and fails validation against the current ~24% market, so it is excluded from IV.';
+    +'Price rows include on-call tilt ('+sgn(ocTilt)+'¢ at ratio '+f2(ratio)+', '+ocPct+'th pctile) and MM flow tilt; all flats floored at OBBBA '+P.floor.toFixed(1)+'¢; spreads bounded at full carry. IV models: per-contract (Dec/Mar/May/Jul) on each contract\u2019s own HIST_CALL_IMP_VOL history — IV = month-effect + a/US-S/U + b\u00d7on-call ratio + c\u00d7|MM z| (winsorized at 50). Fit quality: '+C.IVC.map(function(V){return V.nm+' R\u00b2='+(V.model?f2(V.model.r2):'\u2014')+(V.model?' (n='+V.model.n+')':'');}).join(' \u00b7 ')+'. US S/U beats raw stocks as the driver (low S/U \u2192 high IV). World-ex-China S/U was tested per R\u00b2 but its coefficient is wrong-signed in-sample (China-reserve artifact) and fails validation against the current ~24% market, so it is excluded from IV.';
 
   // OBBBA range
   var lo=Math.min(Sh.px,Sb.px,Sl.px),hi=Math.max(Sh.px,Sb.px,Sl.px);
