@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotton Spread Fair Value — WASDE Stocks → Spreads & Flat Price</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16324f; --blue:#1a5490; --bg:#f4f3ee; --card:#fff;
+  --red:#b02a37; --green:#1e7b34; --gold:#a06b00; --line:#dcd9d0;
+  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);padding:18px;font-size:13px}
+.wrap{max-width:1240px;margin:0 auto}
+header{border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px}
+header h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
+header h1 span{color:var(--blue)}
+.status{font-family:var(--mono);font-size:11px;color:#666}
+.status .ok{color:var(--green)}.status .err{color:var(--red)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:16px}
+.card h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--blue);margin-bottom:10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px 26px}
+label{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin:5px 0;gap:8px}
+input[type=number]{width:74px;font-family:var(--mono);font-size:12px;padding:3px 6px;border:1px solid var(--line);border-radius:4px;text-align:right;background:#fcfcfa}
+.hint{font-size:10px;color:#888;line-height:1.45;margin-top:6px}
+.scatgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:16px}
+.scat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.scat .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex-wrap:wrap;gap:4px}
+.scat .hd .nm{font-weight:700;font-size:13px}
+.scat .hd .fvs{font-family:var(--mono);font-size:10.5px;color:#555}
+.scat .hd .fvs b{color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+th{background:var(--ink);color:#fff;padding:6px 8px;text-align:right;font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+th:first-child,td:first-child{text-align:left}
+td{padding:5px 8px;text-align:right;border-bottom:1px solid #eee}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.note{font-size:11px;color:#666;line-height:1.6;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.foot{font-size:10px;color:#999;margin-top:8px;font-family:var(--mono)}
+.stale{background:#fdf2e3;border:1px solid #f0c987;border-radius:6px;padding:8px 12px;font-size:11px;margin-bottom:12px;display:none}
+.obbba{border-left:4px solid var(--gold)}
+svg text{font-family:var(--mono)}
+.section-title{font-size:13px;font-weight:700;color:var(--ink);margin:18px 0 10px;padding-bottom:4px;border-bottom:2px solid var(--blue)}
+@media print{body{background:#fff;padding:0}.card,.scat{break-inside:avoid;border:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>COTTON <span>SPREAD FAIR VALUE</span> — WASDE RELEASE MODEL</h1>
+    <div style="font-size:11px;color:#777;margin-top:2px">US ending stocks at each WASDE release vs contemporaneous spreads & flat price · current-crop convention from June · OBBBA / AWP regime overlay</div>
+  </div>
+  <div class="status" id="status">initializing…</div>
+</header>
+
+<div class="stale" id="stale-warn"></div>
+
+<div class="card">
+  <h3>Model inputs</h3>
+  <div class="ctrls">
+    <div>
+      <label>WASDE 26/27 stocks (M bal) <input type="number" id="in-wstk" value="4.1" step="0.1"></label>
+      <label>Model-median stocks <input type="number" id="in-mstk" value="3.9" step="0.1"></label>
+      <label>Bull-case stocks <input type="number" id="in-bstk" value="2.5" step="0.1"></label>
+    </div>
+    <div>
+      <label>OBBBA loan rate (¢) <input type="number" id="in-loan" value="55" step="0.5"></label>
+      <label>Futures − AWP wedge (¢) <input type="number" id="in-wedge" value="11" step="0.5"></label>
+      <label>3-lowest-quote AWP effect (¢) <input type="number" id="in-q3" value="1.5" step="0.25"></label>
+      <label>30-day lookback option (¢) <input type="number" id="in-lb" value="1.0" step="0.25"></label>
+    </div>
+    <div>
+      <label>Storage (¢/lb/month) <input type="number" id="in-stor" value="0.60" step="0.05"></label>
+      <label>Funding rate (%/yr) <input type="number" id="in-rate" value="5.5" step="0.25"></label>
+      <label>Lookback spread adj max (¢) <input type="number" id="in-lbsprd" value="0.5" step="0.1"></label>
+    </div>
+    <div>
+      <div style="font-size:11px;line-height:1.5;padding-top:4px">Effective futures floor:<br><span style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--gold)" id="floor-out">—</span><div class="hint">loan + wedge + quote effect + lookback. Shaded on flat charts; FVs floored here. Full carry per spread = −(storage + FV×rate/1200)×months — the new higher storage rates widen this bound vs the pre-2023 history in the scatters.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Fair value summary — market vs model</h3>
+  <div style="overflow-x:auto"><table id="fv-tbl"></table></div>
+  <div class="note" id="fv-note"></div>
+</div>
+
+<div class="section-title">Calendar spreads vs US ending stocks — one point per WASDE release</div>
+<div class="scatgrid" id="grid-sprd"></div>
+
+<div class="section-title">Flat price vs US ending stocks — with OBBBA floor</div>
+<div class="scatgrid" id="grid-flat"></div>
+
+<div class="card obbba" style="margin-top:16px">
+  <h3>OBBBA / AWP regime notes</h3>
+  <div style="font-size:12px;line-height:1.7" id="obbba-note"></div>
+</div>
+
+<div class="foot">Sources: BMR-Com/wasde-analytics (Cotton.json) · BMR-Com/cotton-price (cotton_raw.csv). x = US ending-stocks estimate published in that release for the crop the contracts trade; y = price/spread at first close on/after the 11th of the report month. Fit = better of linear / 1-over-x. Research tool, not trading advice.</div>
+</div>
+<script>
+// ═══════════ CONFIG ═══════════
+var WASDE_URL='https://raw.githubusercontent.com/BMR-Com/wasde-analytics/main/data/Cotton.json';
+var PRICE_URL='https://raw.githubusercontent.com/BMR-Com/cotton-price/main/data/cotton_raw.csv';
+
+// contract-pair rules. months = report months where the generic pair maps to the
+// current-crop series (crop = Y/Y+1 for months Jun–Dec, (Y−1)/Y for Jan–May).
+var CARRY_MONTHS={decmar:3,marmay:2,mayjul:2,juldec:5};
+var SERIES=[
+ {id:'decmar',nm:'Dec − Mar',a:'CTDEC1',b:'CTMAR1',months:[6,7,8,9,10,11],grp:'sprd'},
+ {id:'marmay',nm:'Mar − May',a:'CTMAR1',b:'CTMAY1',months:[6,7,8,9,10,11,12,1,2],grp:'sprd'},
+ {id:'mayjul',nm:'May − Jul',a:'CTMAY1',b:'CTJUL1',months:[8,9,10,11,12,1,2,3,4],grp:'sprd'},
+ {id:'juldec',nm:'Jul − Dec (old/new)',a:'CTJUL1',b:'CTDEC2',months:[8,9,10,11],altMonths:[1,2,3,4,5,6],altB:'CTDEC1',grp:'sprd'},
+ {id:'decf',nm:'Dec flat price',a:'CTDEC1',b:null,months:[6,7,8,9,10,11],grp:'flat'},
+ {id:'marf',nm:'Mar flat price',a:'CTMAR1',b:null,months:[6,7,8,9,10,11,12,1,2],grp:'flat'},
+ {id:'mayf',nm:'May flat price',a:'CTMAY1',b:null,months:[8,9,10,11,12,1,2,3,4],grp:'flat'},
+ {id:'julf',nm:'Jul flat price',a:'CTJUL1',b:null,months:[8,9,10,11,12,1,2,3,4,5,6],grp:'flat'}
+];
+
+var WJ=null,PXrows=null,loaded={w:false,p:false},CACHE=null;
+function setStatus(h){document.getElementById('status').innerHTML=h;}
+function maybeRun(){
+  setStatus('wasde <span class="'+(loaded.w?'ok">✓':'">…')+'</span> &nbsp; prices <span class="'+(loaded.p?'ok">✓':'">…')+'</span>');
+  if(loaded.w&&loaded.p)run();
+}
+fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;maybeRun();})
+  .catch(function(e){setStatus('<span class="err">wasde fetch failed</span>');});
+Papa.parse(PRICE_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){PXrows=res.data;loaded.p=true;maybeRun();},
+  error:function(){setStatus('<span class="err">price fetch failed</span>');}});
+
+// ═══════════ HELPERS ═══════════
+function parseD(s){var p=s.split('/');return new Date(2000+(+p[2])%100,+p[0]-1,+p[1]);}
+function num(x){var v=parseFloat(x);return isNaN(v)?null:v;}
+function f1(x){return x===null||isNaN(x)?'—':x.toFixed(1);}
+function f2(x){return x===null||isNaN(x)?'—':x.toFixed(2);}
+function sgn(x,d){if(x===null||isNaN(x))return '—';return (x>0?'+':'')+x.toFixed(d===undefined?2:d);}
+function ols(X,Y){
+  var n=X.length,sx=0,sy=0,sxy=0,sxx=0;
+  for(var i=0;i<n;i++){sx+=X[i];sy+=Y[i];sxy+=X[i]*Y[i];sxx+=X[i]*X[i];}
+  var b=(n*sxy-sx*sy)/(n*sxx-sx*sx),a=(sy-b*sx)/n,ssr=0,sst=0,my=sy/n;
+  for(i=0;i<n;i++){var p=a+b*X[i];ssr+=(Y[i]-p)*(Y[i]-p);sst+=(Y[i]-my)*(Y[i]-my);}
+  return {a:a,b:b,r2:1-ssr/sst,sigma:Math.sqrt(ssr/(n-2))};
+}
+
+// ═══════════ DATASET CONSTRUCTION ═══════════
+function buildAll(){
+  // price index by date
+  var byDate=[],lastRow=null;
+  PXrows.forEach(function(r){
+    if(!r['Dates'])return;
+    byDate.push({d:parseD(r['Dates']),r:r});
+  });
+  byDate.sort(function(a,b){return a.d-b.d;});
+  lastRow=byDate[byDate.length-1];
+  function rowOn(y,m){
+    var t=new Date(y,m-1,11);
+    for(var i=0;i<byDate.length;i++){
+      if(byDate[i].d>=t){return (byDate[i].d-t)/864e5<8?byDate[i].r:null;}
+    }
+    return null;
+  }
+  // release-specific stocks
+  function stocksAt(my,fy,fm){
+    var k='United States||Ending Stocks||'+my;
+    if(!WJ.data[k])return null;
+    var recs=WJ.data[k];
+    for(var i=0;i<recs.length;i++)if(recs[i].forecastYear===fy&&recs[i].forecastMonth===fm)return recs[i].value;
+    return null;
+  }
+  var out={};
+  SERIES.forEach(function(S){
+    var pts=[];
+    for(var y=2008;y<=2026;y++){
+      var months=S.months.concat(S.altMonths||[]);
+      for(var mi=0;mi<months.length;mi++){
+        var m=months[mi];
+        var cy=m>=6?y:y-1;
+        if(cy<2008||cy>2025)continue;
+        var my=cy+'/'+String(cy+1).slice(2);
+        var s=stocksAt(my,y,m);if(s===null)continue;
+        var r=rowOn(y,m);if(!r)continue;
+        var bId=(S.altMonths&&S.altMonths.indexOf(m)>=0)?S.altB:S.b;
+        var va=num(r[S.a+' Comdty PX_LAST']);if(va===null)continue;
+        var yv;
+        if(bId){var vb=num(r[bId+' Comdty PX_LAST']);if(vb===null)continue;yv=va-vb;}
+        else yv=va;
+        pts.push({x:s,y:yv,yr:y,m:m,cy:cy});
+      }
+    }
+    // fits: linear + inverse, keep better
+    var X=pts.map(function(p){return p.x;}),Y=pts.map(function(p){return p.y;});
+    var lin=ols(X,Y),inv=ols(X.map(function(x){return 1/Math.max(x,0.3);}),Y);
+    var best=inv.r2>lin.r2?{form:'inv',f:inv}:{form:'lin',f:lin};
+    out[S.id]={S:S,pts:pts,fit:best,
+      fv:function(st){return best.form==='inv'?best.f.a+best.f.b/Math.max(st,0.3):best.f.a+best.f.b*st;}};
+  });
+  // latest market values per series — only when the generic pair trades the CURRENT crop (2026/27)
+  var CUR_CY=2026;
+  var lm=lastRow.d.getMonth()+1,ly=lastRow.d.getFullYear(),lr=lastRow.r;
+  var dataCrop=lm>=6?ly:ly-1;
+  SERIES.forEach(function(S){
+    var o=out[S.id];o.mkt=null;o.mktLbl='';
+    var inMain=S.months.indexOf(lm)>=0,inAlt=S.altMonths&&S.altMonths.indexOf(lm)>=0;
+    if(!inMain&&!inAlt){o.mktLbl='pair rolls at data date';return;}
+    if(dataCrop!==CUR_CY){o.mktLbl='trades '+dataCrop+'/'+String(dataCrop+1).slice(2)+' crop at data date';return;}
+    var bId=inAlt?S.altB:S.b;
+    var va=num(lr[S.a+' Comdty PX_LAST']);
+    if(va===null)return;
+    if(bId){var vb=num(lr[bId+' Comdty PX_LAST']);if(vb===null)return;o.mkt=va-vb;}
+    else o.mkt=va;
+  });
+  out._lastDate=lastRow.r['Dates'];
+  out._lastD=lastRow.d;
+  return out;
+}
+
+// ═══════════ RENDER ═══════════
+function pget(id){return parseFloat(document.getElementById(id).value);}
+
+function run(){
+  if(!CACHE)CACHE=buildAll();
+  var P={wstk:pget('in-wstk'),mstk:pget('in-mstk'),bstk:pget('in-bstk'),
+    loan:pget('in-loan'),wedge:pget('in-wedge'),q3:pget('in-q3'),lb:pget('in-lb')};
+  P.floor=P.loan+P.wedge+P.q3+P.lb;
+  P.stor=pget('in-stor');P.rate=pget('in-rate');P.lbSprd=pget('in-lbsprd');
+  document.getElementById('floor-out').textContent=P.floor.toFixed(1)+'¢';
+
+  // adjusted FV per series:
+  //  flats  -> floored at OBBBA effective floor
+  //  spreads-> (a) bounded below at full carry = -(storage + px*rate/1200)*months
+  //            (b) + loan/lookback bull-spread support when flat FV sits near the floor
+  var decfM=CACHE['decf'];
+  SERIES.forEach(function(S){
+    var o=CACHE[S.id];
+    if(S.grp==='flat'){
+      o.fvA=function(st){return Math.max(o.fv(st),P.floor);};
+      return;
+    }
+    var months=CARRY_MONTHS[S.id]||2;
+    o.fvA=function(st){
+      var raw=o.fv(st);
+      var pxRef=Math.max(decfM.fv(st),P.floor);
+      var fullCarry=-(P.stor+pxRef*P.rate/1200)*months;
+      var v=Math.max(raw,fullCarry);
+      // lookback support: scales in as flat FV approaches the floor (within 4c)
+      var prox=Math.max(0,Math.min(1,(P.floor+4-decfM.fv(st))/4));
+      return v+P.lbSprd*prox;
+    };
+    o.carryAt=function(st){
+      var pxRef=Math.max(decfM.fv(st),P.floor);
+      return -(P.stor+pxRef*P.rate/1200)*months;
+    };
+  });
+
+  var age=(new Date()-CACHE._lastD)/864e5;
+  var w=document.getElementById('stale-warn');
+  if(age>7){w.style.display='block';
+    w.innerHTML='⚠ <b>cotton_raw.csv last row is '+CACHE._lastDate+'</b> ('+Math.round(age)+' days old). Market columns and highlighted points reflect that date; some pairs may show as rolled.';
+  }else w.style.display='none';
+  setStatus('live · prices '+CACHE._lastDate+' <span class="ok">✓</span> · wasde '+(WJ.lastUpdated||'')+' <span class="ok">✓</span>');
+
+  // FV summary table
+  var h='<tr><th>Series</th><th>Market ('+CACHE._lastDate+')</th><th>FV @ WASDE '+f1(P.wstk)+'M</th><th>FV @ model '+f1(P.mstk)+'M</th><th>FV @ bull '+f1(P.bstk)+'M</th><th>Mispricing</th><th>Fit R²</th></tr>';
+  SERIES.forEach(function(S){
+    var o=CACHE[S.id],isFlat=S.grp==='flat';
+    var fw=o.fvA(P.wstk),fm=o.fvA(P.mstk),fb=o.fvA(P.bstk);
+    var mis=o.mkt!==null?o.mkt-fw:null;
+    h+='<tr><td>'+S.nm+'</td><td>'+(o.mkt!==null?f2(o.mkt)+'¢':'<span style="color:#999;font-size:10px">'+o.mktLbl+'</span>')+'</td>'
+      +'<td>'+f2(fw)+'¢</td><td>'+f2(fm)+'¢</td><td>'+f2(fb)+'¢</td>'
+      +'<td class="'+(mis===null?'':mis>0.15?'neg':mis<-0.15?'pos':'')+'">'+(mis===null?'—':sgn(mis)+'¢ '+(mis>0.15?'rich':mis<-0.15?'cheap':'fair'))+'</td>'
+      +'<td>'+o.fit.f.r2.toFixed(2)+'</td></tr>';
+  });
+  document.getElementById('fv-tbl').innerHTML=h;
+  document.getElementById('fv-note').textContent='Mispricing = market − FV at WASDE stocks; "cheap" means the market trades below the stocks-implied fair value (a buy candidate on convergence). Flat-price FVs are floored at the OBBBA effective floor of '+P.floor.toFixed(1)+'¢. Model/bull columns show where FV migrates if USDA converges to the crop model.';
+
+  // scatters
+  document.getElementById('grid-sprd').innerHTML='';
+  document.getElementById('grid-flat').innerHTML='';
+  SERIES.forEach(function(S){drawScatter(CACHE[S.id],P);});
+
+  // OBBBA note
+  document.getElementById('obbba-note').innerHTML=
+    '<b>Mechanism.</b> OBBBA lifts the upland loan rate to '+P.loan.toFixed(0)+'¢ and changes the AWP calculation to the <b>3 lowest world quotes</b> (vs 5 previously) with a <b>30-day lookback</b>, letting producers redeem at the lowest AWP of the prior month. Lower AWP for a given futures level ⇒ marketing-loan gains trigger earlier and pay more ⇒ producers hold cotton in loan rather than sell weakness. '
+    +'<b>Flat price:</b> the futures-equivalent support ≈ loan + (futures−AWP wedge '+P.wedge.toFixed(1)+'¢) + quote-calc effect '+P.q3.toFixed(1)+'¢ + lookback option '+P.lb.toFixed(1)+'¢ = <b>'+P.floor.toFixed(1)+'¢</b> — shaded on the flat-price charts. Historical scatter points below the floor come from the old regime; under OBBBA those prices are unlikely to persist, so bearish-stocks FVs are truncated at the floor. '
+    +'<b>Spreads:</b> at prices near the floor, loan entries pull certificated/nearby supply off the market for up to 9 months — a structural bid to <b>bull calendar spreads</b> in low-price + high-stocks states that the pre-OBBBA history understates. The lookback also adds seasonal redemption flow around AWP troughs. <b>Spread FV adjustments applied above:</b> (1) full-carry bound at −(storage '+P.stor.toFixed(2)+'¢/mo + financing at '+P.rate.toFixed(1)+'%)×months — historical points cluster tighter than the new bound because storage rates were lower pre-2023, so at high stocks the adjusted FV (solid) sits below the raw fit (dashed); (2) a lookback/loan bull-spread support of up to '+P.lbSprd.toFixed(1)+'¢ that scales in as the flat-price FV approaches the '+P.floor.toFixed(1)+'¢ floor — visible as the solid curve lifting off the dashed fit at the high-stocks end. Net: the new regime compresses the bearish tail on flat price and skews spread risk toward inversion earlier in the stocks distribution than the raw fitted curves imply.';
+}
+
+function drawScatter(o,P){
+  var S=o.S,isFlat=S.grp==='flat';
+  var pts=o.pts;
+  var xs=pts.map(function(p){return p.x;}),ys=pts.map(function(p){return p.y;});
+  var xmin=0,xmax=Math.max.apply(null,xs)*1.06;
+  var ymin=Math.min.apply(null,ys),ymax=Math.max.apply(null,ys);
+  if(isFlat){ymin=Math.min(ymin,P.floor-4);}
+  var pad=(ymax-ymin)*0.08;ymin-=pad;ymax+=pad;
+  var W=560,H=330,L=52,R=14,T=14,B=36;
+  function X(v){return L+(v-xmin)/(xmax-xmin)*(W-L-R);}
+  function Y(v){return T+(ymax-v)/(ymax-ymin)*(H-T-B);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto">';
+  // grid + axes
+  var yt=(ymax-ymin)>40?10:(ymax-ymin)>12?4:(ymax-ymin)>4?2:1;
+  for(var g=Math.ceil(ymin/yt)*yt;g<=ymax;g+=yt){
+    s+='<line x1="'+L+'" y1="'+Y(g)+'" x2="'+(W-R)+'" y2="'+Y(g)+'" stroke="#eee"/>';
+    s+='<text x="'+(L-6)+'" y="'+(Y(g)+3)+'" font-size="9" fill="#999" text-anchor="end">'+g+'</text>';
+  }
+  for(var gx=0;gx<=xmax;gx+=1){
+    s+='<line x1="'+X(gx)+'" y1="'+T+'" x2="'+X(gx)+'" y2="'+(H-B)+'" stroke="#f2f2f2"/>';
+    s+='<text x="'+X(gx)+'" y="'+(H-B+14)+'" font-size="9" fill="#999" text-anchor="middle">'+gx+'</text>';
+  }
+  s+='<text x="'+(W/2)+'" y="'+(H-4)+'" font-size="9" fill="#777" text-anchor="middle">US ending stocks at release (M bales)</text>';
+  if(pts.length&&Y(0)>T&&Y(0)<H-B&&!isFlat)s+='<line x1="'+L+'" y1="'+Y(0)+'" x2="'+(W-R)+'" y2="'+Y(0)+'" stroke="#bbb" stroke-dasharray="3 3"/>';
+  // OBBBA floor band on flat charts
+  if(isFlat&&Y(P.floor)>T){
+    s+='<rect x="'+L+'" y="'+Y(P.floor)+'" width="'+(W-L-R)+'" height="'+(H-B-Y(P.floor))+'" fill="#a06b00" opacity="0.07"/>';
+    s+='<line x1="'+L+'" y1="'+Y(P.floor)+'" x2="'+(W-R)+'" y2="'+Y(P.floor)+'" stroke="#a06b00" stroke-width="1.5" stroke-dasharray="5 3"/>';
+    s+='<text x="'+(W-R-4)+'" y="'+(Y(P.floor)-4)+'" font-size="9" fill="#a06b00" text-anchor="end" font-weight="700">OBBBA floor '+P.floor.toFixed(1)+'¢</text>';
+  }
+  // raw fitted curve (thin) + adjusted FV curve (bold)
+  var steps=60,path='',pathA='';
+  for(var i=0;i<=steps;i++){
+    var xv=0.4+(xmax-0.4)*i/steps;
+    var fvRaw=isFlat?Math.max(o.fv(xv),P.floor):o.fv(xv);
+    var fvAdj=o.fvA(xv);
+    var cx=X(xv);
+    path +=(i===0?'M':'L')+cx.toFixed(1)+' '+Math.max(T,Math.min(H-B,Y(fvRaw))).toFixed(1)+' ';
+    pathA+=(i===0?'M':'L')+cx.toFixed(1)+' '+Math.max(T,Math.min(H-B,Y(fvAdj))).toFixed(1)+' ';
+  }
+  s+='<path d="'+path+'" fill="none" stroke="#9aa7b5" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.8"/>';
+  s+='<path d="'+pathA+'" fill="none" stroke="#1a5490" stroke-width="2.2" opacity="0.9"/>';
+  // full-carry bound on spread charts
+  if(!isFlat&&o.carryAt){
+    var fc=o.carryAt(P.wstk);
+    if(Y(fc)<H-B&&Y(fc)>T){
+      s+='<line x1="'+L+'" y1="'+Y(fc)+'" x2="'+(W-R)+'" y2="'+Y(fc)+'" stroke="#b02a37" stroke-width="1.3" stroke-dasharray="6 3" opacity="0.75"/>';
+      s+='<text x="'+(L+4)+'" y="'+(Y(fc)-4)+'" font-size="9" fill="#b02a37" font-weight="700">full carry '+fc.toFixed(2)+'¢ (new storage rates)</text>';
+    }
+  }
+  // points
+  var lastYr=Math.max.apply(null,pts.map(function(p){return p.yr;}));
+  pts.forEach(function(p){
+    var recent=p.cy>=2023,latest=(p.yr===lastYr&&p.m===Math.max.apply(null,pts.filter(function(q){return q.yr===lastYr;}).map(function(q){return q.m;})));
+    s+='<circle cx="'+X(p.x)+'" cy="'+Y(p.y)+'" r="'+(latest?5:3)+'" fill="'+(latest?'#a06b00':recent?'#1a5490':'#9aa7b5')+'" opacity="'+(latest?1:recent?0.85:0.45)+'">'
+      +'<title>'+p.cy+'/'+String(p.cy+1).slice(2)+' · report '+p.yr+'-'+String(p.m).padStart(2,'0')+' · stocks '+p.x.toFixed(2)+'M · '+p.y.toFixed(2)+'¢</title></circle>';
+  });
+  // stocks markers
+  [[P.wstk,'#555','WASDE'],[P.mstk,'#a06b00','MODEL'],[P.bstk,'#b02a37','BULL']].forEach(function(mk){
+    s+='<line x1="'+X(mk[0])+'" y1="'+T+'" x2="'+X(mk[0])+'" y2="'+(H-B)+'" stroke="'+mk[1]+'" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.8"/>';
+    s+='<text x="'+X(mk[0])+'" y="'+(T+9)+'" font-size="8.5" fill="'+mk[1]+'" text-anchor="middle" font-weight="700">'+mk[2]+'</text>';
+  });
+  s+='</svg>';
+  var card=document.createElement('div');card.className='scat';
+  card.innerHTML='<div class="hd"><span class="nm">'+S.nm+'</span>'
+    +'<span class="fvs">FV@'+f1(P.wstk)+'M = <b>'+f2(o.fvA(P.wstk))+'¢</b> · @'+f1(P.mstk)+'M = '+f2(o.fvA(P.mstk))+'¢'
+    +(o.mkt!==null?' · mkt '+f2(o.mkt)+'¢':'')
+    +' · R²='+o.fit.f.r2.toFixed(2)+' ('+(o.fit.form==='inv'?'1/x':'lin')+', n='+pts.length+')</span></div>'
+    +s;
+  document.getElementById(S.grp==='sprd'?'grid-sprd':'grid-flat').appendChild(card);
+}
+
+['in-wstk','in-mstk','in-bstk','in-loan','in-wedge','in-q3','in-lb','in-stor','in-rate','in-lbsprd'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){if(loaded.w&&loaded.p)run();});
+});
+setStatus('loading data…');
+</script>
+</body>
+</html>
