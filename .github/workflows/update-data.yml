@@ -2,7 +2,8 @@ name: Update Cotton Data
 
 on:
   schedule:
-    - cron: '0 20 * 4-11 1'
+    - cron: '35 20 * 4-12 1'   # NASS Crop Progress posts Mondays 4pm ET
+    - cron: '30 13 * 4-12 2'   # Tuesday catch-up (holiday weeks / late loads)
   workflow_dispatch:
 
 jobs:
@@ -31,4 +32,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/*.csv
           git commit -m "Update cotton data $(date -u +%Y-%m-%d)" || echo "No changes"
-          git push
+          for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done

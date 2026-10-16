@@ -1,0 +1,24 @@
+name: Build crop analytics
+on:
+  workflow_run:
+    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage", "Backfill (parallel, manual)"]
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: {group: build, cancel-in-progress: true}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests pandas numpy
+      - run: python scripts/build.py
+      - run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data
+          git commit -m "Build crop analytics $(date -u +%Y-%m-%d)" || exit 0
+          for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done
