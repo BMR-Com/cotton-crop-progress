@@ -1,91 +1,91 @@
-/sites/default/files/documents/2007_fsa_acres_sum_final.zip
-/sites/default/files/documents/2008_fsa_acres_sum_final.zip
-/sites/default/files/documents/2009_fsa_acres_detail_final_7.zip
-/sites/default/files/documents/2009_fsa_acres_sum_final_8.zip
-/sites/default/files/documents/2010_fsa_acres_detail_final_5.zip
-/sites/default/files/documents/2010_fsa_acres_sum_final_6.zip
-/sites/default/files/documents/2011_fsa_acre_det_sep11_1.zip
-/sites/default/files/documents/2011_fsa_acre_detail_aug11_3.zip
-/sites/default/files/documents/2011_fsa_acres_det_dec2011.zip
-/sites/default/files/documents/2011_fsa_acres_det_nov2011.zip
-/sites/default/files/documents/2011_fsa_acres_detail_jan2012.zip
-/sites/default/files/documents/2011_fsa_acres_detail_oct2011.zip
-/sites/default/files/documents/2011_fsa_acres_sum_aug11_4.zip
-/sites/default/files/documents/2011_fsa_acres_sum_dec2011.zip
-/sites/default/files/documents/2011_fsa_acres_sum_jan2012.zip
-/sites/default/files/documents/2011_fsa_acres_sum_nov2011.zip
-/sites/default/files/documents/2011_fsa_acres_sum_oct11.zip
-/sites/default/files/documents/2011_fsa_acres_sum_sep11_2.zip
-/sites/default/files/documents/2012_fsa_acres_aug_2012.zip
-/sites/default/files/documents/2012_fsa_acres_dec_2012.zip
-/sites/default/files/documents/2012_fsa_acres_jan_2013.zip
-/sites/default/files/documents/2012_fsa_acres_nov_2012.zip
-/sites/default/files/documents/2012_fsa_acres_oct_2012.zip
-/sites/default/files/documents/2012_fsa_acres_sep_2012.zip
-/sites/default/files/documents/2013_fsa_acres_aug_2013.zip
-/sites/default/files/documents/2013_fsa_acres_dec_2013.zip
-/sites/default/files/documents/2013_fsa_acres_jan_2014.zip
-/sites/default/files/documents/2013_fsa_acres_nov_2013.zip
-/sites/default/files/documents/2013_fsa_acres_oct_2013.zip
-/sites/default/files/documents/2013_fsa_acres_sep_2013.zip
-/sites/default/files/documents/2014_fsa_acres_Jan2014.zip
-/sites/default/files/documents/2014_fsa_acres_aug_2014.zip
-/sites/default/files/documents/2014_fsa_acres_dec2014.zip
-/sites/default/files/documents/2014_fsa_acres_nov2014.zip
-/sites/default/files/documents/2014_fsa_acres_oct2014.zip
-/sites/default/files/documents/2014_fsa_acres_sep_2014.zip
-/sites/default/files/documents/2015_fsa_acres_11022015.zip
-/sites/default/files/documents/2015_fsa_acres_Aug2015.zip
-/sites/default/files/documents/2015_fsa_acres_Dec2015_peS8.zip
-/sites/default/files/documents/2015_fsa_acres_Jan2016_sq19.zip
-/sites/default/files/documents/2015_fsa_acres_Oct2015.zip
-/sites/default/files/documents/2015_fsa_acres_Sept2015.zip
-/sites/default/files/documents/2016_fsa_acres_1003016_gs4.zip
-/sites/default/files/documents/2016_fsa_acres_data_aug2016_dr6.zip
-/sites/default/files/documents/2016_fsa_acres_data_sep2016_gs42.zip
-/sites/default/files/documents/2016_fsa_acres_dec2016_27gv.zip
-/sites/default/files/documents/2016_fsa_acres_jan2017_edr32.zip
-/sites/default/files/documents/2016_fsa_acres_nov2016_dd36.zip
-/sites/default/files/documents/2017_fsa_acres_aug2017_gru49.zip
-/sites/default/files/documents/2017_fsa_acres_dec2017fsb19.zip
-/sites/default/files/documents/2017_fsa_acres_jan2018.zip
-/sites/default/files/documents/2017_fsa_acres_nov2017gru14.zip
-/sites/default/files/documents/2017_fsa_acres_oct2017fsb12.zip
-/sites/default/files/documents/2017_fsa_acres_sep2017kgrb10.zip
-/sites/default/files/documents/2018_fsa_acres_080118_fsb3489.zip
-/sites/default/files/documents/2018_fsa_acres_2018_1001.zip
-/sites/default/files/documents/2018_fsa_acres_Dec_2018_zfak.zip
-/sites/default/files/documents/2018_fsa_acres_Jan-2019-kgcr.zip
-/sites/default/files/documents/2018_fsa_acres_Nov_2018_grufs%21.zip
-/sites/default/files/documents/2018_fsa_acres_sep0618_csa1983.zip
-/sites/default/files/documents/2019_fsa_acres_aug_2019-srbp.zip
-/sites/default/files/documents/2019_fsa_acres_aug_22_2019-stpr.zip
-/sites/default/files/documents/2019_fsa_acres_dec2019_omron.zip
-/sites/default/files/documents/2019_fsa_acres_jan2020_stlno1.zip
-/sites/default/files/documents/2019_fsa_acres_oct_2019_kiro2rt.zip
-/sites/default/files/documents/2019_fsa_acres_sept_2019-grmap.zip
-/sites/default/files/documents/2020_FSA_Acres_web_as_of_110220-vkfNG6.zip
-/sites/default/files/documents/2020_FSA_acres_web_as_of_100120_gHlBad.zip
-/sites/default/files/documents/2020_FSA_acres_web_as_of_120120-2jURlJ.zip
-/sites/default/files/documents/2020_FSA_acres_web_as_of_sept_2020_am6bkE.zip
-/sites/default/files/documents/2020_fsa_acres_as_of_010521-BbO60I.zip
-/sites/default/files/documents/2020_fsa_acres_aug_2020-pSs53q.zip
-/sites/default/files/documents/2021_fsa_acres_web_as_of_010322.zip
-/sites/default/files/documents/2021_fsa_acres_web_as_of_080221.zip
-/sites/default/files/documents/2021_fsa_acres_web_as_of_090121.zip
-/sites/default/files/documents/2021_fsa_acres_web_as_of_110921.zip
-/sites/default/files/documents/2021_fsa_acres_web_as_of_120121.zip
-/sites/default/files/documents/2022_fsa_acres_web_082222.zip
-/sites/default/files/documents/3QPVeIgPizDl.zip
-/sites/default/files/documents/3ZRRUjHh06zG3nfU7zfL.zip
-/sites/default/files/documents/DkSrOxeWEvkEdt2.zip
-/sites/default/files/documents/HrBPNSnXWVoK85WDU3eg.zip
-/sites/default/files/documents/NEBP1OybFfUr83utFEB2.zip
-/sites/default/files/documents/Ph8ZGICAsuKH.zip
-/sites/default/files/documents/XoNdctf9jmvWFGY.zip
-/sites/default/files/documents/YRe5GMMC0mtTuAH96xTe.zip
-/sites/default/files/documents/ZarlPtaEjGLZ.zip
-/sites/default/files/documents/ddXs2lMsKgl5zCRp6DzL.zip
-/sites/default/files/documents/pUCQy90pWYR6.zip
-/sites/default/files/documents/vc8Jn1nR42.zip
-/sites/default/files/documents/yLDyuZz8gcaNQN8F87Xh.zip
+/sites/default/files/documents/pUCQy90pWYR6.zip	2024 acreage data as of August 9, 2024
+/sites/default/files/documents/ZarlPtaEjGLZ.zip	2024 acreage data as of September 3, 2024
+/sites/default/files/documents/HrBPNSnXWVoK85WDU3eg.zip	2023 acreage data as of August 9, 2023
+/sites/default/files/documents/YRe5GMMC0mtTuAH96xTe.zip	2023 acreage data as of September 1, 2023
+/sites/default/files/documents/yLDyuZz8gcaNQN8F87Xh.zip	2023 acreage data as of October 2, 2023
+/sites/default/files/documents/XoNdctf9jmvWFGY.zip	2023 acreage data as of November 1, 2023
+/sites/default/files/documents/Ph8ZGICAsuKH.zip	2023 acreage data as of December 1, 2023
+/sites/default/files/documents/3QPVeIgPizDl.zip	2023 acreage data as of January 2, 2024
+/sites/default/files/documents/2022_fsa_acres_web_082222.zip	2022 acreage data as of August 22, 2022
+/sites/default/files/documents/3ZRRUjHh06zG3nfU7zfL.zip	2022 acreage data as of September 2, 2022
+/sites/default/files/documents/ddXs2lMsKgl5zCRp6DzL.zip	2022 acreage data as of October 3, 2022
+/sites/default/files/documents/NEBP1OybFfUr83utFEB2.zip	2022 acreage data as of November 1, 2022
+/sites/default/files/documents/DkSrOxeWEvkEdt2.zip	2022 acreage data as of December 1, 2022
+/sites/default/files/documents/vc8Jn1nR42.zip	2022 acreage data as of January 3, 2023
+/sites/default/files/documents/2021_fsa_acres_web_as_of_080221.zip	2021 acreage data as of August 2, 2021
+/sites/default/files/documents/2021_fsa_acres_web_as_of_090121.zip	2021 acreage data as of September 1, 2021
+/sites/default/files/documents/2021_fsa_acres_web_as_of_110921.zip	2021 acreage data as of November 9, 2021
+/sites/default/files/documents/2021_fsa_acres_web_as_of_120121.zip	2021 acreage data as of December 1, 2021
+/sites/default/files/documents/2021_fsa_acres_web_as_of_010322.zip	2021 acreage data as of January 3, 2022
+/sites/default/files/documents/2020_fsa_acres_as_of_010521-BbO60I.zip	2020 acreage data as of January 5, 2021
+/sites/default/files/documents/2020_FSA_acres_web_as_of_120120-2jURlJ.zip	2020 acreage data as of December 10, 2020
+/sites/default/files/documents/2020_FSA_Acres_web_as_of_110220-vkfNG6.zip	2020 acreage data as of November 10, 2020
+/sites/default/files/documents/2020_FSA_acres_web_as_of_100120_gHlBad.zip	2020 acreage data as of October 1, 2020
+/sites/default/files/documents/2020_FSA_acres_web_as_of_sept_2020_am6bkE.zip	2020 acreage data as of September 1, 2020
+/sites/default/files/documents/2020_fsa_acres_aug_2020-pSs53q.zip	2020 acreage data as of July 31, 2020
+/sites/default/files/documents/2019_fsa_acres_jan2020_stlno1.zip	2019 acreage data as of January 1, 2020
+/sites/default/files/documents/2019_fsa_acres_dec2019_omron.zip	2019 acreage data as of December 1, 2019
+/sites/default/files/documents/2019_fsa_acres_oct_2019_kiro2rt.zip	2019 acreage data as of October 1, 2019
+/sites/default/files/documents/2019_fsa_acres_sept_2019-grmap.zip	2019 acreage data as of September 4, 2019
+/sites/default/files/documents/2019_fsa_acres_aug_22_2019-stpr.zip	2019 acreage data as of August 22, 2019
+/sites/default/files/documents/2019_fsa_acres_aug_2019-srbp.zip	2019 acreage data as of August 1, 2019
+/sites/default/files/documents/2018_fsa_acres_Jan-2019-kgcr.zip	2018 acreage data as of January 28, 2019
+/sites/default/files/documents/2018_fsa_acres_Dec_2018_zfak.zip	2018 acreage data as of December 3, 2018
+/sites/default/files/documents/2018_fsa_acres_Nov_2018_grufs%21.zip	2018 acreage data as of November 1, 2018
+/sites/default/files/documents/2018_fsa_acres_2018_1001.zip	2018 acreage data as of October 1, 2018
+/sites/default/files/documents/2018_fsa_acres_sep0618_csa1983.zip	2018 acreage data as of September 6, 2018
+/sites/default/files/documents/2018_fsa_acres_080118_fsb3489.zip	2018 acreage data as of August 01, 2018
+/sites/default/files/documents/2017_fsa_acres_jan2018.zip	2017 acreage data as of January 16, 2018
+/sites/default/files/documents/2017_fsa_acres_dec2017fsb19.zip	2017 acreage data as of December 1, 2017
+/sites/default/files/documents/2017_fsa_acres_nov2017gru14.zip	2017 acreage data as of November 1, 2017
+/sites/default/files/documents/2017_fsa_acres_oct2017fsb12.zip	2017 acreage data as of October 1, 2017
+/sites/default/files/documents/2017_fsa_acres_sep2017kgrb10.zip	2017 acreage data as of September 1, 2017
+/sites/default/files/documents/2017_fsa_acres_aug2017_gru49.zip	2017 acreage data as of August 1, 2017
+/sites/default/files/documents/2016_fsa_acres_jan2017_edr32.zip	2016 acreage data as of January 1, 2017
+/sites/default/files/documents/2016_fsa_acres_dec2016_27gv.zip	2016 acreage data as of December 1, 2016
+/sites/default/files/documents/2016_fsa_acres_nov2016_dd36.zip	2016 acreage data as of November 1, 2016
+/sites/default/files/documents/2016_fsa_acres_1003016_gs4.zip	2016 acreage data as of October 1, 2016
+/sites/default/files/documents/2016_fsa_acres_data_sep2016_gs42.zip	2016 acreage data as of September 1, 2016
+/sites/default/files/documents/2016_fsa_acres_data_aug2016_dr6.zip	2016 acreage data as of August 1, 2016
+/sites/default/files/documents/2015_fsa_acres_Jan2016_sq19.zip	2015 acreage data as of January 1, 2016
+/sites/default/files/documents/2015_fsa_acres_Dec2015_peS8.zip	2015 acreage data as of December 1, 2015
+/sites/default/files/documents/2015_fsa_acres_11022015.zip	2015 acreage data as of November 1, 2015
+/sites/default/files/documents/2015_fsa_acres_Oct2015.zip	2015 acreage data as of October 1, 2015
+/sites/default/files/documents/2015_fsa_acres_Sept2015.zip	2015 acreage data as of September 1, 2015
+/sites/default/files/documents/2015_fsa_acres_Aug2015.zip	2015 acreage data as of August 1, 2014
+/sites/default/files/documents/2014_fsa_acres_Jan2014.zip	2014 acreage data as of January 2015
+/sites/default/files/documents/2014_fsa_acres_dec2014.zip	2014 acreage data as of December 2014
+/sites/default/files/documents/2014_fsa_acres_nov2014.zip	2014 acreage data as of November 2014
+/sites/default/files/documents/2014_fsa_acres_oct2014.zip	2014 acreage data as of October 2014
+/sites/default/files/documents/2014_fsa_acres_sep_2014.zip	2014 acreage data as of September 2014
+/sites/default/files/documents/2014_fsa_acres_aug_2014.zip	2014 acreage data as of August 2014
+/sites/default/files/documents/2013_fsa_acres_jan_2014.zip	2013 acreage data as of January 2014
+/sites/default/files/documents/2013_fsa_acres_dec_2013.zip	2013 acreage data as of December 2013
+/sites/default/files/documents/2013_fsa_acres_nov_2013.zip	2013 acreage data as of November 2013
+/sites/default/files/documents/2013_fsa_acres_oct_2013.zip	2013 acreage data as of October 2013
+/sites/default/files/documents/2013_fsa_acres_sep_2013.zip	2013 acreage data as of September 2013
+/sites/default/files/documents/2013_fsa_acres_aug_2013.zip	2013 acreage data as of August 2013
+/sites/default/files/documents/2012_fsa_acres_jan_2013.zip	2012 acreage data as of January 2013
+/sites/default/files/documents/2012_fsa_acres_dec_2012.zip	2012 acreage data as of December 2012
+/sites/default/files/documents/2012_fsa_acres_nov_2012.zip	2012 acreage data as of November 2012
+/sites/default/files/documents/2012_fsa_acres_oct_2012.zip	2012 acreage data as of October 2012
+/sites/default/files/documents/2012_fsa_acres_sep_2012.zip	2012 acreage data as of September 2012
+/sites/default/files/documents/2012_fsa_acres_aug_2012.zip	2012 acreage data as of August 2012
+/sites/default/files/documents/2011_fsa_acres_detail_jan2012.zip	2011 by crop by county as of Jan 2012 FINAL
+/sites/default/files/documents/2011_fsa_acres_sum_jan2012.zip	2011 by crop by state for selected crops as of Jan 2012 FINAL
+/sites/default/files/documents/2011_fsa_acres_det_dec2011.zip	2011 by crop by county as of Dec 2011
+/sites/default/files/documents/2011_fsa_acres_sum_dec2011.zip	2011 by crop by state for selected crops as of Dec 2011
+/sites/default/files/documents/2011_fsa_acres_det_nov2011.zip	2011 by crop by county as of Nov 2011
+/sites/default/files/documents/2011_fsa_acres_sum_nov2011.zip	2011 by crop by state for selected crops as of Nov 2011
+/sites/default/files/documents/2011_fsa_acres_detail_oct2011.zip	2011 by crop by county as of Oct 2011
+/sites/default/files/documents/2011_fsa_acres_sum_oct11.zip	2011 by crop by state for selected crops as of Oct 2011
+/sites/default/files/documents/2011_fsa_acre_det_sep11_1.zip	2011 by crop by county as of Sep 2011
+/sites/default/files/documents/2011_fsa_acres_sum_sep11_2.zip	2011 by crop by state for selected crops as of Sep 2011
+/sites/default/files/documents/2011_fsa_acre_detail_aug11_3.zip	2011 by crop by county as of Aug 2011
+/sites/default/files/documents/2011_fsa_acres_sum_aug11_4.zip	2011 by crop by state for selected crops as of Aug 2011
+/sites/default/files/documents/2010_fsa_acres_detail_final_5.zip	2010 by crop by county
+/sites/default/files/documents/2010_fsa_acres_sum_final_6.zip	2010 by crop by state for selected crops
+/sites/default/files/documents/2009_fsa_acres_detail_final_7.zip	2009 by crop by county
+/sites/default/files/documents/2009_fsa_acres_sum_final_8.zip	2009 by crop by state for selected crops
+/sites/default/files/documents/2008_fsa_acres_sum_final.zip	2008 by crop by state for selected crops
+/sites/default/files/documents/2007_fsa_acres_sum_final.zip	2007 by crop by state for selected crops
