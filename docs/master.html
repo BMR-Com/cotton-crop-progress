@@ -547,7 +547,7 @@ function run(){
     var dPxBeta=beta*dStk;
     var lvlFair=C.lvl?C.lvl.a+C.lvl.b/su+C.lvl.c*(CUR_Y-2007):null;
     var tgtBase=(1-P.lvlw)*(px+dPxBeta)+(lvlFair!==null?P.lvlw*lvlFair:0);
-    var tgt=tgtBase+ocAdj+cotAdj;
+    var tgt=Math.max(tgtBase+ocAdj+cotAdj,P.fl?P.fl('decf').hard:P.floor);   // loan floor (Dec LDP trigger)
     return {prod:prod,dStk:dStk,stk:stk,su:su,dPxBeta:dPxBeta,lvlFair:lvlFair,tgtBase:tgtBase,tgt:tgt,edge:tgt-px};
   }
   var S={bull:scen(P.plo),med:scen(P.pmed),bear:scen(P.phi),wasde:scen(P.wprod)};
