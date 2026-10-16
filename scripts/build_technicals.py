@@ -259,7 +259,7 @@ def analyse(h, label):
 
     trend = ("up" if last > s50 > s200 else "down" if last < s50 < s200 else "mixed") if not np.isnan(s200) else ("up" if last > s50 else "down")
     t = []
-    t.append(f"{label} settled {last:.2f}¢ ({last - prev:+.2f}), {ret['1w']:+.1f}% on the week and {ret['1m']:+.1f}% on the month; "
+    t.append(f"{label} at {last:.2f}¢ ({last - prev:+.2f} on the day), {ret['1w']:+.1f}% on the week and {ret['1m']:+.1f}% on the month; "
              f"52-week range {lo52:.2f}–{hi52:.2f}¢.")
     ma_txt = ", ".join(f"{n}-day {v:.2f}" for n, v in ((20, s20), (50, s50), (100, s100), (200, s200)) if not np.isnan(v))
     t.append(f"Trend: {trend}. Price is {'above' if last > s50 else 'below'} the 50-day and {'above' if not np.isnan(s200) and last > s200 else 'below'} the 200-day ({ma_txt})"
