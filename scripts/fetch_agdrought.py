@@ -6,7 +6,7 @@ Drought Monitor category, weekly, for the United States and Texas.
 Output: data/drought/cotton_area_drought.csv  (location, week, none, d0, d1, d2, d3, d4 = % of cotton area in
 D0-D4 / D1-D4 / D2-D4 / D3-D4 / D4, cumulative as published).
 """
-import os, sys, json
+import os, re, sys, json
 import requests
 import pandas as pd
 
@@ -32,6 +32,7 @@ def num(x):
 
 
 def main():
+    os.makedirs("data/drought", exist_ok=True)
     rows = []
     for ltype, names in WANT.items():
         locs = call("ReturnLocations2020", ltype=ltype, ctype="cotton")
@@ -40,11 +41,19 @@ def main():
                 continue
             data = call("ReturnCropData2020", ctype="cotton", ltype=ltype, loc=loc["Value"])
             print(loc["Text"], len(data), "weeks; fields:", list(data[0].keys()) if data else None)
+            if data:
+                json.dump(data[-3:], open("data/drought/_sample_fields.json", "w"), indent=1)
             for d in data:
-                k = {kk.lower().replace(" ", "").replace("-", ""): v for kk, v in d.items()}
-                rows.append({"location": "US" if ltype == "1" else "TX", "week": k.get("week") or k.get("date") or k.get("mapdate"),
-                             "none": num(k.get("none")), "d0": num(k.get("d0d4")), "d1": num(k.get("d1d4")), "d2": num(k.get("d2d4")),
-                             "d3": num(k.get("d3d4")), "d4": num(k.get("d4"))})
+                k = {re.sub(r"[^a-z0-9]", "", kk.lower()): v for kk, v in d.items()}
+                def pick(prefix):            # 'd1d4', 'd1tod4', 'd1' ... → first key starting with the category
+                    for kk, v in k.items():
+                        if kk.startswith(prefix) and (prefix == "d4" or "d4" in kk[2:] or kk == prefix):
+                            return num(v)
+                    return None
+                rows.append({"location": "US" if ltype == "1" else "TX",
+                             "week": k.get("week") or k.get("date") or k.get("mapdate") or k.get("validstart"),
+                             "none": num(k.get("none")), "d0": pick("d0"), "d1": pick("d1"), "d2": pick("d2"), "d3": pick("d3"),
+                             "d4": num(k.get("d4"))})
     if not rows:
         print("no data returned"); return 1
     df = pd.DataFrame(rows)
