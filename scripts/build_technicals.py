@@ -226,7 +226,7 @@ def swings(h, look=5, n=6):
     return res, sup
 
 
-def analyse(h, label):
+def analyse(h, label, spread=False):
     c = h.Close
     last, prev = float(c.iloc[-1]), float(c.iloc[-2])
     s20, s50, s100, s200 = (sma(c, n).iloc[-1] for n in (20, 50, 100, 200))
@@ -256,27 +256,115 @@ def analyse(h, label):
     ret = {k: (float(c.iloc[-1] / c.iloc[-n - 1] - 1) * 100 if len(c) > n else None) for k, n in (("1w", 5), ("1m", 21), ("3m", 63))}
     ytd = c[c.index.year == c.index[-1].year]
     ret["ytd"] = float(c.iloc[-1] / ytd.iloc[0] - 1) * 100 if len(ytd) > 1 else None
+    if spread:                                   # spreads: changes in cents, not percent
+        ret = {k: (float(c.iloc[-1] - c.iloc[-n - 1]) if len(c) > n else None) for k, n in (("1w", 5), ("1m", 21), ("3m", 63))}
+        ret["ytd"] = float(c.iloc[-1] - ytd.iloc[0]) if len(ytd) > 1 else None
 
     trend = ("up" if last > s50 > s200 else "down" if last < s50 < s200 else "mixed") if not np.isnan(s200) else ("up" if last > s50 else "down")
     t = []
-    t.append(f"{label} at {last:.2f}¢ ({last - prev:+.2f} on the day), {ret['1w']:+.1f}% on the week and {ret['1m']:+.1f}% on the month; "
-             f"52-week range {lo52:.2f}–{hi52:.2f}¢.")
+    if spread:
+        ch = lambda n: last - float(c.iloc[-n - 1]) if len(c) > n else float("nan")
+        t.append(f"{label} at {last:+.2f}¢ ({last - prev:+.2f} on the day, {ch(5):+.2f} on the week, {ch(21):+.2f} on the month); "
+                 f"52-week range {lo52:+.2f} to {hi52:+.2f}¢. Negative = front under the next contract (carry); positive = inverted.")
+    else:
+        t.append(f"{label} at {last:.2f}¢ ({last - prev:+.2f} on the day), {ret['1w']:+.1f}% on the week and {ret['1m']:+.1f}% on the month; "
+                 f"52-week range {lo52:.2f}–{hi52:.2f}¢.")
     ma_txt = ", ".join(f"{n}-day {v:.2f}" for n, v in ((20, s20), (50, s50), (100, s100), (200, s200)) if not np.isnan(v))
     t.append(f"Trend: {trend}. Price is {'above' if last > s50 else 'below'} the 50-day and {'above' if not np.isnan(s200) and last > s200 else 'below'} the 200-day ({ma_txt})"
              + (f"; {cross}." if cross else "."))
     t.append(f"Momentum: RSI {r:.0f} ({'overbought' if r > 70 else 'oversold' if r < 30 else 'neutral'}); MACD {'above' if m.iloc[-1] > sg.iloc[-1] else 'below'} its signal "
              f"with the histogram {'rising' if hist.iloc[-1] > hist.iloc[-2] else 'falling'}; ADX {ad.iloc[-1]:.0f} "
              f"({'trending' if ad.iloc[-1] > 25 else 'weak trend' if ad.iloc[-1] > 20 else 'range-bound'}, {'+DI' if pdi.iloc[-1] > mdi.iloc[-1] else '−DI'} leading).")
-    t.append(f"Volatility: ATR {a:.2f}¢ ({a / last * 100:.1f}% of price)" + (f"; Bollinger width at the {bw_pct:.0f}th percentile of the past year"
+    t.append(f"Volatility: ATR {a:.2f}¢" + ("" if spread else f" ({a / last * 100:.1f}% of price)") + (f"; Bollinger width at the {bw_pct:.0f}th percentile of the past year"
              + (" — a squeeze, often ahead of a range break." if bw_pct < 20 else ".") if bw_pct is not None else "."))
     if res or sup:
         t.append("Levels: resistance " + (", ".join(f"{v:.2f}" for v in res[:3]) or "—") + "; support " + (", ".join(f"{v:.2f}" for v in sup[:3]) or "—")
                  + f". 52-week Fibonacci 38.2% {fib['38.2%']:.2f}, 50% {fib['50.0%']:.2f}, 61.8% {fib['61.8%']:.2f}.")
     t.append(f"Rating: daily {rt_d['overall'].lower()} (moving averages {rt_d['ma'].lower()}, oscillators {rt_d['osc'].lower()})"
              + (f"; weekly {rt_w['overall'].lower()}." if rt_w else "."))
-    return {"last": last, "chg": last - prev, "returns": ret, "trend": trend, "rsi": r, "atr": a, "adx": float(ad.iloc[-1]),
+    return {"last": last, "chg": last - prev, "returns": ret, "spread": spread, "trend": trend, "rsi": r, "atr": a, "adx": float(ad.iloc[-1]),
             "hi52": hi52, "lo52": lo52, "fib": fib, "resistance": res, "support": sup, "pivots": pivots(h),
             "rating_daily": rt_d, "rating_weekly": rt_w, "text": t, "date": h.index[-1].strftime("%Y-%m-%d")}
+
+
+# ───────── seasonality & percentiles from the long history (docs/data/cotton_px.csv) ─────────
+SEQ = ["MAR", "MAY", "JUL", "DEC"]
+
+
+def contract_of(d, mon, n=1):
+    m = MONTHS[mon][0]
+    y = d.year if (d.month, d.day) < (m, 8) else d.year + 1
+    return mon, y + n - 1
+
+
+def expiry(mon, y):
+    return date(y, MONTHS[mon][0], 8)
+
+
+def nxt(mon, y):
+    i = SEQ.index(mon)
+    return (SEQ[i + 1], y) if i < 3 else (SEQ[0], y + 1)
+
+
+def seasonality(today):
+    p = os.path.join(ROOT, "docs", "data", "cotton_px.csv")
+    px = pd.read_csv(p, low_memory=False)
+    px["d"] = pd.to_datetime(px.Dates, format="%m/%d/%y").dt.date
+    defs = [(f"{m.title()} futures", "price", m, None) for m in ("DEC", "MAR", "MAY", "JUL")] + \
+           [(f"{a.title()}/{b.title()} spread", "spread", a, b) for a, b in (("DEC", "MAR"), ("MAR", "MAY"), ("MAY", "JUL"), ("JUL", "DEC"))]
+    out = []
+    for label, kind, a, b in defs:
+        rows = []
+        for i, d in enumerate(px.d):
+            ma, ya = contract_of(d, a, 1)
+            va = px.at[i, f"CT{a}1 Comdty PX_LAST"]
+            if pd.isna(va):
+                continue
+            if kind == "price":
+                val = float(va)
+            else:
+                mb, yb = nxt(ma, ya)
+                vb = None
+                for n in (1, 2):
+                    if contract_of(d, b, n) == (mb, yb):
+                        vb = px.at[i, f"CT{b}{n} Comdty PX_LAST"]
+                        break
+                if vb is None or pd.isna(vb):
+                    continue
+                val = float(va) - float(vb)
+            wk = (expiry(ma, ya) - d).days // 7
+            if 0 <= wk <= 52:
+                rows.append((f"{ma}{ya % 100:02d}", ya, wk, d, val))
+        if not rows:
+            continue
+        df = pd.DataFrame(rows, columns=["contract", "year", "wk", "date", "val"])
+        cur_c = df.sort_values("date").contract.iloc[-1]
+        cur_y = int(df[df.contract == cur_c].year.iloc[0])
+        hist = df[df.contract != cur_c]
+        wkly = hist.groupby(["year", "wk"]).val.last().unstack(0)          # weeks × years
+        bands = {q: [[int(w), round(float(v), 2)] for w, v in wkly.quantile(q / 100, axis=1).dropna().items()] for q in (10, 25, 50, 75, 90)}
+        last5 = [y for y in sorted(wkly.columns)[-5:]]
+        avg5 = [[int(w), round(float(v), 2)] for w, v in wkly[last5].mean(axis=1).dropna().items()]
+        ly = cur_y - 1 if kind == "price" or a != "DEC" else cur_y - 1
+        lyc = [[int(w), round(float(v), 2)] for w, v in wkly[ly].dropna().items()] if ly in wkly else []
+        cur = df[df.contract == cur_c].groupby("wk").val.last()
+        cur_pts = [[int(w), round(float(v), 2)] for w, v in cur.items()]
+        now_v = float(df[df.contract == cur_c].sort_values("date").val.iloc[-1])
+        now_w = int(df[df.contract == cur_c].sort_values("date").wk.iloc[-1])
+        same = hist[(hist.wk >= now_w - 1) & (hist.wk <= now_w + 1)].groupby("year").val.mean()
+        pct = lambda arr: float((np.array(arr) < now_v).mean() * 100) if len(arr) else None
+        recent10 = hist[hist.year >= cur_y - 10]
+        same10 = same[same.index >= cur_y - 10]
+        out.append({"label": label, "kind": kind, "contract": cur_c, "now": now_v, "wk_now": now_w,
+                    "expiry": expiry(*contract_of(df.sort_values("date").date.iloc[-1], a, 1)).isoformat(),
+                    "pct_same_time": pct(same.values), "pct_same_time_10y": pct(same10.values), "pct_all": pct(hist.val.values),
+                    "pct_all_10y": pct(recent10.val.values), "median_same_time": float(same.median()) if len(same) else None,
+                    "avg5_same_time": float(same[same.index >= cur_y - 5].mean()) if len(same) else None,
+                    "ly_same_time": float(same.get(cur_y - 1)) if (cur_y - 1) in same.index else None,
+                    "min_same_time": float(same.min()) if len(same) else None, "max_same_time": float(same.max()) if len(same) else None,
+                    "years": [int(min(hist.year)), int(max(hist.year))] if len(hist) else None, "n_years": int(same.size),
+                    "bands": bands, "avg5": avg5, "last_year": lyc, "current": cur_pts})
+    return out
 
 
 def main():
@@ -285,6 +373,7 @@ def main():
     old = json.load(open(OUT)) if os.path.exists(OUT) else {}
     out = {"generated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "series": [], "note":
            "Daily bars from Yahoo Finance (ICE Futures US). The continuous series rolls between contracts, so gaps at rolls are price jumps, not moves."}
+    closes = {}
     for label, tk, exp in series:
         h = fetch(tk)
         if h is None or len(h) < 60:
@@ -297,6 +386,28 @@ def main():
         out["series"].append({"label": label, "ticker": tk, "expiry": exp.isoformat() if exp else None, "bars": bars,
                               "analysis": analyse(h, label if exp else "Continuous front month")})
         print(tk, len(bars), "bars", h.index[-1].date())
+        closes[tk] = h
+    # calendar spreads between consecutive active contracts (front minus next), from the same Yahoo closes
+    acts = [x for x in series if x[2]]
+    for (la, ta, ea), (lb, tb, eb) in zip(acts, acts[1:]):
+        if ta not in closes or tb not in closes:
+            continue
+        a, b = closes[ta], closes[tb]
+        j = a.join(b, how="inner", lsuffix="_a", rsuffix="_b")
+        if len(j) < 60:
+            continue
+        c = (j.Close_a - j.Close_b).round(2)
+        o = c.shift().fillna(c)
+        sp = pd.DataFrame({"Open": o, "High": pd.concat([o, c], axis=1).max(axis=1), "Low": pd.concat([o, c], axis=1).min(axis=1),
+                           "Close": c, "Volume": j.Volume_b.fillna(0)})
+        lab = f"{la}/{lb} spread"
+        out["series"].append({"label": lab, "ticker": f"{ta}-{tb}", "expiry": ea.isoformat(), "kind": "spread",
+                              "bars": [[d.strftime("%Y-%m-%d"), r.Open, r.High, r.Low, r.Close, int(r.Volume)] for d, r in sp.iterrows()],
+                              "analysis": analyse(sp, lab, spread=True)})
+    try:
+        out["seasonal"] = seasonality(today)
+    except Exception as e:
+        import traceback; traceback.print_exc()
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
 
     def clean(o):

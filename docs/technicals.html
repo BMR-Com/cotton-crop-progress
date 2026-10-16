@@ -6,6 +6,7 @@
 <title>Cotton Price & Technicals</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{color-scheme:light;--bg:#f6f6f4;--surface:#fcfcfb;--border:#e2e1dc;--text:#0b0b0b;--text-2:#52514e;--muted:#8a8984;
   --up:#0f7a3d;--down:#c4302b;--up-bg:#e6f4ea;--down-bg:#fbe9e7;--grid:#eeede9;--accent:#1f3a5f;--candle-up:#1baf7a;--candle-dn:#e34948}
@@ -50,7 +51,7 @@ table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:ta
 th{font-size:10px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);text-align:right;padding:4px 6px;border-bottom:1px solid var(--border)}
 td{text-align:right;padding:4px 6px;border-bottom:1px solid var(--border)}
 th:first-child,td:first-child{text-align:left}
-td.b{color:var(--up);font-weight:600}td.s{color:var(--down);font-weight:600}td.n{color:var(--muted)}
+td.x{font-weight:700;color:var(--accent)}td.b{color:var(--up);font-weight:600}td.s{color:var(--down);font-weight:600}td.n{color:var(--muted)}
 details summary{cursor:pointer;font-size:12px;color:var(--text-2);margin:8px 0 4px}
 .note{font-size:11px;color:var(--muted);margin-top:8px}
 .toggle{font:inherit;font-size:12px;background:none;border:1px solid var(--border);border-radius:999px;padding:3px 9px;color:var(--text-2);cursor:pointer;margin-left:auto}
@@ -85,6 +86,15 @@ details summary{cursor:pointer;font-size:12px;color:var(--text-2);margin:8px 0 4
       <div class="card" id="summary"></div>
       <div class="card" style="margin-top:12px" id="levels"></div>
     </div>
+  </div>
+  <div class="card" style="margin-top:16px" id="seas-card">
+    <h2 style="font-size:15px;margin:0 0 4px">Seasonality and percentiles — price and spreads</h2>
+    <p class="sub" id="seas-lead" style="margin:0 0 10px"></p>
+    <div class="tw" style="overflow-x:auto"><table id="t-seas"></table></div>
+    <div class="bar"><div class="grp" id="g-seas"><span class="lab">Seasonal chart</span></div></div>
+    <div class="legend"><span style="color:#2a78d6">■</span> current contract &nbsp; <span style="color:#eb6834">■</span> same contract last year &nbsp; <span style="color:#8a8984">■</span> 5-yr average &nbsp; shaded: 10–90th and 25–75th percentile of all years</div>
+    <div style="position:relative;height:340px"><canvas id="c-seas"></canvas></div>
+    <p class="note">History: Bloomberg generic contracts from 2000, extended with ICE settlements and Yahoo closes. Each contract is aligned on weeks before its expiry (the 8th of the delivery month), so the same point in every season lines up. Percentile = share of past observations below today's level.</p>
   </div>
 </div>
 <script>
@@ -138,8 +148,10 @@ function render(){
   charts.forEach(c=>c.remove());charts=[];$('#panes').innerHTML='';
   const B=bars(),C=B.map(b=>b.close),H=B.map(b=>b.high),L=B.map(b=>b.low),V=B.map(b=>b.volume);
   const el=$('#main');main=LightweightCharts.createChart(el,{...chartOpts(480),width:el.clientWidth});charts.push(main);
-  const cs=main.addCandlestickSeries({upColor:css('--candle-up'),downColor:css('--candle-dn'),borderVisible:false,wickUpColor:css('--candle-up'),wickDownColor:css('--candle-dn')});
-  cs.setData(B.map(({volume,...r})=>r));
+  let cs;
+  if(S.kind==='spread'){cs=main.addLineSeries({color:css('--text'),lineWidth:2,priceLineVisible:true});cs.setData(B.map(b=>({time:b.time,value:b.close})));}
+  else{cs=main.addCandlestickSeries({upColor:css('--candle-up'),downColor:css('--candle-dn'),borderVisible:false,wickUpColor:css('--candle-up'),wickDownColor:css('--candle-dn')});
+  cs.setData(B.map(({volume,...r})=>r));}
   const legendItems=[];
   const add=(key,label,arr,color,w,extra)=>{const s=lineS(main,color,w,extra);s.setData(pts(B,arr));legendItems.push([label,color]);return s;};
   if(on.sma20)add('sma20','SMA 20',sma(C,20),PAL[0]);
@@ -195,7 +207,7 @@ function render(){
 }
 
 function renderSide(){
-  const A=S.analysis, r=A.returns||{}, pc=(v)=>v==null?'–':`<span class="pill ${v>=0?'up':'down'}">${v>=0?'+':''}${v.toFixed(1)}%</span>`;
+  const A=S.analysis, r=A.returns||{}, pc=(v)=>v==null?'–':`<span class="pill ${v>=0?'up':'down'}">${v>=0?'+':''}${A.spread?v.toFixed(2)+'¢':v.toFixed(1)+'%'}</span>`;
   const g=(x)=>x?`<div><div class="l">${x[0]}</div><div class="v ${x[1].replace(' ','-')}">${x[1]}</div></div>`:'';
   const rd=A.rating_daily||{}, rw=A.rating_weekly||{};
   const cnt=c=>c?`${c[0]} buy · ${c[1]} neutral · ${c[2]} sell`:'';
@@ -214,6 +226,36 @@ function renderSide(){
   $('#levels').innerHTML=h;
 }
 
+let seasIdx=0, seasChart=null;
+function renderSeas(){
+  const L=D.seasonal; if(!L||!L.length){$('#seas-card').style.display='none';return;}
+  const pc=v=>v==null?'–':`${v.toFixed(0)}`, f2=v=>v==null?'–':v.toFixed(2);
+  const tone=v=>v==null?'':(v>=80||v<=20)?'x':'';
+  let h=`<thead><tr><th>Series</th><th>Contract</th><th>Now (¢)</th><th>Weeks to expiry</th><th>%ile, same time of season</th><th>%ile same time, last 10 yrs</th><th>%ile, all history</th><th>%ile, last 10 yrs</th><th>Median same time</th><th>5-yr avg same time</th><th>Last year same time</th><th>Range same time</th></tr></thead><tbody>`;
+  L.forEach(x=>{h+=`<tr><td>${x.label}</td><td>${x.contract}</td><td><b>${f2(x.now)}</b></td><td>${x.wk_now}</td><td class="${tone(x.pct_same_time)}">${pc(x.pct_same_time)}</td><td>${pc(x.pct_same_time_10y)}</td><td class="${tone(x.pct_all)}">${pc(x.pct_all)}</td><td>${pc(x.pct_all_10y)}</td><td>${f2(x.median_same_time)}</td><td>${f2(x.avg5_same_time)}</td><td>${f2(x.ly_same_time)}</td><td>${f2(x.min_same_time)} – ${f2(x.max_same_time)}</td></tr>`;});
+  $('#t-seas').innerHTML=h+'</tbody>';
+  const yrs=L[0].years||[];$('#seas-lead').textContent=`Where each futures price and calendar spread sits today against the same point of the season in every year since ${yrs[0]||2000} (${L[0].n_years} seasons), and against all history. High percentile = expensive / inverted spread is unusual; low = cheap / deep carry.`;
+  chips('#g-seas',L.map((x,i)=>[i,x.label]),seasIdx,k=>{seasIdx=k;renderSeas();});
+  const x=L[seasIdx], exp=new Date(x.expiry+'T00:00:00Z');
+  const lab=w=>{const d=new Date(exp);d.setUTCDate(d.getUTCDate()-7*w);return d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});};
+  const P=a=>(a||[]).map(p=>({x:p[0],y:p[1]}));
+  if(seasChart)seasChart.destroy();
+  const grid=css('--grid'),tick=css('--muted'),band='rgba(138,137,132,.16)',band2='rgba(138,137,132,.28)';
+  seasChart=new Chart($('#c-seas'),{type:'line',data:{datasets:[
+    {label:'90th',data:P(x.bands[90]),borderWidth:0,pointRadius:0,fill:false},
+    {label:'10–90th',data:P(x.bands[10]),borderWidth:0,pointRadius:0,backgroundColor:band,fill:'-1'},
+    {label:'75th',data:P(x.bands[75]),borderWidth:0,pointRadius:0,fill:false},
+    {label:'25–75th',data:P(x.bands[25]),borderWidth:0,pointRadius:0,backgroundColor:band2,fill:'-1'},
+    {label:'Median',data:P(x.bands[50]),borderColor:tick,borderWidth:1,pointRadius:0,borderDash:[2,3]},
+    {label:'5-yr avg',data:P(x.avg5),borderColor:'#8a8984',borderWidth:1.5,pointRadius:0,borderDash:[5,4]},
+    {label:'Last year',data:P(x.last_year),borderColor:'#eb6834',borderWidth:1.8,pointRadius:0},
+    {label:x.contract,data:P(x.current),borderColor:'#2a78d6',borderWidth:2.8,pointRadius:0}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{filter:i=>!['90th','75th'].includes(i.dataset.label),callbacks:{title:i=>`${i[0].parsed.x} weeks to expiry (~${lab(i[0].parsed.x)})`,label:c=>`${c.dataset.label}: ${c.parsed.y.toFixed(2)}¢`}}},
+      scales:{x:{type:'linear',reverse:true,min:0,max:52,grid:{display:false},ticks:{color:tick,callback:v=>lab(v),maxTicksLimit:9}},
+              y:{grid:{color:grid},ticks:{color:tick,callback:v=>v+'¢'}}}}});
+}
+
 function chips(id,items,cur,cb,cls=''){const g=$(id);g.querySelectorAll('button').forEach(b=>b.remove());
   items.forEach(([k,lab])=>{const b=document.createElement('button');b.className='chip '+cls+((typeof cur==='function'?cur(k):cur===k)?' on':'');b.textContent=lab;b.onclick=()=>cb(k,b);g.appendChild(b);});}
 function save(){try{localStorage.setItem('tech_on',JSON.stringify(on));}catch(e){}}
@@ -228,7 +270,7 @@ $('#theme').onclick=()=>{const cur=document.documentElement.dataset.theme||(matc
 window.addEventListener('resize',()=>{charts.forEach(c=>c.applyOptions({width:$('#main').clientWidth}));});
 fetch('data/technicals.json?'+Date.now()).then(r=>r.json()).then(j=>{D=j;S=D.series.find(s=>s.expiry)||D.series[0];
   $('#asof').textContent=`Yahoo Finance daily bars · updated ${D.generated} · default view is the front contract (Dec/Mar/May/Jul only)`;
-  controls();render();renderSide();}).catch(e=>{$('#asof').textContent='Could not load data: '+e;});
+  controls();render();renderSide();renderSeas();}).catch(e=>{$('#asof').textContent='Could not load data: '+e;});
 })();
 </script>
 </body>
