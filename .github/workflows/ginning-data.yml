@@ -1,7 +1,7 @@
 name: Ginnings, classing and FSA acreage
 on:
   schedule:
-    - cron: '20 17 * 8-12,1-5 1-5'   # weekdays after NASS noon-ET releases, Aug–May
+    - cron: '20 17 * 8-12,1-5 1-5'   # weekdays after the noon-ET NASS releases (AMS classing posts Fri mornings)
   workflow_dispatch:
 permissions:
   contents: write
@@ -9,23 +9,24 @@ concurrency: {group: data-commit, cancel-in-progress: false}
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: pip install requests pandas openpyxl xlrd
-      - name: NASS ginnings + annual acreage (batched under the 50k limit)
-        env: {USDA_API_KEY: "${{ secrets.USDA_API_KEY }}"}
-        run: python scripts/fetch_ginning.py
-      - name: AMS classing (weekly quality by state)
+      - name: AMS classing (weekly bales, tenderability, grades by state)
         env: {AMS_API_KEY: "${{ secrets.AMS_API_KEY }}"}
-        run: python scripts/fetch_classing.py
+        run: timeout 30m python scripts/fetch_classing.py || echo "classing incomplete"
       - name: FSA crop acreage
-        run: python scripts/fetch_fsa.py || echo "FSA fetch failed; continuing"
+        run: timeout 25m python scripts/fetch_fsa.py || echo "FSA incomplete"
+      - name: NASS ginnings + annual acreage (batched under the 50k limit, saved year by year)
+        env: {USDA_API_KEY: "${{ secrets.USDA_API_KEY }}"}
+        run: timeout 80m python scripts/fetch_ginning.py || echo "NASS incomplete; progress kept"
       - name: Commit
+        if: always()
         run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ginning data/fsa data/classing
+          git add data/ginning data/fsa data/classing 2>/dev/null || true
           git commit -m "Update ginnings / classing / FSA acreage $(date -u +%Y-%m-%d)" || exit 0
-          git pull --rebase -q origin main && git push
+          for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done

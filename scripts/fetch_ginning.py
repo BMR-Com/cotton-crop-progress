@@ -41,12 +41,12 @@ MON = {m: i for i, m in enumerate("JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV D
 
 
 def get(path, **params):
-    for attempt in range(5):
+    for attempt in range(3):
         try:
-            r = requests.get(B + path, params={"key": KEY, **params}, timeout=180)
+            r = requests.get(B + path, params={"key": KEY, **params}, timeout=120)
             if r.status_code == 200:
                 return r.json()
-            if r.status_code in (400, 413) and "exceeds" in r.text.lower():
+            if r.status_code == 413 or "exceeds" in r.text.lower():
                 return {"too_big": True}
             if r.status_code == 400 and "no data" in r.text.lower():
                 return {"data": []}
@@ -57,18 +57,17 @@ def get(path, **params):
 
 
 def batch(short_desc, year, level, **extra):
+    """One request per item/year/level (a few thousand rows at most). If QuickStats refuses a batch
+    for exceeding its 50,000-row cap, split it by state."""
     q = dict(short_desc=short_desc, year=year, agg_level_desc=level, source_desc="SURVEY", domain_desc="TOTAL", **extra)
-    n = get("get_counts/", **q).get("count", 0)
-    if n == 0:
-        return []
-    if n > LIMIT:            # split by state if a batch would hit the cap
+    d = get("api_GET/", format="JSON", **q)
+    if d.get("too_big"):
         states = get("get_param_values/", param="state_alpha", **q).get("state_alpha", [])
         rows = []
         for s in states:
             rows += batch(short_desc, year, level, state_alpha=s)
         return rows
-    d = get("api_GET/", format="JSON", **q)
-    time.sleep(0.4)
+    time.sleep(0.3)
     return d.get("data", [])
 
 
@@ -91,37 +90,49 @@ def val(v):
         return None
 
 
+def merge_save(path, old, rows, years, keys):
+    """Replace `years` in the saved file with the freshly fetched rows (called after every year,
+    so a long first download keeps its progress even if the job is cut off)."""
+    new = pd.DataFrame(rows)
+    df = old[~old.year.isin(years)] if len(old) else old
+    df = pd.concat([df, new], ignore_index=True) if len(new) else df
+    if len(df):
+        df = df.drop_duplicates(keys, keep="last").sort_values(keys)
+        df.to_csv(path, index=False)
+    return df
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     this_year = date.today().year
-    years = range(FIRST_YEAR, this_year + 1)
     gpath, apath = f"{OUT}/ginnings.csv", f"{OUT}/annual.csv"
     old_g = pd.read_csv(gpath) if os.path.exists(gpath) else pd.DataFrame()
     old_a = pd.read_csv(apath) if os.path.exists(apath) else pd.DataFrame()
     if len(old_a) and "period" not in old_a.columns:   # older layout without forecast periods: rebuild
         old_a = pd.DataFrame()
     # full history once, then only the two most recent crop years (revisions + the season in progress)
-    have = set(old_g.year.unique()) if len(old_g) else set()
-    refresh = [y for y in years if y not in have or y >= this_year - 1]
-    print("years to fetch:", refresh)
+    have_g = set(old_g.year.unique()) if len(old_g) else set()
+    have_a = set(old_a.year.unique()) if len(old_a) else set()
+    rg = [y for y in range(FIRST_YEAR, this_year + 1) if y not in have_g or y >= this_year - 1]
+    ra = [y for y in range(ANNUAL_FIRST, this_year + 1) if y not in have_a or y >= this_year - 1]
+    print("ginnings years:", rg, "annual years:", ra)
 
-    g = []
-    for y in refresh:
+    for y in sorted(rg, reverse=True):          # newest first: the season in progress lands first
+        g = []
         for k, sd in GIN_ITEMS.items():
             for lvl in ("STATE", "NATIONAL"):
-                rows = batch(sd, y, lvl)
-                for r in rows:
+                for r in batch(sd, y, lvl):
                     v = val(r["Value"])
                     if v is None:
                         continue
                     g.append({"year": int(r["year"]), "state": r["state_alpha"] if lvl == "STATE" else "US", "item": k,
                               "period": r["reference_period_desc"], "ref_date": ref_date(int(r["year"]), r["reference_period_desc"]),
                               "value": v, "load_time": r.get("load_time", "")})
-        print(f"  ginnings {y}: total rows so far {len(g)}")
-    have_a = set(old_a.year.unique()) if len(old_a) else set()
-    refresh_a = [y for y in range(ANNUAL_FIRST, this_year + 1) if y not in have_a or y >= this_year - 1]
-    a = []
-    for y in refresh_a:
+        old_g = merge_save(gpath, old_g, g, [y], ["year", "state", "item", "period"])
+        print(f"  ginnings {y}: {len(g)} rows", flush=True)
+
+    for y in sorted(ra, reverse=True):
+        a = []
         for k, sd in ANNUAL_ITEMS.items():
             for lvl in ("STATE", "NATIONAL"):
                 # final ("YEAR") plus in-season forecasts ("YEAR - AUG FORECAST", "YEAR - JUN ACREAGE", ...)
@@ -131,18 +142,8 @@ def main():
                         continue
                     a.append({"year": int(r["year"]), "state": r["state_alpha"] if lvl == "STATE" else "US", "item": k,
                               "period": r["reference_period_desc"], "value": v, "load_time": r.get("load_time", "")})
-    G = pd.DataFrame(g); A = pd.DataFrame(a)
-    if len(old_g):
-        G = pd.concat([old_g[~old_g.year.isin(refresh)], G], ignore_index=True)
-    if len(old_a):
-        A = pd.concat([old_a[~old_a.year.isin(refresh_a)], A], ignore_index=True)
-    if len(G):
-        G = G.drop_duplicates(["year", "state", "item", "period"], keep="last").sort_values(["year", "state", "item", "ref_date"])
-        G.to_csv(gpath, index=False)
-    if len(A):
-        A = A.drop_duplicates(["year", "state", "item", "period"], keep="last").sort_values(["year", "state", "item", "period"])
-        A.to_csv(apath, index=False)
-    print(f"ginnings: {len(G)} rows, annual: {len(A)} rows")
+        old_a = merge_save(apath, old_a, a, [y], ["year", "state", "item", "period"])
+        print(f"  annual {y}: {len(a)} rows", flush=True)
 
 
 if __name__ == "__main__":
