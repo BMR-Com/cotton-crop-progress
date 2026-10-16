@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: pip install requests
-      - run: pip install pandas openpyxl xlrd
+      - run: pip install pandas openpyxl xlrd python-calamine
       - run: python scripts/probe_fsa.py
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
