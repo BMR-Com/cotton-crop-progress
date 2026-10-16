@@ -61,6 +61,12 @@ svg text{font-family:var(--mono)}
 </style>
 </head>
 <body>
+<nav class="bmr-nav" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 16px;font:12px/1.4 Inter,system-ui,sans-serif;background:#f6f6f4;border-bottom:1px solid #e2e1dc">
+<b style="margin-right:6px;color:#1f3a5f">BMR-Com Cotton</b>
+<a href="index.html">Crop monitor</a><a href="technicals.html">Price &amp; technicals</a><a href="model.html">Production model</a><a href="conditional.html">Conditional FV</a><a href="master.html" class="on">Master model</a><a href="spreads.html">Spreads</a><a href="classic.html">Classic charts</a>
+</nav>
+<style>.bmr-nav a{color:#52514e;text-decoration:none;padding:3px 9px;border:1px solid #e2e1dc;border-radius:999px;background:#fff}.bmr-nav a:hover{color:#000}.bmr-nav a.on{background:#1f3a5f;color:#fff;border-color:#1f3a5f}</style>
+
 <div class="wrap">
 <header>
   <div>
@@ -175,7 +181,7 @@ svg text{font-family:var(--mono)}
 </div>
 <script>
 // ═══════════ CONFIG ═══════════
-var PRICE_URL='https://raw.githubusercontent.com/BMR-Com/cotton-price/main/data/cotton_raw.csv';
+var PRICE_URL='data/cotton_px.csv';  // Bloomberg history + ICE settlements / Yahoo closes, rebuilt daily
 var WASDE_URL='https://raw.githubusercontent.com/BMR-Com/wasde-analytics/main/data/Cotton.json';
 var OC_URL='https://raw.githubusercontent.com/BMR-Com/cotton-on-call/main/data/cotton_oncall.csv';
 var COT_URL='https://publicreporting.cftc.gov/resource/kh3c-gbw2.json?$where=market_and_exchange_names=%27COTTON%20NO.%202%20-%20ICE%20FUTURES%20U.S.%27&$order=report_date_as_yyyy_mm_dd%20DESC&$limit=500';
@@ -808,5 +814,6 @@ function drawScatter(o,P,wstk,mstk,bstk){
 });
 setStatus('loading data…');
 </script>
+<script src="js/prefill.js"></script>
 </body>
 </html>

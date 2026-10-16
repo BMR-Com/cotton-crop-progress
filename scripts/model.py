@@ -748,3 +748,82 @@ def ginning_projection(rows, gm, gt, cur):
     out.sort(key=lambda x: -x["proj"])
     tot["yield"] = tot["proj"] * 480 / tot["harv"] if tot["harv"] else None
     return {"states": out, "us": tot, "nass_date": (gt or {}).get("date"), "classing_week": (gm or {}).get("week_end")}
+
+
+def drought_regressions(dr, ann, cur):
+    """Texas USDM drought vs final abandonment (Texas and US), for the Production model tab.
+
+    For every drought week of the current season (March through the end of October; later weeks keep
+    the end-October reading, which is what decides abandonment), regress past seasons' final
+    abandonment on the same week's drought reading (WK) and on the season-to-date average (CU)."""
+    from math import erf, sqrt
+    tx = dr[dr.state == "TX"].copy()
+    tx = tx.rename(columns={"d1": "D1-D4", "d2": "D2-D4", "d3": "D3-D4"})
+    import os
+    src = os.path.join(os.environ.get("DROUGHT_LOCAL", ""), "data/state/TX.csv")
+    full = pd.read_csv(src) if os.environ.get("DROUGHT_LOCAL") else pd.read_csv("https://raw.githubusercontent.com/BMR-Com/drought-monitor/main/data/state/TX.csv")
+    full["week"] = pd.to_datetime(full.Week)
+    full["year"] = full.week.dt.year
+    full["woy"] = full.week.dt.isocalendar().week.astype(int)
+    VARS = ["D1-D4", "D2-D4", "D3-D4", "D4"]
+    pl = load.pick(ann, "upland_planted", final_only=True)
+    hv = load.pick(ann, "upland_harvested", final_only=True)
+    ab = {}
+    for (y, s), v in pl.items():
+        if y < cur and s in ("TX", "US") and hv.get((y, s)):
+            ab[(y, s)] = 1 - hv[(y, s)] / v
+    years = sorted({y for y, s in ab if s == "TX"})
+
+    def tcdf(t, df):                      # Student-t two-sided p-value via normal approx for df>30, else crude
+        z = abs(t) * (1 - 1 / (4 * df)) / sqrt(1 + t * t / (2 * df))
+        return 2 * (1 - 0.5 * (1 + erf(z / sqrt(2))))
+
+    def reg(xs, ys, x0):
+        x, y = np.array(xs, float), np.array(ys, float)
+        n = len(x)
+        if n < 8 or np.ptp(x) == 0:
+            return None
+        b, a = np.polyfit(x, y, 1)
+        res = y - (a + b * x)
+        s2 = (res ** 2).sum() / (n - 2)
+        sxx = ((x - x.mean()) ** 2).sum()
+        r2 = 1 - (res ** 2).sum() / ((y - y.mean()) ** 2).sum()
+        se_b = sqrt(s2 / sxx)
+        pt = a + b * x0
+        se_p = sqrt(s2 * (1 + 1 / n + (x0 - x.mean()) ** 2 / sxx))
+        return {"r2": round(float(r2), 4), "pvalue": round(float(tcdf(b / se_b, n - 2)), 4), "point": round(float(pt), 4),
+                "lo": round(float(pt - 2.05 * se_p), 4), "hi": round(float(pt + 2.05 * se_p), 4), "curr_x": round(float(x0), 2),
+                "scatter_x": [round(float(v), 2) for v in x], "scatter_y": [round(float(v), 4) for v in y], "scatter_years": [int(v) for v in yrs],
+                "reg_x": [round(float(x.min()), 2), round(float(x.max()), 2)], "reg_y": [round(float(a + b * x.min()), 4), round(float(a + b * x.max()), 4)]}
+
+    out = {"WK": [], "CU": [], "WK_US": [], "CU_US": []}
+    cw = full[(full.year == cur) & (full.week.dt.month >= 3)].sort_values("week")
+    oct_end = pd.Timestamp(cur, 10, 31)
+    cw = cw[cw.week <= oct_end]
+    for _, wrow in cw.iterrows():
+        w = int(wrow.woy)
+        label = f"{wrow.week:%b} W{(wrow.week.day - 1) // 7 + 1}"
+        ent = {k: {"label": label, "date": wrow.week.strftime("%Y-%m-%d"), "vars": {}} for k in out}
+        for v in VARS:
+            for kind in ("WK", "CU"):
+                xs, yt, yu, yrs_ok = [], [], [], []
+                for y in years:
+                    h = full[full.year == y]
+                    if kind == "WK":
+                        x = h[h.woy == w][v]
+                    else:
+                        x = h[(h.week.dt.month >= 3) & (h.woy <= w)][v]
+                    if not len(x):
+                        continue
+                    xs.append(float(x.iloc[-1] if kind == "WK" else x.mean()))
+                    yt.append(ab[(y, "TX")]); yu.append(ab.get((y, "US"), np.nan)); yrs_ok.append(y)
+                x0 = float(wrow[v]) if kind == "WK" else float(full[(full.year == cur) & (full.week.dt.month >= 3) & (full.week <= wrow.week)][v].mean())
+                yrs = yrs_ok
+                ent[kind]["vars"][v] = reg(xs, yt, x0)
+                ok = [i for i, u in enumerate(yu) if not np.isnan(u)]
+                yrs = [yrs_ok[i] for i in ok]
+                ent[kind + "_US"]["vars"][v] = reg([xs[i] for i in ok], [yu[i] for i in ok], x0)
+        for k in out:
+            if all(ent[k]["vars"].values()):
+                out[k].append(ent[k])
+    return out

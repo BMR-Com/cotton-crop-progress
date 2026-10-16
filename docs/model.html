@@ -60,6 +60,12 @@ tr.hl td{background:#fdf6e3;font-weight:700}
 </style>
 </head>
 <body>
+<nav class="bmr-nav" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 16px;font:12px/1.4 Inter,system-ui,sans-serif;background:#f6f6f4;border-bottom:1px solid #e2e1dc">
+<b style="margin-right:6px;color:#1f3a5f">BMR-Com Cotton</b>
+<a href="index.html">Crop monitor</a><a href="technicals.html">Price &amp; technicals</a><a href="model.html" class="on">Production model</a><a href="conditional.html">Conditional FV</a><a href="master.html">Master model</a><a href="spreads.html">Spreads</a><a href="classic.html">Classic charts</a>
+</nav>
+<style>.bmr-nav a{color:#52514e;text-decoration:none;padding:3px 9px;border:1px solid #e2e1dc;border-radius:999px;background:#fff}.bmr-nav a:hover{color:#000}.bmr-nav a.on{background:#1f3a5f;color:#fff;border-color:#1f3a5f}</style>
+
 <div class="wrap">
 <header>
   <div>
@@ -82,11 +88,11 @@ tr.hl td{background:#fdf6e3;font-weight:700}
 <div><!-- LEFT: assumptions -->
   <div class="card">
     <h3>Acreage & WASDE anchor</h3>
-    <label>US planted (M ac) <input type="number" id="in-planted" value="9.85" step="0.01"></label>
+    <label>US upland planted (M ac) <input type="number" id="in-planted" value="9.85" step="0.01"></label>
     <label>Texas planted (M ac) <input type="number" id="in-txplanted" value="5.65" step="0.01"></label>
     <label>Non-TX abandonment % <input type="number" id="in-nontx" value="8.0" step="0.5"></label>
-    <label>WASDE production (M bal) <input type="number" id="in-wasde" value="13.7" step="0.1"></label>
-    <div class="hint">Update planted acres after each Acreage report / WASDE. Non-TX abandonment recent 5-yr implied ≈ 8%.</div>
+    <label>USDA upland production (M bal) <input type="number" id="in-wasde" value="13.7" step="0.1"></label>
+    <div class="hint" id="crop-note">Inputs prefill from USDA's latest numbers and the Crop Monitor's projected non-Texas abandonment.</div>
   </div>
   <div class="card">
     <h3>Abandonment blend weights</h3>
@@ -140,18 +146,19 @@ tr.hl td{background:#fdf6e3;font-weight:700}
   </div>
 </div>
 </div>
-<div class="foot" style="margin-top:4px">Sources: BMR-Com/cotton-crop-progress (NASS conditions) · BMR-Com/Cotton-Texas-Drought-analysis (USDM regressions, abandonment history) · WASDE anchor manual. Research tool, not trading advice.</div>
+<div class="foot" style="margin-top:4px">Sources: BMR-Com/cotton-crop-progress (NASS conditions) · BMR-Com/drought-monitor (USDM) with NASS final abandonment (regressions rebuilt daily) · inputs prefilled from USDA latest via the Crop Monitor. Research tool, not trading advice.</div>
 </div>
 <script>
 // ═══════════ CONFIG ═══════════
 var COND_BASE='https://raw.githubusercontent.com/BMR-Com/cotton-crop-progress/main/data/';
 var COND_FILES=['cotton_2001_2005.csv','cotton_2006_2010.csv','cotton_2011_2015.csv','cotton_2016_2020.csv','cotton_2021_2025.csv','cotton_2026_2030.csv'];
-var DROUGHT_URL='https://raw.githubusercontent.com/BMR-Com/Cotton-Texas-Drought-analysis/main/docs/index.html';
+var DROUGHT_URL='data/drought_reg.json';   // built daily from BMR-Com/drought-monitor + NASS final abandonment
+var CROP_URL='data/crop.json';
 
 // ═══════════ STATE ═══════════
 var COND={};      // {'TEXAS'|'US TOTAL' : {year: {week: GE}}}
 var DR=null;      // {WK:[..], CU:[..], WK_US:[..], CU_US:[..]}
-var loaded={cond:false,dr:false};
+var loaded={cond:false,dr:false,crop:false};
 
 // ═══════════ DATA LOADING ═══════════
 function setStatus(html){document.getElementById('status').innerHTML=html;}
@@ -191,16 +198,32 @@ function bracketParse(html,name){
   return null;
 }
 function loadDrought(){
-  fetch(DROUGHT_URL).then(function(r){return r.text();}).then(function(h){
-    DR={WK:bracketParse(h,'WK'),CU:bracketParse(h,'CU'),
-        WK_US:bracketParse(h,'WK_US'),CU_US:bracketParse(h,'CU_US')};
+  fetch(DROUGHT_URL+'?'+Date.now()).then(function(r){return r.json();}).then(function(j){
+    DR={WK:j.WK,CU:j.CU,WK_US:j.WK_US,CU_US:j.CU_US};
     loaded.dr=true;maybeRun();
   }).catch(function(e){ setStatus('<span class="err">drought fetch failed: '+e+'</span>'); });
+}
+// live defaults from the crop monitor (USDA latest + our projected abandonment); user edits still override
+var USDA_AB=null;
+function loadCrop(){
+  fetch(CROP_URL+'?'+Date.now()).then(function(r){return r.json();}).then(function(c){
+    var E=c.estimate||{},u=E.us||{},tx=(E.states||[]).find(function(r){return r.st==='TX';})||{};
+    function setv(id,v,d){if(v!=null&&isFinite(v))document.getElementById(id).value=(+v).toFixed(d);}
+    setv('in-planted',(u.usda_planted||u.planted_nass)/1e6,2);
+    setv('in-txplanted',(tx.planted_nass||tx.planted)/1e6,2);
+    var ntxP=0,ntxH=0;(E.states||[]).forEach(function(r){if(r.st!=='TX'&&r.planted&&r.harv){ntxP+=r.planted;ntxH+=r.harv;}});
+    if(ntxP)setv('in-nontx',(1-ntxH/ntxP)*100,1);
+    setv('in-wasde',u.usda_prod/1e6,2);
+    setv('in-yield',u.usda_yield,0);
+    if(u.usda_harv&&u.usda_planted)USDA_AB=1-u.usda_harv/u.usda_planted;
+    var n=document.getElementById('crop-note');if(n)n.textContent='Inputs prefilled from USDA '+c.crop_year+' (latest) and the Crop Monitor ('+c.generated+'); edit any field to override.';
+    loaded.crop=true;maybeRun();
+  }).catch(function(){loaded.crop=true;maybeRun();});
 }
 
 function maybeRun(){
   setStatus('conditions <span class="'+(loaded.cond?'ok">✓':'">…')+'</span> &nbsp; drought <span class="'+(loaded.dr?'ok">✓':'">…')+'</span>');
-  if(loaded.cond&&loaded.dr)run();
+  if(loaded.cond&&loaded.dr&&loaded.crop)run();
 }
 
 // ═══════════ MODEL ENGINE ═══════════
@@ -264,7 +287,7 @@ function computeModel(P){
   // 5) national build-up
   out.harv=P.txPlanted*(1-out.blendTX)+(P.planted-P.txPlanted)*(1-P.nonTX/100);
   out.usAb=1-out.harv/P.planted;
-  var wasdeAb=1-7.54/9.85; // reference implied
+  var wasdeAb=USDA_AB!=null?USDA_AB:1-7.54/9.85; // USDA-implied abandonment (latest)
   // 6) yield
   var geDef=(out.usGE!==null&&out.usGE5!==null)?(out.usGE-out.usGE5):0;
   out.geDef=geDef;
@@ -315,7 +338,7 @@ function run(){
     ro('Cond. reg R²',M.regTX?M.regTX.r2.toFixed(2):'—','n='+(M.regTX?M.regTX.n:0)+' yrs')+
     ro('G/E vs 5-yr (US)',(M.geDef>0?'+':'')+f1(M.geDef)+' pts','yield input');
   function ro(l,v,s){return '<div class="ro"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';}
-  document.getElementById('live-foot').textContent='conditions: NASS via cotton-crop-progress · drought: USDM via Cotton-Texas-Drought-analysis ('+M.dWK.date+')';
+  document.getElementById('live-foot').textContent='conditions: NASS via cotton-crop-progress · drought: USDM via BMR-Com/drought-monitor ('+M.dWK.date+')';
 
   drawRail(M,P);
   scenTable(M,P);
@@ -407,13 +430,14 @@ function bsReadout(M,P){
 ['in-planted','in-txplanted','in-nontx','in-wasde','w-cond','w-wk','w-cu','in-dvar','in-enso','in-ensoadj','in-yield','in-yadj','in-ysel'].forEach(function(id){
   document.getElementById(id).addEventListener('input',function(){
     ['cond','wk','cu'].forEach(function(k){document.getElementById('wv-'+k).textContent=document.getElementById('w-'+k).value+'%';});
-    if(loaded.cond&&loaded.dr)run();
+    if(loaded.cond&&loaded.dr&&loaded.crop)run();
   });
 });
 
 setStatus('loading data…');
 loadConditions();
 loadDrought();
+loadCrop();
 </script>
 </body>
 </html>

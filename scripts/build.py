@@ -178,6 +178,25 @@ def brief(res):
     res["kpis"] = kpis
 
 
+def wasde_us(cur):
+    """Latest WASDE US cotton production / ending stocks for the current marketing year (wasde-analytics)."""
+    import requests
+    loc = os.environ.get("WASDE_LOCAL")
+    try:
+        d = json.load(open(loc)) if loc else requests.get("https://raw.githubusercontent.com/BMR-Com/wasde-analytics/main/data/Cotton.json", timeout=60).json()
+    except Exception as e:
+        print("wasde unavailable", e)
+        return None
+    my = f"{cur}/{(cur + 1) % 100:02d}"
+    out = {"my": my}
+    for k, lab in (("prod", "Production"), ("end_stocks", "Ending Stocks"), ("exports", "Exports")):
+        v = d["data"].get(f"United States||{lab}||{my}")
+        if v:
+            out[k] = v[-1]["value"]
+            out["report"] = v[-1]["reportDate"]
+    return out
+
+
 def main():
     cond, prog = load.nass_weekly()
     cur = int(cond.year.max())
@@ -200,8 +219,14 @@ def main():
     # ── models (crop estimate, ginning/classing pace, quality) ──
     est = model.run(cond, prog, dr, cur)
     res.update(est)
+    res["wasde"] = wasde_us(cur)
     brief(res)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    try:                                         # drought → abandonment regressions for the Production model tab
+        dreg = model.drought_regressions(dr, load.annual(), cur)
+        json.dump(clean(dreg), open(os.path.join(os.path.dirname(OUT), "drought_reg.json"), "w"), separators=(",", ":"))
+    except Exception as e:
+        import traceback; traceback.print_exc()
     json.dump(clean(res), open(OUT, "w"), separators=(",", ":"))
     print("wrote", OUT, os.path.getsize(OUT) // 1024, "KB")
 
