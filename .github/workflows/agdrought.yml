@@ -1,0 +1,22 @@
+name: Cotton-area drought (Ag in Drought)
+on:
+  schedule:
+    - cron: '20 14 * * 4'   # USDM maps post Thursday mornings
+    - cron: '20 14 * * 5'   # Friday catch-up
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests pandas
+      - run: python scripts/fetch_agdrought.py
+      - run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/drought
+          git commit -m "Update cotton-area drought $(date -u +%Y-%m-%d)" || exit 0
+          for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done
