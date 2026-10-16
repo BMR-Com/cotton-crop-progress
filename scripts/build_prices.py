@@ -69,7 +69,7 @@ def yahoo(contracts, start):
         if h is None or not len(h):
             continue
         close = h["Close"].squeeze()
-        out += [{"date": d.date().isoformat(), "contract": c, "settle": float(v)} for d, v in close.dropna().items()]
+        out += [{"date": d.date().isoformat(), "contract": c, "settle": round(float(v), 2)} for d, v in close.dropna().items()]
     return pd.DataFrame(out)
 
 

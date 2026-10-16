@@ -33,7 +33,12 @@ def fetch(ticker, period="max"):
     if isinstance(h.columns, pd.MultiIndex):
         h.columns = h.columns.get_level_values(0)
     h = h[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
-    h = h[(h.Close > 0) & (h.High >= h.Low)]
+    h = h[(h.Close > 0) & (h.High >= h.Low)].copy()
+    for c in ("Open", "High", "Low"):                    # Yahoo sometimes sends 0 for an unknown open/high/low
+        h[c] = h[c].where(h[c] > 0)
+    h["Open"] = h.Open.fillna(h.Close.shift()).fillna(h.Close)
+    h["High"] = h[["High", "Open", "Close"]].max(axis=1)
+    h["Low"] = h[["Low", "Open", "Close"]].min(axis=1)
     h.index = pd.to_datetime(h.index).tz_localize(None)
     return h
 
