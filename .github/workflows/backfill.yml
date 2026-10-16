@@ -1,0 +1,34 @@
+name: Backfill (parallel, manual)
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  nass:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests pandas
+      - env: {USDA_API_KEY: "${{ secrets.USDA_API_KEY }}"}
+        run: timeout 105m python scripts/fetch_ginning.py || echo "partial"
+      - if: always()
+        run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ginning; git commit -m "Backfill NASS ginnings/annual" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
+  fsa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests pandas openpyxl xlrd
+      - run: timeout 50m python scripts/fetch_fsa.py || echo "partial"
+      - if: always()
+        run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/fsa; git commit -m "Backfill FSA acreage" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
