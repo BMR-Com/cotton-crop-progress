@@ -74,7 +74,8 @@ def main():
     done_path, out_path = f"{OUT}/processed.txt", f"{OUT}/fsa_cotton_state.csv"
     done = set(open(done_path).read().split()) if os.path.exists(done_path) else set()
     html = requests.get(PAGE, headers=H, timeout=90).text
-    links = re.findall(r'<a[^>]+href="([^"]+?\.(?:zip|xlsx))"[^>]*>(.*?)</a>', html, flags=re.S)
+    links = re.findall(r'<a[^>]+href="([^"]+?\.(?:zip|xlsx)|/documents/[A-Za-z0-9_-]+)"[^>]*>(.*?)</a>', html, flags=re.S)
+    links = [(h, t) for h, t in links if "acreage data" in re.sub("<[^>]+>", "", t).lower() or h.endswith((".zip", ".xlsx"))]
     open(f"{OUT}/links.txt", "w").write("\n".join(f"{h}\t{re.sub('<[^>]+>', '', t).strip()}" for h, t in links))
     for href, text in links:
         fname = href.rsplit("/", 1)[-1]
@@ -87,17 +88,23 @@ def main():
         try:
             b = requests.get(url, headers=H, timeout=300).content
             files = []
-            if fname.lower().endswith(".zip"):
+            try:
                 z = zipfile.ZipFile(io.BytesIO(b))
-                files = [(n, z.read(n)) for n in z.namelist() if n.lower().endswith((".xlsx", ".xls"))]
-            else:
+                names = z.namelist()
+                if any(n.startswith("xl/") for n in names):        # the download is itself an .xlsx
+                    files = [(fname + ".xlsx", b)]
+                else:
+                    files = [(n, z.read(n)) for n in names if n.lower().endswith((".xlsx", ".xls"))]
+            except zipfile.BadZipFile:
                 files = [(fname, b)]
             n_rows = 0
             for n, xb in files:
                 g = cotton_by_state(xb)
                 if g is None or not len(g):
                     continue
-                g.insert(0, "release", release_date(xb, n) or release_date(xb, fname))
+                lab = re.search(r"as of\s+([A-Za-z]+\.?\s+\d{1,2},?\s+20\d\d)", label)
+                rd = pd.to_datetime(lab.group(1).replace(".", ""), errors="coerce") if lab else pd.NaT
+                g.insert(0, "release", rd.date().isoformat() if pd.notna(rd) else (release_date(xb, n) or release_date(xb, fname)))
                 g.insert(0, "crop_year", year)
                 g["file"] = fname
                 g.to_csv(out_path, mode="a", header=not os.path.exists(out_path), index=False)
