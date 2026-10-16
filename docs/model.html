@@ -77,7 +77,7 @@ tr.hl td{background:#fdf6e3;font-weight:700}
 
 <div class="hero" id="hero" style="display:none">
   <div>
-    <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:.6">Median production estimate</div>
+    <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;opacity:.6">Drought model estimate</div>
     <div class="big" id="h-prod">—<small> M bales</small></div>
     <div class="rng" id="h-rng">—</div>
   </div>
@@ -350,7 +350,8 @@ function run(){
     'US abandonment <b>'+f1(M.usAb*100)+'%</b><br>'+
     'TX abandonment <b>'+f1(M.blendTX*100)+'%</b> '+(M.source==='best'&&BEST?'('+BEST.variable+' '+BEST.model.toLowerCase()+', R² '+(BEST.r2*100).toFixed(0)+'%)':'(blend)')+'<br>'+
     'Harvested <b>'+M.harv.toFixed(2)+'M ac</b> · Yield <b>'+f0(M.yield)+' lbs</b><br>'+
-    '<span class="'+(dP<0?'delta-neg':'delta-pos')+'">'+(dP>0?'+':'')+dP.toFixed(2)+'M vs WASDE</span>';
+    '<span class="'+(dP<0?'delta-neg':'delta-pos')+'">'+(dP>0?'+':'')+dP.toFixed(2)+'M vs WASDE</span>'+
+    ((CROP&&CROP.headline&&CROP.headline.ratings)?'<br>Ratings model <b>'+CROP.headline.ratings.crop.toFixed(2)+'M</b> · <b>Final (avg) '+CROP.headline.crop.toFixed(2)+'M</b>':'');
 
   // live readout
   document.getElementById('live-readout').innerHTML=

@@ -16,7 +16,7 @@
     // spreads
     setv('in-wstk',W.end_stocks,2);setv('in-mstk',base,2);setv('in-bstk',lo,2);
     var note=document.createElement('div');note.style.cssText='font:12px Inter,system-ui,sans-serif;color:#52514e;padding:6px 16px;background:#eef2f7;border-bottom:1px solid #e2e1dc';
-    note.textContent=H?('Our crop '+H.crop.toFixed(2)+'m bales (Texas drought model, ±1σ '+H.lo.toFixed(2)+'–'+H.hi.toFixed(2)+'m) vs '+(W.report||'WASDE')+' '+W.prod.toFixed(2)+
+    note.textContent=H?('Our crop '+H.crop.toFixed(2)+'m bales (average of drought model '+H.drought.crop.toFixed(2)+'m and ratings model '+(H.ratings?H.ratings.crop.toFixed(2):'–')+'m; ±1σ '+H.lo.toFixed(2)+'–'+H.hi.toFixed(2)+'m) vs '+(W.report||'WASDE')+' '+W.prod.toFixed(2)+
       'm → ending stocks '+B.end_stocks.toFixed(2)+'m (±1σ '+B.end_lo.toFixed(2)+'–'+B.end_hi.toFixed(2)+'m) vs WASDE '+B.wasde_end.toFixed(2)+'m, with WASDE beginning stocks, imports, mill use '+B.domestic.toFixed(2)+'m and exports '+B.exports.toFixed(2)+'m held. Updated '+c.generated+'. Edit any field to override.')
       :('Inputs prefilled from the '+(W.report||'latest')+' WASDE. Edit any field to override.');
     var nav=document.querySelector('.bmr-nav');if(nav)nav.insertAdjacentElement('afterend',note);
