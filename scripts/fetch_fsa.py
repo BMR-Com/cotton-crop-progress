@@ -54,6 +54,13 @@ def cotton_by_state(xb):
     if not name:
         return None
     d = read_sheet(xb, name)
+    if "crop" not in [str(c).strip().lower() for c in d.columns]:      # 2024+ files put a title row above the header
+        for i in range(min(6, len(d))):
+            row = [str(x).strip() for x in d.iloc[i].tolist()]
+            if "Crop" in row and any("Planted" in x for x in row):
+                d.columns = row
+                d = d.iloc[i + 1:]
+                break
     d.columns = [str(c).strip() for c in d.columns]
     lc = {c.lower(): c for c in d.columns}
     crop = lc.get("crop")
