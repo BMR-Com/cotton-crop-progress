@@ -99,6 +99,13 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
   <div id="ab-wrap" style="margin-top:18px"></div>
 </section>
 
+<section class="card" id="gp-card">
+  <h2>Crop projection from ginnings</h2>
+  <p class="lead" id="gp-lead"></p>
+  <div class="tw"><table id="t-gp"></table></div>
+  <p class="note">Ginning pace = bales classed so far ÷ the share normally classed at today's harvest progress, and NASS running bales ginned ÷ the share normally ginned by this date (480-lb bales). It is used once at least 10% of a state's crop is normally through the gins, and blended with the ratings estimate by their historical accuracy, so its weight rises as ginning advances. Harvested acres apply the projected final abandonment.</p>
+</section>
+
 <section class="card">
   <h2>Crop conditions and drought</h2>
   <p class="lead">Share of the crop rated good/excellent and poor/very poor, and the share of the state in D2–D4 drought.</p>
@@ -221,6 +228,21 @@ function renderEstimate(){
   $('#est-note').textContent='Million 480-lb bales unless noted. Diff = our estimate vs USDA latest state forecast. Classing weight = share of the estimate taken from the classing pace (rises as more of the crop is classed).';
 }
 
+// ---------- ginning projection ----------
+function renderGP(){
+  const G=D.gin_projection; if(!G){$('#gp-card').style.display='none';return;}
+  const u=G.us, d=pct(u.proj,u.usda);
+  $('#gp-lead').innerHTML=`<b>${mb(u.proj)}m bales</b> projected for US upland (USDA ${mb(u.usda)}m, ${d==null?'':sg(d)+'%'}), implied yield ${fmt(u.yield)} lb on ${fmt(u.harv/1e6,2)}m harvested acres. `+
+    `${fmt(u.from_gin/u.proj*100)}% of the projection rests on ginning so far; the rest on crop ratings. Classing through ${G.classing_week||'–'}, NASS ginnings to ${G.nass_date||'–'}.`;
+  const k=v=>v==null?'–':fmt(v/1e3)+'k', p0=v=>v==null?'–':fmt(v*100,0)+'%';
+  let h=`<thead><tr><th>State</th><th>Projection</th><th>USDA</th><th>Diff</th><th>Basis</th><th>Ginning weight</th><th>Ginning pace alone</th><th>From classing</th><th>From NASS ginnings</th><th>Harvested %</th><th>Classed</th><th>Normally classed at this harvest %</th><th>NASS ginned (RB)</th><th>Normally ginned by date</th><th>Harvested acres</th><th>Final abandonment</th><th>Implied yield</th><th>Ratings yield</th><th>USDA yield</th></tr></thead><tbody>`;
+  G.states.forEach(r=>{const dd=pct(r.proj,r.usda_prod);
+    h+=`<tr><td>${r.name}</td><td><b>${mb(r.proj)}</b></td><td>${mb(r.usda_prod)}</td><td class="${dd>0?'up':dd<0?'down':''}">${dd==null?'–':sg(dd)+'%'}</td><td>${r.basis}</td><td>${p0(r.w_gin)}</td><td>${mb(r.gin_only)}</td><td>${mb(r.proj_classing)}</td><td>${mb(r.proj_ginnings)}</td>
+    <td>${r.harvest_pct==null?'–':fmt(r.harvest_pct)+'%'}</td><td>${k(r.classed)}</td><td>${p0(r.classed_share)}</td><td>${k(r.ginned_rb)}</td><td>${p0(r.ginned_share)}</td><td>${k(r.harv)}</td><td>${p0(r.ab_final)}</td><td>${fmt(r.yield_implied)}</td><td>${fmt(r.yield_ratings)}</td><td>${fmt(r.usda_yield)}</td></tr>`;});
+  h+=`<tr class="tot"><td>United States</td><td><b>${mb(u.proj)}</b></td><td>${mb(u.usda)}</td><td class="${d>0?'up':d<0?'down':''}">${d==null?'–':sg(d)+'%'}</td><td></td><td>${p0(u.from_gin/u.proj)}</td><td colspan="8"></td><td>${k(u.harv)}</td><td></td><td>${fmt(u.yield)}</td><td></td><td></td></tr>`;
+  $('#t-gp').innerHTML=h+'</tbody>';
+}
+
 // ---------- conditions ----------
 let stCond='US', stCls='US', stQ='US';
 function renderCond(){
@@ -289,7 +311,7 @@ function render(){
   if(!D)return;
   $('#asof').textContent=`${D.crop_year} crop · conditions to ${D.asof.conditions}`+(D.classing?` · classing to ${D.classing.week_end}`:'')+` · drought to ${D.asof.drought}`;
   $('#gen').textContent='Updated '+D.generated+'.';
-  renderBrief();renderEstimate();renderCond();renderCls();renderQ();
+  renderBrief();renderEstimate();renderGP();renderCond();renderCls();renderQ();
 }
 fetch('data/crop.json?'+Date.now()).then(r=>r.json()).then(j=>{D=j;
   const sts=D.states.map(s=>s.st);

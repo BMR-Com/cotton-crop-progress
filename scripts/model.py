@@ -356,6 +356,7 @@ def run(cond, prog, dr, cur):
             sd_h = (am or {}).get("sd") or cm["sd_hr"] or 0.05
             sd = math.sqrt((cm["sd_yield"] or 0.1) ** 2 + (sd_h / max(hr, 0.3)) ** 2)
             ce = {"prod": prod, "sd_log": sd}
+            row["sd_cond"] = sd
             row.update({"harv_ratio": hr, "harv": harv, "yield_cond": c["yield"], "yield_trend": c["yield_trend"],
                         "prod_cond": prod, "ci": c["ci"], "d2": c["d2"]})
         if g:
@@ -383,6 +384,7 @@ def run(cond, prog, dr, cur):
     res["estimate"] = {"states": rows, "us": us, "fsa_release": (fm or {}).get("release"),
                        "model": {"years": (cm or {}).get("years"), "sd_yield": (cm or {}).get("sd_yield")}}
     res["ginnings"] = ginnings_table(cur)
+    res["gin_projection"] = ginning_projection(rows, gm, res["ginnings"], cur)
     for key, fn in (("classing", classing_section), ("quality", quality_section)):
         try:
             res[key] = fn(cs, cur)
@@ -414,9 +416,11 @@ def ginnings_table(cur):
     p = os.path.join(load.D, "ginning", "ginnings.csv")
     if not os.path.exists(p):
         return None
-    g = pd.read_csv(p)
-    g = g[(g.item == "all_rb") & g.ref_date.notna()].copy()
+    raw = pd.read_csv(p)
+    g = raw[(raw.item == "all_rb") & raw.ref_date.notna()].copy()
     g["ref_date"] = pd.to_datetime(g.ref_date)
+    fin480 = raw[raw.item == "all_480"].groupby(["year", "state"]).value.max()
+    finrb = g.groupby(["year", "state"]).value.max()
     now = g[g.year == cur]
     if not len(now):
         return None
@@ -443,10 +447,16 @@ def ginnings_table(cur):
                 fin = h[h.period.str.upper() == "MAY"].value.max() if (h.period.str.upper() == "MAY").any() else h.value.max()
                 if fin:
                     norm.append(float(h[h.period == per].value.iloc[0]) / fin)
-        rows.append({"st": s, "name": load.STATE_NAME.get(s, s), "cur": v, "ly": ly if exact else None,
-                     "pct_ly_final": v / ly_fin * 100 if ly_fin else None, "pct_normal": float(np.mean(norm)) * 100 if norm else None})
+        k = [fin480[(y, s)] / finrb[(y, s)] for y in range(cur - 5, cur) if (y, s) in fin480.index and (y, s) in finrb.index and finrb[(y, s)] > 0]
+        row = {"st": s, "name": load.STATE_NAME.get(s, s), "cur": v, "ly": ly if exact else None,
+               "pct_ly_final": v / ly_fin * 100 if ly_fin else None, "pct_normal": float(np.mean(norm)) * 100 if norm else None}
+        nz = [x for x in norm if x > 0]
+        if len(nz) >= 3 and np.mean(nz) >= 0.02 and k:
+            f = float(np.mean(nz))
+            row.update({"proj_480": v / f * float(np.median(k)), "sd_log": float(np.std(np.log(np.array(nz) / f)))})
+        rows.append(row)
     rows.sort(key=lambda r: (r["st"] != "US", -r["cur"]))
-    return {"period_label": f"{label} ({t:%b %d, %Y})", "table": rows}
+    return {"period_label": f"{label} ({t:%b %d, %Y})", "date": t, "table": rows}
 
 
 # ───────────────────────── classing pace & fibre quality ─────────────────────────
@@ -681,3 +691,60 @@ def quality_section(cs, cur):
             f"color 31 & better {txt('Color 31 & better, %')}, average staple {txt('Average staple (32nds)', '', 2)}.")
     return {"week_end": wk, "states": ["US"] + order, "metrics": metrics, "color": colors,
             "by_state": {"cols": cols, "rows": rows}, "lead": lead}
+
+
+
+def ginning_projection(rows, gm, gt, cur):
+    """Crop projected from what has been ginned/classed so far.
+
+    For each state: bales classed to date ÷ the share normally classed at today's harvest progress, and
+    NASS running bales ginned ÷ the share normally ginned by this date (both converted to 480-lb bales).
+    Where both exist they are combined by their historical spread. Divided by harvested acres after the
+    projected final abandonment this gives the implied yield, shown next to the ratings-based yield.
+    States where too little has been ginned keep the ratings × acres estimate."""
+    gin = {r["st"]: r for r in (gt or {}).get("table", [])}
+    cls = (gm or {}).get("states", {})
+    out, tot = [], {"proj": 0.0, "from_gin": 0.0, "from_ratings": 0.0, "harv": 0.0, "usda": 0.0}
+    for r in rows:
+        s = r["st"]
+        c, n = cls.get(s) or {}, gin.get(s) or {}
+        est = []
+        # a projection from a small share of the crop is unstable: require 10% normally done, and widen the
+        # error band while most of the crop is still to come
+        if c.get("prod") and c.get("sd_log") is not None and (c.get("frac_normal") or 0) >= 0.10:
+            est.append((c["prod"], max(c["sd_log"], 0.35 * (1 - c["frac_normal"]), 0.03)))
+        fsh = (n.get("pct_normal") or 0) / 100
+        if n.get("proj_480") and n.get("sd_log") is not None and fsh >= 0.10:
+            est.append((n["proj_480"], max(n["sd_log"], 0.35 * (1 - fsh), 0.03)))
+        gin_only = None
+        if est:
+            w = [1 / sd ** 2 for _, sd in est]
+            gin_only = math.exp(sum(wi * math.log(p) for wi, (p, _) in zip(w, est)) / sum(w))
+            sd_g = (1 / sum(w)) ** 0.5
+        prior = r.get("prod_cond")
+        sd_c = (r.get("sd_cond") or 0.15)
+        if gin_only and prior:
+            wg = (1 / sd_g ** 2) / (1 / sd_g ** 2 + 1 / sd_c ** 2)
+            proj, basis = math.exp(wg * math.log(gin_only) + (1 - wg) * math.log(prior)), "ginning + ratings"
+        elif gin_only:
+            proj, basis, wg = gin_only, "ginning", 1.0
+        else:
+            proj, basis, wg = prior, "ratings", 0.0
+        if proj is None:
+            continue
+        harv = r.get("harv")
+        o = {"st": s, "name": r["name"], "harvest_pct": c.get("harvest_now"), "classed": c.get("cum"), "classed_share": c.get("frac_normal"),
+             "ginned_rb": n.get("cur"), "ginned_share": (n.get("pct_normal") or 0) / 100 if n.get("pct_normal") is not None else None,
+             "proj_classing": c.get("prod"), "proj_ginnings": n.get("proj_480"), "gin_only": gin_only, "w_gin": wg,
+             "proj": proj, "basis": basis,
+             "harv": harv, "ab_final": r.get("ab_final"), "yield_implied": proj * 480 / harv if harv else None,
+             "yield_ratings": r.get("yield_cond"), "usda_prod": r.get("usda_prod"), "usda_yield": r.get("usda_yield")}
+        out.append(o)
+        tot["proj"] += proj
+        tot["from_gin"] += proj * wg
+        tot["from_ratings"] += proj * (1 - wg)
+        tot["harv"] += harv or 0
+        tot["usda"] += r.get("usda_prod") or 0
+    out.sort(key=lambda x: -x["proj"])
+    tot["yield"] = tot["proj"] * 480 / tot["harv"] if tot["harv"] else None
+    return {"states": out, "us": tot, "nass_date": (gt or {}).get("date"), "classing_week": (gm or {}).get("week_end")}

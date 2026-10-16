@@ -135,6 +135,16 @@ def brief(res):
         if u and u.get("pct_normal"):
             pts.append(f"NASS ginnings to {G['period_label']}: {u['cur'] / 1e6:.2f}m running bales, "
                        f"{u['pct_ly_final']:.1f}% of last season's total (normal {u['pct_normal']:.1f}% by this date).")
+    GP = res.get("gin_projection")
+    if GP and GP["us"].get("proj"):
+        u = GP["us"]
+        dg = (u["proj"] / u["usda"] - 1) * 100 if u.get("usda") else None
+        tx = next((x for x in GP["states"] if x["st"] == "TX"), None)
+        pts.append(f"Projection from ginnings: {m(u['proj'])} bales ({dg:+.1f}% vs USDA), with {u['from_gin'] / u['proj'] * 100:.0f}% of it resting on ginning so far"
+                   + (f"; Texas ginning pace alone points to {m(tx['gin_only'])} ({tx['gin_only'] * 480 / tx['harv']:.0f} lb on harvested acres after projected abandonment)"
+                      if tx and tx.get("gin_only") and tx.get("harv") else "") + ".")
+        kpis.insert(1, {"label": "Projection from ginnings", "value": m(u["proj"]), "delta": f"{dg:+.1f}%" if dg is not None else None,
+                        "good": (dg or 0) >= 0, "sub": f"{u['from_gin'] / u['proj'] * 100:.0f}% ginning-based so far"})
     K = res.get("classing")
     if K:
         u = next((r for r in K["table"] if r["st"] == "US"), None)
