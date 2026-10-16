@@ -1,7 +1,7 @@
 name: Build crop analytics
 on:
   workflow_run:
-    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage", "Backfill (parallel, manual)", "Cotton-area drought (Ag in Drought)"]
+    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage", "Backfill (parallel, manual)", "Cotton-area drought (Ag in Drought) and AWP"]
     types: [completed]
   schedule:
     - cron: '15 22 * * 1-5'   # after the ICE close: refresh prices and technicals
@@ -18,9 +18,9 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: pip install requests pandas numpy yfinance
-      - run: python scripts/build.py
       - name: Prices for the model tabs (Bloomberg history + ICE settlements + Yahoo)
         run: python scripts/build_prices.py || echo 'price build failed; keeping previous file'
+      - run: python scripts/build.py
       - name: Price chart data and technical summary (Yahoo Finance)
         run: python scripts/build_technicals.py || echo 'technicals build failed; keeping previous file'
       - run: |

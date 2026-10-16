@@ -1,8 +1,9 @@
-name: Cotton-area drought (Ag in Drought)
+name: Cotton-area drought (Ag in Drought) and AWP
 on:
   schedule:
     - cron: '20 14 * * 4'   # USDM maps post Thursday mornings
     - cron: '20 14 * * 5'   # Friday catch-up
+    - cron: '45 21 * * 4'   # Thursday evening: FSA posts the AWP after 4 pm ET
   workflow_dispatch:
 permissions:
   contents: write
@@ -13,10 +14,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
-      - run: pip install requests pandas
-      - run: python scripts/fetch_agdrought.py
+      - run: pip install requests pandas pdfplumber
+      - run: python scripts/fetch_agdrought.py || echo 'drought fetch failed'
+      - run: python scripts/fetch_awp.py || echo 'AWP fetch failed'
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/drought
-          git commit -m "Update cotton-area drought $(date -u +%Y-%m-%d)" || exit 0
+          git add data/drought data/awp
+          git commit -m "Update cotton-area drought / AWP $(date -u +%Y-%m-%d)" || exit 0
           for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done
