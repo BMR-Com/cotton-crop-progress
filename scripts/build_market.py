@@ -246,7 +246,25 @@ def spread_fv(px, w, today, rates):
     return out
 
 
+COT_URL = "https://raw.githubusercontent.com/BMR-Com/cftc-cot-full/main/data/bcom_cot_master.csv"
+
+
+def cot_cotton():
+    """Cotton rows of the BMR-Com COT master (31 MB, too large for the browser) → docs/data/cot_cotton.csv."""
+    src = os.environ.get("COT_LOCAL") or COT_URL
+    try:
+        c = pd.read_csv(src, usecols=lambda k: k in ("date", "commodity", "crop_type", "open_interest", "managed_money_long",
+                        "managed_money_short", "managed_money_net", "prod_merc_long", "prod_merc_short", "prod_merc_net"), low_memory=False)
+    except Exception as e:
+        print("COT unavailable:", e); return
+    c = c[c.commodity == "Cotton"].sort_values("date")
+    if len(c) > 500:
+        c.to_csv(os.path.join(ROOT, "docs", "data", "cot_cotton.csv"), index=False)
+        print("COT cotton:", len(c), "rows, latest", c.date.max())
+
+
 def main():
+    cot_cotton()
     px = load_px()
     awp = pd.read_csv(AWP)
     w, wl = load_wasde()
