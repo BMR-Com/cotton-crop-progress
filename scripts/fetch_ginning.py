@@ -8,7 +8,7 @@ get_counts first; anything over the limit is split by state.
 
 Output (tidy CSVs, one row per observation):
   data/ginning/ginnings.csv   year, state, item, period, ref_date, value
-  data/ginning/annual.csv     year, state, item, value
+  data/ginning/annual.csv     year, state, item, period (YEAR = final, or the in-season forecast label), value
 """
 import os, sys, time, json
 from datetime import date
@@ -19,7 +19,8 @@ KEY = os.environ["USDA_API_KEY"]
 B = "https://quickstats.nass.usda.gov/api/"
 LIMIT = 50_000
 OUT = "data/ginning"
-FIRST_YEAR = int(os.environ.get("GIN_FIRST_YEAR", "2014"))
+FIRST_YEAR = int(os.environ.get("GIN_FIRST_YEAR", "2014"))      # ginnings: 2014 crop onward
+ANNUAL_FIRST = int(os.environ.get("ANNUAL_FIRST_YEAR", "2001"))  # acreage / yield history for the condition model
 
 GIN_ITEMS = {
     "all_rb":     "COTTON - GINNED BALES, MEASURED IN RUNNING BALES",
@@ -97,6 +98,8 @@ def main():
     gpath, apath = f"{OUT}/ginnings.csv", f"{OUT}/annual.csv"
     old_g = pd.read_csv(gpath) if os.path.exists(gpath) else pd.DataFrame()
     old_a = pd.read_csv(apath) if os.path.exists(apath) else pd.DataFrame()
+    if len(old_a) and "period" not in old_a.columns:   # older layout without forecast periods: rebuild
+        old_a = pd.DataFrame()
     # full history once, then only the two most recent crop years (revisions + the season in progress)
     have = set(old_g.year.unique()) if len(old_g) else set()
     refresh = [y for y in years if y not in have or y >= this_year - 1]
@@ -115,26 +118,29 @@ def main():
                               "period": r["reference_period_desc"], "ref_date": ref_date(int(r["year"]), r["reference_period_desc"]),
                               "value": v, "load_time": r.get("load_time", "")})
         print(f"  ginnings {y}: total rows so far {len(g)}")
+    have_a = set(old_a.year.unique()) if len(old_a) else set()
+    refresh_a = [y for y in range(ANNUAL_FIRST, this_year + 1) if y not in have_a or y >= this_year - 1]
     a = []
-    for y in refresh:
+    for y in refresh_a:
         for k, sd in ANNUAL_ITEMS.items():
             for lvl in ("STATE", "NATIONAL"):
-                for r in batch(sd, y, lvl, freq_desc="ANNUAL", reference_period_desc="YEAR"):
+                # final ("YEAR") plus in-season forecasts ("YEAR - AUG FORECAST", "YEAR - JUN ACREAGE", ...)
+                for r in batch(sd, y, lvl, freq_desc="ANNUAL"):
                     v = val(r["Value"])
                     if v is None:
                         continue
                     a.append({"year": int(r["year"]), "state": r["state_alpha"] if lvl == "STATE" else "US", "item": k,
-                              "value": v, "load_time": r.get("load_time", "")})
+                              "period": r["reference_period_desc"], "value": v, "load_time": r.get("load_time", "")})
     G = pd.DataFrame(g); A = pd.DataFrame(a)
     if len(old_g):
         G = pd.concat([old_g[~old_g.year.isin(refresh)], G], ignore_index=True)
     if len(old_a):
-        A = pd.concat([old_a[~old_a.year.isin(refresh)], A], ignore_index=True)
+        A = pd.concat([old_a[~old_a.year.isin(refresh_a)], A], ignore_index=True)
     if len(G):
         G = G.drop_duplicates(["year", "state", "item", "period"], keep="last").sort_values(["year", "state", "item", "ref_date"])
         G.to_csv(gpath, index=False)
     if len(A):
-        A = A.drop_duplicates(["year", "state", "item"], keep="last").sort_values(["year", "state", "item"])
+        A = A.drop_duplicates(["year", "state", "item", "period"], keep="last").sort_values(["year", "state", "item", "period"])
         A.to_csv(apath, index=False)
     print(f"ginnings: {len(G)} rows, annual: {len(A)} rows")
 
