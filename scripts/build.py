@@ -140,11 +140,12 @@ def brief(res):
         u = GP["us"]
         dg = (u["proj"] / u["usda"] - 1) * 100 if u.get("usda") else None
         tx = next((x for x in GP["states"] if x["st"] == "TX"), None)
-        pts.append(f"Projection from ginnings: {m(u['proj'])} bales ({dg:+.1f}% vs USDA), with {u['from_gin'] / u['proj'] * 100:.0f}% of it resting on ginning so far"
+        band = f" (±1σ {m(u['lo'])}–{m(u['hi'])})" if u.get("lo") else ""
+        pts.append(f"Projection from ginnings: {m(u['proj'])} bales{band}, {dg:+.1f}% vs USDA, with {u['from_gin'] / u['proj'] * 100:.0f}% of it resting on ginning so far"
                    + (f"; Texas ginning pace alone points to {m(tx['gin_only'])} ({tx['gin_only'] * 480 / tx['harv']:.0f} lb on harvested acres after projected abandonment)"
                       if tx and tx.get("gin_only") and tx.get("harv") else "") + ".")
         kpis.insert(1, {"label": "Projection from ginnings", "value": m(u["proj"]), "delta": f"{dg:+.1f}%" if dg is not None else None,
-                        "good": (dg or 0) >= 0, "sub": f"{u['from_gin'] / u['proj'] * 100:.0f}% ginning-based so far"})
+                        "good": (dg or 0) >= 0, "sub": (f"±{u['sd_log'] * 100:.1f}% (1σ) · " if u.get("sd_log") else "") + f"{u['from_gin'] / u['proj'] * 100:.0f}% ginning-based so far"})
     K = res.get("classing")
     if K:
         u = next((r for r in K["table"] if r["st"] == "US"), None)
@@ -189,7 +190,7 @@ def wasde_us(cur):
         return None
     my = f"{cur}/{(cur + 1) % 100:02d}"
     out = {"my": my}
-    for k, lab in (("prod", "Production"), ("end_stocks", "Ending Stocks"), ("exports", "Exports"), ("planted", "Planted"),
+    for k, lab in (("prod", "Production"), ("end_stocks", "Ending Stocks"), ("exports", "Exports"), ("domestic", "Domestic Use"), ("planted", "Planted"),
                    ("harvested", "Harvested"), ("yield", "Yield per Harvested Acre")):
         v = d["data"].get(f"United States||{lab}||{my}")
         if v:

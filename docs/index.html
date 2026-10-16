@@ -103,7 +103,7 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
   <h2>Crop projection from ginnings</h2>
   <p class="lead" id="gp-lead"></p>
   <div class="tw"><table id="t-gp"></table></div>
-  <p class="note">Ginning pace = bales classed so far ÷ the share normally classed at today's harvest progress, and NASS running bales ginned ÷ the share normally ginned by this date (480-lb bales). It is used once at least 10% of a state's crop is normally through the gins, and blended with the ratings estimate by their historical accuracy, so its weight rises as ginning advances. Harvested acres apply the projected final abandonment.</p>
+  <p class="note">The ±1σ band is the leave-one-year-out error of this build-up at the same point of past seasons (US, about 6% from ratings, drought and FSA failed acres alone), narrowed state by state by the weight on ginning. Ginning pace = bales classed so far ÷ the share normally classed at today's harvest progress, and NASS running bales ginned ÷ the share normally ginned by this date (480-lb bales). It is used once at least 10% of a state's crop is normally through the gins, and blended with the ratings estimate by their historical accuracy, so its weight rises as ginning advances. Harvested acres apply the projected final abandonment.</p>
 </section>
 
 <section class="card">
@@ -232,7 +232,7 @@ function renderEstimate(){
 function renderGP(){
   const G=D.gin_projection; if(!G){$('#gp-card').style.display='none';return;}
   const u=G.us, d=pct(u.proj,u.usda);
-  $('#gp-lead').innerHTML=`<b>${mb(u.proj)}m bales</b> projected for US upland (USDA ${mb(u.usda)}m, ${d==null?'':sg(d)+'%'}), implied yield ${fmt(u.yield)} lb on ${fmt(u.harv/1e6,2)}m harvested acres. `+
+  $('#gp-lead').innerHTML=`<b>${mb(u.proj)}m bales</b> projected for US upland`+(u.lo?` (±1σ ${mb(u.lo)}–${mb(u.hi)}m)`:'')+` (USDA ${mb(u.usda)}m, ${d==null?'':sg(d)+'%'}), implied yield ${fmt(u.yield)} lb on ${fmt(u.harv/1e6,2)}m harvested acres. `+
     `${fmt(u.from_gin/u.proj*100)}% of the projection rests on ginning so far; the rest on crop ratings. Classing through ${G.classing_week||'–'}, NASS ginnings to ${G.nass_date||'–'}.`;
   const k=v=>v==null?'–':fmt(v/1e3)+'k', p0=v=>v==null?'–':fmt(v*100,0)+'%';
   let h=`<thead><tr><th>State</th><th>Projection</th><th>USDA</th><th>Diff</th><th>Basis</th><th>Ginning weight</th><th>Ginning pace alone</th><th>From classing</th><th>From NASS ginnings</th><th>Harvested %</th><th>Classed</th><th>Normally classed at this harvest %</th><th>NASS ginned (RB)</th><th>Normally ginned by date</th><th>Harvested acres</th><th>Final abandonment</th><th>Implied yield</th><th>Ratings yield</th><th>USDA yield</th></tr></thead><tbody>`;

@@ -105,13 +105,13 @@ svg text{font-family:var(--mono)}
   <div class="card">
     <h3>OBBBA & carry</h3>
     <label>Loan rate (¢) <input type="number" id="in-loan" value="55" step="0.5"></label>
-    <label>Futures−AWP wedge <input type="number" id="in-wedge" value="11" step="0.5"></label>
-    <label>3-lowest-quote effect <input type="number" id="in-q3" value="1.5" step="0.25"></label>
-    <label>30-day lookback (¢) <input type="number" id="in-lb" value="1.0" step="0.25"></label>
-    <label>Storage (¢/lb/mo) <input type="number" id="in-stor" value="0.60" step="0.05"></label>
-    <label>Funding (%/yr) <input type="number" id="in-rate" value="5.5" step="0.25"></label>
-    <label>Lookback sprd adj (¢) <input type="number" id="in-lbsprd" value="0.5" step="0.1"></label>
-    <div class="hint">Floor = loan+wedge+quote+lookback: <b id="floor-out" style="font-family:var(--mono)">—</b></div>
+    <label>Dec futures − AWP (¢) <input type="number" id="in-wedge" value="15.86" step="0.1"></label>
+    <label style="display:none">3-lowest-quote effect <input type="number" id="in-q3" value="0" step="0.25"></label>
+    <label style="display:none">30-day lookback (¢) <input type="number" id="in-lb" value="0" step="0.25"></label>
+    <label>Storage, ¢/lb/mo ($3.00/bale) <input type="number" id="in-stor" value="0.625" step="0.005"></label>
+    <label>CCC loan interest (%/yr) <input type="number" id="in-rate" value="5.0" step="0.25"></label>
+    <label style="display:none">Lookback sprd adj (¢) <input type="number" id="in-lbsprd" value="0" step="0.1"></label>
+    <div class="hint">Dec LDP trigger (loan + wedge): <b id="floor-out" style="font-family:var(--mono)">—</b></div><div id="floor-tbl"></div>
   </div>
   <div class="card">
     <h3>Flow signals</h3>
@@ -179,6 +179,7 @@ svg text{font-family:var(--mono)}
 
 <div class="foot" style="margin-top:12px">Sources: BMR-Com cotton-price · wasde-analytics · cotton-on-call · CFTC publicreporting. All regressions fit on load. Manual anchors: production scenarios + WASDE production. Research tool, not trading advice.</div>
 </div>
+<script src="js/market.js"></script>
 <script>
 // ═══════════ CONFIG ═══════════
 var PRICE_URL='data/cotton_px.csv';  // Bloomberg history + ICE settlements / Yahoo closes, rebuilt daily
@@ -204,9 +205,10 @@ var loaded={w:false,p:false,o:false,c:false},CACHE=null;
 function setStatus(h){document.getElementById('status').innerHTML=h;}
 function maybeRun(){
   setStatus('px <span class="'+(loaded.p?'ok">✓':'">…')+'</span> wasde <span class="'+(loaded.w?'ok">✓':'">…')+'</span> on-call <span class="'+(loaded.o?'ok">✓':'">…')+'</span> cot <span class="'+(loaded.c?(COTfail?'warn">n/a':'ok">✓'):'">…')+'</span>');
-  if(loaded.w&&loaded.p&&loaded.o&&loaded.c)run();
+  if(loaded.m&&loaded.w&&loaded.p&&loaded.o&&loaded.c)run();
 }
 fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;maybeRun();}).catch(function(){setStatus('<span class="err">wasde failed</span>');});
+MM_READY.then(function(){mmPrefillInputs();loaded.m=true;maybeRun();});
 Papa.parse(PRICE_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){PXrows=res.data;loaded.p=true;maybeRun();}});
 Papa.parse(OC_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){OCrows=res.data;loaded.o=true;maybeRun();}});
 Papa.parse(COT_URL,{download:true,header:true,skipEmptyLines:true,
@@ -512,7 +514,9 @@ function run(){
   if(!P.useOC)P.wOC=0;
   if(!P.useCOT)P.wCOT=0;
   P.floor=P.loan+P.wedge+P.q3+P.lb;
-  document.getElementById('floor-out').textContent=P.floor.toFixed(1)+'¢';
+  document.getElementById('floor-out').textContent=P.floor.toFixed(2)+'¢';
+  P.fl=function(id){return mmFloor(id,P);};
+  document.getElementById('floor-tbl').innerHTML=mmFloorTable(P);
   var px=P.mktPx!==null?P.mktPx:C.last.px;
   var iv=P.mktIv!==null?P.mktIv:C.last.iv;
   var beta=P.useBeta&&C.beta?C.beta.b:P.betaOv;
@@ -548,13 +552,16 @@ function run(){
   }
   var S={bull:scen(P.plo),med:scen(P.pmed),bear:scen(P.phi),wasde:scen(P.wprod)};
 
+  // ── spread FVs: pre-roll window model (market_model.json) ──
+  if(!C._mm&&MM){['decmar','marmay','mayjul','juldec'].forEach(function(id){
+    if(!MM.spreads[id]||!C[id])return;C[id].pts=mmSpreadPts(id);C[id].fit=mmSpreadFit(id);C[id].fv=function(st){return mmSpreadFV(id,st);};});C._mm=true;}
   // ── spread adjusted FVs ──
   var decfM=C['decf'];
   SERIES.forEach(function(Sr){
     var o=C[Sr.id];
-    if(Sr.grp==='flat'){o.fvA=function(st){return Math.max(o.fv(st),P.floor);};return;}
+    if(Sr.grp==='flat'){o.fvA=function(st){return Math.max(o.fv(st),P.fl(Sr.id).hard);};return;}
     var months=CARRY_MONTHS[Sr.id]||2;
-    o.carryAt=function(st){var pr=Math.max(decfM.fv(st),P.floor);return -(P.stor+pr*P.rate/1200)*months;};
+    o.carryAt=function(st){return mmFullCarry(Sr.id,P.stor);};
     o.fvA=function(st){
       var v=Math.max(o.fv(st),o.carryAt(st));
       var prox=Math.max(0,Math.min(1,(P.floor+4-decfM.fv(st))/4));
@@ -594,7 +601,7 @@ function run(){
     ro('Jul−Dec',jd!==null?sgn(jd)+'¢':'—',jd===null?C['juldec'].mktLbl:'old/new')+
     ro('Dec26 IV',f1(iv)+'%',C.ivPct(iv)+'th pctile')+
     ro('HV20',f1(C.hvNow)+'%','IV−HV '+sgn(iv-C.hvNow))+
-    ro('OBBBA floor',P.floor.toFixed(1)+'¢','effective support');
+    ro('Dec LDP trigger',P.floor.toFixed(1)+'¢','loan + Dec−AWP wedge');
   document.getElementById('mkt-foot').textContent='px data through '+lastStr+' · on-call through '+((L.d.getMonth()+1)+'/'+L.d.getDate()+'/'+String(L.d.getFullYear()).slice(2))+' · wasde '+(WJ.lastUpdated||'');
 
   // price rail + table
@@ -657,7 +664,7 @@ function run(){
   // scatters
   document.getElementById('grid-sprd').innerHTML='';
   document.getElementById('grid-flat').innerHTML='';
-  SERIES.forEach(function(Sr){drawScatter(C[Sr.id],P,C.wStk,S.med.stk,S.bull.stk);});
+  SERIES.forEach(function(Sr){var P2=Object.assign({},P);if(Sr.grp==='flat'){var fl=P.fl(Sr.id);P2.floor=fl.hard;P2.soft=fl.soft;P2.flc=fl.contract;}drawScatter(C[Sr.id],P2,C.wStk,S.med.stk,S.bull.stk);});
 
   // integrated table + verdict
   var h3='<tr><th>Component</th><th>Value</th><th>Basis</th></tr>';
@@ -775,7 +782,11 @@ function drawScatter(o,P,wstk,mstk,bstk){
   if(isFlat&&Y(P.floor)>T){
     s+='<rect x="'+L+'" y="'+Y(P.floor)+'" width="'+(W-L-R)+'" height="'+(H-B-Y(P.floor))+'" fill="#a06b00" opacity="0.07"/>';
     s+='<line x1="'+L+'" y1="'+Y(P.floor)+'" x2="'+(W-R)+'" y2="'+Y(P.floor)+'" stroke="#a06b00" stroke-width="1.5" stroke-dasharray="5 3"/>';
-    s+='<text x="'+(W-R-4)+'" y="'+(Y(P.floor)-4)+'" font-size="9" fill="#a06b00" text-anchor="end" font-weight="700">OBBBA floor '+P.floor.toFixed(1)+'¢</text>';
+    s+='<text x="'+(W-R-4)+'" y="'+(Y(P.floor)-4)+'" font-size="9" fill="#a06b00" text-anchor="end" font-weight="700">'+(P.flc||'')+' LDP trigger '+P.floor.toFixed(1)+'¢</text>';
+  }
+  if(isFlat&&P.soft&&Y(P.soft)>T&&Y(P.soft)<H-B){
+    s+='<line x1="'+L+'" y1="'+Y(P.soft)+'" x2="'+(W-R)+'" y2="'+Y(P.soft)+'" stroke="#5f7a2e" stroke-width="1.2" stroke-dasharray="2 3"/>';
+    s+='<text x="'+(L+4)+'" y="'+(Y(P.soft)-4)+'" font-size="9" fill="#5f7a2e" text-anchor="start" font-weight="700">loan break-even '+P.soft.toFixed(1)+'¢</text>';
   }
   var steps=60,path='',pathA='';
   for(var i=0;i<=steps;i++){
@@ -811,14 +822,14 @@ function drawScatter(o,P,wstk,mstk,bstk){
   card.innerHTML='<div class="hd"><span class="nm">'+Sr.nm+'</span>'
     +'<span class="fvs">FV@'+f1(wstk)+'M = <b>'+f2(o.fvA(wstk))+'¢</b> · @'+f1(mstk)+'M = '+f2(o.fvA(mstk))+'¢'
     +(o.mkt!==null?' · mkt '+f2(o.mkt)+'¢':'')
-    +' · R²='+o.fit.f.r2.toFixed(2)+' ('+(o.fit.form==='inv'?'1/x':'lin')+', n='+pts.length+')</span></div>'+s;
+    +' · R²='+o.fit.f.r2.toFixed(2)+' ('+(o.fit.win?'pre-roll avg, 1/x + funding':o.fit.form==='inv'?'1/x':'lin')+', n='+pts.length+')</span></div>'+s;
   document.getElementById(Sr.grp==='sprd'?'grid-sprd':'grid-flat').appendChild(card);
 }
 
 ['in-pmed','in-plo','in-phi','in-wprod','in-dresp','in-usebeta','in-beta','in-lvlw',
  'in-loan','in-wedge','in-q3','in-lb','in-stor','in-rate','in-lbsprd',
  'in-useOC','in-wOC','in-wOCs','in-useCOT','in-wCOT','in-mktpx','in-mktiv'].forEach(function(id){
-  document.getElementById(id).addEventListener('input',function(){if(loaded.w&&loaded.p&&loaded.o&&loaded.c)run();});
+  document.getElementById(id).addEventListener('input',function(){if(loaded.m&&loaded.w&&loaded.p&&loaded.o&&loaded.c)run();});
 });
 setStatus('loading data…');
 </script>

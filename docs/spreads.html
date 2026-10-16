@@ -57,8 +57,8 @@ svg text{font-family:var(--mono)}
 <div class="wrap">
 <header>
   <div>
-    <h1>COTTON <span>SPREAD FAIR VALUE</span> — WASDE RELEASE MODEL</h1>
-    <div style="font-size:11px;color:#777;margin-top:2px">US ending stocks at each WASDE release vs contemporaneous spreads & flat price · current-crop convention from June · OBBBA / AWP regime overlay</div>
+    <h1>COTTON <span>SPREAD FAIR VALUE</span> — PRE-ROLL WINDOW MODEL</h1>
+    <div style="font-size:11px;color:#777;margin-top:2px">Spreads: average of the 45 days before each roll vs US ending stocks and funding cost · flats: WASDE-release model · loan floors from the latest USDA AWP</div>
   </div>
   <div class="status" id="status">initializing…</div>
 </header>
@@ -75,17 +75,17 @@ svg text{font-family:var(--mono)}
     </div>
     <div>
       <label>OBBBA loan rate (¢) <input type="number" id="in-loan" value="55" step="0.5"></label>
-      <label>Futures − AWP wedge (¢) <input type="number" id="in-wedge" value="11" step="0.5"></label>
-      <label>3-lowest-quote AWP effect (¢) <input type="number" id="in-q3" value="1.5" step="0.25"></label>
-      <label>30-day lookback option (¢) <input type="number" id="in-lb" value="1.0" step="0.25"></label>
+      <label>Dec futures − AWP (¢) <input type="number" id="in-wedge" value="15.86" step="0.1"></label>
+      <label style="display:none">3-lowest-quote AWP effect (¢) <input type="number" id="in-q3" value="0" step="0.25"></label>
+      <label style="display:none">30-day lookback option (¢) <input type="number" id="in-lb" value="0" step="0.25"></label>
     </div>
     <div>
-      <label>Storage (¢/lb/month) <input type="number" id="in-stor" value="0.60" step="0.05"></label>
-      <label>Funding rate (%/yr) <input type="number" id="in-rate" value="5.5" step="0.25"></label>
-      <label>Lookback spread adj max (¢) <input type="number" id="in-lbsprd" value="0.5" step="0.1"></label>
+      <label>Storage, ¢/lb/mo ($3.00/bale) <input type="number" id="in-stor" value="0.625" step="0.005"></label>
+      <label>CCC loan interest (%/yr) <input type="number" id="in-rate" value="5.0" step="0.25"></label>
+      <label style="display:none">Lookback spread adj max (¢) <input type="number" id="in-lbsprd" value="0" step="0.1"></label>
     </div>
     <div>
-      <div style="font-size:11px;line-height:1.5;padding-top:4px">Effective futures floor:<br><span style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--gold)" id="floor-out">—</span><div class="hint">loan + wedge + quote effect + lookback. Shaded on flat charts; FVs floored here. Full carry per spread = −(storage + FV×rate/1200)×months — the new higher storage rates widen this bound vs the pre-2023 history in the scatters.</div></div>
+      <div style="font-size:11px;line-height:1.5;padding-top:4px">Dec LDP trigger (loan + wedge):<br><span style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--gold)" id="floor-out">—</span><div id="floor-tbl"></div></div>
     </div>
   </div>
 </div>
@@ -96,10 +96,10 @@ svg text{font-family:var(--mono)}
   <div class="note" id="fv-note"></div>
 </div>
 
-<div class="section-title">Calendar spreads vs US ending stocks — one point per WASDE release</div>
+<div class="section-title">Calendar spreads — one point per season: average over the 45 days before the roll vs US ending stocks</div>
 <div class="scatgrid" id="grid-sprd"></div>
 
-<div class="section-title">Flat price vs US ending stocks — with OBBBA floor</div>
+<div class="section-title">Flat price vs US ending stocks — with each contract's loan floor</div>
 <div class="scatgrid" id="grid-flat"></div>
 
 <div class="card obbba" style="margin-top:16px">
@@ -109,6 +109,7 @@ svg text{font-family:var(--mono)}
 
 <div class="foot">Sources: BMR-Com/wasde-analytics (Cotton.json) · BMR-Com/cotton-price (cotton_raw.csv). x = US ending-stocks estimate published in that release for the crop the contracts trade; y = price/spread at first close on/after the 11th of the report month. Fit = better of linear / 1-over-x. Research tool, not trading advice.</div>
 </div>
+<script src="js/market.js"></script>
 <script>
 // ═══════════ CONFIG ═══════════
 var WASDE_URL='https://raw.githubusercontent.com/BMR-Com/wasde-analytics/main/data/Cotton.json';
@@ -132,10 +133,11 @@ var WJ=null,PXrows=null,loaded={w:false,p:false},CACHE=null;
 function setStatus(h){document.getElementById('status').innerHTML=h;}
 function maybeRun(){
   setStatus('wasde <span class="'+(loaded.w?'ok">✓':'">…')+'</span> &nbsp; prices <span class="'+(loaded.p?'ok">✓':'">…')+'</span>');
-  if(loaded.w&&loaded.p)run();
+  if(loaded.m&&loaded.w&&loaded.p)run();
 }
 fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;maybeRun();})
   .catch(function(e){setStatus('<span class="err">wasde fetch failed</span>');});
+MM_READY.then(function(){mmPrefillInputs();loaded.m=true;maybeRun();});
 Papa.parse(PRICE_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){PXrows=res.data;loaded.p=true;maybeRun();},
   error:function(){setStatus('<span class="err">price fetch failed</span>');}});
 
@@ -205,6 +207,12 @@ function buildAll(){
     out[S.id]={S:S,pts:pts,fit:best,
       fv:function(st){return best.form==='inv'?best.f.a+best.f.b/Math.max(st,0.3):best.f.a+best.f.b*st;}};
   });
+  // calendar spreads: pre-roll window model from market_model.json
+  SERIES.forEach(function(S){
+    if(S.grp!=='sprd'||!MM||!MM.spreads[S.id])return;
+    var o=out[S.id];o.pts=mmSpreadPts(S.id);o.fit=mmSpreadFit(S.id);
+    o.fv=function(st){return mmSpreadFV(S.id,st);};
+  });
   // latest market values per series — only when the generic pair trades the CURRENT crop (2026/27)
   var CUR_CY=2026;
   var lm=lastRow.d.getMonth()+1,ly=lastRow.d.getFullYear(),lr=lastRow.r;
@@ -220,6 +228,7 @@ function buildAll(){
     if(bId){var vb=num(lr[bId+' Comdty PX_LAST']);if(vb===null)return;o.mkt=va-vb;}
     else o.mkt=va;
   });
+  SERIES.forEach(function(S){if(S.grp==='sprd'&&MM&&MM.spreads[S.id]&&MM.spreads[S.id].market!=null){out[S.id].mkt=MM.spreads[S.id].market;out[S.id].mktLbl='';}});
   out._lastDate=lastRow.r['Dates'];
   out._lastD=lastRow.d;
   return out;
@@ -234,7 +243,9 @@ function run(){
     loan:pget('in-loan'),wedge:pget('in-wedge'),q3:pget('in-q3'),lb:pget('in-lb')};
   P.floor=P.loan+P.wedge+P.q3+P.lb;
   P.stor=pget('in-stor');P.rate=pget('in-rate');P.lbSprd=pget('in-lbsprd');
-  document.getElementById('floor-out').textContent=P.floor.toFixed(1)+'¢';
+  document.getElementById('floor-out').textContent=P.floor.toFixed(2)+'¢';
+  P.fl=function(id){return mmFloor(id,P);};
+  document.getElementById('floor-tbl').innerHTML=mmFloorTable(P);
 
   // adjusted FV per series:
   //  flats  -> floored at OBBBA effective floor
@@ -244,23 +255,19 @@ function run(){
   SERIES.forEach(function(S){
     var o=CACHE[S.id];
     if(S.grp==='flat'){
-      o.fvA=function(st){return Math.max(o.fv(st),P.floor);};
+      o.fvA=function(st){return Math.max(o.fv(st),P.fl(S.id).hard);};
       return;
     }
     var months=CARRY_MONTHS[S.id]||2;
     o.fvA=function(st){
       var raw=o.fv(st);
-      var pxRef=Math.max(decfM.fv(st),P.floor);
-      var fullCarry=-(P.stor+pxRef*P.rate/1200)*months;
+      var fullCarry=mmFullCarry(S.id,P.stor);
       var v=Math.max(raw,fullCarry);
       // lookback support: scales in as flat FV approaches the floor (within 4c)
       var prox=Math.max(0,Math.min(1,(P.floor+4-decfM.fv(st))/4));
       return v+P.lbSprd*prox;
     };
-    o.carryAt=function(st){
-      var pxRef=Math.max(decfM.fv(st),P.floor);
-      return -(P.stor+pxRef*P.rate/1200)*months;
-    };
+    o.carryAt=function(st){return mmFullCarry(S.id,P.stor);};
   });
 
   var age=(new Date()-CACHE._lastD)/864e5;
@@ -282,18 +289,25 @@ function run(){
       +'<td>'+o.fit.f.r2.toFixed(2)+'</td></tr>';
   });
   document.getElementById('fv-tbl').innerHTML=h;
-  document.getElementById('fv-note').textContent='Mispricing = market − FV at WASDE stocks; "cheap" means the market trades below the stocks-implied fair value (a buy candidate on convergence). Flat-price FVs are floored at the OBBBA effective floor of '+P.floor.toFixed(1)+'¢. Model/bull columns show where FV migrates if USDA converges to the crop model.';
+  document.getElementById('fv-note').textContent='Mispricing = market − FV at WASDE stocks; "cheap" means the market trades below the stocks-implied fair value (a buy candidate on convergence). Flat-price FVs are floored at each contract\'s LDP trigger (Dec '+P.floor.toFixed(2)+'¢). Spread FVs use the pre-roll window model. Model/bull columns show where FV migrates if USDA converges to the crop model.';
 
   // scatters
   document.getElementById('grid-sprd').innerHTML='';
   document.getElementById('grid-flat').innerHTML='';
-  SERIES.forEach(function(S){drawScatter(CACHE[S.id],P);});
+  SERIES.forEach(function(S){
+    var P2=Object.assign({},P);
+    if(S.grp==='flat'){var fl=P.fl(S.id);P2.floor=fl.hard;P2.soft=fl.soft;P2.flc=fl.contract;}
+    drawScatter(CACHE[S.id],P2);
+  });
 
   // OBBBA note
+  var F=MM.floors;
   document.getElementById('obbba-note').innerHTML=
-    '<b>Mechanism.</b> OBBBA lifts the upland loan rate to '+P.loan.toFixed(0)+'¢ and changes the AWP calculation to the <b>3 lowest world quotes</b> (vs 5 previously) with a <b>30-day lookback</b>, letting producers redeem at the lowest AWP of the prior month. Lower AWP for a given futures level ⇒ marketing-loan gains trigger earlier and pay more ⇒ producers hold cotton in loan rather than sell weakness. '
-    +'<b>Flat price:</b> the futures-equivalent support ≈ loan + (futures−AWP wedge '+P.wedge.toFixed(1)+'¢) + quote-calc effect '+P.q3.toFixed(1)+'¢ + lookback option '+P.lb.toFixed(1)+'¢ = <b>'+P.floor.toFixed(1)+'¢</b> — shaded on the flat-price charts. Historical scatter points below the floor come from the old regime; under OBBBA those prices are unlikely to persist, so bearish-stocks FVs are truncated at the floor. '
-    +'<b>Spreads:</b> at prices near the floor, loan entries pull certificated/nearby supply off the market for up to 9 months — a structural bid to <b>bull calendar spreads</b> in low-price + high-stocks states that the pre-OBBBA history understates. The lookback also adds seasonal redemption flow around AWP troughs. <b>Spread FV adjustments applied above:</b> (1) full-carry bound at −(storage '+P.stor.toFixed(2)+'¢/mo + financing at '+P.rate.toFixed(1)+'%)×months — historical points cluster tighter than the new bound because storage rates were lower pre-2023, so at high stocks the adjusted FV (solid) sits below the raw fit (dashed); (2) a lookback/loan bull-spread support of up to '+P.lbSprd.toFixed(1)+'¢ that scales in as the flat-price FV approaches the '+P.floor.toFixed(1)+'¢ floor — visible as the solid curve lifting off the dashed fit at the high-stocks end. Net: the new regime compresses the bearish tail on flat price and skews spread risk toward inversion earlier in the stocks distribution than the raw fitted curves imply.';
+    '<b>2026/27 price mechanism.</b> The AWP is the Far East price of the <b>3 cheapest</b> Middling 1-3/32" quotes (5 before) less cost to market '+F.cost_to_market.toFixed(2)+'¢ and the SLM 1-1/16" adjustment '+F.slm_adj.toFixed(2)+'¢. The latest announcement ('+F.announce_date+') set the AWP at <b>'+F.awp.toFixed(2)+'¢</b> for '+F.effective[0]+' to '+F.effective[1]+', '+(F.awp-P.loan).toFixed(2)+'¢ above the '+P.loan.toFixed(0)+'¢ loan rate, so no LDP is paid. '
+    +'<b>Floors by contract:</b> each contract trades at its own premium to the AWP (its average over the AWP pricing week minus the AWP). The <b>LDP trigger</b> is the futures level where the AWP reaches the loan rate: below it growers collect LDPs and marketing-loan gains and US cotton prices to world values, so it marks where loan support stops holding futures up; flat-price FVs are floored there. '
+    +'The <b>loan break-even</b> adds the cost of holding cotton in the loan from early December (storage at the new $'+F.storage_bale_month.toFixed(2)+'/bale/month cap = '+P.stor.toFixed(3)+'¢/lb, plus '+P.rate.toFixed(1)+'% CCC interest on '+P.loan.toFixed(0)+'¢) to the month before delivery. Loan cotton with no equity is not redeemed cheaply, so this is soft support; it rises through the season and sits closest to Jul. '
+    +'<b>Spreads:</b> one point per season, the average of the 45 days before the roll (Dec/Mar Oct 1 to Nov 15, Mar/May Jan 1 to Feb 15, May/Jul Mar 1 to Apr 15, Jul/Dec May 1 to Jun 15), against the US ending-stocks estimate USDA published in that window and the cost of funding the back month at the 3-month T-bill rate. The funding term matters: the 2010s were at zero rates, and without it the fit puts flat spreads where today\'s 4% money pays for carry. A robust fit down-weights squeeze years such as 2011 and 2022. FVs are bounded at full carry (storage plus funding).';
+
 }
 
 function drawScatter(o,P){
@@ -324,7 +338,11 @@ function drawScatter(o,P){
   if(isFlat&&Y(P.floor)>T){
     s+='<rect x="'+L+'" y="'+Y(P.floor)+'" width="'+(W-L-R)+'" height="'+(H-B-Y(P.floor))+'" fill="#a06b00" opacity="0.07"/>';
     s+='<line x1="'+L+'" y1="'+Y(P.floor)+'" x2="'+(W-R)+'" y2="'+Y(P.floor)+'" stroke="#a06b00" stroke-width="1.5" stroke-dasharray="5 3"/>';
-    s+='<text x="'+(W-R-4)+'" y="'+(Y(P.floor)-4)+'" font-size="9" fill="#a06b00" text-anchor="end" font-weight="700">OBBBA floor '+P.floor.toFixed(1)+'¢</text>';
+    s+='<text x="'+(W-R-4)+'" y="'+(Y(P.floor)-4)+'" font-size="9" fill="#a06b00" text-anchor="end" font-weight="700">'+(P.flc||'')+' LDP trigger '+P.floor.toFixed(1)+'¢</text>';
+  }
+  if(isFlat&&P.soft&&Y(P.soft)>T&&Y(P.soft)<H-B){
+    s+='<line x1="'+L+'" y1="'+Y(P.soft)+'" x2="'+(W-R)+'" y2="'+Y(P.soft)+'" stroke="#5f7a2e" stroke-width="1.2" stroke-dasharray="2 3"/>';
+    s+='<text x="'+(L+4)+'" y="'+(Y(P.soft)-4)+'" font-size="9" fill="#5f7a2e" text-anchor="start" font-weight="700">loan break-even '+P.soft.toFixed(1)+'¢</text>';
   }
   // raw fitted curve (thin) + adjusted FV curve (bold)
   var steps=60,path='',pathA='';
@@ -343,7 +361,7 @@ function drawScatter(o,P){
     var fc=o.carryAt(P.wstk);
     if(Y(fc)<H-B&&Y(fc)>T){
       s+='<line x1="'+L+'" y1="'+Y(fc)+'" x2="'+(W-R)+'" y2="'+Y(fc)+'" stroke="#b02a37" stroke-width="1.3" stroke-dasharray="6 3" opacity="0.75"/>';
-      s+='<text x="'+(L+4)+'" y="'+(Y(fc)-4)+'" font-size="9" fill="#b02a37" font-weight="700">full carry '+fc.toFixed(2)+'¢ (new storage rates)</text>';
+      s+='<text x="'+(L+4)+'" y="'+(Y(fc)-4)+'" font-size="9" fill="#b02a37" font-weight="700">full carry '+fc.toFixed(2)+'¢ (storage '+P.stor.toFixed(3)+'¢/mo + T-bill funding)</text>';
     }
   }
   // points
@@ -351,8 +369,14 @@ function drawScatter(o,P){
   pts.forEach(function(p){
     var recent=p.cy>=2023,latest=(p.yr===lastYr&&p.m===Math.max.apply(null,pts.filter(function(q){return q.yr===lastYr;}).map(function(q){return q.m;})));
     s+='<circle cx="'+X(p.x)+'" cy="'+Y(p.y)+'" r="'+(latest?5:3)+'" fill="'+(latest?'#a06b00':recent?'#1a5490':'#9aa7b5')+'" opacity="'+(latest?1:recent?0.85:0.45)+'">'
-      +'<title>'+p.cy+'/'+String(p.cy+1).slice(2)+' · report '+p.yr+'-'+String(p.m).padStart(2,'0')+' · stocks '+p.x.toFixed(2)+'M · '+p.y.toFixed(2)+'¢</title></circle>';
+      +'<title>'+p.cy+'/'+String(p.cy+1).slice(2)+(p.lbl?' · '+p.lbl+' pre-roll average':' · report '+p.yr+'-'+String(p.m).padStart(2,'0'))+' · stocks '+p.x.toFixed(2)+'M · '+p.y.toFixed(2)+'¢'+(p.w!=null&&p.w<1?' · down-weighted '+p.w.toFixed(2):'')+'</title></circle>';
   });
+  // this season's window so far
+  var pa=(!isFlat&&MM&&MM.spreads[S.id])?MM.spreads[S.id].partial:null;
+  if(pa){
+    s+='<circle cx="'+X(pa.x)+'" cy="'+Y(pa.y)+'" r="6" fill="none" stroke="#b02a37" stroke-width="2"><title>'+pa.contracts+' window so far ('+pa.n+' days) · stocks '+pa.x.toFixed(2)+'M · '+pa.y.toFixed(2)+'¢</title></circle>';
+    s+='<text x="'+(X(pa.x)+8)+'" y="'+(Y(pa.y)+3)+'" font-size="9" fill="#b02a37" font-weight="700">'+pa.contracts+' so far</text>';
+  }
   // stocks markers
   [[P.wstk,'#555','WASDE'],[P.mstk,'#a06b00','MODEL'],[P.bstk,'#b02a37','BULL']].forEach(function(mk){
     s+='<line x1="'+X(mk[0])+'" y1="'+T+'" x2="'+X(mk[0])+'" y2="'+(H-B)+'" stroke="'+mk[1]+'" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.8"/>';
@@ -363,13 +387,13 @@ function drawScatter(o,P){
   card.innerHTML='<div class="hd"><span class="nm">'+S.nm+'</span>'
     +'<span class="fvs">FV@'+f1(P.wstk)+'M = <b>'+f2(o.fvA(P.wstk))+'¢</b> · @'+f1(P.mstk)+'M = '+f2(o.fvA(P.mstk))+'¢'
     +(o.mkt!==null?' · mkt '+f2(o.mkt)+'¢':'')
-    +' · R²='+o.fit.f.r2.toFixed(2)+' ('+(o.fit.form==='inv'?'1/x':'lin')+', n='+pts.length+')</span></div>'
+    +' · R²='+o.fit.f.r2.toFixed(2)+' ('+(o.fit.win?'1/x + funding, robust':o.fit.form==='inv'?'1/x':'lin')+', n='+pts.length+')</span></div>'
     +s;
   document.getElementById(S.grp==='sprd'?'grid-sprd':'grid-flat').appendChild(card);
 }
 
 ['in-wstk','in-mstk','in-bstk','in-loan','in-wedge','in-q3','in-lb','in-stor','in-rate','in-lbsprd'].forEach(function(id){
-  document.getElementById(id).addEventListener('input',function(){if(loaded.w&&loaded.p)run();});
+  document.getElementById(id).addEventListener('input',function(){if(loaded.m&&loaded.w&&loaded.p)run();});
 });
 setStatus('loading data…');
 </script>

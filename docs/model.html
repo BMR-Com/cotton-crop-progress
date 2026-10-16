@@ -96,15 +96,16 @@ tr.hl td{background:#fdf6e3;font-weight:700}
   </div>
   <div class="card">
     <h3>Abandonment blend weights</h3>
-    <label>Condition regression <input type="range" id="w-cond" min="0" max="100" value="50"><b id="wv-cond">50%</b></label>
-    <label>Drought — current wk <input type="range" id="w-wk" min="0" max="100" value="25"><b id="wv-wk">25%</b></label>
-    <label>Drought — cumulative <input type="range" id="w-cu" min="0" max="100" value="25"><b id="wv-cu">25%</b></label>
+    <label>FSA failed acres + drought + ratings <input type="range" id="w-fsa" min="0" max="100" value="40"><b id="wv-fsa">40%</b></label>
+    <label>Condition regression <input type="range" id="w-cond" min="0" max="100" value="30"><b id="wv-cond">30%</b></label>
+    <label>Drought — current wk <input type="range" id="w-wk" min="0" max="100" value="15"><b id="wv-wk">15%</b></label>
+    <label>Drought — cumulative <input type="range" id="w-cu" min="0" max="100" value="15"><b id="wv-cu">15%</b></label>
     <label>Drought variable
       <select id="in-dvar"><option>D2-D4</option><option>D1-D4</option><option>D3-D4</option><option>D4</option></select>
     </label>
-    <div class="chk"><input type="checkbox" id="in-enso" checked><span>El Niño overlay active</span></div>
+    <div class="chk"><input type="checkbox" id="in-enso"><span>El Niño overlay active</span></div>
     <label>ENSO adj. to TX aband (pts) <input type="number" id="in-ensoadj" value="-3" step="0.5"></label>
-    <div class="hint">Weights are renormalized to 100%. Condition regression is the highest-R² model; cumulative drought overweights the broken spring drought; current-week underweights establishment damage.</div>
+    <div class="hint">Weights are renormalized to 100%. The FSA leg is the Crop Monitor's projection of final Texas abandonment from failed acres reported to FSA so far, cotton-area drought and poor/very-poor ratings; by October it carries the most information. The ENSO overlay is off by default: by October abandonment is mostly decided.</div>
   </div>
   <div class="card">
     <h3>Yield model</h3>
@@ -142,7 +143,7 @@ tr.hl td{background:#fdf6e3;font-weight:700}
   <div class="card">
     <h3>Balance sheet impact</h3>
     <div class="readout" id="bs-readout"></div>
-    <div class="note">Ending stocks = WASDE 4.1M + (model production − WASDE production), demand held constant. S/U on 13.9M offtake. Elevator math only — demand responds in reality.</div>
+    <div class="note">Ending stocks = latest WASDE ending stocks + (model production − WASDE production), with WASDE demand (exports + mill use) held constant. Elevator math only; demand responds in reality.</div>
   </div>
 </div>
 </div>
@@ -204,9 +205,10 @@ function loadDrought(){
   }).catch(function(e){ setStatus('<span class="err">drought fetch failed: '+e+'</span>'); });
 }
 // live defaults from the crop monitor (USDA latest + our projected abandonment); user edits still override
-var USDA_AB=null;
+var USDA_AB=null,CROP=null;
 function loadCrop(){
   fetch(CROP_URL+'?'+Date.now()).then(function(r){return r.json();}).then(function(c){
+    CROP=c;
     var E=c.estimate||{},u=E.us||{},tx=(E.states||[]).find(function(r){return r.st==='TX';})||{};
     function setv(id,v,d){if(v!=null&&isFinite(v))document.getElementById(id).value=(+v).toFixed(d);}
     var W=c.wasde||{};
@@ -277,9 +279,13 @@ function computeModel(P){
   out.condUS=out.regUS?out.regUS.a+out.regUS.b*out.usGE:null;
 
   // 4) blended TX abandonment
-  var wsum=P.wCond+P.wWK+P.wCU;if(wsum===0)wsum=1;
-  var wc=P.wCond/wsum,ww=P.wWK/wsum,wu=P.wCU/wsum;
-  out.blendTX=wc*out.condTX+ww*out.dWK.pt+wu*out.dCU.pt;
+  var txc=CROP&&CROP.estimate?(CROP.estimate.states||[]).find(function(r){return r.st==='TX';}):null;
+  out.fsaTX=txc&&txc.ab_final!=null?txc.ab_final:null;
+  var wf=out.fsaTX!=null?P.wFsa:0;
+  var wsum=wf+P.wCond+P.wWK+P.wCU;if(wsum===0)wsum=1;
+  var wc=P.wCond/wsum,ww=P.wWK/wsum,wu=P.wCU/wsum;wf=wf/wsum;
+  out.blendTX=wc*out.condTX+ww*out.dWK.pt+wu*out.dCU.pt+(wf?wf*out.fsaTX:0);
+  out.wts={fsa:wf,cond:wc,wk:ww,cu:wu};
   if(P.enso)out.blendTX+=P.ensoAdj/100;
   out.blendTX=Math.max(0.05,Math.min(0.85,out.blendTX));
   // uncertainty: weighted mix of model sigmas / CI half-widths
@@ -296,11 +302,21 @@ function computeModel(P){
   out.yield=P.baseYield+P.yAdj*geDef+P.ySel*((out.usAb-wasdeAb)*100);
   // 7) production
   out.prod=out.harv*out.yield/480;
-  // range: +/- sigmaTX on TX abandonment, +/- 8 lbs yield
+  // range: the Crop Monitor's late-season error for the US crop — leave-one-year-out error of the same
+  // pipeline at this point of the season (abandonment from FSA failed acres + drought + ratings, yield from
+  // ratings/drought), narrowed state by state as ginning and classing come in
   function prodAt(txAb,yld){var h=P.txPlanted*(1-txAb)+(P.planted-P.txPlanted)*(1-P.nonTX/100);return h*yld/480;}
   out.prodAt=prodAt;
-  out.prodLo=prodAt(out.blendTX+sTX,out.yield-8);
-  out.prodHi=prodAt(out.blendTX-sTX,out.yield+8);
+  var gp=CROP&&CROP.gin_projection?CROP.gin_projection.us:null;
+  out.sdLog=gp&&gp.sd_log?gp.sd_log:null;
+  if(out.sdLog){
+    out.prodLo=out.prod*Math.exp(-out.sdLog);out.prodHi=out.prod*Math.exp(out.sdLog);
+    // the same band expressed as Texas abandonment at the median yield
+    out.sigmaTX=(out.prod-out.prodLo)*480/out.yield/P.txPlanted;
+  }else{
+    out.prodLo=prodAt(out.blendTX+sTX,out.yield-8);
+    out.prodHi=prodAt(out.blendTX-sTX,out.yield+8);
+  }
   return out;
 }
 
@@ -308,7 +324,7 @@ function computeModel(P){
 function pget(id){return parseFloat(document.getElementById(id).value);}
 function readParams(){
   return {planted:pget('in-planted'),txPlanted:pget('in-txplanted'),nonTX:pget('in-nontx'),
-    wasde:pget('in-wasde'),wCond:pget('w-cond'),wWK:pget('w-wk'),wCU:pget('w-cu'),
+    wasde:pget('in-wasde'),wFsa:pget('w-fsa'),wCond:pget('w-cond'),wWK:pget('w-wk'),wCU:pget('w-cu'),
     dvar:document.getElementById('in-dvar').value,
     enso:document.getElementById('in-enso').checked,ensoAdj:pget('in-ensoadj'),
     baseYield:pget('in-yield'),yAdj:pget('in-yadj'),ySel:pget('in-ysel')};
@@ -323,7 +339,7 @@ function run(){
   // hero
   document.getElementById('hero').style.display='flex';
   document.getElementById('h-prod').innerHTML=M.prod.toFixed(2)+'<small> M bales</small>';
-  document.getElementById('h-rng').textContent='range '+M.prodLo.toFixed(1)+' – '+M.prodHi.toFixed(1)+' M · vs WASDE '+P.wasde.toFixed(1)+'M';
+  document.getElementById('h-rng').textContent='±1σ '+M.prodLo.toFixed(2)+' – '+M.prodHi.toFixed(2)+' M'+(M.sdLog?' (±'+(M.sdLog*100).toFixed(1)+'%)':'')+' · vs WASDE '+P.wasde.toFixed(2)+'M';
   var dP=M.prod-P.wasde;
   document.getElementById('h-side').innerHTML=
     'US abandonment <b>'+f1(M.usAb*100)+'%</b><br>'+
@@ -354,6 +370,7 @@ function drawRail(M,P){
     {v:M.dCU.pt, lo:M.dCU.lo, hi:M.dCU.hi, c:'#4a7aa8', label:'Drought (cumulative)'},
     {v:M.condTX, lo:M.condTX-M.regTX.sigma, hi:M.condTX+M.regTX.sigma, c:'#1a5490', label:'Condition regression'},
   ];
+  if(M.fsaTX!=null){var sdA=(CROP.abandonment&&CROP.abandonment.sd)||0.08;est.push({v:M.fsaTX,lo:M.fsaTX-sdA,hi:M.fsaTX+sdA,c:'#5f7a2e',label:'FSA failed acres + drought + ratings'});}
   var min=0,max=0.85,Wd=1000,H=60+est.length*34+50;
   function X(v){return 60+(v-min)/(max-min)*(Wd-120);}
   var s='<svg viewBox="0 0 '+Wd+' '+H+'" style="width:100%;height:auto">';
@@ -385,10 +402,10 @@ function drawRail(M,P){
 
 function scenTable(M,P){
   var rows=[
-    ['USDA WASDE anchor', 1-((P.wasde*480/872-(P.planted-P.txPlanted)*(1-P.nonTX/100))/P.txPlanted), 872, null],
-    ['Bull supply — heat re-run', Math.min(0.85,M.blendTX+M.sigmaTX), M.yield-15, null],
+    ['USDA WASDE anchor', 1-((P.wasde*480/P.baseYield-(P.planted-P.txPlanted)*(1-P.nonTX/100))/P.txPlanted), P.baseYield, null],
+    ['Low — −1σ late-season error', Math.min(0.85,M.blendTX+M.sigmaTX), M.yield, null],
     ['MODEL MEDIAN', M.blendTX, M.yield, 'hl'],
-    ['Bear supply — El Niño rescue', Math.max(0.05,M.blendTX-M.sigmaTX), M.yield+12, null],
+    ['High — +1σ late-season error', Math.max(0.05,M.blendTX-M.sigmaTX), M.yield, null],
   ];
   var h='<tr><th>Scenario</th><th>TX ab</th><th>US ab</th><th>Harv (M ac)</th><th>Yield</th><th>Prod (M bal)</th><th>vs WASDE</th></tr>';
   rows.forEach(function(r){
@@ -400,18 +417,19 @@ function scenTable(M,P){
     h+='<tr'+(r[3]?' class="hl"':'')+'><td>'+r[0]+'</td><td>'+(txa*100).toFixed(0)+'%</td><td>'+(usab*100).toFixed(1)+'%</td><td>'+harv.toFixed(2)+'</td><td>'+yld.toFixed(0)+'</td><td>'+prod.toFixed(2)+'</td><td class="'+(d<-0.05?'neg':d>0.05?'pos':'')+'">'+(d>0?'+':'')+d.toFixed(2)+'</td></tr>';
   });
   document.getElementById('scen-tbl').innerHTML=h;
-  document.getElementById('scen-note').textContent='Bull/bear rows shift TX abandonment by ±1σ of the blended estimate and yield by −15/+12 lbs. WASDE anchor row back-solves implied TX abandonment from the anchor production at 872 lbs.';
+  document.getElementById('scen-note').textContent='Low/high rows are ±1σ of the late-season error'+(M.sdLog?' ('+(M.sdLog*100).toFixed(1)+'% of the crop)':'')+', expressed as Texas abandonment at the median yield. The error is the leave-one-year-out miss of the same build-up at this point of past seasons (abandonment from FSA failed acres, drought and ratings; yield from ratings and drought), narrowed state by state as ginning and classing come in. The WASDE anchor row back-solves Texas abandonment from WASDE production at the WASDE yield ('+P.baseYield.toFixed(0)+' lb).';
 }
 
 function heatTable(M,P){
-  var abs=[0.25,0.30,0.35,0.40,0.45,0.50],ylds=[830,845,860,875,890];
+  var a0=Math.round(M.blendTX*20)/20,y0=Math.round(M.yield/5)*5;
+  var abs=[-0.10,-0.05,0,0.05,0.10].map(function(d){return Math.max(0.05,a0+d);}),ylds=[-30,-15,0,15,30].map(function(d){return y0+d;});
   var h='<tr><th>TX ab \\ yield</th>';ylds.forEach(function(y){h+='<th>'+y+'</th>';});h+='</tr>';
   abs.forEach(function(a){
     h+='<tr><td>'+(a*100).toFixed(0)+'%</td>';
     ylds.forEach(function(y){
       var p=M.prodAt(a,y);
       var near=Math.abs(a-M.blendTX)<0.026&&Math.abs(y-M.yield)<8;
-      var bg=p<12.5?'#fbe9e7':p>14?'#e8f5e9':'#fffde7';
+      var bg=p<P.wasde-0.5?'#fbe9e7':p>P.wasde+0.5?'#e8f5e9':'#fffde7';
       h+='<td style="background:'+bg+(near?';outline:2px solid #a06b00;font-weight:700':'')+'">'+p.toFixed(2)+'</td>';
     });
     h+='</tr>';
@@ -420,18 +438,19 @@ function heatTable(M,P){
 }
 
 function bsReadout(M,P){
-  var stocks=4.1+(M.prod-P.wasde),su=stocks/13.9*100;
+  var W=(CROP&&CROP.wasde)||{},es=W.end_stocks!=null?W.end_stocks:3.8,use=(W.exports!=null&&W.domestic!=null)?W.exports+W.domestic:13.8;
+  var stocks=es+(M.prod-P.wasde),su=stocks/use*100;
   document.getElementById('bs-readout').innerHTML=
-    '<div class="ro"><div class="l">Ending stocks</div><div class="v">'+stocks.toFixed(1)+'M</div><div class="s">WASDE 4.1M</div></div>'+
-    '<div class="ro"><div class="l">Stocks / use</div><div class="v">'+su.toFixed(1)+'%</div><div class="s">WASDE 29.5%</div></div>'+
-    '<div class="ro"><div class="l">Bull-case stocks</div><div class="v">'+(4.1+(M.prodLo-P.wasde)).toFixed(1)+'M</div><div class="s">at range low</div></div>'+
-    '<div class="ro"><div class="l">Bear-case stocks</div><div class="v">'+(4.1+(M.prodHi-P.wasde)).toFixed(1)+'M</div><div class="s">at range high</div></div>';
+    '<div class="ro"><div class="l">Ending stocks</div><div class="v">'+stocks.toFixed(1)+'M</div><div class="s">WASDE '+es.toFixed(2)+'M</div></div>'+
+    '<div class="ro"><div class="l">Stocks / use</div><div class="v">'+su.toFixed(1)+'%</div><div class="s">WASDE '+(es/use*100).toFixed(1)+'%</div></div>'+
+    '<div class="ro"><div class="l">Bull-case stocks</div><div class="v">'+(es+(M.prodLo-P.wasde)).toFixed(2)+'M</div><div class="s">at −1σ</div></div>'+
+    '<div class="ro"><div class="l">Bear-case stocks</div><div class="v">'+(es+(M.prodHi-P.wasde)).toFixed(2)+'M</div><div class="s">at +1σ</div></div>';
 }
 
 // wire inputs
-['in-planted','in-txplanted','in-nontx','in-wasde','w-cond','w-wk','w-cu','in-dvar','in-enso','in-ensoadj','in-yield','in-yadj','in-ysel'].forEach(function(id){
+['in-planted','in-txplanted','in-nontx','in-wasde','w-fsa','w-cond','w-wk','w-cu','in-dvar','in-enso','in-ensoadj','in-yield','in-yadj','in-ysel'].forEach(function(id){
   document.getElementById(id).addEventListener('input',function(){
-    ['cond','wk','cu'].forEach(function(k){document.getElementById('wv-'+k).textContent=document.getElementById('w-'+k).value+'%';});
+    ['fsa','cond','wk','cu'].forEach(function(k){document.getElementById('wv-'+k).textContent=document.getElementById('w-'+k).value+'%';});
     if(loaded.cond&&loaded.dr&&loaded.crop)run();
   });
 });

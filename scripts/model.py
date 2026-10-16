@@ -79,18 +79,25 @@ def condition_model(cond, dr, ann, cur, wk):
         return float(np.exp(ly)), float(min(max(hr, 0.25), 1.0))
 
     # leave-one-year-out error (production-weighted), used for blending weights
-    errs_y, errs_h = [], []
+    errs_y, errs_h, errs_us = [], [], []
+    loo_y = {}
     for y in sorted(hist.year.unique()):
         tr_ = hist[hist.year != y]
         te = hist[hist.year == y]
         b_y, b_a, mm = fit(tr_)
+        pu = au = 0.0
         for _, row in te.iterrows():
             yr, hr = predict(row, b_y, b_a, mm)
             if yr is None:
                 continue
             errs_y.append((math.log(yr) - row.ly, row.planted))
+            loo_y[(int(y), row.state)] = row.trend * yr
             if not pd.isna(row.hr):
                 errs_h.append((hr - row.hr, row.planted))
+                pu += row.planted * hr * row.trend * yr          # predicted production (lb)
+                au += row.planted * row.hr * row["yield"]       # actual production (lb)
+        if pu and au:
+            errs_us.append(math.log(pu / au))
     def wsd(e):
         a = np.array(e)
         return float(np.sqrt(np.average(a[:, 0] ** 2, weights=a[:, 1]))) if len(a) else None
@@ -106,7 +113,9 @@ def condition_model(cond, dr, ann, cur, wk):
             continue
         out[row.state] = {"yield": row.trend * yr, "yield_trend": row.trend, "yield_ratio": yr, "hr_drought": hr,
                           "ci": row.ci, "ci_now": row.ci_now, "d2": row.d2, "pvp": row.pvp, "hr_avg": mm.loc[row.state].hr}
-    return {"states": out, "sd_yield": sd_y, "sd_hr": sd_h, "years": [int(hist.year.min()), int(hist.year.max())]}
+    sd_us = float(np.sqrt(np.mean(np.square(errs_us)))) if errs_us else None
+    return {"states": out, "sd_yield": sd_y, "sd_hr": sd_h, "sd_us": sd_us, "us_errors": [round(e, 4) for e in errs_us], "loo_yield": loo_y,
+            "years": [int(hist.year.min()), int(hist.year.max())]}
 
 
 def fsa_model(ann, cur):
@@ -207,11 +216,14 @@ def abandonment_model(cond, dr, ann, fm, cur, wk):
         x = np.r_[1, np.array([row[c] for c in feats], float) - base[feats].values.astype(float)]
         return float(np.clip(base.ab + x @ b, 0, 0.95))
 
-    err = []
+    err, loo = [], {}
     for y in sorted(hist.crop_year.unique()):
         tr, te = hist[hist.crop_year != y], hist[hist.crop_year == y]
         b, m = fit(tr)
-        err += [(pred(r, b, m, tr) - r.ab, r.npl) for _, r in te.iterrows()]
+        for _, r in te.iterrows():
+            pa = pred(r, b, m, tr)
+            loo[(int(y), r.st)] = pa
+            err.append((pa - r.ab, r.npl))
     e = np.array(err)
     sd = float(np.sqrt(np.average(e[:, 0] ** 2, weights=e[:, 1])))
     b, m = fit(hist)
@@ -223,7 +235,7 @@ def abandonment_model(cond, dr, ann, fm, cur, wk):
     # Texas history at this release month for the page: failed share then vs final abandonment
     tx = hist[hist.st == "TX"].sort_values("crop_year")
     hist_tx = [{"year": int(r.crop_year), "fs": r.fs, "d2": r.d2, "pvp": r.pvp, "ab": r.ab} for _, r in tx.iterrows()]
-    return {"states": out, "sd": sd, "release_month": rm, "tx_history": hist_tx}
+    return {"states": out, "sd": sd, "release_month": rm, "tx_history": hist_tx, "loo_ab": loo}
 
 
 def classing_model(cs, ann, cur, prog=None):
@@ -303,6 +315,32 @@ def classing_model(cs, ann, cur, prog=None):
     return {"states": out, "week": last_wk, "week_end": u[u.crop_year == cur].week_end.max(), "curve": curve}
 
 
+def pipeline_us_error(cm, am, ann, cur):
+    """Leave-one-year-out error of the US crop as this page builds it at the same point of the season:
+    FSA-based projected final abandonment × ratings/drought yield, summed over states, vs the final
+    NASS crop. Both parts are predicted without the year being tested."""
+    if not cm or not am:
+        return None, None
+    ly, la = cm.get("loo_yield") or {}, am.get("loo_ab") or {}
+    pl = load.pick(ann, "upland_planted", final_only=True)
+    pr = load.pick(ann, "upland_prod", final_only=True)
+    errs = {}
+    for y in sorted({k[0] for k in la}):
+        if y >= cur:
+            continue
+        p = a = 0.0
+        for (yy, s), ab in la.items():
+            if yy != y or (y, s) not in ly or not pl.get((y, s)) or not pr.get((y, s)):
+                continue
+            p += pl[(y, s)] * (1 - ab) * ly[(y, s)] / 480
+            a += pr[(y, s)]
+        if p and a:
+            errs[y] = math.log(p / a)
+    if len(errs) < 6:
+        return None, None
+    return float(np.sqrt(np.mean(np.square(list(errs.values()))))), {int(k): round(v, 4) for k, v in errs.items()}
+
+
 def blend(c, g):
     """Inverse-variance blend of the condition estimate and the classing-pace estimate (log space)."""
     if c is None and g is None:
@@ -378,13 +416,16 @@ def run(cond, prog, dr, cur):
     us["fsa_failed"] = tot("fsa_failed")
     us["fsa_total"] = tot("fsa_total")
     if am:
-        res["abandonment"] = {"tx_history": am["tx_history"], "release_month": am["release_month"]}
+        res["abandonment"] = {"tx_history": am["tx_history"], "release_month": am["release_month"], "sd": am["sd"]}
         txc = (cm or {}).get("states", {}).get("TX") or {}
         us["tx_d2"], us["tx_pvp"] = txc.get("d2"), txc.get("pvp")
     res["estimate"] = {"states": rows, "us": us, "fsa_release": (fm or {}).get("release"),
-                       "model": {"years": (cm or {}).get("years"), "sd_yield": (cm or {}).get("sd_yield")}}
+                       "model": {"years": (cm or {}).get("years"), "sd_yield": (cm or {}).get("sd_yield"), "sd_us": (cm or {}).get("sd_us"),
+                                 "week": min(wk, 42)}}
     res["ginnings"] = ginnings_table(cur)
-    res["gin_projection"] = ginning_projection(rows, gm, res["ginnings"], cur)
+    sd_pipe, pipe_err = pipeline_us_error(cm, am, ann, cur)
+    res["estimate"]["model"].update({"sd_us_pipeline": sd_pipe, "us_errors_pipeline": pipe_err})
+    res["gin_projection"] = ginning_projection(rows, gm, res["ginnings"], cur, sd_pipe or (cm or {}).get("sd_us"))
     for key, fn in (("classing", classing_section), ("quality", quality_section)):
         try:
             res[key] = fn(cs, cur)
@@ -694,7 +735,7 @@ def quality_section(cs, cur):
 
 
 
-def ginning_projection(rows, gm, gt, cur):
+def ginning_projection(rows, gm, gt, cur, sd_us=None):
     """Crop projected from what has been ginned/classed so far.
 
     For each state: bales classed to date ÷ the share normally classed at today's harvest progress, and
@@ -723,11 +764,14 @@ def ginning_projection(rows, gm, gt, cur):
             sd_g = (1 / sum(w)) ** 0.5
         prior = r.get("prod_cond")
         sd_c = (r.get("sd_cond") or 0.15)
+        sd_post = sd_c
         if gin_only and prior:
             wg = (1 / sd_g ** 2) / (1 / sd_g ** 2 + 1 / sd_c ** 2)
+            sd_post = (1 / sd_g ** 2 + 1 / sd_c ** 2) ** -0.5
             proj, basis = math.exp(wg * math.log(gin_only) + (1 - wg) * math.log(prior)), "ginning + ratings"
         elif gin_only:
             proj, basis, wg = gin_only, "ginning", 1.0
+            sd_post = sd_g
         else:
             proj, basis, wg = prior, "ratings", 0.0
         if proj is None:
@@ -736,7 +780,7 @@ def ginning_projection(rows, gm, gt, cur):
         o = {"st": s, "name": r["name"], "harvest_pct": c.get("harvest_now"), "classed": c.get("cum"), "classed_share": c.get("frac_normal"),
              "ginned_rb": n.get("cur"), "ginned_share": (n.get("pct_normal") or 0) / 100 if n.get("pct_normal") is not None else None,
              "proj_classing": c.get("prod"), "proj_ginnings": n.get("proj_480"), "gin_only": gin_only, "w_gin": wg,
-             "proj": proj, "basis": basis,
+             "proj": proj, "basis": basis, "sd_log": sd_post, "sd_ratings": sd_c, "prior": prior,
              "harv": harv, "ab_final": r.get("ab_final"), "yield_implied": proj * 480 / harv if harv else None,
              "yield_ratings": r.get("yield_cond"), "usda_prod": r.get("usda_prod"), "usda_yield": r.get("usda_yield")}
         out.append(o)
@@ -747,6 +791,20 @@ def ginning_projection(rows, gm, gt, cur):
         tot["usda"] += r.get("usda_prod") or 0
     out.sort(key=lambda x: -x["proj"])
     tot["yield"] = tot["proj"] * 480 / tot["harv"] if tot["harv"] else None
+    # US error band. State errors are not independent (one weather year hits several states), so the
+    # independent-state sum is scaled to the leave-one-year-out US error of the ratings model; ginning
+    # evidence then shrinks each state's share of it.
+    ind_post = math.sqrt(sum((o["proj"] * o["sd_log"]) ** 2 for o in out))
+    ind_rat = math.sqrt(sum(((o["prior"] or o["proj"]) * o["sd_ratings"]) ** 2 for o in out))
+    pri = sum((o["prior"] or o["proj"]) for o in out)
+    if sd_us and ind_rat and tot["proj"]:
+        k = sd_us * pri / ind_rat
+        sd = k * ind_post / tot["proj"]
+    else:
+        k, sd = None, ind_post / tot["proj"] if tot["proj"] else None
+    if sd:
+        tot.update({"sd_log": sd, "lo": tot["proj"] * math.exp(-sd), "hi": tot["proj"] * math.exp(sd),
+                    "sd_ratings_us": sd_us, "corr_scale": k})
     return {"states": out, "us": tot, "nass_date": (gt or {}).get("date"), "classing_week": (gm or {}).get("week_end")}
 
 

@@ -60,6 +60,15 @@ def drought(states):
         t["state"] = s
         out.append(t)
     d = pd.concat(out, ignore_index=True)
+    # share of the state's COTTON area in drought (USDA/NDMC Ag in Drought) replaces whole-state area
+    ap = os.path.join(D, "drought", "cotton_area_drought.csv")
+    if os.path.exists(ap):
+        a = pd.read_csv(ap)
+        a = a[a.location.isin(states) & (a.location != "US")]
+        if len(a):
+            a = a.rename(columns={"location": "state", "week": "Week", "d1": "D1-D4", "d2": "D2-D4", "d3": "D3-D4"})
+            d = pd.concat([d[~d.state.isin(set(a.state))], a[["state", "Week", "D1-D4", "D2-D4", "D3-D4"]]], ignore_index=True)
+            print("cotton-area drought for", sorted(set(a.state)))
     d["week"] = pd.to_datetime(d.Week)
     d["year"] = d.week.dt.year
     d["woy"] = d.week.dt.isocalendar().week.astype(int)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 USDA/NDMC "Agriculture in Drought" (agindrought.unl.edu): share of COTTON production area in each US
-Drought Monitor category, weekly, for the United States and Texas.
+Drought Monitor category, weekly, for the United States and every cotton state the site lists.
 
 Output: data/drought/cotton_area_drought.csv  (location, week, none, d0, d1, d2, d3, d4 = % of cotton area in
 D0-D4 / D1-D4 / D2-D4 / D3-D4 / D4, cumulative as published).
@@ -14,7 +14,11 @@ B = "https://agindrought.unl.edu/Home.aspx/"
 H = {"User-Agent": "Mozilla/5.0 (BMR-Com research)", "Content-Type": "application/json; charset=utf-8",
      "Referer": "https://agindrought.unl.edu/Table.aspx"}
 OUT = "data/drought/cotton_area_drought.csv"
-WANT = {"1": ["United States"], "2": ["Texas"]}
+WANT = {"1": ["United States"], "2": None}          # None = every state offered for cotton
+ABBR = {"Alabama": "AL", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Florida": "FL", "Georgia": "GA",
+        "Kansas": "KS", "Louisiana": "LA", "Mississippi": "MS", "Missouri": "MO", "New Mexico": "NM",
+        "North Carolina": "NC", "Oklahoma": "OK", "South Carolina": "SC", "Tennessee": "TN", "Texas": "TX",
+        "Virginia": "VA", "United States": "US"}
 
 
 def call(fn, **params):
@@ -37,7 +41,8 @@ def main():
     for ltype, names in WANT.items():
         locs = call("ReturnLocations2020", ltype=ltype, ctype="cotton")
         for loc in locs:
-            if loc["Text"].strip() not in names:
+            name = loc["Text"].strip()
+            if (names is not None and name not in names) or name not in ABBR:
                 continue
             data = call("ReturnCropData2020", ctype="cotton", ltype=ltype, loc=loc["Value"])
             print(loc["Text"], len(data), "weeks; fields:", list(data[0].keys()) if data else None)
@@ -50,7 +55,7 @@ def main():
                         if kk.startswith(prefix) and (prefix == "d4" or "d4" in kk[2:] or kk == prefix):
                             return num(v)
                     return None
-                rows.append({"location": "US" if ltype == "1" else "TX",
+                rows.append({"location": ABBR[name],
                              "week": k.get("week") or k.get("date") or k.get("mapdate") or k.get("validstart"),
                              "none": num(k.get("none")), "d0": pick("d0"), "d1": pick("d1"), "d2": pick("d2"), "d3": pick("d3"),
                              "d4": num(k.get("d4"))})
