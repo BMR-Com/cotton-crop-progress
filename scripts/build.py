@@ -83,15 +83,37 @@ def brief(res):
     us = E.get("us") or {}
     pts, kpis = [], []
     d = (us["prod"] / us["usda_prod"] - 1) * 100 if us.get("prod") and us.get("usda_prod") else None
-    head = (f"We estimate the {cur} US upland crop at {m(us.get('prod'))} bales, "
-            f"{abs(d):.1f}% {'above' if d > 0 else 'below'} USDA's {m(us.get('usda_prod'))}." if d is not None else "Crop estimate pending data.")
-    kpis.append({"label": "Upland crop — our estimate", "value": m(us.get("prod")), "delta": f"{d:+.1f}%" if d is not None else None,
-                 "good": (d or 0) >= 0, "sub": f"USDA {m(us.get('usda_prod'))} 480-lb bales"})
-    if us.get("harv") and us.get("usda_harv"):
+    HC = res.get("headline")
+    if HC:
+        B = HC["balance"]
+        dd = HC["crop"] - HC["wasde"]
+        head = (f"We estimate the {cur}/{(cur + 1) % 100:02d} US crop at {HC['crop']:.2f}m bales, {abs(dd):.2f}m "
+                f"{'above' if dd > 0 else 'below'} the {HC['report']} WASDE ({HC['wasde']:.2f}m). Ending stocks {B['end_stocks']:.2f}m vs WASDE {B['wasde_end']:.2f}m.")
+        pts.append(f"Crop: Texas abandonment {HC['tx_ab'] * 100:.1f}% (±{HC['tx_ab_sd'] * 100:.0f} pts) from the highest-R² drought model "
+                   f"({HC['model']}, R² {HC['r2'] * 100:.0f}%, cotton-area drought through {HC['drought_week']}), against {HC['tx_ab_usda'] * 100:.1f}% implied by USDA. "
+                   f"That puts Texas at {HC['tx_prod'] / 1e6:.2f}m bales (USDA {HC['tx_prod_usda'] / 1e6:.2f}m) on {HC['tx_planted'] / 1e6:.2f}m planted acres at USDA's {HC['tx_yield']:.0f} lb yield; "
+                   f"every other state stays at USDA. ±1σ crop {HC['lo']:.2f}–{HC['hi']:.2f}m.")
+        pts.append(f"Balance sheet (WASDE {HC['my']}, our crop): beginning stocks {B['beg_stocks']:.2f}m + crop {B['prod']:.2f}m + imports {B['imports']:.2f}m "
+                   f"− mill use {B['domestic']:.2f}m − exports {B['exports']:.2f}m = ending stocks {B['end_stocks']:.2f}m "
+                   f"(stocks/use {B['su'] * 100:.1f}% vs WASDE {B['wasde_su'] * 100:.1f}%); ±1σ {B['end_lo']:.2f}–{B['end_hi']:.2f}m. "
+                   "These stocks drive the price and spread fair values on the model tabs.")
+        kpis.append({"label": "US crop — our estimate", "value": f"{HC['crop']:.2f}m", "delta": f"{dd:+.2f}m", "good": dd >= 0,
+                     "sub": f"WASDE {HC['wasde']:.2f}m · all cotton · ±1σ {HC['lo']:.2f}–{HC['hi']:.2f}"})
+        kpis.append({"label": "Ending stocks", "value": f"{B['end_stocks']:.2f}m", "delta": f"{B['end_stocks'] - B['wasde_end']:+.2f}m",
+                     "good": B['end_stocks'] <= B['wasde_end'], "sub": f"WASDE {B['wasde_end']:.2f}m · S/U {B['su'] * 100:.1f}%"})
+        if d is not None:
+            pts.append(f"Crop-progress cross-check (ratings, drought, FSA failed acres, classing): US upland {m(us.get('prod'))} vs USDA {m(us.get('usda_prod'))} "
+                       f"({d:+.1f}%). It is higher than the drought model because it projects Texas abandonment lower; it would replace the headline only if it proves the better predictor.")
+    else:
+        head = (f"We estimate the {cur} US upland crop at {m(us.get('prod'))} bales, "
+                f"{abs(d):.1f}% {'above' if d > 0 else 'below'} USDA's {m(us.get('usda_prod'))}." if d is not None else "Crop estimate pending data.")
+        kpis.append({"label": "Upland crop — our estimate", "value": m(us.get("prod")), "delta": f"{d:+.1f}%" if d is not None else None,
+                     "good": (d or 0) >= 0, "sub": f"USDA {m(us.get('usda_prod'))} 480-lb bales"})
+    if us.get("harv") and us.get("usda_harv") and not HC:
         dh = (us["harv"] / us["usda_harv"] - 1) * 100
         kpis.append({"label": "Harvested acres", "value": f"{us['harv'] / 1e6:.2f}m", "delta": f"{dh:+.1f}%", "good": dh >= 0,
                      "sub": f"USDA {us['usda_harv'] / 1e6:.2f}m · planted {us['planted'] / 1e6:.2f}m"})
-    if us.get("yield") and us.get("usda_yield"):
+    if us.get("yield") and us.get("usda_yield") and not HC:
         dy = us["yield"] - us["usda_yield"]
         kpis.append({"label": "Yield, lb/harvested acre", "value": f"{us['yield']:.0f}", "delta": f"{dy:+.0f}", "good": dy >= 0,
                      "sub": f"USDA {us['usda_yield']:.0f}"})
@@ -144,7 +166,7 @@ def brief(res):
         pts.append(f"Projection from ginnings: {m(u['proj'])} bales{band}, {dg:+.1f}% vs USDA, with {u['from_gin'] / u['proj'] * 100:.0f}% of it resting on ginning so far"
                    + (f"; Texas ginning pace alone points to {m(tx['gin_only'])} ({tx['gin_only'] * 480 / tx['harv']:.0f} lb on harvested acres after projected abandonment)"
                       if tx and tx.get("gin_only") and tx.get("harv") else "") + ".")
-        kpis.insert(1, {"label": "Projection from ginnings", "value": m(u["proj"]), "delta": f"{dg:+.1f}%" if dg is not None else None,
+        kpis.insert(3, {"label": "Ginning projection (upland check)", "value": m(u["proj"]), "delta": f"{dg:+.1f}%" if dg is not None else None,
                         "good": (dg or 0) >= 0, "sub": (f"±{u['sd_log'] * 100:.1f}% (1σ) · " if u.get("sd_log") else "") + f"{u['from_gin'] / u['proj'] * 100:.0f}% ginning-based so far"})
     K = res.get("classing")
     if K:
@@ -191,12 +213,51 @@ def wasde_us(cur):
     my = f"{cur}/{(cur + 1) % 100:02d}"
     out = {"my": my}
     for k, lab in (("prod", "Production"), ("end_stocks", "Ending Stocks"), ("exports", "Exports"), ("domestic", "Domestic Use"), ("planted", "Planted"),
-                   ("harvested", "Harvested"), ("yield", "Yield per Harvested Acre")):
+                   ("harvested", "Harvested"), ("yield", "Yield per Harvested Acre"), ("beg_stocks", "Beginning Stocks"), ("imports", "Imports"),
+                   ("unaccounted", "Unaccounted"), ("price", "Avg. Farm Price")):
         v = d["data"].get(f"United States||{lab}||{my}")
         if v:
             out[k] = v[-1]["value"]
             out["report"] = v[-1]["reportDate"]
     return out
+
+
+DROUGHT_MODEL_URL = "https://raw.githubusercontent.com/BMR-Com/Cotton-Texas-Drought-analysis/main/docs/model.json"
+
+
+def headline_crop(W, cur):
+    """The page's crop number: the Texas drought analysis (highest-R² model for Texas abandonment, every
+    other state at USDA's latest), all cotton, set against WASDE and carried through the WASDE balance
+    sheet (WASDE beginning stocks, imports, mill use, exports and unaccounted held) to ending stocks."""
+    import requests
+    loc = os.environ.get("DROUGHT_MODEL_LOCAL")
+    try:
+        j = json.load(open(loc)) if loc else requests.get(DROUGHT_MODEL_URL, timeout=60).json()
+    except Exception as e:
+        print("drought model unavailable", e)
+        return None
+    c, b = j.get("crop") or {}, j.get("tx_best") or {}
+    if not c.get("all_prod") or not W or W.get("prod") is None:
+        return None
+    crop = c["all_prod"] / 1e6
+    # use WASDE's own non-Texas crop so the gap to WASDE is exactly the Texas call
+    adj = crop - (c["us_prod_usda"] + c.get("pima_usda", 0)) / 1e6
+    crop = W["prod"] + adj
+    lo = W["prod"] + (c["us_prod_lo"] + c.get("pima_usda", 0) - c["us_prod_usda"] - c.get("pima_usda", 0)) / 1e6 if c.get("us_prod_lo") else None
+    hi = W["prod"] + (c["us_prod_hi"] - c["us_prod_usda"]) / 1e6 if c.get("us_prod_hi") else None
+    use = (W.get("domestic") or 0) + (W.get("exports") or 0)
+
+    def end(p):
+        return (W.get("beg_stocks") or 0) + p + (W.get("imports") or 0) - use - (W.get("unaccounted") or 0)
+    bal = {"beg_stocks": W.get("beg_stocks"), "imports": W.get("imports"), "domestic": W.get("domestic"), "exports": W.get("exports"),
+           "unaccounted": W.get("unaccounted"), "use": use, "prod": crop, "end_stocks": end(crop), "su": end(crop) / use if use else None,
+           "end_lo": end(lo) if lo else None, "end_hi": end(hi) if hi else None,
+           "wasde_prod": W["prod"], "wasde_end": W.get("end_stocks"), "wasde_su": (W.get("end_stocks") or 0) / use if use else None}
+    return {"crop": crop, "lo": lo, "hi": hi, "wasde": W["prod"], "report": W.get("report"), "my": W.get("my"),
+            "tx_ab": c.get("tx_ab"), "tx_ab_sd": c.get("tx_ab_sd"), "tx_ab_usda": c.get("tx_ab_usda"), "tx_prod": c.get("tx_prod"),
+            "tx_prod_usda": c.get("tx_prod_usda"), "tx_planted": c.get("tx_planted"), "tx_yield": c.get("tx_yield"),
+            "model": f"{b.get('variable')} {str(b.get('model', '')).lower()}", "r2": b.get("r2"), "drought_week": j.get("latest_week"),
+            "balance": bal}
 
 
 def main():
@@ -233,6 +294,7 @@ def main():
     est = model.run(cond, prog, dr, cur)
     res.update(est)
     res["wasde"] = wasde_us(cur)
+    res["headline"] = headline_crop(res["wasde"], cur)
     brief(res)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     try:                                         # drought → abandonment regressions for the Production model tab
