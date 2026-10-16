@@ -1,4 +1,4 @@
-name: Ginnings and FSA acreage
+name: Ginnings, classing and FSA acreage
 on:
   schedule:
     - cron: '20 17 * 8-12,1-5 1-5'   # weekdays after NASS noon-ET releases, Aug–May
@@ -18,11 +18,14 @@ jobs:
       - name: NASS ginnings + annual acreage (batched under the 50k limit)
         env: {USDA_API_KEY: "${{ secrets.USDA_API_KEY }}"}
         run: python scripts/fetch_ginning.py
+      - name: AMS classing (weekly quality by state)
+        env: {AMS_API_KEY: "${{ secrets.AMS_API_KEY }}"}
+        run: python scripts/fetch_classing.py
       - name: FSA crop acreage
         run: python scripts/fetch_fsa.py || echo "FSA fetch failed; continuing"
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ginning data/fsa
-          git commit -m "Update ginnings / FSA acreage $(date -u +%Y-%m-%d)" || exit 0
+          git add data/ginning data/fsa data/classing
+          git commit -m "Update ginnings / classing / FSA acreage $(date -u +%Y-%m-%d)" || exit 0
           git pull --rebase -q origin main && git push
