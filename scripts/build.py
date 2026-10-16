@@ -189,7 +189,8 @@ def wasde_us(cur):
         return None
     my = f"{cur}/{(cur + 1) % 100:02d}"
     out = {"my": my}
-    for k, lab in (("prod", "Production"), ("end_stocks", "Ending Stocks"), ("exports", "Exports")):
+    for k, lab in (("prod", "Production"), ("end_stocks", "Ending Stocks"), ("exports", "Exports"), ("planted", "Planted"),
+                   ("harvested", "Harvested"), ("yield", "Yield per Harvested Acre")):
         v = d["data"].get(f"United States||{lab}||{my}")
         if v:
             out[k] = v[-1]["value"]
@@ -214,6 +215,17 @@ def main():
             stages[st] = seasonal(prog.dropna(subset=[st]), st, states, cur)
     res["progress"] = stages
     res["drought"] = seasonal(dr, "d2", [s for s in states if s != "US"], cur)
+    # US and Texas: share of COTTON area in D2–D4 (USDA/NDMC Ag in Drought) instead of whole-state area
+    ap = os.path.join(load.D, "drought", "cotton_area_drought.csv")
+    if os.path.exists(ap):
+        ad = pd.read_csv(ap)
+        ad["week"] = pd.to_datetime(ad.week)
+        ad["year"] = ad.week.dt.year
+        ad["woy"] = ad.week.dt.isocalendar().week.astype(int)
+        ad = ad.rename(columns={"location": "state"})
+        res["drought"].update(seasonal(ad, "d2", ["US", "TX"], cur))
+        res["drought_cotton_area"] = ["US", "TX"]
+        res["asof"]["drought"] = max(res["asof"]["drought"], ad.week.max())
     res["states"] = [{"st": s, "name": load.STATE_NAME.get(s, s)} for s in states]
 
     # ── models (crop estimate, ginning/classing pace, quality) ──

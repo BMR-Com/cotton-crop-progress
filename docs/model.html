@@ -88,10 +88,10 @@ tr.hl td{background:#fdf6e3;font-weight:700}
 <div><!-- LEFT: assumptions -->
   <div class="card">
     <h3>Acreage & WASDE anchor</h3>
-    <label>US upland planted (M ac) <input type="number" id="in-planted" value="9.85" step="0.01"></label>
+    <label>US planted, all cotton (M ac) <input type="number" id="in-planted" value="9.85" step="0.01"></label>
     <label>Texas planted (M ac) <input type="number" id="in-txplanted" value="5.65" step="0.01"></label>
     <label>Non-TX abandonment % <input type="number" id="in-nontx" value="8.0" step="0.5"></label>
-    <label>USDA upland production (M bal) <input type="number" id="in-wasde" value="13.7" step="0.1"></label>
+    <label>WASDE production (M bal) <input type="number" id="in-wasde" value="13.7" step="0.1"></label>
     <div class="hint" id="crop-note">Inputs prefill from USDA's latest numbers and the Crop Monitor's projected non-Texas abandonment.</div>
   </div>
   <div class="card">
@@ -146,7 +146,7 @@ tr.hl td{background:#fdf6e3;font-weight:700}
   </div>
 </div>
 </div>
-<div class="foot" style="margin-top:4px">Sources: BMR-Com/cotton-crop-progress (NASS conditions) · BMR-Com/drought-monitor (USDM) with NASS final abandonment (regressions rebuilt daily) · inputs prefilled from USDA latest via the Crop Monitor. Research tool, not trading advice.</div>
+<div class="foot" style="margin-top:4px">Sources: BMR-Com/cotton-crop-progress (NASS conditions) · USDA/NDMC Ag in Drought (share of Texas and US cotton area in drought) against NASS final abandonment (regressions rebuilt weekly) · inputs prefilled from USDA latest via the Crop Monitor. Research tool, not trading advice.</div>
 </div>
 <script>
 // ═══════════ CONFIG ═══════════
@@ -209,14 +209,16 @@ function loadCrop(){
   fetch(CROP_URL+'?'+Date.now()).then(function(r){return r.json();}).then(function(c){
     var E=c.estimate||{},u=E.us||{},tx=(E.states||[]).find(function(r){return r.st==='TX';})||{};
     function setv(id,v,d){if(v!=null&&isFinite(v))document.getElementById(id).value=(+v).toFixed(d);}
-    setv('in-planted',(u.usda_planted||u.planted_nass)/1e6,2);
+    var W=c.wasde||{};
+    // all-cotton WASDE anchor (planted, production, yield, implied abandonment)
+    setv('in-planted',W.planted!=null?W.planted:(u.usda_planted||u.planted_nass)/1e6,2);
     setv('in-txplanted',(tx.planted_nass||tx.planted)/1e6,2);
     var ntxP=0,ntxH=0;(E.states||[]).forEach(function(r){if(r.st!=='TX'&&r.planted&&r.harv){ntxP+=r.planted;ntxH+=r.harv;}});
     if(ntxP)setv('in-nontx',(1-ntxH/ntxP)*100,1);
-    setv('in-wasde',u.usda_prod/1e6,2);
-    setv('in-yield',u.usda_yield,0);
-    if(u.usda_harv&&u.usda_planted)USDA_AB=1-u.usda_harv/u.usda_planted;
-    var n=document.getElementById('crop-note');if(n)n.textContent='Inputs prefilled from USDA '+c.crop_year+' (latest) and the Crop Monitor ('+c.generated+'); edit any field to override.';
+    setv('in-wasde',W.prod!=null?W.prod:u.usda_prod/1e6,2);
+    setv('in-yield',W.yield!=null?W.yield:u.usda_yield,0);
+    if(W.planted&&W.harvested)USDA_AB=1-W.harvested/W.planted;else if(u.usda_harv&&u.usda_planted)USDA_AB=1-u.usda_harv/u.usda_planted;
+    var n=document.getElementById('crop-note');if(n)n.textContent='Prefilled from the '+(W.report||'latest')+' WASDE (planted '+(W.planted||'–')+'m ac, production '+(W.prod||'–')+'m, yield '+(W.yield||'–')+' lb) and the Crop Monitor’s non-Texas abandonment; edit any field to override.';
     loaded.crop=true;maybeRun();
   }).catch(function(){loaded.crop=true;maybeRun();});
 }
@@ -338,7 +340,7 @@ function run(){
     ro('Cond. reg R²',M.regTX?M.regTX.r2.toFixed(2):'—','n='+(M.regTX?M.regTX.n:0)+' yrs')+
     ro('G/E vs 5-yr (US)',(M.geDef>0?'+':'')+f1(M.geDef)+' pts','yield input');
   function ro(l,v,s){return '<div class="ro"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';}
-  document.getElementById('live-foot').textContent='conditions: NASS via cotton-crop-progress · drought: USDM via BMR-Com/drought-monitor ('+M.dWK.date+')';
+  document.getElementById('live-foot').textContent='conditions: NASS via cotton-crop-progress · drought: USDM on cotton acreage via USDA/NDMC Ag in Drought ('+M.dWK.date+')';
 
   drawRail(M,P);
   scenTable(M,P);

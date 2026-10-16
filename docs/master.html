@@ -184,7 +184,7 @@ svg text{font-family:var(--mono)}
 var PRICE_URL='data/cotton_px.csv';  // Bloomberg history + ICE settlements / Yahoo closes, rebuilt daily
 var WASDE_URL='https://raw.githubusercontent.com/BMR-Com/wasde-analytics/main/data/Cotton.json';
 var OC_URL='https://raw.githubusercontent.com/BMR-Com/cotton-on-call/main/data/cotton_oncall.csv';
-var COT_URL='https://publicreporting.cftc.gov/resource/kh3c-gbw2.json?$where=market_and_exchange_names=%27COTTON%20NO.%202%20-%20ICE%20FUTURES%20U.S.%27&$order=report_date_as_yyyy_mm_dd%20DESC&$limit=500';
+var COT_URL='https://raw.githubusercontent.com/BMR-Com/cftc-cot-full/main/data/bcom_cot_master.csv';  // BMR-Com COT master (CFTC disaggregated), updated weekly
 var CUR_MY='2026/27',CUR_Y=2026,CUR_CY=2026;
 var CARRY_MONTHS={decmar:3,marmay:2,mayjul:2,juldec:5};
 var SERIES=[
@@ -209,7 +209,15 @@ function maybeRun(){
 fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;maybeRun();}).catch(function(){setStatus('<span class="err">wasde failed</span>');});
 Papa.parse(PRICE_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){PXrows=res.data;loaded.p=true;maybeRun();}});
 Papa.parse(OC_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){OCrows=res.data;loaded.o=true;maybeRun();}});
-fetch(COT_URL).then(function(r){return r.json();}).then(function(j){COT=j;loaded.c=true;maybeRun();}).catch(function(){COTfail=true;loaded.c=true;maybeRun();});
+Papa.parse(COT_URL,{download:true,header:true,skipEmptyLines:true,
+  complete:function(res){
+    // map the repo's columns onto the CFTC field names the model below expects (last ~10 years)
+    COT=res.data.filter(function(r){return r.commodity==='Cotton'&&r.crop_type==='all';}).slice(-520).map(function(r){
+      return {report_date_as_yyyy_mm_dd:r.date,open_interest_all:r.open_interest,
+        m_money_positions_long_all:r.managed_money_long,m_money_positions_short_all:r.managed_money_short,
+        prod_merc_positions_long_all:r.prod_merc_long,prod_merc_positions_short_all:r.prod_merc_short};});
+    if(!COT.length)COTfail=true;loaded.c=true;maybeRun();},
+  error:function(){COTfail=true;loaded.c=true;maybeRun();}});
 
 // ═══════════ HELPERS ═══════════
 function parseD(s){var p=s.split('/');return new Date(2000+(+p[2])%100,+p[0]-1,+p[1]);}
@@ -515,7 +523,7 @@ function run(){
   var lastStr=(C.last.d.getMonth()+1)+'/'+C.last.d.getDate()+'/'+String(C.last.d.getFullYear()).slice(2);
   var w=document.getElementById('stale-warn');
   if(age>7){w.style.display='block';
-    w.innerHTML='⚠ <b>cotton_raw.csv last row is '+lastStr+'</b> ('+Math.round(age)+' days old). Price/IV/spread market values reflect that date — use overrides for live levels. On-call current through '+((C.ocLast.d.getMonth()+1)+'/'+C.ocLast.d.getDate())+(C.cot?'; COT through '+((C.cot.last.d.getMonth()+1)+'/'+C.cot.last.d.getDate()):'')+'.';
+    w.innerHTML='⚠ <b>Price file last row is '+lastStr+'</b> ('+Math.round(age)+' days old). Price/IV/spread market values reflect that date — use overrides for live levels. On-call current through '+((C.ocLast.d.getMonth()+1)+'/'+C.ocLast.d.getDate())+(C.cot?'; COT through '+((C.cot.last.d.getMonth()+1)+'/'+C.cot.last.d.getDate()):'')+'.';
   }else w.style.display='none';
   setStatus('live · px '+lastStr+' · wasde '+(WJ.lastUpdated||'')+' · on-call ✓ · cot '+(C.cot?'✓':'<span class="warn">n/a</span>'));
 
@@ -630,8 +638,8 @@ function run(){
       ro('Price tilt',sgn(cotAdjRaw)+'¢','z-drift');
     document.getElementById('cot-note').innerHTML='MM z '+f2(C.cot.mmZ)+' — '+(Math.abs(C.cot.mmZ)>1.5?'<b>extended</b>; reversion risk dominates':'mid-range; flows over reversion')+'. PM '+(C.cot.last.pm<0?'short (normal hedge book) — heavier shorting caps rallies':'long — hedge pressure light')+'. Heavy MM length concentrates front-month: bull-spread supportive while flows persist; its unwind is the vol-spike channel.';
   } else {
-    document.getElementById('cot-readout').innerHTML='<div class="ro"><div class="l">CFTC API</div><div class="v">n/a</div><div class="s">unreachable — tilt 0</div></div>';
-    document.getElementById('cot-note').textContent='publicreporting.cftc.gov unreachable; retries on reload.';
+    document.getElementById('cot-readout').innerHTML='<div class="ro"><div class="l">COT</div><div class="v">n/a</div><div class="s">unavailable — tilt 0</div></div>';
+    document.getElementById('cot-note').textContent='COT file (BMR-Com/cftc-cot-full) unavailable; retries on reload.';
   }
 
   // spread FV table

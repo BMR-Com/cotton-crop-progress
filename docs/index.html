@@ -255,8 +255,8 @@ function renderCond(){
     return {sr:sr.map(x=>({...x,data:(x.data||[]).filter(p=>p[0]>=lo&&p[0]<=hi)})),opt:{...extra,xmin:lo,xmax:hi}};};
   const draw=(id,raw,extra)=>{const w=win(raw,extra);line(id,w.sr,{...o,...w.opt});};
   draw('c-ge',ser(C.ge[s]),{ymin:0});draw('c-pvp',ser(C.pvp[s]),{ymin:0});
-  const ds=s==='US'?'TX':s; const cut=a=>a?a.filter(p=>p[0]>=18&&p[0]<=48):a; const dser=ser(D.drought[ds]).map(x=>({...x,data:cut(x.data)}));
-  const cw=win(ser(C.ge[s])).opt; line('c-dr',dser.map(x=>({...x,data:(x.data||[]).filter(p=>cw.xmin==null||(p[0]>=cw.xmin&&p[0]<=cw.xmax))})),{...o,ymin:0,ymax:100,xmin:cw.xmin,xmax:cw.xmax}); $('#dr-title').textContent=`D2–D4 drought, % of ${ds==='TX'&&s==='US'?'Texas':D.states.find(x=>x.st===ds).name} area`;
+  const ds=(s==='US'&&!(D.drought_cotton_area||[]).includes('US'))?'TX':s; const cut=a=>a?a.filter(p=>p[0]>=18&&p[0]<=48):a; const dser=ser(D.drought[ds]).map(x=>({...x,data:cut(x.data)}));
+  const cw=win(ser(C.ge[s])).opt; line('c-dr',dser.map(x=>({...x,data:(x.data||[]).filter(p=>cw.xmin==null||(p[0]>=cw.xmin&&p[0]<=cw.xmax))})),{...o,ymin:0,ymax:100,xmin:cw.xmin,xmax:cw.xmax}); const ca=(D.drought_cotton_area||[]).includes(ds); $('#dr-title').textContent=`D2–D4 drought, % of ${D.states.find(x=>x.st===ds).name} ${ca?'cotton area':'state area'}`;
   const P=D.progress, wrap=$('#prog'); wrap.innerHTML='';
   Object.keys(P).forEach((st,i)=>{const id='c-prog-'+i;const d=document.createElement('div');d.innerHTML=`<p class="ct">${st.charAt(0)+st.slice(1).toLowerCase()}</p><div class="chart sm"><canvas id="${id}"></canvas></div>`;wrap.appendChild(d);
     draw(id,ser(P[st][s]),{ymin:0,ymax:100});});
