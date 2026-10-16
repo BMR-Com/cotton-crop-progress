@@ -86,7 +86,14 @@ def main():
         year = int(m.group(1))
         url = href if href.startswith("http") else ROOT + href
         try:
-            b = requests.get(url, headers=H, timeout=300).content
+            resp = requests.get(url, headers=H, timeout=300)
+            b = resp.content
+            if "html" in (resp.headers.get("content-type") or ""):     # /documents/<id> is a landing page → follow its file link
+                m2 = re.search(r'href="([^"]+?\.(?:zip|xlsx))"', resp.text)
+                if not m2:
+                    print("no file link on", url); continue
+                fu = m2.group(1)
+                b = requests.get(fu if fu.startswith("http") else ROOT + fu, headers=H, timeout=300).content
             files = []
             try:
                 z = zipfile.ZipFile(io.BytesIO(b))
