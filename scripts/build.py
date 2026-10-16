@@ -108,10 +108,14 @@ def brief(res):
     tx = next((r for r in E.get("states", []) if r["st"] == "TX"), None)
     txd = last(res["drought"].get("TX"))
     if tx and tx.get("harv_ratio") is not None:
-        t = (f"Texas: {tx['harv_ratio'] * 100:.0f}% of planted acres expected to be harvested"
-             + (f" (FSA failed acres {tx['fail_share'] * 100:.1f}% of reported plantings)" if tx.get("fail_share") is not None else "")
-             + f"; yield {tx.get('yield_implied') or tx.get('yield_cond'):.0f} lb vs USDA {tx.get('usda_yield') or 0:.0f}"
-             + (f"; {txd[1]:.0f}% of the state in D2–D4 drought." if txd else "."))
+        uh = tx.get("usda_harv")
+        t = ("Texas abandonment: " + (f"FSA failed acres are {tx['fail_share'] * 100:.1f}% of reported plantings so far, but failed acres "
+             f"keep rising after October — on this season's drought and ratings we project final abandonment of {tx['ab_final'] * 100:.0f}% "
+             f"(state average {tx['ab_avg'] * 100:.0f}%)" if tx.get("ab_final") is not None and tx.get("fail_share") is not None
+             else f"{(1 - tx['harv_ratio']) * 100:.0f}% projected")
+             + (f", vs {(1 - uh / tx['planted_nass']) * 100:.0f}% implied by USDA" if uh and tx.get("planted_nass") else "")
+             + f". Yield {tx.get('yield_implied') or tx.get('yield_cond'):.0f} lb vs USDA {tx.get('usda_yield') or 0:.0f}"
+             + (f"; {txd[1]:.0f}% of Texas in D2–D4 drought." if txd else "."))
         pts.append(t)
     diffs = [r for r in E.get("states", []) if r.get("prod") and r.get("usda_prod")]
     diffs.sort(key=lambda r: -abs(r["prod"] - r["usda_prod"]))
@@ -131,6 +135,31 @@ def brief(res):
         if u and u.get("pct_normal"):
             pts.append(f"NASS ginnings to {G['period_label']}: {u['cur'] / 1e6:.2f}m running bales, "
                        f"{u['pct_ly_final']:.1f}% of last season's total (normal {u['pct_normal']:.1f}% by this date).")
+    K = res.get("classing")
+    if K:
+        u = next((r for r in K["table"] if r["st"] == "US"), None)
+        if u and u.get("bales"):
+            ch = (u["bales"] / u["bales_ly"] - 1) * 100 if u.get("bales_ly") else None
+            pts.append(K["lead"])
+            kpis.append({"label": "Upland bales classed", "value": f"{u['bales'] / 1e6:.2f}m", "delta": f"{ch:+.0f}%" if ch is not None else None,
+                         "good": (ch or 0) >= 0, "sub": f"through {K['week_end']:%b %d} · vs same week {cur - 1}"})
+    Q = res.get("quality")
+    if Q:
+        qm = {r["label"]: r for r in Q["metrics"]["US"]}
+        t = qm.get("Tenderable, %")
+        if t and t["cur"] is not None:
+            dt = t["cur"] - t["ly"] if t.get("ly") is not None else None
+            kpis.append({"label": "Tenderable (season)", "value": f"{t['cur']:.1f}%", "delta": f"{dt:+.1f} pts" if dt is not None else None,
+                         "good": (dt or 0) >= 0, "sub": f"{cur - 1} same week {t['ly']:.1f}%" if t.get("ly") is not None else ""})
+        def d(k, dp=1, unit="%"):
+            r = qm.get(k)
+            if not r or r["cur"] is None:
+                return "–"
+            pu = " pts" if unit == "%" else ""
+            return f"{r['cur']:.{dp}f}{unit}" + (f" ({r['cur'] - r['ly']:+.{dp}f}{pu} vs last year)" if r.get("ly") is not None else "")
+        pts.append(f"Quality so far: tenderable {d('Tenderable, %')}; color 31 & better {d('Color 31 & better, %')}; "
+                   f"staple {d('Average staple (32nds)', 2, '')}; mike 5.0+ discount {d('Mike 5.0 & above (discount), %')}; "
+                   f"strength {d('Average strength (g/tex)', 1, ' g/tex')}.")
     for extra in res.get("brief_extra", []):
         pts.append(extra)
     for k in res.get("kpis_extra", []):

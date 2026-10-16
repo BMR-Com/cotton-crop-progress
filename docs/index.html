@@ -39,7 +39,7 @@ nav a:hover{color:var(--text)}
 .brief h2{font-size:18px;line-height:1.35;margin-bottom:10px}
 .brief ul{margin:0;padding-left:18px}
 .brief li{margin:4px 0}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
 .kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .kpi .v{font-size:24px;font-weight:600;margin-top:2px;font-variant-numeric:tabular-nums}
@@ -96,6 +96,7 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
   <div class="chart tall"><canvas id="c-est"></canvas></div>
   <div class="tw" style="margin-top:14px"><table id="t-est"></table></div>
   <p class="note" id="est-note"></p>
+  <div id="ab-wrap" style="margin-top:18px"></div>
 </section>
 
 <section class="card">
@@ -211,6 +212,12 @@ function renderEstimate(){
   h+=`<tr class="tot"><td>United States</td><td><b>${mb(u.prod)}</b></td><td>${mb(u.usda_prod)}</td><td class="${du>0?'up':du<0?'down':''}">${du==null?'–':sg(du)+'%'}</td><td>${fmt(u.yield)}</td><td>${fmt(u.usda_yield)}</td><td>${fmt(u.harv/1e3)}k</td><td>${u.harv&&u.planted?fmt(u.harv/u.planted*100)+'%':'–'}</td>
     <td>${fmt(u.planted/1e3)}k</td><td>${u.usda_planted?fmt(u.usda_planted/1e3)+'k':'–'}</td><td>${u.fsa_total?fmt(u.fsa_failed/u.fsa_total*100,1)+'%':'–'}</td><td>${mb(u.prod_cond)}</td><td></td><td></td></tr></tbody>`;
   $('#t-est').innerHTML=h;
+  const A=D.abandonment, tx=E.states.find(r=>r.st==='TX');
+  if(A&&A.tx_history&&tx){const mo=new Date(2000,A.release_month-1,1).toLocaleString('en-US',{month:'long'});
+    let t=`<p class="ct">Texas abandonment — FSA failed acres reported by early ${mo} vs the final NASS abandonment</p><div class="tw"><table><thead><tr><th>Crop year</th><th>FSA failed, % of plantings (${mo})</th><th>D2–D4 drought, avg Jun–Oct</th><th>Poor/very poor, avg</th><th>Final abandonment (NASS)</th></tr></thead><tbody>`;
+    t+=`<tr class="tot"><td>${D.crop_year} (projected)</td><td>${fmt(tx.fail_share*100,1)}%</td><td>${fmt(D.estimate.us.tx_d2,0)}%</td><td>${fmt(D.estimate.us.tx_pvp,0)}%</td><td>${tx.ab_final!=null?fmt(tx.ab_final*100,0)+'%':'–'}</td></tr>`;
+    A.tx_history.slice().reverse().forEach(h=>{t+=`<tr><td>${h.year}</td><td>${fmt(h.fs*100,1)}%</td><td>${fmt(h.d2,0)}%</td><td>${fmt(h.pvp,0)}%</td><td>${fmt(h.ab*100,0)}%</td></tr>`;});
+    $('#ab-wrap').innerHTML=t+'</tbody></table></div><p class="note">Failed acres reported to FSA keep growing into winter, so the October count understates final abandonment. The projection reads this season’s failed share, drought and crop ratings against past seasons at the same point.</p>';}
   $('#est-note').textContent='Million 480-lb bales unless noted. Diff = our estimate vs USDA latest state forecast. Classing weight = share of the estimate taken from the classing pace (rises as more of the crop is classed).';
 }
 
@@ -233,7 +240,7 @@ function renderCls(){
   const K=D.classing; if(!K){$('#cls-lead').textContent='Classing data not available yet.';return;}
   const y=D.crop_year; legend($('#lg-cls'),y);
   $('#cls-lead').innerHTML=K.lead||'';
-  const s=K.series[stCls]||{}; const o={xfmt:v=>swkLabel(v),cb:{title:i=>'Week ending ~'+swkLabel(i[0].parsed.x),label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}k`},ymin:0};
+  const s=K.series[stCls]||{}; const o={xfmt:v=>swkLabel(v),yfmt:v=>v>=1000?(v/1000)+'m':v+'k',xmin:0,cb:{title:i=>'Week ending ~'+swkLabel(i[0].parsed.x),label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}k bales`},ymin:0};
   const k=a=>a?a.map(p=>[p[0],p[1]/1e3]):a;
   line('c-cls',[{label:String(y),data:k(s.cur),color:css('--cur'),w:2.5},{label:String(y-1),data:k(s.ly),color:css('--ly')},{label:'5-yr avg',data:k(s.avg5),color:css('--avg'),dash:[4,4]}],o);
   const w=K.weekly[stCls]||{};
@@ -247,7 +254,7 @@ function renderCls(){
   if(G&&G.table&&G.table.length){
     let g=`<p class="ct">NASS ginnings — running bales ginned to ${G.period_label}</p><div class="tw"><table><thead><tr><th>State</th><th>${y}</th><th>${y-1} same date</th><th>Change</th><th>% of ${y-1} season total</th><th>5-yr avg % ginned by this date</th></tr></thead><tbody>`;
     G.table.forEach(r=>{const c=pct(r.cur,r.ly);g+=`<tr${r.st==='US'?' class="tot"':''}><td>${r.name}</td><td>${fmt(r.cur)}</td><td>${fmt(r.ly)}</td><td class="${c>0?'up':c<0?'down':''}">${c==null?'–':sg(c,0)+'%'}</td><td>${r.pct_ly_final!=null?fmt(r.pct_ly_final,1)+'%':'–'}</td><td>${r.pct_normal!=null?fmt(r.pct_normal,1)+'%':'–'}</td></tr>`;});
-    $('#gin-wrap').innerHTML=g+'</tbody></table></div>';
+    $('#gin-wrap').innerHTML=g+'</tbody></table></div><p class="note">NASS ginnings are reported on the 1st and 15th. A dash for last year means no report for that date (the October 2025 reports were not issued during the government shutdown).</p>';
   }
 }
 
