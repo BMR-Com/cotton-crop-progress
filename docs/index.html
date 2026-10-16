@@ -161,7 +161,7 @@ function base(yTitle,opts={}){
   return {responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
     plugins:{legend:{display:false},tooltip:{backgroundColor:css('--surface'),titleColor:css('--text'),bodyColor:css('--text-2'),borderColor:grid,borderWidth:1,padding:10,
       callbacks:opts.cb||{}}},
-    scales:{x:{type:'linear',grid:{display:false},border:{color:grid},ticks:{color:tick,font:{size:11},maxTicksLimit:8,callback:opts.xfmt||(v=>v)},min:opts.xmin,max:opts.xmax},
+    scales:{x:{type:'linear',grid:{display:false},border:{color:grid},ticks:{color:tick,font:{size:11},maxTicksLimit:7,includeBounds:false,callback:opts.xfmt||(v=>v)},min:opts.xmin,max:opts.xmax},
             y:{grid:{color:grid},border:{display:false},ticks:{color:tick,font:{size:11},maxTicksLimit:6,callback:opts.yfmt||(v=>v)},min:opts.ymin,max:opts.ymax,
                title:{display:!!yTitle,text:yTitle,color:tick,font:{size:11}}}}};
 }
@@ -227,12 +227,17 @@ function renderCond(){
   const y=D.crop_year; legend($('#lg-cond'),y);
   const C=D.conditions, s=stCond, ser=(o)=>o?[{label:String(y),data:o.cur,color:css('--cur'),w:2.5},{label:String(y-1),data:o.ly,color:css('--ly')},{label:'5-yr avg',data:o.avg5,color:css('--avg'),dash:[4,4]}]:[];
   const o={xfmt:v=>wkLabel(v),cb:{title:i=>wkLabel(i[0].parsed.x),label:c=>`${c.dataset.label}: ${c.parsed.y.toFixed(0)}%`}};
-  line('c-ge',ser(C.ge[s]),{...o,ymin:0});line('c-pvp',ser(C.pvp[s]),{...o,ymin:0});
+  // show only the weeks the report is published: the span covered by this year and last year
+  const win=(sr,extra={})=>{const pts=sr.filter(x=>x.label!=='5-yr avg').flatMap(x=>x.data||[]);
+    if(!pts.length)return {sr,opt:extra};const lo=Math.min(...pts.map(p=>p[0])),hi=Math.max(...pts.map(p=>p[0]));
+    return {sr:sr.map(x=>({...x,data:(x.data||[]).filter(p=>p[0]>=lo&&p[0]<=hi)})),opt:{...extra,xmin:lo,xmax:hi}};};
+  const draw=(id,raw,extra)=>{const w=win(raw,extra);line(id,w.sr,{...o,...w.opt});};
+  draw('c-ge',ser(C.ge[s]),{ymin:0});draw('c-pvp',ser(C.pvp[s]),{ymin:0});
   const ds=s==='US'?'TX':s; const cut=a=>a?a.filter(p=>p[0]>=18&&p[0]<=48):a; const dser=ser(D.drought[ds]).map(x=>({...x,data:cut(x.data)}));
-  line('c-dr',dser,{...o,ymin:0,ymax:100}); $('#dr-title').textContent=`D2–D4 drought, % of ${ds==='TX'&&s==='US'?'Texas':D.states.find(x=>x.st===ds).name} area`;
+  const cw=win(ser(C.ge[s])).opt; line('c-dr',dser.map(x=>({...x,data:(x.data||[]).filter(p=>cw.xmin==null||(p[0]>=cw.xmin&&p[0]<=cw.xmax))})),{...o,ymin:0,ymax:100,xmin:cw.xmin,xmax:cw.xmax}); $('#dr-title').textContent=`D2–D4 drought, % of ${ds==='TX'&&s==='US'?'Texas':D.states.find(x=>x.st===ds).name} area`;
   const P=D.progress, wrap=$('#prog'); wrap.innerHTML='';
   Object.keys(P).forEach((st,i)=>{const id='c-prog-'+i;const d=document.createElement('div');d.innerHTML=`<p class="ct">${st.charAt(0)+st.slice(1).toLowerCase()}</p><div class="chart sm"><canvas id="${id}"></canvas></div>`;wrap.appendChild(d);
-    line(id,ser(P[st][s]),{...o,ymin:0,ymax:100});});
+    draw(id,ser(P[st][s]),{ymin:0,ymax:100});});
 }
 
 // ---------- classing ----------
