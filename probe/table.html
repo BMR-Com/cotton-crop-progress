@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us">
+<head><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-83MK4BYF0S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-83MK4BYF0S');
+    </script>
+
+    <!-- GA4 Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', 'GTM-T8PZ9F8');</script>
+    <!-- End Google Tag Manager -->
+
+    <title>
+	Row Crops Data Table | U.S. Agricultural Commodities in Drought
+</title>
+
+    <!--Site Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" /><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" /><link rel="manifest" href="/site.webmanifest" /><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#036434" /><meta name="msapplication-TileColor" content="#036434" /><meta name="theme-color" content="#036434" />
+    <!--End Site Icons-->
+
+    <script type="text/javascript" src='/webfiles/js/jquery/3.4.1/jquery.min.js'></script>
+    <script type="text/javascript" src='/webfiles/js/jqueryui/1.12.1/jquery-ui.min.js'></script> 
+    <script type="text/javascript" src='/webfiles/js/ndmcutils.js'></script>
+    <script type="text/javascript" src='/webfiles/js/menu-highlight-2.0.js'></script>
+    <script type="text/javascript" src='/webfiles/js/breadcrumbs-3.0.js'></script>
+    <link rel="stylesheet" href="/webfiles/fonts/GoogleFonts.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <script type="text/javascript" src="/webfiles/js/bootstrap/5.2/bootstrap.bundle.min.js"></script>
+    <link href="/webfiles/css/bootstrap/5.2/bootstrap.min.css" rel="stylesheet" /><link href="/webfiles/css/bootstrap/5.2/themes/bootstrap-ag.css" rel="stylesheet" />
+    <link href="/styles/site.css?v=20261016114901" rel="stylesheet" />
+
+     <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                generateBreadcrumbs();
+
+            });
+
+     </script>
+
+    
+
+
+    <style type="text/css">
+        #low-prod{text-align:center;margin-top:20px;}        
+    </style>
+        <link href="/webfiles/js/bootstrap/5.2/tables/bootstrap-table-ag.css" rel="stylesheet" />
+    <script type="text/javascript" src="/webfiles/js/bootstrap/5.2/tables/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="/webfiles/js/bootstrap/5.2/tables/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/tableExport.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF/jspdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var $table = $('#data-table')
+
+            var today = new Date();
+            var year = "all"; //today.getFullYear();
+
+            getLocations();
+            setTable(year);
+
+            $('.fixed-table-body').each(function () {
+
+                $(this).attr('tabindex', '0');
+
+            });
+
+            $('#ContentPlaceHolder1_croptype').change(function () {
+            var yr = "all";//$('#datalist ul li.ui-state-hover').attr('id').replace('yr-', '');
+            setTable(yr);
+
+        });
+
+        $('#loctype').change(function () {
+
+            getLocations();
+            var yr = "all";//$('#datalist ul li.ui-state-hover').attr('id').replace('yr-', '');
+            setTable(yr);
+        });
+
+        $('#location').change(function () {
+
+            var yr = "all";//$('#datalist ul li.ui-state-hover').attr('id').replace('yr-', '');
+            setTable(yr);
+        });
+
+        function setTable(yr) {
+
+            ltype = $('#loctype').val();
+            cname = $('#ContentPlaceHolder1_croptype :selected').text();
+            sname = $('#location :selected').text().trim();
+
+            if (yr == "all") {
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'Home.aspx/ReturnCropData2020',
+                    dataType: 'json',
+                    data: { 'ctype': '"' + $('#ContentPlaceHolder1_croptype').val() + '"', 'ltype': '"' + ltype + '"', 'loc': '"' + $('#location').val() + '"' },
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (data) {
+
+                    $table.bootstrapTable('destroy')
+                    $table.bootstrapTable({ data: data.d })
+
+                },
+                error: function () {
+
+                }
+            });
+            }
+            else {
+
+            $.ajax({
+                type: 'GET',
+                url: 'Home.aspx/ReturnCropData2020',
+            dataType: 'json',
+            data: { 'ctype':'"' + $('#ContentPlaceHolder1_croptype').val() + '"','ltype':'"' + $('#loctype').val() + '"','loc':'"' + $('#location').val() + '"','yr':'"' + yr + '"'},
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (data) {
+
+                    $table.bootstrapTable('destroy')
+                    $table.bootstrapTable({ data: data.d })
+
+                },
+                error: function () {
+
+                }
+            });
+
+            }
+
+            areamod = "Acreage";
+            cname = $('#ContentPlaceHolder1_croptype :selected').text();
+
+            if (cname == 'Cattle' || cname == "Hogs" || cname == "Beef Cows" || cname == "Milk Cows" || cname == "Sheep") {
+                areamod = "Inventory";
+            }
+            else if (cname == 'Barley' || cname == 'Corn' || cname == 'Cotton' || cname == 'Peanuts' || cname == 'Rice' || cname == 'Sorghum' || cname == 'Soybeans' || cname == 'Sunflower' || cname == 'Durum Wheat' || cname == 'Spring Wheat' || cname == 'Winter Wheat' || cname == 'Sugarbeets' || cname == 'Sugarcane')
+            {
+                areamod = "Production"
+            }
+
+            if (cname == "Beef Cows") {
+                cname = "Beef Cow";
+            }
+            else if (cname == "Milk Cows") {
+                cname == "Milk Cow";
+            }
+            else if (cname == "Peanuts") {
+                cname == "Peanut";
+            }
+            else if (cname == "Sugarbeets") {
+                cname == "Sugarbeet";
+            }
+            else if (cname == "Soybeans") {
+                cname == "Soybean";
+            }
+
+            var title = 'Percent of ' + cname + ' ' + areamod + ' Affected by Drought';
+            $('#ttl').html(title);
+        }
+
+        function getLocations(){
+           
+           
+           $.ajax({
+                type: 'GET',
+               url: 'Home.aspx/ReturnLocations2020',
+                dataType: 'json',
+                data: {'ltype':'"' + $('#loctype').val() +'"','ctype':'"' + $('#ContentPlaceHolder1_croptype').val() + '"' },
+               contentType: "application/json; charset=utf-8",
+               async: false,
+               success: function (data) {
+
+
+                   $('#location').html('');
+
+                   var i = 0;
+
+                   while (i < data.d.length) {
+
+
+                       if (i == 0) {
+                           $('#location').append('<option Value="' + data.d[i].Value + '" selected="selected">' + data.d[i].Text + '</option>');
+                       }
+                       else {
+                           $('#location').append('<option Value="' + data.d[i].Value + '">' + data.d[i].Text + '</option>');
+                       }
+
+                       i++;
+                   }
+
+
+               },
+               error: function () {
+
+               }
+           });
+        }
+
+    });
+
+        function headerStyle(column) {
+            return {
+                Date: {
+                    css: { background: '#67625f', color: 'white' }
+                },
+                None: {
+                    css: { background: 'white' }
+                },
+                D0: {
+                    css: { background: '#FFFF00' }
+                },
+                D1: {
+                    css: { background: '#FCD37F' }
+                },
+                D2: {
+                    css: { background: '#FFAA00' }
+                },
+                D3: {
+                    css: { background: '#E60000', color: 'white' }
+                },
+                D4: {
+                    css: { background: '#730000', color: 'white' }
+                }
+            }[column.field]
+        }
+
+    </script>
+
+</head>
+<body>
+    <!-- GA4 Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8PZ9F8"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <form method="post" action="./Table.aspx?1" id="frm">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="hWd7gwPoXxZYjLiSAZW8ggR+b6LorUsVvnQhqzEYA5A8zZUd8XcPCYCZQTJ5Wet8LEacl554/DCXBr0PzDeKVXAQmzJ9wNinZwrGkRK1DptVaRhiomIeU/zQr2bmOUSLS5+u3omLXIo86OMck5ngP18Pz7sOlmeB4Nlxx6q6s0bTwXLOb5kOX4LM1UDgMsTfsZsfA5uNdJln+61AU7O5N4zBCwXdTXhxbm++ah0BiXzCDUwv4d3waFoNkLzfQBH3HPy9Fc3kqaaG0REasqN7x6oQ8EMY5Khz7si+3ZVwC1qbuRqUVXzX34L+0h+NSIvdwR1U5Nz1f5S3XxtuvXJUXTCrCrZAMut3u7obusI3sMNXFt+y5oBVPY3C8p8IlIK4blnsY+KL/HXpKf/+zkPn7EYYmZVUJ12dvBdAhj3b2UhmOQ/kzXyxILEsTd4/P8rTm7FCJ7kYVVHOmus9ZRT5wD56+yoTasxCe+lskT8DrevAIKEFlQa50KmgiPFamFDs3xmapLnlSoL7iw8dUqoO6fHN1KenobFODI4EDO6KqkY=" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="3537ADB3" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="bArM4YxrooSCiexdRAojDJEpoWi2Aim9kczjUN+pDKx07gXTlTsH+6GlTNLy+jiHqPGBvnoGrCuh2woy7jaT8vH8LzuCQzC/B4Wo+EsPM9q666TcfSbkTpW0WqzgvYksNnKgTG4YBZpOQUvDsXN0+e/KzHhhcQaxuB0K1/hfmocayaTiUPFLNq/SeiWBLImqastILT9iHxFY9/OJJYtprpymef2lB9/vyQPL2ZpDsdsK9VP0IXovLqyC1prYPTFUGJa8L9/AdapzPyK4yn6HiGPUdN58jObrpvFBH4sG55R71B2QJn7gQPlc0QUaI3h6LKqWJzLjleawcH8r017K/qHrLLVxgnpFdA2D4X5tJVs9FJUqaqtObFDkq17FmWNA" />
+</div>
+
+    <div id="pg-container">
+        <header class="sticky-top">
+            
+<!--<div id="message bar" class="alert-warning-bright">
+    <div class="container-xxl">
+        <div class="row py-2">
+            <div class="col-1 position-relative">
+                <i class="bi bi-exclamation-triangle-fill position-absolute top-50 start-50 translate-middle" style="font-size:2rem;" aria-hidden="true"></i>
+            </div>
+            <div class="col-11 fw-bold" style="font-size:0.875rem;">Starting June 23rd, this website will undergo maintenance that may cause temporary interruptions to data updates and site availability over the next week. We apologize for any inconvenience and appreciate your patience.</div>
+        </div>
+    </div>
+</div>-->
+            <div id="title-bar">
+                <div id="title-bar-inner" class="container-xl container-lg">
+                    
+<span id="title-txt"><a href="/Home.aspx" style="color:white!important;">U.S. Agricultural Commodities in Drought</a></span>
+
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+            <nav id="navigationbar" class="navbar navbar-expand-xl navbar-expand-lg bg-primary">
+                <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                          <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                    
+<ul id="navmenu" class="navbar-nav container-xl container-lg">
+    <li class="nav-item"><a class="nav-link" href="/Home.aspx">Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="/RowCrops.aspx">Row Crops</a></li>
+    <li class="nav-item"><a class="nav-link" href="/LiveStock.aspx">Livestock &amp; Forage</a></li>
+    <li class="nav-item"><a class="nav-link" href="/SpecialtyCrops.aspx">Specialty Crops</a></li>
+    <li class="hide-elem"><a class="nav-link" href="/Maps.aspx">Maps</a></li>
+    <li class="hide-elem"><a class="nav-link" href="/Table.aspx">Data Table</a></li>
+    <li class="hide-elem"><a class="nav-link" href="/TimeSeries.aspx">Time Series</a></li>    
+    <li class="nav-item"><a class="nav-link" href="/USDAPDFArchive.aspx">Archive</a></li>
+    <li class="nav-item"><a class="nav-link" href="/Other.aspx">Crop Progress</a></li>
+    <li class="hide-elem"><a class="nav-link" href="/404.aspx">Page Not Found</a></li>
+</ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div id="page-title-inner" class="container-xl container-lg mt-3 mb-5">
+                <nav id="breadcrumb-outer" aria-label="breadcrumb">
+                <ol id="breadcrumb-inner" class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Home.aspx">Home</a></li>
+                </ol>
+                </nav>
+                <h1>Row Crops Data Table</h1>
+            </div>
+            <div style="clear:both;"></div>
+            <div id="content">
+                
+    <div class="container-lg container-xl">
+        <div class="row">
+                        <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-dark">Ag Type:</span>
+                    <select name="ctl00$ContentPlaceHolder1$croptype" id="ContentPlaceHolder1_croptype" class="form-select" aria-label="Agriculture Type">
+	<option value="barley">Barley</option>
+	<option value="corn">Corn</option>
+	<option value="cotton">Cotton</option>
+	<option value="durum wheat">Durum Wheat</option>
+	<option value="peanuts">Peanuts</option>
+	<option value="rice">Rice</option>
+	<option value="sorghum">Sorghum</option>
+	<option value="soybeans">Soybeans</option>
+	<option value="spring wheat">Spring Wheat</option>
+	<option value="sugarbeets">Sugarbeets</option>
+	<option value="sugarcane">Sugarcane</option>
+	<option value="sunflowers">Sunflowers</option>
+	<option value="winter wheat">Winter Wheat</option>
+
+</select>
+                </div>                
+            </div>
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-dark">Location Type:</span>
+                    <select id="loctype" class="form-select" aria-label="Location Type">
+                        <option Value="1">United States</option>
+                        <option Value="2">State</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-dark">Location:</span>
+                    <select id="location" class="form-select" aria-label="Location"></select>
+                </div>                
+            </div>
+         
+        </div>
+        <div class="row mb-5">
+            <div class="col-sm-12">
+                <div id="data-table-area">
+                    <center><h2 id="ttl" class="mb-3"></h2></center>
+                    <table id="data-table" class="table table-striped" data-toggle="table" data-header-style="headerStyle" data-show-export="true" data-pagination="true" data-page-list="[10, 25, 50, All]" data-buttons-class="primary">
+                        <thead><tr><th data-field="Date">Week</th><th data-field="None">None</th><th data-field="D0"class="d0">D0-D4</th><th data-field="D1" class="d1">D1-D4</th><th data-field="D2" class="d2">D2-D4</th><th data-field="D3" class="d3">D3-D4</th><th data-field="D4">D4</th></tr></thead>
+                        <tbody id="data-table-body"></tbody>
+                    </table>
+                </div>
+                <div id="low-prod"></div>
+            </div>
+        </div>
+    </div>
+
+            </div>
+        </main>
+        <footer>
+            
+
+<div id="footer-top" style="text-align:left!important;" class="text-white">
+        <div class="container-md-max bg-dark pt-5">
+            <div class="row text-center">
+                <div class="col-12">
+                    <a href="https://www.usda.gov/" title="United States Department of Agriculture">
+                        <img src="/webfiles/logos/USDA/svg/USDA-logo-white.svg" class="footerimg USDA mx-5" alt="USDA Logo" />
+                    </a>
+
+                    <a href="https://drought.unl.edu/" title="National Drought Mitigation Center">
+                        <img src="/webfiles/logos/NDMC/svg/NDMC-logo-white.svg" class="footerimg NDMC mx-5" alt="NDMC Logo" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="container-address-max py-5 bg-dark">
+            <div class="row text-start">
+                <div class="text-center">
+                    <div class="text-start">
+                        <h2 class="h4 mb-4 fw-400">Contact Us</h2>
+                        <hr />
+                        
+    <address>
+        <p><b>National Drought Mitigation Center</b><br />
+        University of Nebraska-Lincoln</p>
+        <p><i class="bi bi-geo-alt-fill"></i> 3310 Holdrege Street<br />
+        <i class="bi bi-envelope-fill"></i> P.O. Box 830988<br />
+        Lincoln, NE 68583–0988</p>
+        <p><i class="bi bi-envelope-fill"></i> <a class="text-decoration-underline" href="tel:4024726707">(402) 472–6707</a></p>
+        <p><i class="bi bi-printer-fill"></i> (402) 472–2946</p>
+    </address>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer-bottom" class="bg-primary">
+        <span>&copy;2026 - National Drought Mitigation Center</span>
+    </div>
+
+
+        </footer>
+    </div>
+    </form>
+</body>
+</html>
