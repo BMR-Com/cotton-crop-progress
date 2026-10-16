@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-FSA Crop Acreage Data: planted, prevented and failed acres reported to FSA, released monthly Aug–Jan.
-Downloads each year's releases from the FSA reading room, keeps the cotton rows of the state-level
-summary, and writes data/fsa/fsa_cotton_state.csv (one row per release × state × crop type).
-Files already processed are listed in data/fsa/processed.txt and skipped.
+FSA Crop Acreage Data (acres reported to FSA; releases monthly from August through January).
+For every release from 2014 onward, sums the county_data sheet's cotton rows by state, cotton type
+(UPLAND / ELS) and irrigation practice: planted, failed, prevented, volunteer and not-planted acres.
+
+Output: data/fsa/fsa_cotton_state.csv
+  crop_year, release (date of the data), state, type, irr, planted, failed, prevented, volunteer, not_planted
+Each file is appended as soon as it is processed (data/fsa/processed.txt lists files already done).
 """
 import io, os, re, sys, zipfile
 import requests
@@ -14,99 +17,99 @@ ROOT = "https://www.fsa.usda.gov"
 OUT = "data/fsa"
 H = {"User-Agent": "Mozilla/5.0 (BMR-Com research)"}
 FIRST_YEAR = 2014
-MONTHS = "jan feb mar apr may jun jul aug sep oct nov dec".split()
+COLS = {"planted acres": "planted", "failed acres": "failed", "prevented acres": "prevented",
+        "volunteer acres": "volunteer", "not planted acres": "not_planted"}
 
 
-def vintage(fname, year):
-    """Release month label from the file name, e.g. 2016_fsa_acres_nov2016 -> 2016-11."""
-    f = fname.lower()
-    for i, m in enumerate(MONTHS, 1):
-        if re.search(m, f):
-            yr = year + 1 if i <= 6 else year
-            m2 = re.search(r"(20\d\d)", f[f.find(m):]) if m in f else None
-            return f"{yr if not m2 else m2.group(1)}-{i:02d}"
-    m = re.search(r"(\d{2})(\d{2})(20\d\d)", f) or re.search(r"(20\d\d)[_-]?(\d{2})(\d{2})", f)
+def read_sheet(xb, name):
+    for eng in ("calamine", None):
+        try:
+            return pd.read_excel(io.BytesIO(xb), sheet_name=name, engine=eng) if eng else pd.read_excel(io.BytesIO(xb), sheet_name=name)
+        except Exception as e:
+            err = e
+    raise err
+
+
+def release_date(xb, fname):
+    try:
+        d = pd.read_excel(io.BytesIO(xb), sheet_name=0, header=None, nrows=4, engine="calamine")
+        for v in d.values.ravel():
+            t = pd.to_datetime(v, errors="coerce")
+            if pd.notna(t) and 2000 < t.year < 2100:
+                return t.date().isoformat()
+    except Exception:
+        pass
+    m = re.search(r"(\d{2})(\d{2})(\d{2})(?!\d)", fname)          # e.g. ..._110921 -> 2021-11-09
     if m:
-        g = m.groups()
-        return f"{g[2]}-{g[0]}" if len(g[2]) == 4 else f"{g[0]}-{g[1]}"
-    return "unknown"
-
-
-def header_row(df):
-    for i in range(min(15, len(df))):
-        row = " ".join(str(x).lower() for x in df.iloc[i].tolist())
-        if "crop" in row and "state" in row:
-            return i
+        return f"20{m.group(3)}-{m.group(1)}-{m.group(2)}"
     return None
 
 
-def cotton_rows(xbytes, name):
-    out = []
+def cotton_by_state(xb):
     try:
-        sheets = pd.read_excel(io.BytesIO(xbytes), sheet_name=None, header=None)
-    except Exception as e:
-        print("   cannot read", name, e)
-        return out
-    for sh, df in sheets.items():
-        h = header_row(df)
-        if h is None:
-            continue
-        cols = [str(c).strip() for c in df.iloc[h].tolist()]
-        body = df.iloc[h + 1:].copy()
-        body.columns = cols
-        lc = {c.lower(): c for c in cols}
-        if any("county" in c for c in lc):          # keep state summaries only (county detail is huge)
-            continue
-        crop_col = next((lc[c] for c in lc if c.startswith("crop")), None)
-        if not crop_col:
-            continue
-        sel = body[body[crop_col].astype(str).str.upper().str.contains("COTTON", na=False)]
-        for _, r in sel.iterrows():
-            out.append({"sheet": sh, **{c: r[c] for c in cols if c and c != "nan"}})
-    return out
+        sheets = pd.ExcelFile(io.BytesIO(xb), engine="calamine").sheet_names
+    except Exception:
+        sheets = pd.ExcelFile(io.BytesIO(xb)).sheet_names
+    name = next((s for s in sheets if "county_data" in s.lower()), None)
+    if not name:
+        return None
+    d = read_sheet(xb, name)
+    d.columns = [str(c).strip() for c in d.columns]
+    lc = {c.lower(): c for c in d.columns}
+    crop = lc.get("crop")
+    if not crop:
+        return None
+    d = d[d[crop].astype(str).str.upper().str.contains("COTTON", na=False)].copy()
+    d["type"] = d[crop].astype(str).str.upper().str.replace(r"COTTON\s+", "", regex=True).str.strip()
+    d["irr"] = d[lc["irrigation practice"]].astype(str).str.upper().str.strip() if "irrigation practice" in lc else "ALL"
+    keep = {lc[k]: v for k, v in COLS.items() if k in lc}
+    for c in keep:
+        d[c] = pd.to_numeric(d[c], errors="coerce").fillna(0)
+    g = d.groupby([lc["state"], "type", "irr"])[list(keep)].sum().reset_index().rename(columns={lc["state"]: "state", **keep})
+    return g
 
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    done_path = f"{OUT}/processed.txt"
+    done_path, out_path = f"{OUT}/processed.txt", f"{OUT}/fsa_cotton_state.csv"
     done = set(open(done_path).read().split()) if os.path.exists(done_path) else set()
     html = requests.get(PAGE, headers=H, timeout=90).text
-    links = sorted(set(re.findall(r'href="([^"]+?\.(?:zip|xlsx))"', html)))
-    open(f"{OUT}/links.txt", "w").write("\n".join(links))
-    rows = []
-    for href in links:
+    links = re.findall(r'<a[^>]+href="([^"]+?\.(?:zip|xlsx))"[^>]*>(.*?)</a>', html, flags=re.S)
+    open(f"{OUT}/links.txt", "w").write("\n".join(f"{h}\t{re.sub('<[^>]+>', '', t).strip()}" for h, t in links))
+    for href, text in links:
         fname = href.rsplit("/", 1)[-1]
-        m = re.match(r"(20\d\d)", fname)
+        label = re.sub("<[^>]+>", "", text)
+        m = re.match(r"\s*(20\d\d)", label) or re.match(r"(20\d\d)", fname)
         if not m or int(m.group(1)) < FIRST_YEAR or fname in done:
             continue
         year = int(m.group(1))
         url = href if href.startswith("http") else ROOT + href
         try:
             b = requests.get(url, headers=H, timeout=300).content
-        except Exception as e:
-            print("skip", fname, e); continue
-        files = []
-        if fname.endswith(".zip"):
-            try:
+            files = []
+            if fname.lower().endswith(".zip"):
                 z = zipfile.ZipFile(io.BytesIO(b))
-                files = [(n, z.read(n)) for n in z.namelist() if n.lower().endswith((".xlsx", ".xls")) and "county" not in n.lower()]
-            except zipfile.BadZipFile:
-                print("bad zip", fname); continue
-        else:
-            files = [(fname, b)]
-        n0 = len(rows)
-        for n, xb in files:
-            for r in cotton_rows(xb, n):
-                rows.append({"crop_year": year, "release": vintage(fname, year), "file": fname, "member": n, **r})
-        print(f"{fname}: {len(files)} sheets-files, {len(rows) - n0} cotton rows")
-        done.add(fname)
-    if rows:
-        new = pd.DataFrame(rows)
-        p = f"{OUT}/fsa_cotton_raw.csv"
-        old = pd.read_csv(p) if os.path.exists(p) else pd.DataFrame()
-        pd.concat([old, new], ignore_index=True).to_csv(p, index=False)
-    open(done_path, "w").write("\n".join(sorted(done)))
-    print("done; total new rows", len(rows))
+                files = [(n, z.read(n)) for n in z.namelist() if n.lower().endswith((".xlsx", ".xls"))]
+            else:
+                files = [(fname, b)]
+            n_rows = 0
+            for n, xb in files:
+                g = cotton_by_state(xb)
+                if g is None or not len(g):
+                    continue
+                g.insert(0, "release", release_date(xb, n) or release_date(xb, fname))
+                g.insert(0, "crop_year", year)
+                g["file"] = fname
+                g.to_csv(out_path, mode="a", header=not os.path.exists(out_path), index=False)
+                n_rows += len(g)
+            print(f"{label.strip()[:60]} ({fname}): {n_rows} rows", flush=True)
+            done.add(fname)
+            open(done_path, "w").write("\n".join(sorted(done)))
+        except Exception as e:
+            print("skip", fname, e, flush=True)
+    if os.path.exists(out_path):
+        d = pd.read_csv(out_path).drop_duplicates(["crop_year", "release", "state", "type", "irr"], keep="last")
+        d.sort_values(["crop_year", "release", "state", "type", "irr"]).to_csv(out_path, index=False)
 
 
 if __name__ == "__main__":
