@@ -106,7 +106,7 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
   <div class="grid3">
     <div><p class="ct">Good / excellent, %</p><div class="chart sm"><canvas id="c-ge"></canvas></div></div>
     <div><p class="ct">Poor / very poor, %</p><div class="chart sm"><canvas id="c-pvp"></canvas></div></div>
-    <div><p class="ct">D2–D4 drought, % of state area</p><div class="chart sm"><canvas id="c-dr"></canvas></div></div>
+    <div><p class="ct" id="dr-title">D2–D4 drought, % of state area</p><div class="chart sm"><canvas id="c-dr"></canvas></div></div>
   </div>
   <p class="ct" style="margin-top:16px">Crop progress, % of acres</p>
   <div class="grid3" id="prog"></div>
@@ -202,13 +202,14 @@ function renderEstimate(){
       tooltip:{backgroundColor:css('--surface'),titleColor:css('--text'),bodyColor:css('--text-2'),borderColor:grid,borderWidth:1,callbacks:{label:c=>`${c.dataset.label}: ${c.raw==null?'–':c.raw.toFixed(2)+'m bales'}`}}},
       scales:{x:{grid:{color:grid},border:{display:false},ticks:{color:tick,callback:v=>v+'m'}},y:{grid:{display:false},ticks:{color:css('--text-2')}}}}});
   const mx=Math.max(...rows.map(r=>r.prod||0));
-  let h=`<thead><tr><th>State</th><th>Planted (FSA adj.)</th><th>NASS planted</th><th>FSA failed</th><th>Harvest share</th><th>Harvested</th><th>Yield lb/ac</th><th>USDA yield</th><th>Conditions model</th><th>Classing pace</th><th>Classing weight</th><th>Estimate</th><th>USDA</th><th>Diff</th></tr></thead><tbody>`;
+  let h=`<thead><tr><th>State</th><th>Estimate</th><th>USDA</th><th>Diff</th><th>Yield lb/ac</th><th>USDA yield</th><th>Harvested</th><th>Harvest share</th><th>Planted (FSA adj.)</th><th>NASS planted</th><th>FSA failed</th><th>Conditions model</th><th>Classing pace</th><th>Classing weight</th></tr></thead><tbody>`;
   rows.forEach(r=>{const d=pct(r.prod,r.usda_prod);
-    h+=`<tr><td>${r.name}</td><td>${fmt(r.planted/1e3)}k</td><td>${r.planted_nass?fmt(r.planted_nass/1e3)+'k':'–'}</td><td>${r.fail_share!=null?fmt(r.fail_share*100,1)+'%':'–'}</td><td>${r.harv_ratio!=null?fmt(r.harv_ratio*100,0)+'%':'–'}</td><td>${r.harv?fmt(r.harv/1e3)+'k':'–'}</td>
-    <td>${fmt(r.yield_implied||r.yield_cond)}</td><td>${fmt(r.usda_yield)}</td><td>${mb(r.prod_cond)}</td><td>${mb(r.prod_gin)}</td><td>${r.w_gin!=null?fmt(r.w_gin*100)+'%':'–'}</td>
-    <td><b>${mb(r.prod)}</b><span class="bar" style="width:${Math.round(60*(r.prod||0)/mx)}px"></span></td><td>${mb(r.usda_prod)}</td><td class="${d>0?'up':d<0?'down':''}">${d==null?'–':sg(d)+'%'}</td></tr>`;});
+    h+=`<tr><td>${r.name}</td><td><b>${mb(r.prod)}</b><span class="bar" style="width:${Math.round(60*(r.prod||0)/mx)}px"></span></td><td>${mb(r.usda_prod)}</td><td class="${d>0?'up':d<0?'down':''}">${d==null?'–':sg(d)+'%'}</td>
+    <td>${fmt(r.yield_implied||r.yield_cond)}</td><td>${fmt(r.usda_yield)}</td><td>${r.harv?fmt(r.harv/1e3)+'k':'–'}</td><td>${r.harv_ratio!=null?fmt(r.harv_ratio*100,0)+'%':'–'}</td>
+    <td>${fmt(r.planted/1e3)}k</td><td>${r.planted_nass?fmt(r.planted_nass/1e3)+'k':'–'}</td><td>${r.fail_share!=null?fmt(r.fail_share*100,1)+'%':'–'}</td><td>${mb(r.prod_cond)}</td><td>${mb(r.prod_gin)}</td><td>${r.w_gin!=null?fmt(r.w_gin*100)+'%':'–'}</td></tr>`;});
   const u=E.us; const du=pct(u.prod,u.usda_prod);
-  h+=`<tr class="tot"><td>United States</td><td>${fmt(u.planted/1e3)}k</td><td>${u.usda_planted?fmt(u.usda_planted/1e3)+'k':'–'}</td><td>${u.fsa_total?fmt(u.fsa_failed/u.fsa_total*100,1)+'%':'–'}</td><td>${u.harv&&u.planted?fmt(u.harv/u.planted*100)+'%':'–'}</td><td>${fmt(u.harv/1e3)}k</td><td>${fmt(u.yield)}</td><td>${fmt(u.usda_yield)}</td><td>${mb(u.prod_cond)}</td><td></td><td></td><td><b>${mb(u.prod)}</b></td><td>${mb(u.usda_prod)}</td><td class="${du>0?'up':du<0?'down':''}">${du==null?'–':sg(du)+'%'}</td></tr></tbody>`;
+  h+=`<tr class="tot"><td>United States</td><td><b>${mb(u.prod)}</b></td><td>${mb(u.usda_prod)}</td><td class="${du>0?'up':du<0?'down':''}">${du==null?'–':sg(du)+'%'}</td><td>${fmt(u.yield)}</td><td>${fmt(u.usda_yield)}</td><td>${fmt(u.harv/1e3)}k</td><td>${u.harv&&u.planted?fmt(u.harv/u.planted*100)+'%':'–'}</td>
+    <td>${fmt(u.planted/1e3)}k</td><td>${u.usda_planted?fmt(u.usda_planted/1e3)+'k':'–'}</td><td>${u.fsa_total?fmt(u.fsa_failed/u.fsa_total*100,1)+'%':'–'}</td><td>${mb(u.prod_cond)}</td><td></td><td></td></tr></tbody>`;
   $('#t-est').innerHTML=h;
   $('#est-note').textContent='Million 480-lb bales unless noted. Diff = our estimate vs USDA latest state forecast. Classing weight = share of the estimate taken from the classing pace (rises as more of the crop is classed).';
 }
@@ -220,8 +221,8 @@ function renderCond(){
   const C=D.conditions, s=stCond, ser=(o)=>o?[{label:String(y),data:o.cur,color:css('--cur'),w:2.5},{label:String(y-1),data:o.ly,color:css('--ly')},{label:'5-yr avg',data:o.avg5,color:css('--avg'),dash:[4,4]}]:[];
   const o={xfmt:v=>wkLabel(v),cb:{title:i=>wkLabel(i[0].parsed.x),label:c=>`${c.dataset.label}: ${c.parsed.y.toFixed(0)}%`}};
   line('c-ge',ser(C.ge[s]),{...o,ymin:0});line('c-pvp',ser(C.pvp[s]),{...o,ymin:0});
-  const ds=s==='US'?'TX':s; line('c-dr',ser(D.drought[ds]),{...o,ymin:0,ymax:100});
-  document.querySelectorAll('#c-dr').forEach(()=>{});
+  const ds=s==='US'?'TX':s; const cut=a=>a?a.filter(p=>p[0]>=18&&p[0]<=48):a; const dser=ser(D.drought[ds]).map(x=>({...x,data:cut(x.data)}));
+  line('c-dr',dser,{...o,ymin:0,ymax:100}); $('#dr-title').textContent=`D2–D4 drought, % of ${ds==='TX'&&s==='US'?'Texas':D.states.find(x=>x.st===ds).name} area`;
   const P=D.progress, wrap=$('#prog'); wrap.innerHTML='';
   Object.keys(P).forEach((st,i)=>{const id='c-prog-'+i;const d=document.createElement('div');d.innerHTML=`<p class="ct">${st.charAt(0)+st.slice(1).toLowerCase()}</p><div class="chart sm"><canvas id="${id}"></canvas></div>`;wrap.appendChild(d);
     line(id,ser(P[st][s]),{...o,ymin:0,ymax:100});});
