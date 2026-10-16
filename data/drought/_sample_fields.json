@@ -1,0 +1,32 @@
+[
+ {
+  "__type": "AgInDroughtSite.code.AffectedCropData2020",
+  "Date": "2000-01-18",
+  "None": 0,
+  "D0": 100,
+  "D1": 48,
+  "D2": 19,
+  "D3": 0,
+  "D4": 0
+ },
+ {
+  "__type": "AgInDroughtSite.code.AffectedCropData2020",
+  "Date": "2000-01-11",
+  "None": 0,
+  "D0": 100,
+  "D1": 48,
+  "D2": 19,
+  "D3": 0,
+  "D4": 0
+ },
+ {
+  "__type": "AgInDroughtSite.code.AffectedCropData2020",
+  "Date": "2000-01-04",
+  "None": 0,
+  "D0": 99,
+  "D1": 48,
+  "D2": 19,
+  "D3": 0,
+  "D4": 0
+ }
+]
