@@ -90,6 +90,10 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
 <div class="kpis" id="kpis"></div>
 
 <section class="card">
+  <h2>Brazil — cotton-area weather, El Niño and USDA reports</h2>
+  <div id="brwx" data-crop="cotton"></div>
+</section>
+<section class="card">
   <h2>Crop-progress cross-check by state (upland)</h2>
   <p class="lead" id="est-lead"></p>
   <div class="legend"><span><i style="background:var(--cur)"></i>Our estimate</span><span><i style="background:var(--ly)"></i>USDA latest</span></div>
@@ -321,5 +325,6 @@ fetch('data/crop.json?'+Date.now()).then(r=>r.json()).then(j=>{D=j;
   render();}).catch(e=>{$('#asof').textContent='Could not load data: '+e;});
 })();
 </script>
+<script src="https://bmr-com.github.io/Brazil--trade/shared/brwx.js"></script>
 </body>
 </html>
