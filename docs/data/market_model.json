@@ -1,13 +1,13 @@
 {
- "generated": "2026-10-19 23:55 UTC",
- "price_date": "2026-10-16",
+ "generated": "2026-10-20 01:06 UTC",
+ "price_date": "2026-10-19",
  "wasde": {
   "my": "2026/27",
   "end_stocks": 3.8,
   "updated": "2026-10-16"
  },
  "rate": {
-  "now": 4.07,
+  "now": 4.09,
   "source": "FRED DTB3"
  },
  "floors": {
@@ -375,10 +375,10 @@
      "yr": 2026,
      "my": "2026/27",
      "x": 3.8,
-     "y": -3.085,
+     "y": -3.101,
      "rate": 4.06,
      "fin": -0.844,
-     "n": 12,
+     "n": 13,
      "complete": false,
      "contracts": "Dec26/Mar27"
     }
@@ -387,10 +387,10 @@
     "yr": 2026,
     "my": "2026/27",
     "x": 3.8,
-    "y": -3.085,
+    "y": -3.101,
     "rate": 4.06,
     "fin": -0.844,
-    "n": 12,
+    "n": 13,
     "complete": false,
     "contracts": "Dec26/Mar27"
    },
@@ -400,14 +400,14 @@
    ],
    "median": -0.393,
    "share_carry": 0.5625,
-   "market": -3.24,
+   "market": -3.29,
    "market_contracts": "Dec26/Mar27",
-   "full_carry": -2.72,
-   "back_price": 83.24,
-   "fin_now": -0.847,
+   "full_carry": -2.73,
+   "back_price": 83.43,
+   "fin_now": -0.852,
    "fv_wasde_stocks_only": 0.1,
-   "fv_wasde_raw": -1.69,
-   "fv_wasde": -1.69
+   "fv_wasde_raw": -1.71,
+   "fv_wasde": -1.71
   },
   "marmay": {
    "label": "Mar \u2212 May",
@@ -646,14 +646,14 @@
    ],
    "median": -0.6615,
    "share_carry": 0.875,
-   "market": -1.69,
+   "market": -1.66,
    "market_contracts": "Mar27/May27",
    "full_carry": -1.83,
-   "back_price": 84.93,
-   "fin_now": -0.576,
+   "back_price": 85.09,
+   "fin_now": -0.579,
    "fv_wasde_stocks_only": -0.24,
-   "fv_wasde_raw": -0.9,
-   "fv_wasde": -0.9
+   "fv_wasde_raw": -0.91,
+   "fv_wasde": -0.91
   },
   "mayjul": {
    "label": "May \u2212 Jul",
@@ -905,11 +905,11 @@
    ],
    "median": -0.349,
    "share_carry": 0.7647058823529411,
-   "market": -0.48,
+   "market": -0.47,
    "market_contracts": "May27/Jul27",
    "full_carry": -1.83,
-   "back_price": 85.41,
-   "fin_now": -0.58,
+   "back_price": 85.56,
+   "fin_now": -0.583,
    "fv_wasde_stocks_only": -0.11,
    "fv_wasde_raw": -0.85,
    "fv_wasde": -0.85
@@ -1164,14 +1164,14 @@
    ],
    "median": 1.334,
    "share_carry": 0.29411764705882354,
-   "market": 6.41,
+   "market": 6.47,
    "market_contracts": "Jul27/Dec27",
    "full_carry": -4.47,
-   "back_price": 79.0,
-   "fin_now": -1.34,
+   "back_price": 79.09,
+   "fin_now": -1.347,
    "fv_wasde_stocks_only": 2.47,
-   "fv_wasde_raw": -0.01,
-   "fv_wasde": -0.01
+   "fv_wasde_raw": -0.03,
+   "fv_wasde": -0.03
   }
  }
 }
