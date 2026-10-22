@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-22 18:34 UTC",
+ "generated": "2026-10-22 20:41 UTC",
  "price_date": "2026-10-21",
  "wasde": {
   "my": "2026/27",
@@ -409,7 +409,7 @@
    "market_contracts": "Dec26/Mar27",
    "full_carry": -2.75,
    "back_price": 85.2,
-   "fin_now": -0.872,
+   "fin_now": -0.871,
    "fv_wasde_stocks_only": 0.1,
    "fv_wasde_raw": -1.78,
    "fv_wasde": -1.78
@@ -912,7 +912,7 @@
    "share_carry": 0.7647058823529411,
    "market": -0.42,
    "market_contracts": "May27/Jul27",
-   "full_carry": -1.85,
+   "full_carry": -1.84,
    "back_price": 87.26,
    "fin_now": -0.595,
    "fv_wasde_stocks_only": -0.11,
@@ -1173,7 +1173,7 @@
    "market_contracts": "Jul27/Dec27",
    "full_carry": -4.48,
    "back_price": 79.5,
-   "fin_now": -1.355,
+   "fin_now": -1.354,
    "fv_wasde_stocks_only": 2.47,
    "fv_wasde_raw": -0.04,
    "fv_wasde": -0.04
