@@ -2,7 +2,7 @@ name: Backfill (parallel, manual)
 on:
   workflow_dispatch:
     inputs:
-      what: {description: 'nass, fsa, classing, office, ginesmis or both', default: 'both'}
+      what: {description: 'nass, fsa, classing, office, ginesmis, rma or both', default: 'both'}
       gin_first_year: {description: 'first crop year for NASS ginnings', default: '2014'}
 permissions:
   contents: write
@@ -85,4 +85,19 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/ginning/ginnings_esmis.csv data/ginning/esmis_processed.txt; git commit -m "Backfill NASS ginnings from ESMIS reports" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
+  rma:
+    if: inputs.what == 'rma'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests pandas
+      - run: timeout 85m python scripts/fetch_rma_col.py || echo "partial"
+      - if: always()
+        run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/rma; git commit -m "Backfill RMA cotton cause of loss" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done

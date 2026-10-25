@@ -20,6 +20,8 @@ jobs:
         run: timeout 75m python scripts/fetch_classing.py || echo "classing incomplete"
       - name: AMS classing by classing office (latest weekly report)
         run: pip install -q pdfplumber && (timeout 10m python scripts/fetch_classing_office.py || echo "office classing incomplete")
+      - name: RMA cotton cause of loss (current and prior crop year)
+        run: timeout 15m python scripts/fetch_rma_col.py || echo "RMA incomplete"
       - name: FSA crop acreage
         run: timeout 25m python scripts/fetch_fsa.py || echo "FSA incomplete"
       - name: NASS ginnings + annual acreage (batched under the 50k limit, saved year by year)
@@ -29,6 +31,6 @@ jobs:
         if: always()
         run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ginning data/fsa data/classing 2>/dev/null || true
+          git add data/ginning data/fsa data/classing data/rma 2>/dev/null || true
           git commit -m "Update ginnings / classing / FSA acreage $(date -u +%Y-%m-%d)" || exit 0
           for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done
