@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       what: {description: 'nass, fsa, classing or both', default: 'both'}
+      gin_first_year: {description: 'first crop year for NASS ginnings', default: '2014'}
 permissions:
   contents: write
 jobs:
@@ -15,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: pip install requests pandas
-      - env: {USDA_API_KEY: "${{ secrets.USDA_API_KEY }}"}
+      - env: {USDA_API_KEY: "${{ secrets.USDA_API_KEY }}", GIN_FIRST_YEAR: "${{ inputs.gin_first_year }}"}
         run: timeout 105m python scripts/fetch_ginning.py || echo "partial"
       - if: always()
         run: |
