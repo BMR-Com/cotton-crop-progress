@@ -4,43 +4,248 @@
   "ginnings": "2026-10-15",
   "crop_progress": "2026-10-18",
   "drought": "2026-10-20",
-  "classing_by_office": "2026-10-22",
-  "fsa": "2026-10 release"
+  "classing_by_office": "2026-10-23"
  },
  "unit": "million 480-lb bales",
  "us_upland": {
-  "central": 11.25,
-  "lo68": 10.15,
-  "hi68": 12.47,
-  "lo95": 9.1,
-  "hi95": 13.91,
-  "lo99": 8.41,
-  "hi99": 15.05
+  "central": 11.245,
+  "lo68": 10.145,
+  "hi68": 12.464,
+  "lo95": 9.097,
+  "hi95": 13.9,
+  "lo99": 8.404,
+  "hi99": 15.046
  },
  "us_all": {
-  "central": 11.63,
-  "lo68": 10.53,
-  "hi68": 12.85,
+  "central": 11.628,
+  "lo68": 10.528,
+  "hi68": 12.847,
   "lo95": 9.48,
-  "hi95": 14.29,
-  "lo99": 8.79,
-  "hi99": 15.43
+  "hi95": 14.283,
+  "lo99": 8.787,
+  "hi99": 15.429
  },
  "pima_usda": 0.383,
  "texas": {
-  "central": 2.99,
-  "lo68": 2.54,
-  "hi68": 3.52,
-  "lo95": 2.11,
-  "hi95": 4.23,
-  "lo99": 1.84,
-  "hi99": 4.85,
+  "central": 2.991,
+  "lo68": 2.586,
+  "hi68": 3.46,
+  "lo95": 2.204,
+  "hi95": 4.061,
+  "lo99": 1.949,
+  "hi99": 4.591,
   "abandonment": {
-   "central": 0.52,
-   "lo95": 0.34,
-   "hi95": 0.7
+   "central": 0.522,
+   "lo95": 0.341,
+   "hi95": 0.703
   }
  },
+ "states": [
+  {
+   "st": "TX",
+   "name": "Texas",
+   "central": 2.991,
+   "lo68": 2.586,
+   "hi68": 3.46,
+   "lo95": 2.204,
+   "hi95": 4.061,
+   "lo99": 1.949,
+   "hi99": 4.591,
+   "usda": 4.35
+  },
+  {
+   "st": "GA",
+   "name": "Georgia",
+   "central": 1.874,
+   "lo68": 1.676,
+   "hi68": 2.096,
+   "lo95": 1.489,
+   "hi95": 2.359,
+   "lo99": 1.366,
+   "hi99": 2.571,
+   "usda": 2.0
+  },
+  {
+   "st": "AR",
+   "name": "Arkansas",
+   "central": 1.375,
+   "lo68": 1.031,
+   "hi68": 1.834,
+   "lo95": 0.759,
+   "hi95": 2.49,
+   "lo99": 0.608,
+   "hi99": 3.108,
+   "usda": 1.6
+  },
+  {
+   "st": "MO",
+   "name": "Missouri",
+   "central": 0.883,
+   "lo68": 0.723,
+   "hi68": 1.078,
+   "lo95": 0.586,
+   "hi95": 1.332,
+   "lo99": 0.502,
+   "hi99": 1.553,
+   "usda": 0.88
+  },
+  {
+   "st": "MS",
+   "name": "Mississippi",
+   "central": 0.864,
+   "lo68": 0.736,
+   "hi68": 1.015,
+   "lo95": 0.62,
+   "hi95": 1.204,
+   "lo99": 0.548,
+   "hi99": 1.362,
+   "usda": 0.85
+  },
+  {
+   "st": "AL",
+   "name": "Alabama",
+   "central": 0.698,
+   "lo68": 0.597,
+   "hi68": 0.816,
+   "lo95": 0.506,
+   "hi95": 0.963,
+   "lo99": 0.448,
+   "hi99": 1.086,
+   "usda": 0.71
+  },
+  {
+   "st": "NC",
+   "name": "North Carolina",
+   "central": 0.601,
+   "lo68": 0.511,
+   "hi68": 0.706,
+   "lo95": 0.431,
+   "hi95": 0.838,
+   "lo99": 0.381,
+   "hi99": 0.949,
+   "usda": 0.75
+  },
+  {
+   "st": "TN",
+   "name": "Tennessee",
+   "central": 0.437,
+   "lo68": 0.321,
+   "hi68": 0.595,
+   "lo95": 0.231,
+   "hi95": 0.826,
+   "lo99": 0.182,
+   "hi99": 1.048,
+   "usda": 0.42
+  },
+  {
+   "st": "SC",
+   "name": "South Carolina",
+   "central": 0.376,
+   "lo68": 0.278,
+   "hi68": 0.507,
+   "lo95": 0.202,
+   "hi95": 0.697,
+   "lo99": 0.16,
+   "hi99": 0.879,
+   "usda": 0.33
+  },
+  {
+   "st": "LA",
+   "name": "Louisiana",
+   "central": 0.308,
+   "lo68": 0.243,
+   "hi68": 0.39,
+   "lo95": 0.189,
+   "hi95": 0.501,
+   "lo99": 0.158,
+   "hi99": 0.6,
+   "usda": 0.25
+  },
+  {
+   "st": "AZ",
+   "name": "Arizona",
+   "central": 0.213,
+   "lo68": 0.187,
+   "hi68": 0.243,
+   "lo95": 0.163,
+   "hi95": 0.279,
+   "lo99": 0.147,
+   "hi99": 0.309,
+   "usda": 0.25
+  },
+  {
+   "st": "OK",
+   "name": "Oklahoma",
+   "central": 0.168,
+   "lo68": 0.105,
+   "hi68": 0.267,
+   "lo95": 0.064,
+   "hi95": 0.438,
+   "lo99": 0.045,
+   "hi99": 0.627,
+   "usda": 0.19
+  },
+  {
+   "st": "VA",
+   "name": "Virginia",
+   "central": 0.127,
+   "lo68": 0.098,
+   "hi68": 0.165,
+   "lo95": 0.074,
+   "hi95": 0.218,
+   "lo99": 0.06,
+   "hi99": 0.267,
+   "usda": 0.16
+  },
+  {
+   "st": "FL",
+   "name": "Florida",
+   "central": 0.11,
+   "lo68": 0.076,
+   "hi68": 0.157,
+   "lo95": 0.052,
+   "hi95": 0.231,
+   "lo99": 0.039,
+   "hi99": 0.305,
+   "usda": 0.12
+  },
+  {
+   "st": "KS",
+   "name": "Kansas",
+   "central": 0.085,
+   "lo68": 0.065,
+   "hi68": 0.111,
+   "lo95": 0.049,
+   "hi95": 0.147,
+   "lo99": 0.04,
+   "hi99": 0.181,
+   "usda": 0.09
+  },
+  {
+   "st": "CA",
+   "name": "California",
+   "central": 0.077,
+   "lo68": 0.067,
+   "hi68": 0.089,
+   "lo95": 0.058,
+   "hi95": 0.103,
+   "lo99": 0.052,
+   "hi99": 0.115,
+   "usda": 0.07
+  },
+  {
+   "st": "NM",
+   "name": "New Mexico",
+   "central": 0.058,
+   "lo68": 0.046,
+   "hi68": 0.074,
+   "lo95": 0.035,
+   "hi95": 0.095,
+   "lo99": 0.03,
+   "hi99": 0.114,
+   "usda": 0.039
+  }
+ ],
  "usda": {
   "report": "October 2026",
   "us_upland": 13.059,
@@ -48,9 +253,9 @@
   "tx": 4.35,
   "tx_abandonment": 0.339
  },
- "texas_regions": "Classing by office to Oct 22: South Texas (Corpus Christi) 951k bales classed, West Texas (Lubbock 42k, Lamesa 19k, Abilene 22k) 83k. South Texas is well advanced; West Texas, where abandonment decides the crop, has barely started and is projected from drought and ratings until its classing builds in November.",
+ "texas_regions": "Classing by office to Oct 23: South Texas (Corpus Christi) 951k bales classed; West Texas (Lubbock 42k, Lamesa 19k, Abilene 22k) 83k. West Texas, where abandonment decides the crop, has barely started; it is projected from drought and ratings until its classing builds.",
  "notes": [
-  "Texas October FSA failed acres (9.8% of planted) are not final: failed acres are reported to FSA with a lag, and the December\u2013January releases settle it. The abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons."
+  "Texas FSA failed acres (October release) are 9.8% of planted. Failed acres are reported to FSA with a lag and the December\u2013January releases settle them, so the abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons."
  ],
  "variables": [
   "NASS crop progress by state: squaring, setting bolls, bolls opening, harvested",
