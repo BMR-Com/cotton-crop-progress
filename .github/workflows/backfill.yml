@@ -2,7 +2,7 @@ name: Backfill (parallel, manual)
 on:
   workflow_dispatch:
     inputs:
-      what: {description: 'nass, fsa, classing or both', default: 'both'}
+      what: {description: 'nass, fsa, classing, office or both', default: 'both'}
       gin_first_year: {description: 'first crop year for NASS ginnings', default: '2014'}
 permissions:
   contents: write
@@ -53,4 +53,20 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/classing; git commit -m "Backfill AMS classing" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
+  office:
+    if: inputs.what == 'office'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: sudo apt-get install -y -q poppler-utils && pip install requests pandas
+      - env: {OFFICE_MODE: backfill, OFFICE_FIRST_YEAR: "${{ inputs.gin_first_year }}"}
+        run: timeout 110m python scripts/fetch_classing_office.py || echo "partial"
+      - if: always()
+        run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/classing/office.csv data/classing/office_processed.txt; git commit -m "Backfill classing by office" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
