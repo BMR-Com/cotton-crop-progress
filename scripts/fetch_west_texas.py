@@ -130,7 +130,12 @@ def climdiv():
                     continue
                 rows.append({"year": yr, "month": m, "div": div, "element": el, "value": f})
     if rows:
-        pd.DataFrame(rows).to_csv(os.path.join(OUT, "climdiv.csv"), index=False)
+        path = os.path.join(OUT, "climdiv.csv")
+        new = pd.DataFrame(rows)
+        if os.path.exists(path):                      # keep earlier years when refreshing only the latest
+            old = pd.read_csv(path)
+            new = pd.concat([old[old.year < FIRST], new], ignore_index=True)
+        new.sort_values(["element", "div", "year", "month"]).to_csv(path, index=False)
         note(f"climdiv: {len(rows)} values, elements {sorted(set(x['element'] for x in rows))}")
 
 
