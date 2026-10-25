@@ -2,7 +2,7 @@ name: Backfill (parallel, manual)
 on:
   workflow_dispatch:
     inputs:
-      what: {description: 'nass, fsa, classing, office, ginesmis, rma or both', default: 'both'}
+      what: {description: 'nass, fsa, classing, office, ginesmis, rma, westtx or both', default: 'both'}
       gin_first_year: {description: 'first crop year for NASS ginnings', default: '2014'}
 permissions:
   contents: write
@@ -100,4 +100,20 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/rma; git commit -m "Backfill RMA cotton cause of loss" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
+  westtx:
+    if: inputs.what == 'westtx'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests pandas numpy
+      - env: {USDA_API_KEY: "${{ secrets.USDA_API_KEY }}"}
+        run: timeout 140m python scripts/fetch_west_texas.py || echo "partial"
+      - if: always()
+        run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/westtx; git commit -m "Backfill West Texas inputs (NASS districts, climate divisions, drought, NDVI)" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
