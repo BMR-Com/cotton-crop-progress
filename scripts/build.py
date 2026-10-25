@@ -205,6 +205,30 @@ def brief(res):
         pts.append(f"Quality so far: tenderable {d('Tenderable, %')}; color 31 & better {d('Color 31 & better, %')}; "
                    f"staple {d('Average staple (32nds)', 2, '')}; mike 5.0+ discount {d('Mike 5.0 & above (discount), %')}; "
                    f"strength {d('Average strength (g/tex)', 1, ' g/tex')}.")
+    # BMR-Com crop projection (stage-adjusted ginnings + ratings + drought, Texas abandonment, classing by office);
+    # produced separately and published here as output only
+    pp = os.path.join(os.path.dirname(OUT), "crop_projection.json")
+    if os.path.exists(pp):
+        try:
+            P = json.load(open(pp))
+            u, t, us = P["us_upland"], P["texas"], P.get("usda", {})
+            rng = lambda x, a, b: f"{x[a]:.1f}–{x[b]:.1f}m"
+            pts.insert(0, f"BMR-Com crop projection ({P['asof']}): US upland {u['central']:.2f}m bales "
+                          f"(95% {rng(u, 'lo95', 'hi95')}; 99% {rng(u, 'lo99', 'hi99')}) vs USDA {us.get('us_upland', float('nan')):.2f}m; "
+                          f"all cotton {P['us_all']['central']:.2f}m vs WASDE {us.get('us_all', float('nan')):.2f}m. "
+                          f"Texas {t['central']:.2f}m (95% {rng(t, 'lo95', 'hi95')}) vs USDA {us.get('tx', float('nan')):.2f}m, "
+                          f"with final Texas abandonment projected at {t['abandonment']['central'] * 100:.0f}% "
+                          f"(95% {t['abandonment']['lo95'] * 100:.0f}–{t['abandonment']['hi95'] * 100:.0f}%) against {us.get('tx_abandonment', 0) * 100:.0f}% in USDA's numbers.")
+            if P.get("texas_regions"):
+                pts.insert(1, P["texas_regions"])
+            for line in P.get("notes", []):
+                pts.insert(2, line)
+            kpis.insert(0, {"label": "BMR-Com US upland projection", "value": f"{u['central']:.2f}m",
+                            "delta": f"{(u['central'] / us['us_upland'] - 1) * 100:+.1f}% vs USDA" if us.get("us_upland") else None,
+                            "good": u["central"] >= us.get("us_upland", 0), "sub": f"95% {rng(u, 'lo95', 'hi95')}"})
+            res["projection"] = P
+        except Exception as e:
+            print("crop projection skipped:", e)
     for extra in res.get("brief_extra", []):
         pts.append(extra)
     for k in res.get("kpis_extra", []):

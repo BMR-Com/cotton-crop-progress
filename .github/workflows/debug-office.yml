@@ -1,5 +1,5 @@
 name: Debug office PDF text (temporary)
-on: {workflow_dispatch: {}}
+on: {push: {branches: [debug-office]}}
 permissions: {contents: write}
 jobs:
   dump:
