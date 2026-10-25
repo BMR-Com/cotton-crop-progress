@@ -27,6 +27,7 @@ CSV = f"{OUT}/office.csv"
 DONE = f"{OUT}/office_processed.txt"
 FIRST = int(os.environ.get("OFFICE_FIRST_YEAR", "2000"))
 MODE = os.environ.get("OFFICE_MODE", "latest")
+REPARSE = os.environ.get("OFFICE_REPARSE", "0") == "1"
 ARCH = "https://apps.ams.usda.gov/Cotton/Historical%20Weekly%20Reports/"
 FOLDERS = ["mp_cn810_WQO", "mp_cn810 CO Quality - Weekly", "mp_cn810", "mp_cn810 WQO", "mp_cn810_CO Quality - Weekly"]
 LATEST = ["https://www.ams.usda.gov/mnreports/cnwwqo.pdf"]
@@ -81,27 +82,37 @@ def pdf_text(content):
             return ""
 
 
-NUM = r"(Withheld|withheld|-+|\*+|[\d,]+)"
-ROW = re.compile(r"^\s*(" + "|".join(OFFICES) + r")\b[\s.:]*" + NUM + r"\s+" + NUM, re.M)
+TOK = re.compile(r"Withheld|withheld|\(D\)|-{1,}|\*{1,}|\d[\d,]*(?:\.\d+)?")
+ROWSTART = re.compile(r"^\s*(" + "|".join(OFFICES) + r")\b\s*\*?\s*(.*)$")
 
 
 def to_num(x):
     x = x.replace(",", "")
-    return float(x) if x.isdigit() else None
+    return float(x) if re.fullmatch(r"\d+", x) else None
 
 
 def parse(text):
-    """First table in the report = upland samples classed by office (week, season)."""
+    """Upland bales classed by office (week, season) from the first table.
+
+    Layouts: 'Office Week Season' (to 2013); 'Office GinsW BalesW GinsS BalesS' (2014-);
+    'Office Gins Tend% Elig% Bales | Gins Tend% Elig% Bales' (current). Bales are always the last
+    number of each half of the row."""
     out, seen = [], set()
-    # stop before the American Pima block so Visalia Pima doesn't overwrite Visalia upland
-    cut = re.search(r"American\s+Pima", text)
+    cut = re.search(r"AMERICAN\s+PIMA|American\s+Pima", text)
     body = text[: cut.start()] if cut and cut.start() > 200 else text
-    for m in ROW.finditer(body):
-        off = m.group(1)
-        if off in seen:
+    for ln in body.splitlines():
+        m = ROWSTART.match(ln)
+        if not m or m.group(1) in seen:
             continue
-        seen.add(off)
-        out.append({"office": off, "week": to_num(m.group(2)), "season": to_num(m.group(3))})
+        toks = TOK.findall(m.group(2))
+        if len(toks) < 2 or len(toks) % 2:
+            continue
+        h = len(toks) // 2
+        week, season = to_num(toks[h - 1]), to_num(toks[-1])
+        if season is None:
+            continue
+        seen.add(m.group(1))
+        out.append({"office": m.group(1), "week": week, "season": season})
     return out
 
 
@@ -173,7 +184,7 @@ def esmis_files(max_pages=60):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    old = pd.read_csv(CSV) if os.path.exists(CSV) else pd.DataFrame()
+    old = pd.read_csv(CSV) if os.path.exists(CSV) and not REPARSE else pd.DataFrame()
     done = set(open(DONE).read().split()) if os.path.exists(DONE) else set()
     urls = []
     if MODE == "backfill":
@@ -183,7 +194,7 @@ def main():
     urls += LATEST
     rows, n_new = [], 0
     for u in urls:
-        if u in done and u not in LATEST:
+        if u in done and u not in LATEST and not REPARSE:
             continue
         r = get(u)
         if r is None or r.status_code != 200 or not r.content[:4] == b"%PDF":
