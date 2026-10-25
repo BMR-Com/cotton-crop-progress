@@ -229,6 +229,8 @@ def brief(res):
             if P.get("texas_regions"):
                 pts.insert(2 if C else 1, P["texas_regions"])
             for line in P.get("notes", []):
+                if C and line.startswith("Seasons with Texas poor"):      # already in the conditional line
+                    continue
                 pts.insert(2, line)
             kpis.insert(0, {"label": "BMR-Com US upland projection", "value": f"{u['central']:.2f}m",
                             "delta": f"{(u['central'] / us['us_upland'] - 1) * 100:+.1f}% vs USDA" if us.get("us_upland") else None,
