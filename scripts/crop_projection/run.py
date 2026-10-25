@@ -71,10 +71,23 @@ hv = load.pick(ann, "upland_harvested", final_only=True)
 prod = load.pick(ann, "upland_prod", final_only=True)
 
 
+fsa_tx = pd.read_csv(os.path.join(load.D, "fsa", "fsa_cotton_state.csv"))
+fsa_tx = fsa_tx[fsa_tx.type.str.contains("UPLAND") & ~fsa_tx.type.str.contains("SEED") & (fsa_tx.state.str.upper() == "TEXAS")].copy()
+fsa_tx["rel"] = pd.to_datetime(fsa_tx.release)
+
+
+def fsa_share(y, t):
+    f = fsa_tx[(fsa_tx.crop_year == y) & (fsa_tx.rel <= t)]
+    if not len(f):
+        return np.nan
+    l = f[f.rel == f.rel.max()]
+    return float(l.failed.sum() / (l.planted.sum() + l.failed.sum()))
+
+
 def tx_feats(y, t):
     d = dr[(dr.location == "TX") & (dr.week >= pd.Timestamp(y, 5, 1)) & (dr.week <= min(t, pd.Timestamp(y, 10, 31)))]
     c = cond[(cond.year == y) & (cond.state == "TX") & (cond.week_ending <= t)].sort_values("week_ending")
-    return {"d2": d.d2.mean(), "pvp_now": c.pvp.iloc[-1] if len(c) else np.nan}
+    return {"d2": d.d2.mean(), "pvp_now": c.pvp.iloc[-1] if len(c) else np.nan, "fsa": fsa_share(y, t)}
 
 
 def usda_latest(y, item, st, before=None):
@@ -108,6 +121,23 @@ ab_now = float(np.clip(x0 @ bA, 0.02, 0.9))
 se_ab = math.sqrt(s2 * (1 + x0 @ np.linalg.inv(X(h).T @ X(h)) @ x0))
 ab_lo, ab_hi = max(0.0, ab_now - tmult(0.95, len(h)) / math.sqrt(1 + 1 / len(h)) * se_ab), min(0.95, ab_now + tmult(0.95, len(h)) / math.sqrt(1 + 1 / len(h)) * se_ab)
 r2_ab = 1 - np.sum((h.ab - ab_loo) ** 2) / np.sum((h.ab - h.ab.mean()) ** 2)
+
+# second view: ratings + FSA failed share so far (FSA history from 2014); averaged with drought + ratings
+hf = h.dropna(subset=["fsa"])
+if len(hf) >= 8 and np.isfinite(T.loc[CUR, "fsa"]):
+    XF = lambda D: np.c_[np.ones(len(D)), D.pvp_now, D.fsa]
+    f_loo = pd.Series({y: float((XF(hf.loc[[y]]) @ np.linalg.lstsq(XF(hf.drop(y)), hf.drop(y).ab, rcond=None)[0])[0]) for y in hf.index})
+    f_now = float(np.clip(np.r_[1, T.loc[CUR, ["pvp_now", "fsa"]].values.astype(float)] @ np.linalg.lstsq(XF(hf), hf.ab, rcond=None)[0], 0.02, 0.9))
+    comb = (ab_loo.loc[hf.index] + f_loo) / 2
+    sd_c = float(np.sqrt(np.mean((hf.ab - comb) ** 2)))
+    ab_now = (ab_now + f_now) / 2
+    ab_loo.loc[hf.index] = comb
+    wc = tmult(0.95, len(hf)) * sd_c
+    ab_lo, ab_hi = max(0.0, ab_now - wc), min(0.95, ab_now + wc)
+# analog check: seasons with Texas poor+very poor within 7 points or more of this year's reading
+an = h[h.pvp_now >= T.loc[CUR, "pvp_now"] - 7]
+analog = {"min": float(an.ab.min()), "max": float(an.ab.max()), "mean": float(an.ab.mean()), "n": int(len(an)),
+          "pvp_from": float(T.loc[CUR, "pvp_now"] - 7)} if len(an) >= 3 else None
 
 tx_ab_model = T.planted * (1 - pd.concat([ab_loo, pd.Series({CUR: ab_now})])) * T.uy / 480
 g_tx = e[e.state == "TX"].set_index("year")
@@ -202,7 +232,7 @@ out = {
              "tx": round(usda_latest(CUR, "upland_prod", "TX") / 1e6, 3),
              "tx_abandonment": round(1 - tx_hv / tx_pl, 3) if np.isfinite(tx_hv) and np.isfinite(tx_pl) else None},
     "texas_regions": regions,
-    "notes": [fsa_note] if fsa_note else [],
+    "notes": ([fsa_note] if fsa_note else []) + ([f"Seasons with Texas poor+very poor at {analog['pvp_from']:.0f}% or more in late October ({analog['n']} since 2001) ended with final Texas abandonment of {analog['min'] * 100:.0f}–{analog['max'] * 100:.0f}% (average {analog['mean'] * 100:.0f}%)."] if analog else []),
     "variables": ["NASS crop progress by state: squaring, setting bolls, bolls opening, harvested",
                   "NASS crop condition ratings by state",
                   "US Drought Monitor, share of cotton area in D2–D4, weighted by crop stage, through October",
