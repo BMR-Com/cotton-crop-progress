@@ -153,28 +153,21 @@ def archive_files(cy):
     return []
 
 
-# ── 2. ESMIS ──
-def esmis_publications():
-    slugs = set()
-    for q in ["quality of cotton classed by classing office", "cnwwqo", "classing office weekly quality report"]:
-        r = get(ESMIS + "/search", params={"search_api_fulltext": q})
-        if r is not None and r.status_code == 200:
-            slugs |= set(re.findall(r'href="(/publication/[a-z0-9\-]+)"', r.text))
-    combined = [s for s in slugs if "wwqo" in s or ("classing-office" in s and "weekly-quality-report" not in s)]
-    note(f"ESMIS publications: {sorted(slugs)[:12]} combined: {combined}")
-    return combined
+# ── 2. ESMIS (combined weekly report by classing office, publication qb98mf474) ──
+ESMIS_PUB = ESMIS + "/concern/publications/qb98mf474"
 
 
-def esmis_files(slug, max_pages=40):
+def esmis_files(max_pages=60):
     files = []
     for p in range(max_pages):
-        r = get(ESMIS + slug, params={"page": p})
+        r = get(ESMIS_PUB, params={"page": p})
         if r is None or r.status_code != 200:
             break
-        links = re.findall(r'href="([^"]+release-files[^"]+\.pdf)"', r.text, re.I)
+        links = re.findall(r'href="([^"]*release-files[^"]+\.pdf)"', r.text, re.I)
         if not links:
             break
-        files += [urljoin(ESMIS, l) for l in links]
+        files += [urljoin(ESMIS_PUB, l) for l in links]
+    note(f"ESMIS combined report: {len(set(files))} files over {p} pages")
     return sorted(set(files))
 
 
@@ -186,8 +179,7 @@ def main():
     if MODE == "backfill":
         for cy in range(FIRST, date.today().year):
             urls += archive_files(cy)
-        for slug in esmis_publications():
-            urls += esmis_files(slug)
+        urls += esmis_files()
     urls += LATEST
     rows, n_new = [], 0
     for u in urls:
@@ -223,7 +215,7 @@ def main():
         f.write("\n".join(sorted(x for x in done if x not in LATEST)))
     note(f"office classing: {n_new} reports parsed, {len(df)} rows; reports by crop year "
          f"{df.groupby('crop_year').report_date.nunique().to_dict() if len(df) else {}}")
-    for n in NOTES[-40:]:
+    for n in [x for x in NOTES if not x.endswith("nothing in archive")][-9:]:
         print("::notice::" + n.replace("\n", " ")[:900])
 
 
