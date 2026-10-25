@@ -219,8 +219,15 @@ def brief(res):
                           f"Texas {t['central']:.2f}m (95% {rng(t, 'lo95', 'hi95')}) vs USDA {us.get('tx', float('nan')):.2f}m, "
                           f"with final Texas abandonment projected at {t['abandonment']['central'] * 100:.0f}% "
                           f"(95% {t['abandonment']['lo95'] * 100:.0f}–{t['abandonment']['hi95'] * 100:.0f}%) against {us.get('tx_abandonment', 0) * 100:.0f}% in USDA's numbers.")
+            C = P.get("conditional")
+            if C:
+                an = C.get("analog") or {}
+                pts.insert(1, f"Conditional view (Texas abandonment also using FSA failed acres reported so far): Texas abandonment "
+                              f"{C['tx_abandonment']['central'] * 100:.0f}% (95% {C['tx_abandonment']['lo95'] * 100:.0f}–{C['tx_abandonment']['hi95'] * 100:.0f}%), "
+                              f"Texas {C['texas']['central']:.2f}m, US upland {C['us_upland']['central']:.2f}m, all cotton {C['us_all']['central']:.2f}m."
+                              + (f" Past seasons with similar Texas ratings ended at {an['min'] * 100:.0f}–{an['max'] * 100:.0f}% abandonment." if an else ""))
             if P.get("texas_regions"):
-                pts.insert(1, P["texas_regions"])
+                pts.insert(2 if C else 1, P["texas_regions"])
             for line in P.get("notes", []):
                 pts.insert(2, line)
             kpis.insert(0, {"label": "BMR-Com US upland projection", "value": f"{u['central']:.2f}m",

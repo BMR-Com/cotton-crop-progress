@@ -122,7 +122,9 @@ se_ab = math.sqrt(s2 * (1 + x0 @ np.linalg.inv(X(h).T @ X(h)) @ x0))
 ab_lo, ab_hi = max(0.0, ab_now - tmult(0.95, len(h)) / math.sqrt(1 + 1 / len(h)) * se_ab), min(0.95, ab_now + tmult(0.95, len(h)) / math.sqrt(1 + 1 / len(h)) * se_ab)
 r2_ab = 1 - np.sum((h.ab - ab_loo) ** 2) / np.sum((h.ab - h.ab.mean()) ** 2)
 
-# second view: ratings + FSA failed share so far (FSA history from 2014); averaged with drought + ratings
+# conditional view (reported alongside, headline unchanged): ratings + FSA failed share so far (FSA from 2014),
+# averaged with drought + ratings
+cond_view = None
 hf = h.dropna(subset=["fsa"])
 if len(hf) >= 8 and np.isfinite(T.loc[CUR, "fsa"]):
     XF = lambda D: np.c_[np.ones(len(D)), D.pvp_now, D.fsa]
@@ -130,10 +132,9 @@ if len(hf) >= 8 and np.isfinite(T.loc[CUR, "fsa"]):
     f_now = float(np.clip(np.r_[1, T.loc[CUR, ["pvp_now", "fsa"]].values.astype(float)] @ np.linalg.lstsq(XF(hf), hf.ab, rcond=None)[0], 0.02, 0.9))
     comb = (ab_loo.loc[hf.index] + f_loo) / 2
     sd_c = float(np.sqrt(np.mean((hf.ab - comb) ** 2)))
-    ab_now = (ab_now + f_now) / 2
-    ab_loo.loc[hf.index] = comb
+    abc = (ab_now + f_now) / 2
     wc = tmult(0.95, len(hf)) * sd_c
-    ab_lo, ab_hi = max(0.0, ab_now - wc), min(0.95, ab_now + wc)
+    cond_view = {"ab": abc, "lo": max(0.0, abc - wc), "hi": min(0.95, abc + wc), "sd_pts": sd_c, "n": len(hf)}
 # analog check: seasons with Texas poor+very poor within 7 points or more of this year's reading
 an = h[h.pvp_now >= T.loc[CUR, "pvp_now"] - 7]
 analog = {"min": float(an.ab.min()), "max": float(an.ab.max()), "mean": float(an.ab.mean()), "n": int(len(an)),
@@ -159,6 +160,21 @@ if use_blend and np.isfinite(tx_ab_now):
 else:
     tx_now = tx_gin_now
 now.loc[now.state == "TX", "proj"] = tx_now
+
+# conditional crop: Texas from the conditional abandonment (blended with the ginning model like the headline)
+def tx_from_ab(ab):
+    return float(T.loc[CUR, "planted"] * (1 - ab) * T.loc[CUR, "uy"] / 480)
+
+
+conditional = None
+if cond_view and np.isfinite(T.loc[CUR, "uy"]):
+    tx_c = math.sqrt(tx_gin_now * tx_from_ab(cond_view["ab"])) if use_blend else tx_from_ab(cond_view["ab"])
+    tx_c_lo = math.sqrt(tx_gin_now * tx_from_ab(cond_view["hi"])) if use_blend else tx_from_ab(cond_view["hi"])
+    tx_c_hi = math.sqrt(tx_gin_now * tx_from_ab(cond_view["lo"])) if use_blend else tx_from_ab(cond_view["lo"])
+    us_c = float(now.proj.sum()) - tx_now + tx_c
+    conditional = {"tx_abandonment": {"central": round(cond_view["ab"], 3), "lo95": round(cond_view["lo"], 3), "hi95": round(cond_view["hi"], 3)},
+                   "texas": {"central": round(tx_c / 1e6, 3), "lo95": round(tx_c_lo / 1e6, 3), "hi95": round(tx_c_hi / 1e6, 3)},
+                   "analog": analog}
 
 # ── 4. assemble ──
 def band(c, sd, n):
@@ -232,6 +248,7 @@ out = {
              "tx": round(usda_latest(CUR, "upland_prod", "TX") / 1e6, 3),
              "tx_abandonment": round(1 - tx_hv / tx_pl, 3) if np.isfinite(tx_hv) and np.isfinite(tx_pl) else None},
     "texas_regions": regions,
+    "conditional": None,
     "notes": ([fsa_note] if fsa_note else []) + ([f"Seasons with Texas poor+very poor at {analog['pvp_from']:.0f}% or more in late October ({analog['n']} since 2001) ended with final Texas abandonment of {analog['min'] * 100:.0f}–{analog['max'] * 100:.0f}% (average {analog['mean'] * 100:.0f}%)."] if analog else []),
     "variables": ["NASS crop progress by state: squaring, setting bolls, bolls opening, harvested",
                   "NASS crop condition ratings by state",
@@ -241,6 +258,14 @@ out = {
                   "USDA FSA planted and failed acres", "NASS planted acres",
                   "Target: NASS final upland production (May annual report)"],
 }
+if conditional:
+    w95 = tmult(0.95, n_us) * sd_us
+    uc = us_c
+    conditional["us_upland"] = {"central": round(uc / 1e6, 3), "lo95": round(uc * math.exp(-w95) / 1e6, 3), "hi95": round(uc * math.exp(w95) / 1e6, 3)}
+    conditional["us_all"] = {k: round(v + pima / 1e6, 3) for k, v in conditional["us_upland"].items()}
+    conditional["what"] = ("Texas abandonment also using the FSA failed share reported so far (2014 onward), averaged with drought and ratings; "
+                           "other states as in the headline.")
+    out["conditional"] = conditional
 json.dump(out, open(OUT, "w"), indent=1)
 # private diagnostics (not published): written to the cache only
 json.dump({"week": kc, "monday": str(asof_D.date()), "sd_us": sd_us, "n_us": n_us, "sd_state": sd_st, "tx_gin": tx_gin_now, "tx_ab_model": tx_ab_now,
