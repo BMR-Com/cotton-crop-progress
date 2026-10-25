@@ -37,6 +37,15 @@ S = requests.Session()
 S.headers["User-Agent"] = "Mozilla/5.0 (BMR-Com research data fetch)"
 
 
+NOTES = []
+
+
+def note(msg):
+    """Diagnostics surfaced as a workflow annotation (readable without the raw log)."""
+    print(msg)
+    NOTES.append(msg)
+
+
 def get(url, **kw):
     for a in range(3):
         try:
@@ -53,13 +62,22 @@ def crop_year(d):
 
 
 def pdf_text(content):
+    """Text of the PDF with its layout kept (pdftotext if installed, else pdfplumber)."""
     with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
         f.write(content)
         f.flush()
         try:
-            return subprocess.run(["pdftotext", "-layout", f.name, "-"], capture_output=True, text=True, timeout=60).stdout
+            t = subprocess.run(["pdftotext", "-layout", f.name, "-"], capture_output=True, text=True, timeout=60).stdout
+            if t.strip():
+                return t
+        except Exception:
+            pass
+        try:
+            import pdfplumber
+            with pdfplumber.open(f.name) as pdf:
+                return "\n".join((pg.extract_text(layout=True) or "") for pg in pdf.pages)
         except Exception as e:
-            print("  pdftotext failed", e)
+            print("  pdf text failed", e)
             return ""
 
 
@@ -112,7 +130,7 @@ def archive_files(cy):
                 if "WQO" in h.upper():
                     files.append(urljoin(base, h))
             if files:
-                print(f"  {my}: listing {fo} → {len(files)} files")
+                note(f"{my}: listing {fo} -> {len(files)} files")
                 return sorted(set(files))
     # no listing: probe report dates (Thursdays/Fridays/Wednesdays, Aug–Apr)
     for fo in FOLDERS[:2]:
@@ -129,9 +147,9 @@ def archive_files(cy):
                         break
             d += timedelta(days=1)
         if found:
-            print(f"  {my}: probed {fo} → {len(found)} files")
+            note(f"{my}: probed {fo} -> {len(found)} files")
             return found
-    print(f"  {my}: nothing in archive")
+    note(f"{my}: nothing in archive")
     return []
 
 
@@ -143,7 +161,7 @@ def esmis_publications():
         if r is not None and r.status_code == 200:
             slugs |= set(re.findall(r'href="(/publication/[a-z0-9\-]+)"', r.text))
     combined = [s for s in slugs if "wwqo" in s or ("classing-office" in s and "weekly-quality-report" not in s)]
-    print("  ESMIS publications found:", sorted(slugs)[:20], "combined:", combined)
+    note(f"ESMIS publications: {sorted(slugs)[:12]} combined: {combined}")
     return combined
 
 
@@ -185,7 +203,8 @@ def main():
         d = report_date_from(text, fb)
         recs = parse(text)
         if not recs:
-            print("  no rows parsed:", u, "| sample:", " / ".join(text.splitlines()[:25])[:600])
+            if sum("no rows" in n for n in NOTES) < 3:
+                note(f"no rows parsed: {u} | sample: {' / '.join(l.strip() for l in text.splitlines()[:30] if l.strip())[:700]}")
             continue
         for x in recs:
             x.update({"report_date": d.isoformat(), "crop_year": crop_year(d), "file": u.split("/")[-1]})
@@ -202,8 +221,10 @@ def main():
         df.to_csv(CSV, index=False, columns=["report_date", "crop_year", "office", "week", "season", "file"])
     with open(DONE, "w") as f:
         f.write("\n".join(sorted(x for x in done if x not in LATEST)))
-    print(f"office classing: {n_new} reports parsed, {len(df)} rows total;",
-          df.groupby("crop_year").report_date.nunique().to_dict() if len(df) else {})
+    note(f"office classing: {n_new} reports parsed, {len(df)} rows; reports by crop year "
+         f"{df.groupby('crop_year').report_date.nunique().to_dict() if len(df) else {}}")
+    for n in NOTES[-40:]:
+        print("::notice::" + n.replace("\n", " ")[:900])
 
 
 if __name__ == "__main__":

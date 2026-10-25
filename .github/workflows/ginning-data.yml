@@ -19,7 +19,7 @@ jobs:
         env: {AMS_API_KEY: "${{ secrets.AMS_API_KEY }}"}
         run: timeout 75m python scripts/fetch_classing.py || echo "classing incomplete"
       - name: AMS classing by classing office (latest weekly report)
-        run: sudo apt-get install -y -q poppler-utils && (timeout 10m python scripts/fetch_classing_office.py || echo "office classing incomplete")
+        run: pip install -q pdfplumber && (timeout 10m python scripts/fetch_classing_office.py || echo "office classing incomplete")
       - name: FSA crop acreage
         run: timeout 25m python scripts/fetch_fsa.py || echo "FSA incomplete"
       - name: NASS ginnings + annual acreage (batched under the 50k limit, saved year by year)
