@@ -254,8 +254,39 @@
   "tx_abandonment": 0.339
  },
  "texas_regions": "Classing by office to Oct 23: South Texas (Corpus Christi) 951k bales classed; West Texas (Lubbock 42k, Lamesa 19k, Abilene 22k) 83k. West Texas, where abandonment decides the crop, has barely started; it is projected from drought and ratings until its classing builds.",
+ "conditional": {
+  "tx_abandonment": {
+   "central": 0.501,
+   "lo95": 0.337,
+   "hi95": 0.666
+  },
+  "texas": {
+   "central": 3.055,
+   "lo95": 2.5,
+   "hi95": 3.523
+  },
+  "analog": {
+   "min": 0.41538461538461535,
+   "max": 0.7452229299363058,
+   "mean": 0.5756859118555154,
+   "n": 6,
+   "pvp_from": 45.0
+  },
+  "us_upland": {
+   "central": 11.308,
+   "lo95": 9.148,
+   "hi95": 13.978
+  },
+  "us_all": {
+   "central": 11.691,
+   "lo95": 9.531,
+   "hi95": 14.361
+  },
+  "what": "Texas abandonment also using the FSA failed share reported so far (2014 onward), averaged with drought and ratings; other states as in the headline."
+ },
  "notes": [
-  "Texas FSA failed acres (October release) are 9.8% of planted. Failed acres are reported to FSA with a lag and the December\u2013January releases settle them, so the abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons."
+  "Texas FSA failed acres (October release) are 9.8% of planted. Failed acres are reported to FSA with a lag and the December\u2013January releases settle them, so the abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons.",
+  "Seasons with Texas poor+very poor at 45% or more in late October (6 since 2001) ended with final Texas abandonment of 42\u201375% (average 58%)."
  ],
  "variables": [
   "NASS crop progress by state: squaring, setting bolls, bolls opening, harvested",
