@@ -257,13 +257,37 @@
  "conditional": {
   "tx_abandonment": {
    "central": 0.501,
-   "lo95": 0.337,
-   "hi95": 0.666
+   "lo95": 0.366,
+   "hi95": 0.672
+  },
+  "tx_harvested_acres": {
+   "central": 2.943,
+   "lo95": 1.937,
+   "hi95": 3.743
+  },
+  "tx_planted_acres": 5.9,
+  "tx_yield": {
+   "central": 535,
+   "lo95": 452,
+   "hi95": 627
   },
   "texas": {
-   "central": 3.055,
-   "lo95": 2.5,
-   "hi95": 3.523
+   "central": 3.28,
+   "lo68": 2.337,
+   "hi68": 3.774,
+   "lo95": 2.088,
+   "hi95": 4.223,
+   "lo99": 1.965,
+   "hi99": 4.437
+  },
+  "us_upland": {
+   "central": 11.533,
+   "lo68": 10.233,
+   "hi68": 12.365,
+   "lo95": 9.448,
+   "hi95": 13.403,
+   "lo99": 9.024,
+   "hi99": 14.031
   },
   "analog": {
    "min": 0.41538461538461535,
@@ -272,17 +296,17 @@
    "n": 6,
    "pvp_from": 45.0
   },
-  "us_upland": {
-   "central": 11.308,
-   "lo95": 9.148,
-   "hi95": 13.978
-  },
+  "n_seasons": 13,
   "us_all": {
-   "central": 11.691,
-   "lo95": 9.531,
-   "hi95": 14.361
+   "central": 11.916,
+   "lo68": 10.616,
+   "hi68": 12.748,
+   "lo95": 9.831,
+   "hi95": 13.786,
+   "lo99": 9.407,
+   "hi99": 14.414
   },
-  "what": "Texas abandonment also using the FSA failed share reported so far (2014 onward), averaged with drought and ratings; other states as in the headline."
+  "what": "Texas built as planted acres x (1 - abandonment) x USDA's in-season yield; abandonment from drought, ratings and FSA failed acres so far; ranges from past seasons' joint abandonment and yield misses; other states as in the headline."
  },
  "notes": [
   "Texas FSA failed acres (October release) are 9.8% of planted. Failed acres are reported to FSA with a lag and the December\u2013January releases settle them, so the abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons.",
