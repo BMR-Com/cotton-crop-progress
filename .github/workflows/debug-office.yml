@@ -1,0 +1,33 @@
+name: Debug office PDF text (temporary)
+on: {workflow_dispatch: {}}
+permissions: {contents: write}
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: debug-office}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install -q requests pdfplumber
+      - run: |
+          mkdir -p dbg
+          python - <<'PY'
+          import requests, pdfplumber, io, re
+          A="https://apps.ams.usda.gov/Cotton/Historical%20Weekly%20Reports/"
+          urls={"2008":A+"MY%202008-2009/mp_cn810_WQO/","2014":A+"MY%202014-2015/mp_cn810_WQO/","2015":A+"MY%202015-2016/mp_cn810_WQO/"}
+          picks=[]
+          for k,u in urls.items():
+              t=requests.get(u,timeout=60).text
+              fs=[x for x in re.findall(r'href="([^"]+\.pdf)"',t,re.I)]
+              oct_=[f for f in fs if re.search(r'(20081030|20141030|20151029|1023|1030)',f)] or fs[len(fs)//3:len(fs)//3+1]
+              picks.append((k, requests.compat.urljoin(u, oct_[0])))
+          picks.append(("latest","https://www.ams.usda.gov/mnreports/cnwwqo.pdf"))
+          for k,u in picks:
+              b=requests.get(u,timeout=60).content
+              with pdfplumber.open(io.BytesIO(b)) as p:
+                  txt="\n".join((pg.extract_text(layout=True) or "") for pg in p.pages[:2])
+              open(f"dbg/{k}.txt","w").write(u+"\n"+txt[:6000])
+          PY
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dbg; git commit -m dbg; git push origin HEAD:debug-office
