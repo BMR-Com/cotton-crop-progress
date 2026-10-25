@@ -1,0 +1,30 @@
+name: Crop projection
+on:
+  workflow_run:
+    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage"]
+    types: [completed]
+  schedule:
+    - cron: '40 15 * * 2'   # Tuesday, after Monday's crop progress and its Tuesday catch-up
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: {group: crop-projection, cancel-in-progress: false}
+jobs:
+  projection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install requests pandas numpy scipy yfinance
+      - name: Crop projection (writes docs/data/crop_projection.json)
+        run: python scripts/crop_projection/run.py
+      - name: Rebuild the page data and weekly brief
+        run: python scripts/build.py
+      - run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/crop_projection.json docs/data/crop.json docs/data/drought_reg.json
+          git commit -m "Crop projection $(date -u +%Y-%m-%d)" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done

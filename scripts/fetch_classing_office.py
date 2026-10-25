@@ -59,7 +59,7 @@ def get(url, **kw):
 
 
 def crop_year(d):
-    return d.year if d.month >= 7 else d.year - 1
+    return d.year if d.month >= 8 else d.year - 1          # classing season starts Aug 1
 
 
 def pdf_text(content):
@@ -143,23 +143,6 @@ def archive_files(cy):
             if files:
                 note(f"{my}: listing {fo} -> {len(files)} files")
                 return sorted(set(files))
-    # no listing: probe report dates (Thursdays/Fridays/Wednesdays, Aug–Apr)
-    for fo in FOLDERS[:2]:
-        base = ARCH + quote(my) + "/" + quote(fo) + "/"
-        found = []
-        d = date(cy, 7, 25)
-        while d <= date(cy + 1, 5, 15):
-            if d.weekday() in (2, 3, 4):
-                for pat in ("CN{}WWQO.pdf", "CN{}wWQO.pdf", "CN{}WWQO.PDF"):
-                    u = base + pat.format(d.strftime("%Y%m%d"))
-                    r = S.head(u, timeout=30) if True else None
-                    if r.status_code == 200:
-                        found.append(u)
-                        break
-            d += timedelta(days=1)
-        if found:
-            note(f"{my}: probed {fo} -> {len(found)} files")
-            return found
     note(f"{my}: nothing in archive")
     return []
 
@@ -182,13 +165,24 @@ def esmis_files(max_pages=60):
     return sorted(set(files))
 
 
+def save(old, rows, done):
+    new = pd.DataFrame(rows)
+    df = pd.concat([old, new], ignore_index=True) if len(old) else new
+    if len(df):
+        df = df.drop_duplicates(["report_date", "office"], keep="last").sort_values(["report_date", "office"])
+        df.to_csv(CSV, index=False, columns=["report_date", "crop_year", "office", "week", "season", "file"])
+    with open(DONE, "w") as f:
+        f.write("\n".join(sorted(x for x in done if x not in LATEST)))
+    return df
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     old = pd.read_csv(CSV) if os.path.exists(CSV) and not REPARSE else pd.DataFrame()
     done = set(open(DONE).read().split()) if os.path.exists(DONE) else set()
     urls = []
     if MODE == "backfill":
-        for cy in range(FIRST, date.today().year):
+        for cy in range(max(FIRST, 2006), 2016):          # AMS archive covers the 2006-2015 crops
             urls += archive_files(cy)
         urls += esmis_files()
     urls += LATEST
@@ -216,14 +210,12 @@ def main():
         n_new += 1
         if n_new % 25 == 0:
             print(f"  parsed {n_new} reports", flush=True)
+            save(old, rows, done)
         time.sleep(0.3)
-    new = pd.DataFrame(rows)
-    df = pd.concat([old, new], ignore_index=True) if len(old) else new
+    df = save(old, rows, done)
     if len(df):
         df = df.drop_duplicates(["report_date", "office"], keep="last").sort_values(["report_date", "office"])
         df.to_csv(CSV, index=False, columns=["report_date", "crop_year", "office", "week", "season", "file"])
-    with open(DONE, "w") as f:
-        f.write("\n".join(sorted(x for x in done if x not in LATEST)))
     note(f"office classing: {n_new} reports parsed, {len(df)} rows; reports by crop year "
          f"{df.groupby('crop_year').report_date.nunique().to_dict() if len(df) else {}}")
     for n in [x for x in NOTES if not x.endswith("nothing in archive")][-9:]:
