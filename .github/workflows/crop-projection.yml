@@ -21,10 +21,8 @@ jobs:
       - run: pip install requests pandas numpy scipy yfinance
       - name: Crop projection (writes docs/data/crop_projection.json)
         run: python scripts/crop_projection/run.py
-      - name: Rebuild the page data and weekly brief
-        run: python scripts/build.py
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/data/crop_projection.json docs/data/crop.json docs/data/drought_reg.json
+          git add docs/data/crop_projection.json
           git commit -m "Crop projection $(date -u +%Y-%m-%d)" || exit 0
-          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && break; sleep 15; done
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push && exit 0; git rebase --abort 2>/dev/null; sleep 15; done; exit 1

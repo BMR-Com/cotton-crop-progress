@@ -1,7 +1,7 @@
 name: Build crop analytics
 on:
   workflow_run:
-    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage", "Backfill (parallel, manual)", "Cotton-area drought (Ag in Drought) and AWP"]
+    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage", "Backfill (parallel, manual)", "Cotton-area drought (Ag in Drought) and AWP", "Crop projection"]
     types: [completed]
   schedule:
     - cron: '15 22 * * 1-5'   # after the ICE close: refresh prices and technicals
