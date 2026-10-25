@@ -15,6 +15,17 @@ A weekly view of the US cotton crop:
 - **Crop projection from ginnings**: ginning and classing so far against harvest progress, on projected harvested acres
 - **Price & technicals**: candlestick charts of the continuous contract and the active Dec/Mar/May/Jul contracts, with moving averages, Bollinger/Keltner/Donchian bands, Ichimoku, Parabolic SAR, pivots, RSI, MACD, stochastics, ADX, ATR, CCI, Williams %R, OBV, MFI and momentum, plus a daily technical summary
 
+## Crop projection
+
+The weekly brief opens with the BMR-Com projection of the final US crop (upland and all cotton, Texas, with 68/95/99% ranges), published in `docs/data/crop_projection.json`. It is built from:
+
+- NASS crop progress by state (squaring, setting bolls, bolls opening, harvested) and crop condition ratings
+- US Drought Monitor share of cotton area in D2–D4, weighted by crop stage, through October
+- NASS Cotton Ginnings by state, converted from running bales to 480-lb bales of the state where the cotton was grown
+- USDA AMS bales classed by classing office (Lubbock, Lamesa, Abilene and Corpus Christi split West and South Texas)
+- USDA FSA planted and failed acres, and NASS planted acres
+- Target: NASS final upland production (May annual report)
+
 ## Data (refreshed automatically)
 
 | Source | What | Folder |
@@ -22,6 +33,8 @@ A weekly view of the US cotton crop:
 | USDA NASS Crop Progress | weekly condition and progress by state | `data/cotton_*.csv` |
 | USDA NASS QuickStats | ginnings by state; acreage, yield and production | `data/ginning/` |
 | USDA AMS MyMarketNews (report 1654) | weekly cotton classing by gin state | `data/classing/` |
+| USDA AMS classing by classing office (weekly, archive from 2006) | bales classed by office | `data/classing/office.csv` |
+| NASS Cotton Ginnings report archive (ESMIS) | state ginnings for crop years before QuickStats coverage (2008–2013) | `data/ginning/ginnings_esmis.csv` |
 | USDA FSA crop acreage data | planted, failed and prevented acres by state | `data/fsa/` |
 | US Drought Monitor | D0–D4 area by state (via BMR-Com/drought-monitor) | fetched at build |
 | Yahoo Finance / ICE settlements | cotton futures prices (charts, technicals, model tabs) | `docs/data/technicals.json`, `docs/data/cotton_px.csv` |

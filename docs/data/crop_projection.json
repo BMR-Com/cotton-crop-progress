@@ -1,0 +1,65 @@
+{
+ "asof": "2026-10-25",
+ "inputs_through": {
+  "ginnings": "2026-10-15",
+  "crop_progress": "2026-10-18",
+  "drought": "2026-10-20",
+  "classing_by_office": "2026-10-22",
+  "fsa": "2026-10 release"
+ },
+ "unit": "million 480-lb bales",
+ "us_upland": {
+  "central": 11.25,
+  "lo68": 10.15,
+  "hi68": 12.47,
+  "lo95": 9.1,
+  "hi95": 13.91,
+  "lo99": 8.41,
+  "hi99": 15.05
+ },
+ "us_all": {
+  "central": 11.63,
+  "lo68": 10.53,
+  "hi68": 12.85,
+  "lo95": 9.48,
+  "hi95": 14.29,
+  "lo99": 8.79,
+  "hi99": 15.43
+ },
+ "pima_usda": 0.383,
+ "texas": {
+  "central": 2.99,
+  "lo68": 2.54,
+  "hi68": 3.52,
+  "lo95": 2.11,
+  "hi95": 4.23,
+  "lo99": 1.84,
+  "hi99": 4.85,
+  "abandonment": {
+   "central": 0.52,
+   "lo95": 0.34,
+   "hi95": 0.7
+  }
+ },
+ "usda": {
+  "report": "October 2026",
+  "us_upland": 13.059,
+  "us_all": 13.442,
+  "tx": 4.35,
+  "tx_abandonment": 0.339
+ },
+ "texas_regions": "Classing by office to Oct 22: South Texas (Corpus Christi) 951k bales classed, West Texas (Lubbock 42k, Lamesa 19k, Abilene 22k) 83k. South Texas is well advanced; West Texas, where abandonment decides the crop, has barely started and is projected from drought and ratings until its classing builds in November.",
+ "notes": [
+  "Texas October FSA failed acres (9.8% of planted) are not final: failed acres are reported to FSA with a lag, and the December\u2013January releases settle it. The abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons."
+ ],
+ "variables": [
+  "NASS crop progress by state: squaring, setting bolls, bolls opening, harvested",
+  "NASS crop condition ratings by state",
+  "US Drought Monitor, share of cotton area in D2\u2013D4, weighted by crop stage, through October",
+  "NASS Cotton Ginnings by state (running bales, converted to 480-lb bales of the state where grown)",
+  "USDA AMS bales classed by classing office (Texas split: Lubbock, Lamesa, Abilene vs Corpus Christi)",
+  "USDA FSA planted and failed acres",
+  "NASS planted acres",
+  "Target: NASS final upland production (May annual report)"
+ ]
+}
