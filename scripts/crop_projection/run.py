@@ -161,20 +161,47 @@ else:
     tx_now = tx_gin_now
 now.loc[now.state == "TX", "proj"] = tx_now
 
-# conditional crop: Texas from the conditional abandonment (blended with the ginning model like the headline)
-def tx_from_ab(ab):
-    return float(T.loc[CUR, "planted"] * (1 - ab) * T.loc[CUR, "uy"] / 480)
-
-
+# conditional crop, built as harvested acres x yield:
+#   Texas harvested acres = planted x (1 - conditional abandonment); yield = USDA's latest in-season Texas yield;
+#   range from past seasons' joint misses (abandonment miss, USDA-yield miss); rest of the US from the model with its own error.
 conditional = None
 if cond_view and np.isfinite(T.loc[CUR, "uy"]):
-    tx_c = math.sqrt(tx_gin_now * tx_from_ab(cond_view["ab"])) if use_blend else tx_from_ab(cond_view["ab"])
-    tx_c_lo = math.sqrt(tx_gin_now * tx_from_ab(cond_view["hi"])) if use_blend else tx_from_ab(cond_view["hi"])
-    tx_c_hi = math.sqrt(tx_gin_now * tx_from_ab(cond_view["lo"])) if use_blend else tx_from_ab(cond_view["lo"])
-    us_c = float(now.proj.sum()) - tx_now + tx_c
-    conditional = {"tx_abandonment": {"central": round(cond_view["ab"], 3), "lo95": round(cond_view["lo"], 3), "hi95": round(cond_view["hi"], 3)},
-                   "texas": {"central": round(tx_c / 1e6, 3), "lo95": round(tx_c_lo / 1e6, 3), "hi95": round(tx_c_hi / 1e6, 3)},
-                   "analog": analog}
+    hy = T.loc[T.index < CUR].dropna(subset=["ab", "uy"])
+    hy = hy[hy.index.isin(ab_loo.index)]
+    yfin = load.pick(ann, "upland_yield", final_only=True)
+    ey = np.log(np.array([yfin.get((y, "TX"), np.nan) for y in hy.index]) / hy.uy.values)
+    ea = (hy.ab - ab_loo.loc[hy.index]).values
+    ok = np.isfinite(ey) & np.isfinite(ea)
+    ey, ea = ey[ok], ea[ok]
+    rng = np.random.default_rng(7)
+    nd = 40000
+    idx = rng.integers(len(ea), size=nd)
+    a_d = np.clip(cond_view["ab"] + ea[idx] + rng.normal(0, ea.std() * 0.3, nd), 0.02, 0.95)
+    y_d = T.loc[CUR, "uy"] * np.exp(ey[idx] - ey.mean() + rng.normal(0, ey.std() * 0.3, nd))
+    tx_d = T.loc[CUR, "planted"] * (1 - a_d) * y_d / 480
+    tx_c = float(T.loc[CUR, "planted"] * (1 - cond_view["ab"]) * T.loc[CUR, "uy"] / 480)
+    # rest of the US: model projection with its backtest error at this week, linked to Texas misses at the observed correlation
+    rest_now = float(now.proj.sum()) - tx_now
+    re_ = e[e.state != "TX"].groupby("year").apply(lambda d: np.log(d.Ph.sum() / d.P.sum()))
+    sd_rest = float(np.sqrt(np.mean(re_ ** 2)))
+    zt = (np.log(tx_d / tx_c) - np.log(tx_d / tx_c).mean()) / np.log(tx_d / tx_c).std()
+    rho = 0.2
+    r_d = rest_now * np.exp(sd_rest * (rho * zt + math.sqrt(1 - rho ** 2) * rng.standard_normal(nd)))
+    us_d = r_d + tx_d
+    q = lambda x: {"central": None, "lo68": float(np.percentile(x, 16)), "hi68": float(np.percentile(x, 84)),
+                   "lo95": float(np.percentile(x, 2.5)), "hi95": float(np.percentile(x, 97.5)),
+                   "lo99": float(np.percentile(x, 0.5)), "hi99": float(np.percentile(x, 99.5))}
+    def mb(c, x):
+        o = q(x); o["central"] = c
+        return {k: round(v / 1e6, 3) for k, v in o.items()}
+    conditional = {"tx_abandonment": {"central": round(cond_view["ab"], 3), "lo95": round(float(np.percentile(a_d, 2.5)), 3), "hi95": round(float(np.percentile(a_d, 97.5)), 3)},
+                   "tx_harvested_acres": {"central": round(T.loc[CUR, "planted"] * (1 - cond_view["ab"]) / 1e6, 3),
+                                          "lo95": round(T.loc[CUR, "planted"] * (1 - float(np.percentile(a_d, 97.5))) / 1e6, 3),
+                                          "hi95": round(T.loc[CUR, "planted"] * (1 - float(np.percentile(a_d, 2.5))) / 1e6, 3)},
+                   "tx_planted_acres": round(T.loc[CUR, "planted"] / 1e6, 3),
+                   "tx_yield": {"central": round(float(T.loc[CUR, "uy"])), "lo95": round(float(np.percentile(y_d, 2.5))), "hi95": round(float(np.percentile(y_d, 97.5)))},
+                   "texas": mb(tx_c, tx_d), "us_upland": mb(rest_now + tx_c, us_d),
+                   "analog": analog, "n_seasons": int(len(ea))}
 
 # ── 4. assemble ──
 def band(c, sd, n):
@@ -259,12 +286,9 @@ out = {
                   "Target: NASS final upland production (May annual report)"],
 }
 if conditional:
-    w95 = tmult(0.95, n_us) * sd_us
-    uc = us_c
-    conditional["us_upland"] = {"central": round(uc / 1e6, 3), "lo95": round(uc * math.exp(-w95) / 1e6, 3), "hi95": round(uc * math.exp(w95) / 1e6, 3)}
     conditional["us_all"] = {k: round(v + pima / 1e6, 3) for k, v in conditional["us_upland"].items()}
-    conditional["what"] = ("Texas abandonment also using the FSA failed share reported so far (2014 onward), averaged with drought and ratings; "
-                           "other states as in the headline.")
+    conditional["what"] = ("Texas built as planted acres x (1 - abandonment) x USDA's in-season yield; abandonment from drought, ratings and FSA failed acres so far; "
+                           "ranges from past seasons' joint abandonment and yield misses; other states as in the headline.")
     out["conditional"] = conditional
 json.dump(out, open(OUT, "w"), indent=1)
 # private diagnostics (not published): written to the cache only

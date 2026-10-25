@@ -222,9 +222,12 @@ def brief(res):
             C = P.get("conditional")
             if C:
                 an = C.get("analog") or {}
-                pts.insert(1, f"Conditional view (Texas abandonment also using FSA failed acres reported so far): Texas abandonment "
-                              f"{C['tx_abandonment']['central'] * 100:.0f}% (95% {C['tx_abandonment']['lo95'] * 100:.0f}–{C['tx_abandonment']['hi95'] * 100:.0f}%), "
-                              f"Texas {C['texas']['central']:.2f}m, US upland {C['us_upland']['central']:.2f}m, all cotton {C['us_all']['central']:.2f}m."
+                ha, yd, tc, uc = C.get("tx_harvested_acres"), C.get("tx_yield"), C["texas"], C["us_upland"]
+                pts.insert(1, (f"Conditional view (Texas built as harvested acres × yield): abandonment {C['tx_abandonment']['central'] * 100:.0f}% of "
+                               f"{C.get('tx_planted_acres', 0):.1f}m planted leaves {ha['central']:.2f}m harvested acres (95% {ha['lo95']:.2f}–{ha['hi95']:.2f}m); "
+                               f"at USDA's {yd['central']} lb (95% {yd['lo95']}–{yd['hi95']}) Texas is {tc['central']:.2f}m (95% {tc['lo95']:.2f}–{tc['hi95']:.2f}m). "
+                               f"US upland {uc['central']:.2f}m (95% {uc['lo95']:.2f}–{uc['hi95']:.2f}m), all cotton {C['us_all']['central']:.2f}m." if ha else
+                               f"Conditional view: Texas {tc['central']:.2f}m, US upland {uc['central']:.2f}m.")
                               + (f" Past seasons with similar Texas ratings ended at {an['min'] * 100:.0f}–{an['max'] * 100:.0f}% abandonment." if an else ""))
             if P.get("texas_regions"):
                 pts.insert(2 if C else 1, P["texas_regions"])
