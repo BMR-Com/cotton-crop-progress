@@ -49893,12 +49893,12 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,CA,,5,Excess Moisture/Precipitation/Rain,155.0,88325.0,2,155.0
 2025,CA,,5,Failure of Irrigation Supply,31357.9,31047082.0,12,31357.9
 2025,CA,,5,Wind/Excess Wind,60.0,51596.0,1,60.0
-2025,CA,,6,Heat,236.38,92032.0,1,236.38
+2025,CA,,6,Heat,594.339,182462.2,2,594.339
 2025,CA,,6,"Other (Snow, Lightning, Etc.)",155.2,76483.0,1,155.2
 2025,CA,,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,0.0,89973.0,6,0.0
 2025,CA,,7,Failure of Irrigation Supply,418.5,306113.0,2,418.5
 2025,CA,,8,Heat,325.216,16699.2,1,325.216
-2025,CA,,10,Excess Moisture/Precipitation/Rain,394.91999999999996,240008.0,7,394.91999999999996
+2025,CA,,10,Excess Moisture/Precipitation/Rain,548.331,278763.8,8,548.331
 2025,CA,,11,Excess Moisture/Precipitation/Rain,109.2,7840.0,1,109.2
 2025,FL,,1,Decline in Price,7.8908000000000005,2108.8,2,7.8908000000000005
 2025,FL,,6,Excess Moisture/Precipitation/Rain,35.42,2053.85,2,35.42
@@ -50018,9 +50018,9 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,MO,,4,Hail,23.23,8784.0,1,23.23
 2025,MO,,5,Cold Wet Weather,2118.0950000000003,144187.0,5,2118.0950000000003
 2025,MO,,5,Excess Moisture/Precipitation/Rain,26147.32775,6455065.5,221,26100.21075675
-2025,MO,,5,Hail,1761.0584999999999,978797.0,8,1761.0584999999999
+2025,MO,,5,Hail,1761.0585,978797.0,8,1761.0585
 2025,MO,,6,Cold Wet Weather,3095.7250000000004,675053.0,5,3095.7250000000004
-2025,MO,,6,Excess Moisture/Precipitation/Rain,13080.59185,3209298.95,82,13078.092763249999
+2025,MO,,6,Excess Moisture/Precipitation/Rain,13080.59185,3209298.95,82,13078.09276325
 2025,MO,,6,Hail,654.407,117717.0,4,654.407
 2025,MO,,6,Heat,282.3645,77956.0,3,282.3645
 2025,MO,,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,20524.4186,1441026.0,74,60.03
@@ -50032,7 +50032,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,MO,,8,Drought,1255.09445,166482.75,16,1255.094634
 2025,MO,,8,Excess Moisture/Precipitation/Rain,1135.007,390629.5,7,1137.506
 2025,MO,,8,Heat,5128.421,1228250.45,32,5128.420951
-2025,MO,,9,Excess Moisture/Precipitation/Rain,9523.673,1737681.0,37,9523.623
+2025,MO,,9,Excess Moisture/Precipitation/Rain,9523.672999999999,1737681.0,37,9523.623
 2025,MO,,9,Heat,889.392,115702.0,5,889.392
 2025,MO,,10,Excess Moisture/Precipitation/Rain,66.1875,7106.0,1,66.1875
 2025,MO,,10,Heat,40.71,3320.0,2,40.71
@@ -50070,7 +50070,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,NC,,5,Excess Moisture/Precipitation/Rain,56561.5916,10847902.85,319,56599.4616
 2025,NC,,6,All Other Causes,43.368,9630.8,1,43.368
 2025,NC,,6,Cold Wet Weather,93.16000000000001,19570.0,4,93.16000000000001
-2025,NC,,6,Excess Moisture/Precipitation/Rain,5688.35,948217.85,62,5688.349999999999
+2025,NC,,6,Excess Moisture/Precipitation/Rain,5688.35,948217.85,62,5688.35
 2025,NC,,6,Heat,786.7395,96317.5,13,786.7395
 2025,NC,,6,Wildlife,2.44,1268.4,1,2.44
 2025,NC,,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,4073.482,886204.0,27,0.0
@@ -50090,7 +50090,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,NC,,10,Drought,355.94,114228.4,4,355.94
 2025,NC,,10,Excess Moisture/Precipitation/Rain,112.41,15514.0,1,112.41
 2025,NC,,10,Heat,64.232,12017.599999999999,3,64.232
-2025,NC,,11,Decline in Price,5.542,334.5000000000001,4,5.542
+2025,NC,,11,Decline in Price,5.542,334.5,4,5.542
 2025,NC,,11,Drought,25.66,4659.4,1,25.66
 2025,NC,,11,Excess Moisture/Precipitation/Rain,2.308,48.8,1,2.308
 2025,NC,,12,Decline in Price,125.9565,14671.35,3,125.9565
@@ -50134,7 +50134,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,OK,,6,Wind/Excess Wind,476.90999999999997,223410.0,4,476.90999999999997
 2025,OK,,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,22524.9141,2375663.0,48,0.0
 2025,OK,,7,Drought,4476.92,370393.75,20,4476.92
-2025,OK,,7,Excess Moisture/Precipitation/Rain,2279.1279999999997,469459.0,13,2279.1279799999998
+2025,OK,,7,Excess Moisture/Precipitation/Rain,2279.128,469459.0,13,2279.12798
 2025,OK,,7,Hail,3312.80638,736472.1,15,3312.806376
 2025,OK,,7,Heat,1320.5913,436387.0,7,1320.59125
 2025,OK,,7,Hot Wind,707.6700000000001,160098.0,9,678.4300000000001
@@ -50143,7 +50143,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,OK,,8,Decline in Price,51.63,1643.0,2,51.63
 2025,OK,,8,Drought,3859.022,700834.45,24,3859.0217000000002
 2025,OK,,8,Failure of Irrigation Equipment,120.0,-19175.0,1,120.0
-2025,OK,,8,Heat,989.505,176528.5,7,989.505
+2025,OK,,8,Heat,989.5050000000001,176528.5,7,989.505
 2025,OK,,8,Hot Wind,959.485,188301.5,11,900.43
 2025,OK,,8,Wind/Excess Wind,117.75,9139.0,1,117.75
 2025,OK,,9,All Other Causes,17.3575,882.25,1,17.3575
@@ -50169,12 +50169,12 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,SC,,6,All Other Causes,5.045,940.0,1,5.045
 2025,SC,,6,Drought,192.0,26864.0,3,192.0
 2025,SC,,6,Excess Moisture/Precipitation/Rain,4529.6172,1008495.3999999999,61,4529.6172
-2025,SC,,6,Heat,149.38899999999998,13481.1,5,149.38899999999998
+2025,SC,,6,Heat,149.389,13481.1,5,149.389
 2025,SC,,6,Wildlife,22.81,4237.0,1,22.81
 2025,SC,,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,5037.51,667217.0,13,0.0
 2025,SC,,7,All Other Causes,48.74,7684.0,1,48.74
 2025,SC,,7,Drought,1108.452,189458.1,24,1108.452
-2025,SC,,7,Excess Moisture/Precipitation/Rain,598.8394000000001,38054.15000000001,7,598.8394000000001
+2025,SC,,7,Excess Moisture/Precipitation/Rain,598.8394000000001,38054.15,7,598.8394000000001
 2025,SC,,7,Heat,2054.491,259616.1,29,2054.491
 2025,SC,,8,Drought,791.2860000000001,158300.4,16,791.2860000000001
 2025,SC,,8,Excess Moisture/Precipitation/Rain,236.938,16808.5,2,236.938
@@ -50266,9 +50266,9 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Borden,6,Hail,340.979652,68940.56,2,340.9796
 2025,TX,Borden,6,Hot Wind,7168.8949999999995,815467.0,7,7212.045
 2025,TX,Borden,6,Insects,202.0,53668.0,2,202.0
-2025,TX,Borden,6,Wind/Excess Wind,4167.705598,637867.92,33,4167.70555
+2025,TX,Borden,6,Wind/Excess Wind,4167.7055980000005,637867.9199999999,33,4167.705550000001
 2025,TX,Borden,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,11142.6638,2374627.0,184,0.0
-2025,TX,Borden,7,Drought,4942.7575,585852.0,18,5020.014800999999
+2025,TX,Borden,7,Drought,4942.7575,585852.0,18,5020.014801
 2025,TX,Borden,7,Excess Moisture/Precipitation/Rain,392.87795000000006,15937.0,8,392.878
 2025,TX,Borden,7,Hot Wind,271.0672,66325.0,3,317.68
 2025,TX,Borden,7,Insects,217.15118,14999.8,9,277.3462
@@ -50312,10 +50312,10 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Calhoun,9,Excess Moisture/Precipitation/Rain,475.1104,63017.0,4,475.1104
 2025,TX,Cameron,2,Failure of Irrigation Supply,777.7505,254141.0,5,777.7505
 2025,TX,Cameron,3,Earthquake,43.65,20786.85,1,43.65
-2025,TX,Cameron,3,Excess Moisture/Precipitation/Rain,14179.489500000001,4746998.7,68,14179.489500000001
+2025,TX,Cameron,3,Excess Moisture/Precipitation/Rain,14179.4895,4746998.7,68,14179.4895
 2025,TX,Cameron,3,Failure of Irrigation Equipment,210.995,70668.25,2,210.995
 2025,TX,Cameron,3,Failure of Irrigation Supply,12426.77,4824079.2,28,12423.6425
-2025,TX,Cameron,4,Excess Moisture/Precipitation/Rain,3659.3295,1320504.0,22,3659.3295
+2025,TX,Cameron,4,Excess Moisture/Precipitation/Rain,3659.3295000000003,1320504.0,22,3659.3295000000003
 2025,TX,Cameron,4,Failure of Irrigation Supply,3652.2129999999997,1126635.0,25,3652.2129999999997
 2025,TX,Cameron,5,Failure of Irrigation Supply,90.4711,23020.0,2,90.4711
 2025,TX,Cameron,6,Excess Moisture/Precipitation/Rain,94.91,4887.0,2,94.91
@@ -50563,7 +50563,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Dawson,5,Hot Wind,214.5,101107.5,3,214.5
 2025,TX,Dawson,5,Wind/Excess Wind,1193.3249999999998,243797.0,14,1193.3249999999998
 2025,TX,Dawson,6,Cold Wet Weather,247.3,36288.0,1,247.3
-2025,TX,Dawson,6,Drought,41510.04455,5960650.5,185,41509.744528999996
+2025,TX,Dawson,6,Drought,41510.044550000006,5960650.5,185,41509.744529
 2025,TX,Dawson,6,Excess Moisture/Precipitation/Rain,6820.414125,1483200.73,52,6793.881575
 2025,TX,Dawson,6,Hail,19473.926225,4296040.100000001,115,18108.6785865
 2025,TX,Dawson,6,Heat,6476.462485,873556.4099999999,27,6476.462425
@@ -50660,7 +50660,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Fannin,5,Excess Moisture/Precipitation/Rain,8.44,355.0,1,8.44
 2025,TX,Fannin,6,Excess Moisture/Precipitation/Rain,95.89,11762.0,2,95.89
 2025,TX,Fisher,6,Drought,3603.6064,523613.9,24,3603.6063999999997
-2025,TX,Fisher,6,Excess Moisture/Precipitation/Rain,12789.63134,1645510.05,151,12789.611309
+2025,TX,Fisher,6,Excess Moisture/Precipitation/Rain,13439.011340000001,1702332.45,153,13439.061309
 2025,TX,Fisher,6,Hail,1836.6513,450646.0,28,1830.21315
 2025,TX,Fisher,6,Heat,71.92,30594.0,1,71.92
 2025,TX,Fisher,6,Hot Wind,2142.10875,176560.55000000002,7,2142.10875
@@ -50674,7 +50674,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Fisher,8,Hail,555.4245,95992.6,3,555.4245
 2025,TX,Fisher,8,Heat,34.51875,1383.0,2,34.51875
 2025,TX,Fisher,8,Hot Wind,24.89025,470.4,1,24.89025
-2025,TX,Fisher,9,Drought,20751.03543,907164.1,152,20751.060384999997
+2025,TX,Fisher,9,Drought,21800.58043,953345.7000000001,155,21800.460385000002
 2025,TX,Fisher,9,Hot Wind,130.89,11568.0,2,130.89
 2025,TX,Fisher,10,Drought,4785.155000000001,389430.0,27,4784.975
 2025,TX,Fisher,11,Decline in Price,784.0275,10723.0,1,784.0275
@@ -50734,7 +50734,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Gaines,6,Hot Wind,31893.1008,8038435.609999999,93,32133.069499999998
 2025,TX,Gaines,6,"Other (Snow, Lightning, Etc.)",217.09,387.0,1,217.09
 2025,TX,Gaines,6,Wildlife,62.5,23247.0,1,125.0
-2025,TX,Gaines,6,Wind/Excess Wind,61487.640799999994,14746449.92,213,61596.64805
+2025,TX,Gaines,6,Wind/Excess Wind,61487.6408,14746449.92,213,61596.64805
 2025,TX,Gaines,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,21945.9579,25728747.0,772,0.0
 2025,TX,Gaines,7,Cold Wet Weather,4863.725,2249108.81,14,4863.725
 2025,TX,Gaines,7,Drought,696.4989,42615.77,9,696.4989
@@ -50745,7 +50745,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Gaines,8,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,739.84,836064.0,16,0.0
 2025,TX,Gaines,8,Drought,2624.2832,134353.19999999998,17,2624.283
 2025,TX,Gaines,8,Hail,603.326,278535.2,2,603.326
-2025,TX,Gaines,8,Heat,8301.8825,823174.5,45,8290.607399999999
+2025,TX,Gaines,8,Heat,8181.8825,790144.5,44,8170.6074
 2025,TX,Gaines,8,Hot Wind,17381.3511,4038596.4,56,17342.2511
 2025,TX,Gaines,8,Wind/Excess Wind,10480.19262,1869189.45,26,10464.59662
 2025,TX,Gaines,9,Drought,1098.3,99876.0,3,1098.3
@@ -50798,13 +50798,13 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Glasscock,5,Drought,7431.023,1766786.3,24,7431.023
 2025,TX,Glasscock,5,Heat,111.096,78999.0,3,111.096
 2025,TX,Glasscock,5,Wind/Excess Wind,164.872,28337.0,1,164.872
-2025,TX,Glasscock,6,Drought,55191.4471,8946345.0,176,55191.44552
+2025,TX,Glasscock,6,Drought,55191.447100000005,8946345.0,176,55191.44552
 2025,TX,Glasscock,6,Hail,231.6,90359.75,5,231.6
 2025,TX,Glasscock,6,Heat,1808.15206,425335.0,13,1808.152
 2025,TX,Glasscock,6,Hot Wind,5104.33054,2284874.5,28,5104.3305
 2025,TX,Glasscock,6,"Other (Snow, Lightning, Etc.)",135.172,-5493.0,4,135.172
 2025,TX,Glasscock,6,Wind/Excess Wind,14029.2,4045821.95,25,14029.2
-2025,TX,Glasscock,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,24401.9887,9531505.0,391,0.0
+2025,TX,Glasscock,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,23563.6467,9499733.0,390,0.0
 2025,TX,Glasscock,7,Drought,4094.4972,383518.5,9,4094.497168
 2025,TX,Glasscock,7,Heat,205.67,17150.0,7,205.67
 2025,TX,Glasscock,7,Wind/Excess Wind,308.97,72130.5,1,308.97
@@ -50815,6 +50815,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Glasscock,8,Hot Wind,1263.9714999999999,657255.2,6,1263.9714999999999
 2025,TX,Glasscock,9,Heat,39.824,1971.0,1,39.824
 2025,TX,Glasscock,9,Hot Wind,163.025,14425.0,1,163.025
+2025,TX,Glasscock,10,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,838.342,31772.0,1,0.0
 2025,TX,Glasscock,10,Drought,326.91,1535.0,1,326.91
 2025,TX,Glasscock,11,Decline in Price,40.665,1286.0,1,40.665
 2025,TX,Glasscock,11,Drought,91.075,5738.0,3,91.075
@@ -50925,7 +50926,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Haskell,1,Drought,254.1838,5935.0,3,254.18371
 2025,TX,Haskell,1,Hot Wind,50.255,3869.0,1,50.255
 2025,TX,Haskell,6,Drought,253.4,16608.0,10,253.4
-2025,TX,Haskell,6,Excess Moisture/Precipitation/Rain,14147.534625,1492809.25,92,14147.533801000001
+2025,TX,Haskell,6,Excess Moisture/Precipitation/Rain,14147.534624999998,1492809.25,92,14147.533801000001
 2025,TX,Haskell,6,Hot Wind,1396.35314,138131.3,21,1396.35314
 2025,TX,Haskell,6,Wind/Excess Wind,4042.373475,926485.75,14,4042.373361
 2025,TX,Haskell,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,0.0,1170238.0,108,0.0
@@ -50957,7 +50958,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Hidalgo,3,Failure of Irrigation Supply,12830.1307,4826606.0,37,12830.130625
 2025,TX,Hidalgo,4,Excess Moisture/Precipitation/Rain,1720.742,593306.0,10,1720.742
 2025,TX,Hidalgo,4,Failure of Irrigation Equipment,71.65,27321.0,2,71.65
-2025,TX,Hidalgo,4,Failure of Irrigation Supply,8988.689999999999,3418586.0,28,8988.689999999999
+2025,TX,Hidalgo,4,Failure of Irrigation Supply,8988.69,3418586.0,28,8988.69
 2025,TX,Hidalgo,5,Excess Moisture/Precipitation/Rain,20.0,-9141.0,1,20.0
 2025,TX,Hidalgo,5,Failure of Irrigation Supply,22.424,10071.0,1,22.424
 2025,TX,Hidalgo,6,Excess Moisture/Precipitation/Rain,82.0,12713.0,2,82.0
@@ -51003,13 +51004,13 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Hockley,10,Wind/Excess Wind,162.79500000000002,5728.0,2,162.79500000000002
 2025,TX,Hockley,11,Decline in Price,84.5,1223.0,3,84.5
 2025,TX,Hopkins,4,Excess Moisture/Precipitation/Rain,70.57,2710.0,1,70.57
-2025,TX,Howard,4,Drought,40080.62015,7277854.75,142,40080.62027000001
+2025,TX,Howard,4,Drought,40080.620149999995,7277854.75,142,40080.62027
 2025,TX,Howard,4,Wind/Excess Wind,30.19375,4960.5,2,30.19375
 2025,TX,Howard,5,Drought,10087.52383,1956342.65,55,10087.52383
 2025,TX,Howard,6,Drought,44983.6766,6897826.220000001,200,44983.676039
 2025,TX,Howard,6,Excess Moisture/Precipitation/Rain,117.10899,20001.7,12,117.109
 2025,TX,Howard,6,Hail,3902.60694,801692.78,34,3902.606782
-2025,TX,Howard,6,Hot Wind,9049.156149999999,1263503.5,24,9049.13102
+2025,TX,Howard,6,Hot Wind,9049.15615,1263503.5,24,9049.13102
 2025,TX,Howard,6,Wind/Excess Wind,20875.74544,3540576.9,139,18486.613541400002
 2025,TX,Howard,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,101806.6594,5524863.0,529,0.0
 2025,TX,Howard,7,Drought,2975.0877,596312.0,18,2975.0877
@@ -51090,7 +51091,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Kent,12,Drought,193.5,5932.0,2,193.5
 2025,TX,King,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,284.5,32043.0,1,0.0
 2025,TX,Kleberg,10,Decline in Price,31.35,676.0,1,31.35
-2025,TX,Knox,6,Excess Moisture/Precipitation/Rain,3269.485,682593.3,20,3269.485
+2025,TX,Knox,6,Excess Moisture/Precipitation/Rain,3269.4849999999997,682593.3,20,3269.4849999999997
 2025,TX,Knox,6,Wind/Excess Wind,2325.37,1007784.7,15,2325.37
 2025,TX,Knox,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,60.0,801318.0,65,0.0
 2025,TX,Knox,7,Excess Moisture/Precipitation/Rain,29.025,17493.0,2,29.025
@@ -51110,10 +51111,10 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Lamb,6,Cold Wet Weather,1514.44,299283.3,9,1514.44
 2025,TX,Lamb,6,Decline in Price,83.46,156.0,1,83.46
 2025,TX,Lamb,6,Drought,131.25,336.0,1,131.25
-2025,TX,Lamb,6,Excess Moisture/Precipitation/Rain,5845.10094,1336559.7999999998,91,5845.10075
-2025,TX,Lamb,6,Hail,13406.610499999999,2701644.7,156,13505.2355
+2025,TX,Lamb,6,Excess Moisture/Precipitation/Rain,5845.10094,1336559.8,91,5845.10075
+2025,TX,Lamb,6,Hail,13406.610499999999,2701644.7,156,13505.235499999999
 2025,TX,Lamb,6,Hot Wind,3622.1137500000004,729171.5,13,3622.11375
-2025,TX,Lamb,6,Wind/Excess Wind,7177.20075,1083625.55,81,7066.74325
+2025,TX,Lamb,6,Wind/Excess Wind,7177.20075,1083625.55,81,7066.7432499999995
 2025,TX,Lamb,7,Drought,75.39,5198.6,3,75.39
 2025,TX,Lamb,7,Hail,123.058,29880.6,4,126.358
 2025,TX,Lamb,7,Heat,336.935,36145.0,6,336.935
@@ -51156,7 +51157,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Lubbock,6,Decline in Price,216.67,1665.0,3,216.67
 2025,TX,Lubbock,6,Drought,881.9865,100189.0,12,881.9865
 2025,TX,Lubbock,6,Excess Moisture/Precipitation/Rain,2947.740025,479187.98,53,2978.739825
-2025,TX,Lubbock,6,Hail,45959.1284,12441623.58,461,44911.90107
+2025,TX,Lubbock,6,Hail,45959.1284,12441623.58,461,44911.90106999999
 2025,TX,Lubbock,6,Heat,368.0,26372.0,14,368.0
 2025,TX,Lubbock,6,Hot Wind,759.08275,96732.7,8,759.08275
 2025,TX,Lubbock,6,Wind/Excess Wind,6825.9738,1022133.22,106,6630.053749999999
@@ -51283,16 +51284,16 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Medina,9,Heat,41.5,6333.0,1,41.5
 2025,TX,Medina,12,Drought,6.732,626.0,1,6.732
 2025,TX,Midland,3,Wind/Excess Wind,75.5376,4643.0,2,75.5375
-2025,TX,Midland,4,Wind/Excess Wind,375.97749999999996,49683.0,6,375.97749999999996
+2025,TX,Midland,4,Wind/Excess Wind,375.9775,49683.0,6,375.9775
 2025,TX,Midland,5,Drought,2314.24,501482.0,11,2314.24
-2025,TX,Midland,6,Drought,11362.3325,1376827.0,50,11362.332212
+2025,TX,Midland,6,Drought,11362.3325,1376827.0,50,11362.332212000001
 2025,TX,Midland,6,Heat,18.0,12559.0,1,18.0
 2025,TX,Midland,6,Hot Wind,1042.61,840151.0,7,1042.61
 2025,TX,Midland,6,Wind/Excess Wind,5832.375,918531.0,6,5832.375
 2025,TX,Midland,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,2644.0125,1077747.0,54,0.0
 2025,TX,Midland,8,Drought,8.7612,1017.0,1,8.7612
 2025,TX,Mitchell,6,Decline in Price,318.6613,12717.0,4,318.66125
-2025,TX,Mitchell,6,Drought,21186.77297,1887726.15,118,21186.767905
+2025,TX,Mitchell,6,Drought,21186.772969999998,1887726.15,118,21186.767905
 2025,TX,Mitchell,6,Hail,88.95,17080.0,8,88.95
 2025,TX,Mitchell,6,Heat,1173.0501,515187.25,10,1173.049949
 2025,TX,Mitchell,6,Hot Wind,39.3075,9937.0,1,39.3075
@@ -51498,17 +51499,17 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Scurry,6,Wildlife,44.9775,4934.0,3,44.9775
 2025,TX,Scurry,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,3533.7726,1299345.0,318,0.0
 2025,TX,Scurry,7,Drought,3208.0576,284209.0,16,3250.3075
-2025,TX,Scurry,7,Excess Moisture/Precipitation/Rain,3080.62986,364154.25,85,3080.52236
+2025,TX,Scurry,7,Excess Moisture/Precipitation/Rain,3376.83486,378695.05,87,3376.71236
 2025,TX,Scurry,7,Heat,483.19875,4980.0,1,483.19875
 2025,TX,Scurry,7,Hot Wind,2216.7110000000002,401316.0,9,2330.881
-2025,TX,Scurry,7,Insects,165.96,17386.5,5,165.95
+2025,TX,Scurry,7,Insects,306.3,24490.5,7,306.28999999999996
 2025,TX,Scurry,7,Wind/Excess Wind,3697.16525,490049.0,14,3697.1652599999998
 2025,TX,Scurry,8,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,0.0,132.0,2,0.0
 2025,TX,Scurry,8,Drought,3928.4514,257027.1,37,3928.4512999999997
 2025,TX,Scurry,8,Heat,316.15,54452.5,4,316.15
 2025,TX,Scurry,8,Hot Wind,166.63,34562.0,1,166.63
 2025,TX,Scurry,9,Drought,4713.42393,520505.35,50,4713.42393
-2025,TX,Scurry,10,Drought,3173.90216,195874.59999999998,44,3173.88216
+2025,TX,Scurry,10,Drought,3516.6821600000003,211413.8,46,3516.60216
 2025,TX,Scurry,10,Heat,5.2,1311.0,1,5.2
 2025,TX,Scurry,10,Wildlife,24.3775,2826.6,1,24.3775
 2025,TX,Scurry,11,Decline in Price,29.625,132.0,1,29.625
@@ -51707,8 +51708,8 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Yoakum,6,Excess Moisture/Precipitation/Rain,1013.191375,393349.12,11,1013.1913750000001
 2025,TX,Yoakum,6,Hail,11596.953625,1639928.2,76,10366.227325
 2025,TX,Yoakum,6,Heat,2131.6975,210338.5,6,2125.6975
-2025,TX,Yoakum,6,Hot Wind,8850.48328,1291166.84,34,8850.483250000001
-2025,TX,Yoakum,6,Wind/Excess Wind,31038.74192,6080539.29,121,31039.141799999998
+2025,TX,Yoakum,6,Hot Wind,8850.48328,1291166.84,34,8850.48325
+2025,TX,Yoakum,6,Wind/Excess Wind,31038.741919999997,6080539.29,121,31039.141799999998
 2025,TX,Yoakum,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,14176.6176,7059026.0,335,0.0
 2025,TX,Yoakum,7,Cold Wet Weather,25.7565,4540.8,1,25.7565
 2025,TX,Yoakum,7,Decline in Price,1051.155,29306.200000000004,2,1051.155
@@ -51722,7 +51723,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Yoakum,8,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,433.79,142897.0,6,0.0
 2025,TX,Yoakum,8,Drought,99.5775,15018.0,1,99.5775
 2025,TX,Yoakum,8,Hail,1153.7025,130985.4,3,1153.7025
-2025,TX,Yoakum,8,Heat,3453.7152,704303.0,15,3583.115
+2025,TX,Yoakum,8,Heat,3325.7152,686060.0,14,3325.715
 2025,TX,Yoakum,8,Hot Wind,7040.268999999999,1317033.9,19,7040.268999999999
 2025,TX,Yoakum,8,Wind/Excess Wind,2404.0825,271163.85,15,2404.0825
 2025,TX,Yoakum,9,Drought,920.9550999999999,46388.0,5,920.9549999999999
