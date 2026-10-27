@@ -205,9 +205,13 @@ var loaded={w:false,p:false,o:false,c:false},CACHE=null;
 function setStatus(h){document.getElementById('status').innerHTML=h;}
 function maybeRun(){
   setStatus('px <span class="'+(loaded.p?'ok">✓':'">…')+'</span> wasde <span class="'+(loaded.w?'ok">✓':'">…')+'</span> on-call <span class="'+(loaded.o?'ok">✓':'">…')+'</span> cot <span class="'+(loaded.c?(COTfail?'warn">n/a':'ok">✓'):'">…')+'</span>');
-  if(loaded.m&&loaded.w&&loaded.p&&loaded.o&&loaded.c)run();
+  if(loaded.m&&loaded.w&&loaded.p&&loaded.o&&loaded.c)safeRun();
 }
-fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;maybeRun();}).catch(function(){setStatus('<span class="err">wasde failed</span>');});
+function safeRun(){
+  try{run();}
+  catch(e){console.error(e);setStatus('<span class="err">render error: '+String(e&&e.message||e).replace(/</g,'&lt;')+'</span>');}
+}
+fetch(WASDE_URL).then(function(r){return r.json();}).then(function(j){WJ=j;loaded.w=true;},function(){WJ=null;}).then(function(){if(WJ)maybeRun();else setStatus('<span class="err">wasde failed</span>');});
 MM_READY.then(function(){mmPrefillInputs();loaded.m=true;maybeRun();});
 Papa.parse(PRICE_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){PXrows=res.data;loaded.p=true;maybeRun();}});
 Papa.parse(OC_URL,{download:true,header:true,skipEmptyLines:true,complete:function(res){OCrows=res.data;loaded.o=true;maybeRun();}});
@@ -269,6 +273,7 @@ function buildAll(){
   PXrows.forEach(function(r){if(!r['Dates'])return;recs.push({d:parseD(r['Dates']),r:r,px:num(r['CTDEC1 Comdty PX_LAST']),iv:num(r['CTDEC1 Comdty HIST_CALL_IMP_VOL'])});});
   recs.sort(function(a,b){return a.d-b.d;});
   C.recs=recs;C.last=recs[recs.length-1];
+  C.lastIv=null;for(var li=recs.length-1;li>=0;li--)if(recs[li].iv!==null){C.lastIv=recs[li];break;}
   function idxOn(t){for(var i=0;i<recs.length;i++)if(recs[i].d>=t)return i;return null;}
   C.idxOn=idxOn;
   function hv20(i){
@@ -518,7 +523,8 @@ function run(){
   P.fl=function(id){return mmFloor(id,P);};
   document.getElementById('floor-tbl').innerHTML=mmFloorTable(P);
   var px=P.mktPx!==null?P.mktPx:C.last.px;
-  var iv=P.mktIv!==null?P.mktIv:C.last.iv;
+  var iv=P.mktIv!==null?P.mktIv:(C.last.iv!==null?C.last.iv:(C.lastIv?C.lastIv.iv:null));
+  var ivAsOf=(P.mktIv===null&&C.last.iv===null&&C.lastIv)?' · as of '+(C.lastIv.d.getMonth()+1)+'/'+C.lastIv.d.getDate():'';
   var beta=P.useBeta&&C.beta?C.beta.b:P.betaOv;
   var nowM=new Date().getMonth()+1;if(nowM<6)nowM=6;if(nowM>11)nowM=11;
 
@@ -585,7 +591,7 @@ function run(){
   document.getElementById('h-tgt').innerHTML=f1(S.med.tgt)+'<small> ¢</small>';
   document.getElementById('h-tgt-sub').textContent='band '+f1(Math.min(S.bull.tgt,S.bear.tgt))+'–'+f1(Math.max(S.bull.tgt,S.bear.tgt))+'¢ · mkt '+f1(px)+'¢ · edge '+sgn(S.med.edge)+'¢';
   document.getElementById('h-iv').innerHTML=f1(ivM)+'<small> %</small>';
-  document.getElementById('h-iv-sub').textContent='mkt '+f1(iv)+'% ('+sgn(iv-ivM)+' pts) · bull-S/U FV '+f1(ivB)+'%';
+  document.getElementById('h-iv-sub').textContent='mkt '+f1(iv)+'% ('+(iv!==null?sgn(iv-ivM):'—')+' pts) · bull-S/U FV '+f1(ivB)+'%';
   document.getElementById('h-stk').innerHTML=f1(S.med.stk)+'<small>M</small> / '+f1(S.med.su*100)+'<small>%</small>';
   document.getElementById('h-stk-sub').textContent='WASDE '+f1(C.wStk)+'M / '+f1(C.wStk/C.wUse*100)+'%';
   document.getElementById('h-side').innerHTML=
@@ -599,8 +605,8 @@ function run(){
     ro('Dec26',f2(px)+'¢',C.chg20!==null?sgn(C.chg20)+'¢/20d':'')+
     ro('Dec−Mar',dm!==null?sgn(dm)+'¢':'—',dm===null?C['decmar'].mktLbl:'carry')+
     ro('Jul−Dec',jd!==null?sgn(jd)+'¢':'—',jd===null?C['juldec'].mktLbl:'old/new')+
-    ro('Dec26 IV',f1(iv)+'%',C.ivPct(iv)+'th pctile')+
-    ro('HV20',f1(C.hvNow)+'%','IV−HV '+sgn(iv-C.hvNow))+
+    ro('Dec26 IV',f1(iv)+'%',iv!==null?C.ivPct(iv)+'th pctile'+ivAsOf:'no IV in price file')+
+    ro('HV20',f1(C.hvNow)+'%',iv!==null&&C.hvNow!==null?'IV−HV '+sgn(iv-C.hvNow):'')+
     ro('Dec LDP trigger',P.floor.toFixed(1)+'¢','loan + Dec−AWP wedge');
   document.getElementById('mkt-foot').textContent='px data through '+lastStr+' · on-call through '+((L.d.getMonth()+1)+'/'+L.d.getDate()+'/'+String(L.d.getFullYear()).slice(2))+' · wasde '+(WJ.lastUpdated||'');
 
@@ -731,7 +737,8 @@ function drawIVPath(C,S,mktIv,nowM,ratio){
       return C.ivFV(m,sc[0],hv,ratio);
     })};
   });
-  var all=[];series.forEach(function(sr){all=all.concat(sr.vals);});all.push(mktIv);
+  var hasMkt=mktIv!==null&&mktIv!==undefined&&isFinite(mktIv);
+  var all=[];series.forEach(function(sr){all=all.concat(sr.vals);});if(hasMkt)all.push(mktIv);
   var ymin=Math.min.apply(null,all)-2,ymax=Math.max.apply(null,all)+2;
   var W=980,H=280,Lx=46,R=110,T=14,B=28;
   function X(i){return Lx+i/(months.length-1)*(W-Lx-R);}
@@ -750,8 +757,8 @@ function drawIVPath(C,S,mktIv,nowM,ratio){
     s+='<text x="'+(W-R+8)+'" y="'+Y(sr.vals[sr.vals.length-1])+'" font-size="10" font-weight="700" fill="'+sr.c+'">'+sr.nm+' '+sr.vals[sr.vals.length-1].toFixed(1)+'%</text>';
   });
   var mi=months.indexOf(nowM);if(mi<0)mi=1;
-  s+='<circle cx="'+X(mi)+'" cy="'+Y(mktIv)+'" r="6" fill="none" stroke="#16324f" stroke-width="2.5"/>';
-  s+='<text x="'+X(mi)+'" y="'+(Y(mktIv)-10)+'" font-size="10" font-weight="700" fill="#16324f" text-anchor="middle">MKT '+mktIv.toFixed(1)+'%</text>';
+  if(hasMkt)s+='<circle cx="'+X(mi)+'" cy="'+Y(mktIv)+'" r="6" fill="none" stroke="#16324f" stroke-width="2.5"/>';
+  if(hasMkt)s+='<text x="'+X(mi)+'" y="'+(Y(mktIv)-10)+'" font-size="10" font-weight="700" fill="#16324f" text-anchor="middle">MKT '+mktIv.toFixed(1)+'%</text>';
   s+='</svg>';
   document.getElementById('iv-path').innerHTML=s;
 }
@@ -829,7 +836,7 @@ function drawScatter(o,P,wstk,mstk,bstk){
 ['in-pmed','in-plo','in-phi','in-wprod','in-dresp','in-usebeta','in-beta','in-lvlw',
  'in-loan','in-wedge','in-q3','in-lb','in-stor','in-rate','in-lbsprd',
  'in-useOC','in-wOC','in-wOCs','in-useCOT','in-wCOT','in-mktpx','in-mktiv'].forEach(function(id){
-  document.getElementById(id).addEventListener('input',function(){if(loaded.m&&loaded.w&&loaded.p&&loaded.o&&loaded.c)run();});
+  document.getElementById(id).addEventListener('input',function(){if(loaded.m&&loaded.w&&loaded.p&&loaded.o&&loaded.c)safeRun();});
 });
 setStatus('loading data…');
 </script>
