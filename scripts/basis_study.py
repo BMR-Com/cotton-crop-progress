@@ -3,7 +3,8 @@
 minus the nearby ICE futures) predict the front calendar spread or flat price from October to May?
 
 Inputs : data/spot/spot41_daily.csv (date, spot41), ICE contract closes (TradingView, cftc-cot-full research data)
-Outputs: printed tables + results CSV in a scratch directory (findings go to the private research notes, not the site)
+Run: python scripts/basis_study.py [spot csv] [contracts csv.gz] [output dir]
+Outputs: printed tables + CSVs in the output dir (findings are kept in private research notes, not on the site)
 """
 import os, sys, numpy as np, pandas as pd
 SPOT = sys.argv[1] if len(sys.argv) > 1 else 'data/spot/spot41_daily.csv'

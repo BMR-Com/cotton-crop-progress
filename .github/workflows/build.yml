@@ -18,6 +18,9 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: pip install requests pandas numpy yfinance
+      - name: AMS daily spot cotton quotations (basis, base 41-4-34 and 31-3-36)
+        env: {AMS_API_KEY: "${{ secrets.AMS_API_KEY }}"}
+        run: python scripts/fetch_spot.py || echo 'spot quotations not updated'
       - name: Prices for the model tabs (Bloomberg history + ICE settlements + Yahoo)
         run: python scripts/build_prices.py || echo 'price build failed; keeping previous file'
       - run: python scripts/build.py
@@ -27,6 +30,6 @@ jobs:
         run: python scripts/build_market.py || echo 'market model build failed; keeping previous file'
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/data
+          git add docs/data data/spot
           git commit -m "Build crop analytics $(date -u +%Y-%m-%d)" || exit 0
           for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done

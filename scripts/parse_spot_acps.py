@@ -14,7 +14,7 @@ MNUM = dict(Aug=8, Sep=9, Oct=10, Nov=11, Dec=12, Jan=1, Feb=2, Mar=3, Apr=4, Ma
 def my_start(path, text):
     m = re.search(r'(\d{4})-(\d{4})', os.path.basename(path))
     if m and 'ACPS' in os.path.basename(path): return int(m.group(1))
-    m = re.search(r'daily and monthly averages,\s*(\d{4})-(\d{4})', text)
+    m = re.search(r'daily\s+and monthly averages,\s*(\d{4})-(\d{4})', text) or re.search(r'monthly averages,\s*(\d{4})-(\d{4})', text)
     return int(m.group(1)) if m else None
 
 def parse(path):
