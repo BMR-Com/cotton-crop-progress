@@ -28,6 +28,8 @@ jobs:
         run: python scripts/build_technicals.py || echo 'technicals build failed; keeping previous file'
       - name: Loan floors (latest AWP) and spread fair value
         run: python scripts/build_market.py || echo 'market model build failed; keeping previous file'
+      - name: Spot basis and trade ideas
+        run: python scripts/build_basis.py || echo 'basis build failed; keeping previous file'
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/data data/spot

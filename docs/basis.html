@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cotton Basis &amp; Trade Ideas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{color-scheme:light;--bg:#f6f6f4;--surface:#fcfcfb;--border:#e2e1dc;--text:#0b0b0b;--text-2:#52514e;--muted:#8a8984;
+  --up:#0f7a3d;--down:#c4302b;--up-bg:#e6f4ea;--down-bg:#fbe9e7;--grid:#eeede9;--accent:#1f3a5f;--warn-bg:#fff6dd;--warn:#7a5a00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#121211;--surface:#1a1a19;--border:#33332f;--text:#f0efec;--text-2:#c3c2b7;--muted:#8f8e86;
+  --up:#4cc27a;--down:#ff7a6e;--up-bg:#173322;--down-bg:#3a1c19;--grid:#262624;--accent:#9db8dd;--warn-bg:#3a3015;--warn:#f0c860}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121211;--surface:#1a1a19;--border:#33332f;--text:#f0efec;--text-2:#c3c2b7;--muted:#8f8e86;
+  --up:#4cc27a;--down:#ff7a6e;--up-bg:#173322;--down-bg:#3a1c19;--grid:#262624;--accent:#9db8dd;--warn-bg:#3a3015;--warn:#f0c860}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,system-ui,sans-serif}
+.bmr-nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 16px;font-size:12px;background:var(--surface);border-bottom:1px solid var(--border)}
+.bmr-nav b{margin-right:6px;color:var(--accent)}
+.bmr-nav a{color:var(--text-2);text-decoration:none;padding:3px 9px;border:1px solid var(--border);border-radius:999px}
+.bmr-nav a.on{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.toggle{font:inherit;font-size:12px;background:none;border:1px solid var(--border);border-radius:999px;padding:3px 9px;color:var(--text-2);cursor:pointer;margin-left:auto}
+.wrap{max-width:1400px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:0 0 2px} h2{font-size:15px;margin:0 0 4px}
+.sub{color:var(--text-2);font-size:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:16px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:12px}
+@media (max-width:1000px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.kpi .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.kpi{min-width:0}.kpi .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:11px;color:var(--text-2)}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:6px}
+.pill.up{background:var(--up-bg);color:var(--up)}.pill.down{background:var(--down-bg);color:var(--down)}.pill.n{background:var(--grid);color:var(--text-2)}.pill.w{background:var(--warn-bg);color:var(--warn)}
+.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr));gap:12px;margin-top:10px}
+.idea{border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--bg)}
+.idea h3{font-size:13px;margin:0 0 6px}
+.idea .row{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--text-2);margin:2px 0}
+.idea .row b{color:var(--text);font-weight:600;text-align:right}
+.idea p{font-size:12px;color:var(--text-2);margin:8px 0 0}
+.idea .rec{font-size:11px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--border);padding-top:6px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:1000px){.grid2{grid-template-columns:minmax(0,1fr)}}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);text-align:right;padding:5px 6px;border-bottom:1px solid var(--border)}
+td{text-align:right;padding:5px 6px;border-bottom:1px solid var(--border)}
+th:first-child,td:first-child{text-align:left}
+tr.on td{font-weight:700;background:var(--grid)}
+.tw{overflow-x:auto}
+.legend{font-size:12px;color:var(--text-2);margin:6px 0}
+.note{font-size:11px;color:var(--muted);margin-top:8px}
+#hist{height:320px}
+.idea .row b{overflow-wrap:anywhere}
+@media (max-width:560px){.kpi .v{font-size:18px}}
+</style>
+</head>
+<body>
+<nav class="bmr-nav"><b>BMR-Com Cotton</b>
+<a href="index.html">Crop monitor</a><a href="technicals.html">Price &amp; technicals</a><a href="model.html">Production model</a><a href="conditional.html">Conditional FV</a><a href="master.html">Master model</a><a href="spreads.html">Spreads</a><a href="basis.html" class="on">Basis &amp; ideas</a><a href="classic.html">Classic charts</a>
+<button class="toggle" id="theme">Theme</button></nav>
+<div class="wrap">
+  <h1>US spot basis &amp; cotton trade ideas</h1>
+  <div class="sub" id="asof">Loading…</div>
+  <div class="kpis" id="kpis"></div>
+
+  <div class="card">
+    <h2>Trade ideas</h2>
+    <p class="sub">Rule-based ideas, re-checked on every update. Spreads are one lot each leg ($500 per cent). "Record" is how the same rule did in past seasons. These are research outputs, not recommendations.</p>
+    <div class="ideas" id="ideas"></div>
+  </div>
+
+  <div class="card">
+    <h2>Basis seasonality — spot 41-4-34 minus nearby futures</h2>
+    <p class="sub" id="seasLead"></p>
+    <div class="legend"><span style="color:#2a78d6">■</span> this season &nbsp; <span style="color:#eb6834">■</span> last season &nbsp; <span style="color:#8a8984">■</span> 5-season average &nbsp; shaded: 10–90th and 25–75th percentile of all seasons</div>
+    <div style="position:relative;height:340px"><canvas id="seas"></canvas></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>What followed — next 8 weeks, by basis state</h2>
+      <p class="sub">Basis state = basis versus its normal level for that week of the season (weak / normal / firm thirds). Front = the nearest Dec/Mar/May/Jul not entering delivery within 8 weeks; spread = front minus the next contract.</p>
+      <div class="tw"><table id="tOM"></table></div>
+      <div class="tw" style="margin-top:10px"><table id="tJM"></table></div>
+    </div>
+    <div class="card">
+      <h2>Basis by month — last 12 seasons (median, ¢/lb)</h2>
+      <div class="tw"><table id="heat"></table></div>
+      <p class="note">Marketing year runs August to July. Negative = spot under futures.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Basis by spot market (points on/off the futures month AMS quotes)</h2>
+    <div class="tw"><table id="mk"></table></div>
+    <div style="position:relative;height:300px;margin-top:10px"><canvas id="mkc"></canvas></div>
+    <p class="note">Base quality 41-4-34, from the USDA AMS Daily Spot Cotton Quotations (available by market from August 2025).</p>
+  </div>
+
+  <div class="card">
+    <h2>Basis history since 2000 (weekly, ¢/lb)</h2>
+    <div id="hist"></div>
+    <p class="note" id="foot"></p>
+  </div>
+</div>
+<script>
+(function(){
+const $=s=>document.querySelector(s), css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}
+const MON=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'];
+const PAL=['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4','#008300','#6250d6','#e34948'];
+let D=null, charts=[], hist=null;
+const f2=v=>v==null?'–':(v>0?'+':'')+v.toFixed(2);
+const col=(v,s)=>{if(v==null)return'';const a=Math.min(1,Math.abs(v)/s)*.5;return v>=0?`background:rgba(15,122,61,${a.toFixed(3)})`:`background:rgba(196,48,43,${a.toFixed(3)})`;};
+
+function kpis(){const n=D.now;
+  const st=n.state==='Weak'?'down':n.state==='Firm'?'up':'n';
+  const k=[['Spot 41-4-34',n.spot.toFixed(2)+'¢',`average of designated markets · ${n.date}`],
+    ['Nearby futures',n.fut.toFixed(2)+'¢',n.near],
+    ['Basis',f2(n.basis)+'¢',`normal for this week ${f2(n.norm)}¢`],
+    ['Vs normal',f2(n.anom)+'¢',`<span class="pill ${st}">${n.state} basis</span> · ${n.pct_anom}th percentile`],
+    ['4-week change',n.chg4==null?'–':f2(n.chg4)+'¢','change in basis over 4 weeks'],
+    ['Same week, all seasons',n.same_week_range?`${f2(n.same_week_range[0])} to ${f2(n.same_week_range[1])}`:'–','10th–90th percentile, ¢']];
+  $('#kpis').innerHTML=k.map(x=>`<div class="kpi"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('');}
+
+function ideas(){
+  const cls=s=>/^Active|Cover/.test(s)?'up':/^Qualifies|^Upcoming/.test(s)?'w':/^Stop|Not taken/.test(s)?'down':'n';
+  $('#ideas').innerHTML=D.ideas.map(i=>{
+    const r=i.record;
+    const mark=i.mark?`<div class="row"><span>Mark</span><b style="color:${i.mark.pnl_c>=0?'var(--up)':'var(--down)'}">${f2(i.mark.pnl_c)}¢ (${i.mark.pnl_usd>=0?'+':'−'}$${Math.abs(i.mark.pnl_usd).toLocaleString()})</b></div>`:'';
+    const roll=i.next_roll?`<div class="row"><span>Next roll</span><b>${i.next_roll.contract} → ${i.next_roll.to}: ${i.next_roll.rogers} (Rogers) or ${i.next_roll.gsci} (GSCI)</b></div>`:'';
+    const rec=r?`<div class="rec">Record: worked ${r.hit}% of ${r.n} · average ${r.avg} · ${r.label}${r.extra?' · '+r.extra:''}</div>`:'';
+    return `<div class="idea"><h3>${i.title} <span class="pill ${cls(i.status)}">${i.status}</span></h3>
+      <div class="row"><span>Position</span><b>${i.side}</b></div><div class="row"><span>Contract</span><b>${i.instrument}</b></div>
+      <div class="row"><span>Window</span><b>${i.window}</b></div>${mark}${roll}<p>${i.why}</p>${rec}</div>`;}).join('');}
+
+function seas(){
+  const S=D.seasonal, P=a=>(a||[]).map(p=>({x:p[0],y:p[1]}));
+  $('#seasLead').textContent=`Weekly basis through each marketing year (Aug–Jul), this season against ${S.n_years} seasons since ${S.first_my}/${String(S.first_my+1).slice(2)}. Basis is measured against the nearest Dec/Mar/May/Jul futures not close to first notice.`;
+  const wl=w=>{const d=new Date(Date.UTC(2001,7,1+7*w));return d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});};
+  const band='rgba(138,137,132,.16)',band2='rgba(138,137,132,.28)';
+  charts.push(new Chart($('#seas'),{type:'line',data:{datasets:[
+    {label:'90th',data:P(S.bands[90]),borderWidth:0,pointRadius:0,fill:false},
+    {label:'10–90th',data:P(S.bands[10]),borderWidth:0,pointRadius:0,backgroundColor:band,fill:'-1'},
+    {label:'75th',data:P(S.bands[75]),borderWidth:0,pointRadius:0,fill:false},
+    {label:'25–75th',data:P(S.bands[25]),borderWidth:0,pointRadius:0,backgroundColor:band2,fill:'-1'},
+    {label:'Median',data:P(S.bands[50]),borderColor:'#8a8984',borderWidth:1,pointRadius:0,borderDash:[2,3]},
+    {label:'5-season avg',data:P(S.avg5),borderColor:'#8a8984',borderWidth:1.5,pointRadius:0,borderDash:[5,4]},
+    {label:'Last season',data:P(S.last_year),borderColor:'#eb6834',borderWidth:1.8,pointRadius:0},
+    {label:'This season',data:P(S.current),borderColor:'#2a78d6',borderWidth:2.8,pointRadius:0}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{filter:i=>!['90th','75th'].includes(i.dataset.label),callbacks:{title:i=>'Week of '+wl(i[0].parsed.x),label:c=>`${c.dataset.label}: ${c.parsed.y.toFixed(2)}¢`}}},
+      scales:{x:{type:'linear',min:0,max:52,grid:{display:false},ticks:{color:css('--muted'),stepSize:4.35,callback:v=>wl(v)}},
+              y:{grid:{color:css('--grid')},ticks:{color:css('--muted'),callback:v=>v+'¢'}}}}}));}
+
+function tables(){
+  const n=D.now.state, H=D.history;
+  const t=(rows,title)=>`<thead><tr><th>${title}</th><th>Weeks</th><th>Futures, avg</th><th>Futures up</th><th>Spread, avg</th><th>Front gained</th><th>$/spread</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr${r.state===n?' class="on"':''}><td>${r.state} basis${r.state===n?' (now)':''}</td><td>${r.n}</td><td style="${col(r.fut_avg,4)}">${f2(r.fut_avg)}%</td><td>${r.fut_up}%</td><td style="${col(r.spread_avg,1.5)}">${f2(r.spread_avg)}¢</td><td>${r.spread_up}%</td><td>${r.spread_usd>=0?'+':'−'}$${Math.abs(r.spread_usd).toLocaleString()}</td></tr>`).join('')+'</tbody>';
+  $('#tOM').innerHTML=t(H.oct_may,'October–May'); $('#tJM').innerHTML=t(H.jan_may,'January–May');
+  const yrs=Object.keys(D.heat).map(Number).sort((a,b)=>b-a);
+  let h='<thead><tr><th>Season</th>'+MON.map(m=>`<th>${m}</th>`).join('')+'</tr></thead><tbody>';
+  yrs.forEach(y=>{h+=`<tr><td>${y}/${String(y+1).slice(2)}</td>`+MON.map(m=>{const v=D.heat[y][m];return `<td style="${col(v==null?null:v+3.5,3)}">${v==null?'':v.toFixed(1)}</td>`;}).join('')+'</tr>';});
+  $('#heat').innerHTML=h+'</tbody>';}
+
+function markets(){
+  const M=D.markets, names=Object.keys(M).sort((a,b)=>a==='US Average'?-1:b==='US Average'?1:a.localeCompare(b));
+  if(!names.length){$('#mk').innerHTML='<tr><td>No market data.</td></tr>';return;}
+  $('#mk').innerHTML='<thead><tr><th>Market</th><th>Date</th><th>Price 41-4-34</th><th>Basis (pts)</th><th>vs</th><th>4-week change</th><th>Bales, 4 weeks</th></tr></thead><tbody>'+
+    names.map(m=>{const x=M[m];return `<tr${m==='US Average'?' class="on"':''}><td>${m}</td><td>${x.date}</td><td>${x.price.toFixed(2)}¢</td><td>${x.basis_pts>0?'+':''}${x.basis_pts}</td><td>${x.basis_month}</td><td style="${col(x.chg4_pts,150)}">${x.chg4_pts==null?'–':(x.chg4_pts>0?'+':'')+x.chg4_pts}</td><td>${x.bales_4w.toLocaleString()}</td></tr>`;}).join('')+'</tbody>';
+  const ds=names.map((m,i)=>({label:m,data:M[m].series.map(p=>({x:p[0],y:p[1]})),borderColor:m==='US Average'?css('--text'):PAL[i%PAL.length],borderWidth:m==='US Average'?2.6:1.4,pointRadius:0}));
+  const all=[...new Set(ds.flatMap(d=>d.data.map(p=>p.x)))].sort();
+  charts.push(new Chart($('#mkc'),{type:'line',data:{labels:all,datasets:ds.map(d=>({...d,data:all.map(x=>{const p=d.data.find(q=>q.x===x);return p?p.y:null;}),spanGaps:true}))},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,color:css('--text-2'),font:{size:11}}}},
+      scales:{x:{ticks:{color:css('--muted'),maxTicksLimit:10},grid:{display:false}},y:{ticks:{color:css('--muted')},grid:{color:css('--grid')}}}}}));}
+
+function history(){
+  if(hist)hist.remove();
+  const el=$('#hist');
+  hist=LightweightCharts.createChart(el,{height:320,width:el.clientWidth,layout:{background:{type:'solid',color:css('--surface')},textColor:css('--text-2'),fontFamily:'Inter,system-ui,sans-serif',fontSize:11},
+    grid:{vertLines:{color:css('--grid')},horzLines:{color:css('--grid')}},rightPriceScale:{borderColor:css('--border')},timeScale:{borderColor:css('--border')}});
+  const s=hist.addLineSeries({color:'#2a78d6',lineWidth:1.6,priceLineVisible:false});
+  s.setData(D.weekly.map(p=>({time:p[0],value:p[1]})));
+  s.createPriceLine({price:0,color:css('--muted'),lineWidth:1,lineStyle:2,axisLabelVisible:false});
+  hist.timeScale().fitContent();}
+
+function all(){charts.forEach(c=>c.destroy());charts=[];kpis();ideas();seas();tables();markets();history();}
+$('#theme').onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){};all();};
+window.addEventListener('resize',()=>{if(hist)hist.applyOptions({width:$('#hist').clientWidth});});
+fetch('data/basis.json?'+Date.now()).then(r=>r.json()).then(j=>{D=j;
+  $('#asof').textContent=`USDA AMS daily spot quotations (base quality 41-4-34, average of the designated markets) against ICE futures · spot through ${j.spot_as_of} · futures through ${j.as_of} · updated ${j.generated}`;
+  $('#foot').textContent='Spot history: USDA AMS Annual Cotton Price Statistics (2000/01 onward; 2001/02 not available in machine-readable form) and the MyMarketNews Daily Spot Cotton Quotations API. Futures: ICE settlements. October futures are not used.';
+  all();}).catch(e=>{$('#asof').textContent='Could not load data: '+e;});
+})();
+</script>
+</body>
+</html>
