@@ -1,28 +1,25 @@
-import os, re, json, requests
-K=os.environ['AMS_API_KEY']; A=(K,''); B='https://marsapi.ams.usda.gov/services/v3.1'
-os.makedirs('pout',exist_ok=True); out={}
-def get(path,q=None):
-    try:
-        r=requests.get(B+path,params={'q':q} if q else None,auth=A,timeout=120); return r.json()
-    except Exception as e: return {'err':str(e)}
-for s in (3804,3895):
-    out[f'{s}_sections']=get(f'/reports/{s}/sections') if True else None
-    cov={}
-    for y in range(2000,2027):
-        j=get(f'/reports/{s}',f'report_begin_date=01/01/{y}:01/31/{y}')
-        cov[y]=len(j.get('results',[])) if isinstance(j,dict) else ('list',len(j))
-    out[f'{s}_coverage_jan']=cov; print(s,cov,flush=True)
-# detail rows for one day / one month
-for s,q in ((3804,'report_begin_date=10/09/2025:10/10/2025'),(3895,'report_begin_date=10/01/2025:10/31/2025')):
-    for sec in ('Report Detail','Details','Report Details'):
-        j=get(f'/reports/{s}/{sec}',q)
-        if isinstance(j,dict) and j.get('results'):
-            out[f'{s}_{sec}']=j['results'][:40]; print(s,sec,len(j['results'])); break
-    else:
-        out[f'{s}_detail_raw']=str(get(f'/reports/{s}',q+'&allSections=true'))[:4000]
-H={'User-Agent':'Mozilla/5.0'}
-for u in ['https://apps.ams.usda.gov/Cotton/AnnualCNMarketNewsReports/','https://apps.ams.usda.gov/Cotton/Historical%20Weekly%20Reports/MY%202005-2006/','https://apps.ams.usda.gov/Cotton/Historical%20Weekly%20Reports/MY%202015-2016/']:
-    try:
-        t=requests.get(u,headers=H,timeout=60).text; out['dir '+u]=re.findall(r'HREF="([^"]+)"',t,re.I)[:300]; print(u,len(out['dir '+u]))
-    except Exception as e: print('dir fail',u,e)
-json.dump(out,open('pout/probe2.json','w'),indent=1,default=str)
+import os, json, requests, subprocess
+K=os.environ['AMS_API_KEY']; A=(K,''); B='https://marsapi.ams.usda.gov/services/v3.1'; H={'User-Agent':'Mozilla/5.0'}
+os.makedirs('pout/acps',exist_ok=True)
+for y in range(1998,2026):
+    for u in [f'https://apps.ams.usda.gov/Cotton/AnnualCNMarketNewsReports/CottonPriceStatistics/ACPS-{y}-{y+1}.pdf']:
+        r=requests.get(u,headers=H,timeout=120)
+        if r.status_code==200 and r.content[:4]==b'%PDF':
+            fn=f'pout/acps/ACPS-{y}-{y+1}.pdf'; open(fn,'wb').write(r.content)
+            subprocess.run(['pdftotext','-layout',fn,fn[:-4]+'.txt']); os.remove(fn); print('got',fn,len(r.content))
+        else: print('miss',u,r.status_code)
+r=requests.get('https://www.ams.usda.gov/mnreports/cnaacps.pdf',headers=H,timeout=120)
+if r.content[:4]==b'%PDF':
+    open('pout/acps/cnaacps_latest.pdf','wb').write(r.content); subprocess.run(['pdftotext','-layout','pout/acps/cnaacps_latest.pdf','pout/acps/cnaacps_latest.txt']); os.remove('pout/acps/cnaacps_latest.pdf')
+# API: 3804 sections for Aug 2025 -> now, month by month
+out={}
+import datetime as dt
+d=dt.date(2025,8,1)
+while d<=dt.date.today():
+    e=(d.replace(day=28)+dt.timedelta(days=4)).replace(day=1)-dt.timedelta(days=1)
+    for sec in ('Daily Spot Quotations Differences','Basis and Bales','ICE CN Futures Settlement Prices'):
+        j=requests.get(f'{B}/reports/3804/{sec}',params={'q':f'report_begin_date={d:%m/%d/%Y}:{e:%m/%d/%Y}'},auth=A,timeout=180).json()
+        out.setdefault(sec,[]).extend(j.get('results',[]) if isinstance(j,dict) else [])
+    print(d, {k:len(v) for k,v in out.items()}, flush=True)
+    d=e+dt.timedelta(days=1)
+json.dump(out,open('pout/ams3804.json','w'))

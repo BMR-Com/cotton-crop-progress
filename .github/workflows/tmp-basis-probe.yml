@@ -12,9 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
-      - run: pip install -q requests pandas
+      - run: pip install -q requests pandas && sudo apt-get install -y -q poppler-utils >/dev/null
       - env: {AMS_API_KEY: "${{ secrets.AMS_API_KEY }}"}
         run: python tmp/probe.py
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdir -p tmp/out && cp pout/* tmp/out/ && git add tmp/out && git commit -m "tmp: probe output" && git push origin HEAD:tmp/basis-probe
+          mkdir -p tmp/out && cp -r pout/* tmp/out/ && git add tmp/out && git commit -m "tmp: probe output" && git push origin HEAD:tmp/basis-probe
