@@ -16,5 +16,8 @@ jobs:
       - env: {AMS_API_KEY: "${{ secrets.AMS_API_KEY }}"}
         run: python tmp/probe.py
       - run: |
+          du -sh pout; ls -la pout pout/acps | head -50
+          mkdir -p tmp/out && tar czf tmp/out/basis_raw.tgz -C pout . && ls -la tmp/out
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdir -p tmp/out && cp -r pout/* tmp/out/ && git add tmp/out && git commit -m "tmp: probe output" && git push origin HEAD:tmp/basis-probe
+          git add -f tmp/out/basis_raw.tgz && git commit -m "tmp: basis raw output"
+          for i in 1 2 3; do git pull --rebase -q origin tmp/basis-probe && git push origin HEAD:tmp/basis-probe && exit 0; sleep 5; done; exit 1
