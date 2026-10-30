@@ -4216,3 +4216,1240 @@ week_end,crop_year,commodity,state,attribute,bucket,week_pct,season_pct
 2026-10-22,2026,Upland,Virginia,Uniformity,84,4.0,4.0
 2026-10-22,2026,Upland,Virginia,Uniformity,85 & Above,0.1,0.1
 2026-10-22,2026,Upland,Virginia,Uniformity,Average For All Uniformity,82.31,82.31
+2026-10-29,2026,Upland,Alabama,Extraneous Matter,11,0.1,
+2026-10-29,2026,Upland,Alabama,Extraneous Matter,31,0.1,0.1
+2026-10-29,2026,Upland,Alabama,Leaf Grade,1 - 2,13.7,22.2
+2026-10-29,2026,Upland,Alabama,Leaf Grade,3,52.3,49.9
+2026-10-29,2026,Upland,Alabama,Leaf Grade,4,26.9,22.5
+2026-10-29,2026,Upland,Alabama,Leaf Grade,5,6.2,4.8
+2026-10-29,2026,Upland,Alabama,Leaf Grade,6,0.9,0.6
+2026-10-29,2026,Upland,Alabama,Leaf Grade,7,0.1,
+2026-10-29,2026,Upland,Alabama,Leaf Grade,Average For All Leaf,3.28,3.11
+2026-10-29,2026,Upland,Alabama,MIKE,3.1,0.1,
+2026-10-29,2026,Upland,Alabama,MIKE,3.2,0.1,0.1
+2026-10-29,2026,Upland,Alabama,MIKE,3.3,0.3,0.3
+2026-10-29,2026,Upland,Alabama,MIKE,3.4,0.6,0.4
+2026-10-29,2026,Upland,Alabama,MIKE,3.5,1.5,1.1
+2026-10-29,2026,Upland,Alabama,MIKE,3.6,2.7,2.0
+2026-10-29,2026,Upland,Alabama,MIKE,3.7,4.1,3.2
+2026-10-29,2026,Upland,Alabama,MIKE,3.8,5.5,5.1
+2026-10-29,2026,Upland,Alabama,MIKE,3.9,6.5,6.4
+2026-10-29,2026,Upland,Alabama,MIKE,4.0,7.9,8.0
+2026-10-29,2026,Upland,Alabama,MIKE,4.1,9.9,9.4
+2026-10-29,2026,Upland,Alabama,MIKE,4.2,9.5,10.1
+2026-10-29,2026,Upland,Alabama,MIKE,4.3,9.3,10.1
+2026-10-29,2026,Upland,Alabama,MIKE,4.4,8.2,9.5
+2026-10-29,2026,Upland,Alabama,MIKE,4.5,8.7,9.6
+2026-10-29,2026,Upland,Alabama,MIKE,4.6,8.9,8.4
+2026-10-29,2026,Upland,Alabama,MIKE,4.7,4.9,5.2
+2026-10-29,2026,Upland,Alabama,MIKE,4.8,4.0,4.1
+2026-10-29,2026,Upland,Alabama,MIKE,4.9,2.9,2.6
+2026-10-29,2026,Upland,Alabama,MIKE,5.0,2.0,1.9
+2026-10-29,2026,Upland,Alabama,MIKE,5.1,1.0,1.2
+2026-10-29,2026,Upland,Alabama,MIKE,5.2,0.5,0.7
+2026-10-29,2026,Upland,Alabama,MIKE,5.3,0.4,0.3
+2026-10-29,2026,Upland,Alabama,MIKE,5.4,0.2,0.2
+2026-10-29,2026,Upland,Alabama,MIKE,5.5 & Above,0.1,0.1
+2026-10-29,2026,Upland,Alabama,MIKE,Average For All MIKE,4.27,4.29
+2026-10-29,2026,Upland,Alabama,MIKE Range,3.0 - 3.2,0.2,0.1
+2026-10-29,2026,Upland,Alabama,MIKE Range,3.3 - 3.4,0.8,0.7
+2026-10-29,2026,Upland,Alabama,MIKE Range,3.5 - 3.6,4.2,3.1
+2026-10-29,2026,Upland,Alabama,MIKE Range,3.7 - 4.2,43.5,42.2
+2026-10-29,2026,Upland,Alabama,MIKE Range,4.3 - 4.9,47.0,49.6
+2026-10-29,2026,Upland,Alabama,MIKE Range,5.0 - 5.2,3.6,3.7
+2026-10-29,2026,Upland,Alabama,MIKE Range,5.3 & Above,0.7,0.6
+2026-10-29,2026,Upland,Alabama,MIKE Range,Average For All MIKERange,4.27,4.29
+2026-10-29,2026,Upland,Alabama,Staple,32,,0.1
+2026-10-29,2026,Upland,Alabama,Staple,33,0.3,0.8
+2026-10-29,2026,Upland,Alabama,Staple,34,5.6,5.3
+2026-10-29,2026,Upland,Alabama,Staple,35,22.9,20.8
+2026-10-29,2026,Upland,Alabama,Staple,36,34.2,33.4
+2026-10-29,2026,Upland,Alabama,Staple,37,28.8,32.6
+2026-10-29,2026,Upland,Alabama,Staple,38,6.3,5.4
+2026-10-29,2026,Upland,Alabama,Staple,39,1.6,1.4
+2026-10-29,2026,Upland,Alabama,Staple,40,0.4,0.2
+2026-10-29,2026,Upland,Alabama,Staple,Average Length,1.13,1.13
+2026-10-29,2026,Upland,Alabama,Staple,Average Staple,36.13,36.14
+2026-10-29,2026,Upland,Alabama,Strength,25,0.1,0.1
+2026-10-29,2026,Upland,Alabama,Strength,26,0.7,0.7
+2026-10-29,2026,Upland,Alabama,Strength,27,4.0,4.7
+2026-10-29,2026,Upland,Alabama,Strength,28,14.1,18.6
+2026-10-29,2026,Upland,Alabama,Strength,29,28.6,30.4
+2026-10-29,2026,Upland,Alabama,Strength,30,25.0,23.1
+2026-10-29,2026,Upland,Alabama,Strength,31,11.9,10.9
+2026-10-29,2026,Upland,Alabama,Strength,32,7.5,6.3
+2026-10-29,2026,Upland,Alabama,Strength,33,5.2,3.7
+2026-10-29,2026,Upland,Alabama,Strength,34,2.2,1.1
+2026-10-29,2026,Upland,Alabama,Strength,35,0.4,0.2
+2026-10-29,2026,Upland,Alabama,Strength,36,0.2,0.1
+2026-10-29,2026,Upland,Alabama,Strength,37,0.1,
+2026-10-29,2026,Upland,Alabama,Strength,Average For All Strengths,30.27,30.01
+2026-10-29,2026,Upland,Alabama,Trash,01,1.1,3.8
+2026-10-29,2026,Upland,Alabama,Trash,02,17.5,23.7
+2026-10-29,2026,Upland,Alabama,Trash,03,27.8,27.4
+2026-10-29,2026,Upland,Alabama,Trash,04,23.3,20.3
+2026-10-29,2026,Upland,Alabama,Trash,05,14.7,12.2
+2026-10-29,2026,Upland,Alabama,Trash,06,7.8,6.5
+2026-10-29,2026,Upland,Alabama,Trash,07,3.9,3.2
+2026-10-29,2026,Upland,Alabama,Trash,08,1.9,1.6
+2026-10-29,2026,Upland,Alabama,Trash,09,0.9,0.7
+2026-10-29,2026,Upland,Alabama,Trash,10,0.4,0.3
+2026-10-29,2026,Upland,Alabama,Trash,11,0.3,0.2
+2026-10-29,2026,Upland,Alabama,Trash,12,0.1,0.1
+2026-10-29,2026,Upland,Alabama,Trash,Average For All HVITrash,0.39,0.36
+2026-10-29,2026,Upland,Alabama,Uniformity,77,0.2,0.2
+2026-10-29,2026,Upland,Alabama,Uniformity,78,1.1,1.2
+2026-10-29,2026,Upland,Alabama,Uniformity,79,8.4,7.5
+2026-10-29,2026,Upland,Alabama,Uniformity,80,25.3,23.4
+2026-10-29,2026,Upland,Alabama,Uniformity,81,35.1,35.2
+2026-10-29,2026,Upland,Alabama,Uniformity,82,22.6,24.3
+2026-10-29,2026,Upland,Alabama,Uniformity,83,6.6,7.6
+2026-10-29,2026,Upland,Alabama,Uniformity,84,0.5,0.6
+2026-10-29,2026,Upland,Alabama,Uniformity,85 & Above,0.1,0.1
+2026-10-29,2026,Upland,Alabama,Uniformity,Average For All Uniformity,81.37,81.44
+2026-10-29,2026,Upland,Arizona,Extraneous Matter,31,0.4,0.1
+2026-10-29,2026,Upland,Arizona,Extraneous Matter,Plastic - Level 1,0.1,
+2026-10-29,2026,Upland,Arizona,Leaf Grade,1 - 2,63.9,81.0
+2026-10-29,2026,Upland,Arizona,Leaf Grade,3,23.3,14.9
+2026-10-29,2026,Upland,Arizona,Leaf Grade,4,10.8,3.3
+2026-10-29,2026,Upland,Arizona,Leaf Grade,5,1.9,0.8
+2026-10-29,2026,Upland,Arizona,Leaf Grade,Average For All Leaf,2.4,2.01
+2026-10-29,2026,Upland,Arizona,MIKE,3.6,0.1,0.3
+2026-10-29,2026,Upland,Arizona,MIKE,3.7,0.6,0.9
+2026-10-29,2026,Upland,Arizona,MIKE,3.8,0.3,1.6
+2026-10-29,2026,Upland,Arizona,MIKE,3.9,0.5,2.4
+2026-10-29,2026,Upland,Arizona,MIKE,4.0,0.9,3.9
+2026-10-29,2026,Upland,Arizona,MIKE,4.1,1.1,5.2
+2026-10-29,2026,Upland,Arizona,MIKE,4.2,3.2,9.9
+2026-10-29,2026,Upland,Arizona,MIKE,4.3,5.0,8.9
+2026-10-29,2026,Upland,Arizona,MIKE,4.4,13.1,12.8
+2026-10-29,2026,Upland,Arizona,MIKE,4.5,14.3,11.9
+2026-10-29,2026,Upland,Arizona,MIKE,4.6,17.4,10.8
+2026-10-29,2026,Upland,Arizona,MIKE,4.7,18.0,11.8
+2026-10-29,2026,Upland,Arizona,MIKE,4.8,11.0,9.3
+2026-10-29,2026,Upland,Arizona,MIKE,4.9,6.3,5.2
+2026-10-29,2026,Upland,Arizona,MIKE,5.0,6.4,3.5
+2026-10-29,2026,Upland,Arizona,MIKE,5.1,0.4,1.1
+2026-10-29,2026,Upland,Arizona,MIKE,5.2,0.8,0.4
+2026-10-29,2026,Upland,Arizona,MIKE,5.3,0.4,0.1
+2026-10-29,2026,Upland,Arizona,MIKE,Average For All MIKE,4.6,4.47
+2026-10-29,2026,Upland,Arizona,MIKE Range,3.5 - 3.6,0.1,0.3
+2026-10-29,2026,Upland,Arizona,MIKE Range,3.7 - 4.2,6.6,24.0
+2026-10-29,2026,Upland,Arizona,MIKE Range,4.3 - 4.9,85.3,70.6
+2026-10-29,2026,Upland,Arizona,MIKE Range,5.0 - 5.2,7.6,4.9
+2026-10-29,2026,Upland,Arizona,MIKE Range,5.3 & Above,0.4,0.1
+2026-10-29,2026,Upland,Arizona,MIKE Range,Average For All MIKERange,4.6,4.47
+2026-10-29,2026,Upland,Arizona,Staple,33,0.1,
+2026-10-29,2026,Upland,Arizona,Staple,34,1.1,0.8
+2026-10-29,2026,Upland,Arizona,Staple,35,5.6,4.1
+2026-10-29,2026,Upland,Arizona,Staple,36,20.1,25.0
+2026-10-29,2026,Upland,Arizona,Staple,37,54.1,53.6
+2026-10-29,2026,Upland,Arizona,Staple,38,18.2,15.0
+2026-10-29,2026,Upland,Arizona,Staple,39,0.7,1.3
+2026-10-29,2026,Upland,Arizona,Staple,40,,0.2
+2026-10-29,2026,Upland,Arizona,Staple,Average Length,1.15,1.15
+2026-10-29,2026,Upland,Arizona,Staple,Average Staple,36.85,36.83
+2026-10-29,2026,Upland,Arizona,Strength,25,0.2,0.1
+2026-10-29,2026,Upland,Arizona,Strength,26,1.1,1.2
+2026-10-29,2026,Upland,Arizona,Strength,27,3.6,7.8
+2026-10-29,2026,Upland,Arizona,Strength,28,6.0,19.9
+2026-10-29,2026,Upland,Arizona,Strength,29,20.5,22.8
+2026-10-29,2026,Upland,Arizona,Strength,30,27.6,19.4
+2026-10-29,2026,Upland,Arizona,Strength,31,30.1,12.8
+2026-10-29,2026,Upland,Arizona,Strength,32,8.3,9.1
+2026-10-29,2026,Upland,Arizona,Strength,33,1.8,4.1
+2026-10-29,2026,Upland,Arizona,Strength,34,0.6,2.1
+2026-10-29,2026,Upland,Arizona,Strength,35,0.2,0.4
+2026-10-29,2026,Upland,Arizona,Strength,36,0.1,0.3
+2026-10-29,2026,Upland,Arizona,Strength,Average For All Strengths,30.54,30.1
+2026-10-29,2026,Upland,Arizona,Trash,01,29.7,45.7
+2026-10-29,2026,Upland,Arizona,Trash,02,40.3,40.6
+2026-10-29,2026,Upland,Arizona,Trash,03,12.8,7.9
+2026-10-29,2026,Upland,Arizona,Trash,04,8.1,2.9
+2026-10-29,2026,Upland,Arizona,Trash,05,5.0,1.5
+2026-10-29,2026,Upland,Arizona,Trash,06,2.6,0.8
+2026-10-29,2026,Upland,Arizona,Trash,07,0.9,0.3
+2026-10-29,2026,Upland,Arizona,Trash,08,0.5,0.2
+2026-10-29,2026,Upland,Arizona,Trash,09,0.1,0.1
+2026-10-29,2026,Upland,Arizona,Trash,Average For All HVITrash,0.23,0.18
+2026-10-29,2026,Upland,Arizona,Uniformity,78,0.2,0.1
+2026-10-29,2026,Upland,Arizona,Uniformity,79,1.4,1.0
+2026-10-29,2026,Upland,Arizona,Uniformity,80,6.0,18.8
+2026-10-29,2026,Upland,Arizona,Uniformity,81,26.4,41.6
+2026-10-29,2026,Upland,Arizona,Uniformity,82,56.2,34.2
+2026-10-29,2026,Upland,Arizona,Uniformity,83,9.7,4.2
+2026-10-29,2026,Upland,Arizona,Uniformity,84,0.2,0.1
+2026-10-29,2026,Upland,Arizona,Uniformity,Average For All Uniformity,82.11,81.66
+2026-10-29,2026,Upland,Arkansas,Extraneous Matter,31,0.1,1.1
+2026-10-29,2026,Upland,Arkansas,Leaf Grade,1 - 2,22.2,25.6
+2026-10-29,2026,Upland,Arkansas,Leaf Grade,3,52.7,49.1
+2026-10-29,2026,Upland,Arkansas,Leaf Grade,4,19.6,19.4
+2026-10-29,2026,Upland,Arkansas,Leaf Grade,5,4.0,4.6
+2026-10-29,2026,Upland,Arkansas,Leaf Grade,6,1.0,1.1
+2026-10-29,2026,Upland,Arkansas,Leaf Grade,7,0.4,0.2
+2026-10-29,2026,Upland,Arkansas,Leaf Grade,Average For All Leaf,3.1,3.06
+2026-10-29,2026,Upland,Arkansas,MIKE,3.4,,0.1
+2026-10-29,2026,Upland,Arkansas,MIKE,3.5,,0.1
+2026-10-29,2026,Upland,Arkansas,MIKE,3.6,0.2,0.2
+2026-10-29,2026,Upland,Arkansas,MIKE,3.7,0.3,0.3
+2026-10-29,2026,Upland,Arkansas,MIKE,3.8,0.5,0.5
+2026-10-29,2026,Upland,Arkansas,MIKE,3.9,0.6,0.7
+2026-10-29,2026,Upland,Arkansas,MIKE,4.0,1.2,1.1
+2026-10-29,2026,Upland,Arkansas,MIKE,4.1,2.2,2.1
+2026-10-29,2026,Upland,Arkansas,MIKE,4.2,2.9,3.4
+2026-10-29,2026,Upland,Arkansas,MIKE,4.3,5.1,5.8
+2026-10-29,2026,Upland,Arkansas,MIKE,4.4,8.0,9.0
+2026-10-29,2026,Upland,Arkansas,MIKE,4.5,12.9,12.8
+2026-10-29,2026,Upland,Arkansas,MIKE,4.6,16.5,15.5
+2026-10-29,2026,Upland,Arkansas,MIKE,4.7,15.6,15.0
+2026-10-29,2026,Upland,Arkansas,MIKE,4.8,13.2,13.3
+2026-10-29,2026,Upland,Arkansas,MIKE,4.9,9.4,9.4
+2026-10-29,2026,Upland,Arkansas,MIKE,5.0,5.6,5.8
+2026-10-29,2026,Upland,Arkansas,MIKE,5.1,3.0,2.9
+2026-10-29,2026,Upland,Arkansas,MIKE,5.2,1.6,1.3
+2026-10-29,2026,Upland,Arkansas,MIKE,5.3,0.6,0.4
+2026-10-29,2026,Upland,Arkansas,MIKE,5.4,0.2,0.2
+2026-10-29,2026,Upland,Arkansas,MIKE,Average For All MIKE,4.63,4.62
+2026-10-29,2026,Upland,Arkansas,MIKE Range,3.3 - 3.4,,0.1
+2026-10-29,2026,Upland,Arkansas,MIKE Range,3.5 - 3.6,0.2,0.3
+2026-10-29,2026,Upland,Arkansas,MIKE Range,3.7 - 4.2,7.8,8.2
+2026-10-29,2026,Upland,Arkansas,MIKE Range,4.3 - 4.9,80.9,80.8
+2026-10-29,2026,Upland,Arkansas,MIKE Range,5.0 - 5.2,10.3,10.0
+2026-10-29,2026,Upland,Arkansas,MIKE Range,5.3 & Above,0.8,0.6
+2026-10-29,2026,Upland,Arkansas,MIKE Range,Average For All MIKERange,4.63,4.62
+2026-10-29,2026,Upland,Arkansas,Staple,33,0.1,0.1
+2026-10-29,2026,Upland,Arkansas,Staple,34,1.0,1.0
+2026-10-29,2026,Upland,Arkansas,Staple,35,8.6,8.8
+2026-10-29,2026,Upland,Arkansas,Staple,36,30.5,30.9
+2026-10-29,2026,Upland,Arkansas,Staple,37,49.3,50.4
+2026-10-29,2026,Upland,Arkansas,Staple,38,8.8,7.4
+2026-10-29,2026,Upland,Arkansas,Staple,39,1.5,1.2
+2026-10-29,2026,Upland,Arkansas,Staple,40,0.2,0.1
+2026-10-29,2026,Upland,Arkansas,Staple,Average Length,1.14,1.14
+2026-10-29,2026,Upland,Arkansas,Staple,Average Staple,36.61,36.58
+2026-10-29,2026,Upland,Arkansas,Strength,26,0.2,0.2
+2026-10-29,2026,Upland,Arkansas,Strength,27,1.7,1.5
+2026-10-29,2026,Upland,Arkansas,Strength,28,8.5,7.6
+2026-10-29,2026,Upland,Arkansas,Strength,29,20.7,20.9
+2026-10-29,2026,Upland,Arkansas,Strength,30,33.2,34.8
+2026-10-29,2026,Upland,Arkansas,Strength,31,24.0,23.6
+2026-10-29,2026,Upland,Arkansas,Strength,32,6.7,7.2
+2026-10-29,2026,Upland,Arkansas,Strength,33,2.6,2.6
+2026-10-29,2026,Upland,Arkansas,Strength,34,2.0,1.2
+2026-10-29,2026,Upland,Arkansas,Strength,35,0.3,0.3
+2026-10-29,2026,Upland,Arkansas,Strength,Average For All Strengths,30.56,30.56
+2026-10-29,2026,Upland,Arkansas,Trash,01,3.3,5.1
+2026-10-29,2026,Upland,Arkansas,Trash,02,25.5,26.8
+2026-10-29,2026,Upland,Arkansas,Trash,03,29.6,27.4
+2026-10-29,2026,Upland,Arkansas,Trash,04,19.0,17.8
+2026-10-29,2026,Upland,Arkansas,Trash,05,10.7,10.4
+2026-10-29,2026,Upland,Arkansas,Trash,06,5.6,5.8
+2026-10-29,2026,Upland,Arkansas,Trash,07,3.1,3.2
+2026-10-29,2026,Upland,Arkansas,Trash,08,1.5,1.7
+2026-10-29,2026,Upland,Arkansas,Trash,09,0.9,0.9
+2026-10-29,2026,Upland,Arkansas,Trash,10,0.5,0.5
+2026-10-29,2026,Upland,Arkansas,Trash,11,0.3,0.2
+2026-10-29,2026,Upland,Arkansas,Trash,12,0.1,0.1
+2026-10-29,2026,Upland,Arkansas,Trash,13,0.1,
+2026-10-29,2026,Upland,Arkansas,Trash,Average For All HVITrash,0.36,0.35
+2026-10-29,2026,Upland,Arkansas,Uniformity,77,0.1,0.1
+2026-10-29,2026,Upland,Arkansas,Uniformity,78,1.0,0.6
+2026-10-29,2026,Upland,Arkansas,Uniformity,79,3.8,3.2
+2026-10-29,2026,Upland,Arkansas,Uniformity,80,17.7,15.2
+2026-10-29,2026,Upland,Arkansas,Uniformity,81,34.0,32.4
+2026-10-29,2026,Upland,Arkansas,Uniformity,82,30.5,32.7
+2026-10-29,2026,Upland,Arkansas,Uniformity,83,11.7,14.2
+2026-10-29,2026,Upland,Arkansas,Uniformity,84,1.2,1.5
+2026-10-29,2026,Upland,Arkansas,Uniformity,85 & Above,0.1,0.1
+2026-10-29,2026,Upland,Arkansas,Uniformity,Average For All Uniformity,81.74,81.87
+2026-10-29,2026,Upland,California,Extraneous Matter,21,0.7,1.7
+2026-10-29,2026,Upland,California,Leaf Grade,1 - 2,73.0,62.3
+2026-10-29,2026,Upland,California,Leaf Grade,3,19.8,25.3
+2026-10-29,2026,Upland,California,Leaf Grade,4,6.1,10.0
+2026-10-29,2026,Upland,California,Leaf Grade,5,1.1,2.5
+2026-10-29,2026,Upland,California,Leaf Grade,Average For All Leaf,2.22,2.31
+2026-10-29,2026,Upland,California,MIKE,3.2,1.0,0.3
+2026-10-29,2026,Upland,California,MIKE,3.3,0.5,0.2
+2026-10-29,2026,Upland,California,MIKE,3.4,1.3,0.7
+2026-10-29,2026,Upland,California,MIKE,3.5,2.1,1.3
+2026-10-29,2026,Upland,California,MIKE,3.6,2.6,2.0
+2026-10-29,2026,Upland,California,MIKE,3.7,5.9,4.9
+2026-10-29,2026,Upland,California,MIKE,3.8,10.3,6.8
+2026-10-29,2026,Upland,California,MIKE,3.9,10.2,7.0
+2026-10-29,2026,Upland,California,MIKE,4.0,5.9,5.1
+2026-10-29,2026,Upland,California,MIKE,4.1,3.1,5.1
+2026-10-29,2026,Upland,California,MIKE,4.2,3.7,5.7
+2026-10-29,2026,Upland,California,MIKE,4.3,5.9,8.9
+2026-10-29,2026,Upland,California,MIKE,4.4,6.1,8.1
+2026-10-29,2026,Upland,California,MIKE,4.5,6.8,8.3
+2026-10-29,2026,Upland,California,MIKE,4.6,10.4,9.9
+2026-10-29,2026,Upland,California,MIKE,4.7,5.3,9.0
+2026-10-29,2026,Upland,California,MIKE,4.8,8.7,9.1
+2026-10-29,2026,Upland,California,MIKE,4.9,5.4,4.8
+2026-10-29,2026,Upland,California,MIKE,5.0,2.6,1.7
+2026-10-29,2026,Upland,California,MIKE,5.1,0.7,0.4
+2026-10-29,2026,Upland,California,MIKE,5.2,0.7,0.5
+2026-10-29,2026,Upland,California,MIKE,5.3,0.6,0.3
+2026-10-29,2026,Upland,California,MIKE,Average For All MIKE,4.27,4.33
+2026-10-29,2026,Upland,California,MIKE Range,3.0 - 3.2,1.0,0.3
+2026-10-29,2026,Upland,California,MIKE Range,3.3 - 3.4,1.8,0.9
+2026-10-29,2026,Upland,California,MIKE Range,3.5 - 3.6,4.7,3.2
+2026-10-29,2026,Upland,California,MIKE Range,3.7 - 4.2,39.2,34.6
+2026-10-29,2026,Upland,California,MIKE Range,4.3 - 4.9,48.6,58.0
+2026-10-29,2026,Upland,California,MIKE Range,5.0 - 5.2,4.0,2.6
+2026-10-29,2026,Upland,California,MIKE Range,5.3 & Above,0.6,0.3
+2026-10-29,2026,Upland,California,MIKE Range,Average For All MIKERange,4.27,4.33
+2026-10-29,2026,Upland,California,Staple,33,,1.6
+2026-10-29,2026,Upland,California,Staple,34,1.6,3.9
+2026-10-29,2026,Upland,California,Staple,35,4.3,11.1
+2026-10-29,2026,Upland,California,Staple,36,5.5,19.8
+2026-10-29,2026,Upland,California,Staple,37,30.1,34.2
+2026-10-29,2026,Upland,California,Staple,38,42.6,21.8
+2026-10-29,2026,Upland,California,Staple,39,11.1,6.1
+2026-10-29,2026,Upland,California,Staple,40,4.6,1.5
+2026-10-29,2026,Upland,California,Staple,41,0.1,
+2026-10-29,2026,Upland,California,Staple,Average Length,1.18,1.15
+2026-10-29,2026,Upland,California,Staple,Average Staple,37.6,36.79
+2026-10-29,2026,Upland,California,Strength,25,,0.1
+2026-10-29,2026,Upland,California,Strength,26,,0.6
+2026-10-29,2026,Upland,California,Strength,27,0.7,1.9
+2026-10-29,2026,Upland,California,Strength,28,3.8,5.6
+2026-10-29,2026,Upland,California,Strength,29,4.1,9.9
+2026-10-29,2026,Upland,California,Strength,30,7.1,13.0
+2026-10-29,2026,Upland,California,Strength,31,10.1,12.9
+2026-10-29,2026,Upland,California,Strength,32,10.5,9.9
+2026-10-29,2026,Upland,California,Strength,33,16.1,12.7
+2026-10-29,2026,Upland,California,Strength,34,16.0,13.6
+2026-10-29,2026,Upland,California,Strength,35,11.0,9.6
+2026-10-29,2026,Upland,California,Strength,36,10.6,6.9
+2026-10-29,2026,Upland,California,Strength,37,8.2,2.7
+2026-10-29,2026,Upland,California,Strength,38,1.2,0.4
+2026-10-29,2026,Upland,California,Strength,39,0.2,0.1
+2026-10-29,2026,Upland,California,Strength,40 & Above,0.3,0.1
+2026-10-29,2026,Upland,California,Strength,Average For All Strengths,33.68,32.55
+2026-10-29,2026,Upland,California,Trash,01,32.8,35.9
+2026-10-29,2026,Upland,California,Trash,02,42.2,30.2
+2026-10-29,2026,Upland,California,Trash,03,12.6,14.5
+2026-10-29,2026,Upland,California,Trash,04,6.2,9.2
+2026-10-29,2026,Upland,California,Trash,05,3.3,5.1
+2026-10-29,2026,Upland,California,Trash,06,1.6,2.7
+2026-10-29,2026,Upland,California,Trash,07,0.9,1.4
+2026-10-29,2026,Upland,California,Trash,08,0.3,0.6
+2026-10-29,2026,Upland,California,Trash,09,0.1,0.3
+2026-10-29,2026,Upland,California,Trash,Average For All HVITrash,0.22,0.24
+2026-10-29,2026,Upland,California,Uniformity,78,0.1,0.7
+2026-10-29,2026,Upland,California,Uniformity,79,1.3,5.4
+2026-10-29,2026,Upland,California,Uniformity,80,7.3,14.9
+2026-10-29,2026,Upland,California,Uniformity,81,17.6,27.1
+2026-10-29,2026,Upland,California,Uniformity,82,24.4,29.9
+2026-10-29,2026,Upland,California,Uniformity,83,43.1,20.0
+2026-10-29,2026,Upland,California,Uniformity,84,6.1,2.0
+2026-10-29,2026,Upland,California,Uniformity,85 & Above,0.2,0.1
+2026-10-29,2026,Upland,California,Uniformity,Average For All Uniformity,82.64,81.93
+2026-10-29,2026,Upland,Florida,Extraneous Matter,31,,1.6
+2026-10-29,2026,Upland,Florida,Leaf Grade,1 - 2,,0.8
+2026-10-29,2026,Upland,Florida,Leaf Grade,3,,54.9
+2026-10-29,2026,Upland,Florida,Leaf Grade,4,,42.6
+2026-10-29,2026,Upland,Florida,Leaf Grade,5,,1.7
+2026-10-29,2026,Upland,Florida,Leaf Grade,Average For All Leaf,,3.45
+2026-10-29,2026,Upland,Florida,MIKE,4.2,,0.1
+2026-10-29,2026,Upland,Florida,MIKE,4.3,,0.4
+2026-10-29,2026,Upland,Florida,MIKE,4.4,,2.2
+2026-10-29,2026,Upland,Florida,MIKE,4.5,,3.5
+2026-10-29,2026,Upland,Florida,MIKE,4.6,,1.3
+2026-10-29,2026,Upland,Florida,MIKE,4.7,,9.2
+2026-10-29,2026,Upland,Florida,MIKE,4.8,,10.7
+2026-10-29,2026,Upland,Florida,MIKE,4.9,,14.3
+2026-10-29,2026,Upland,Florida,MIKE,5.0,,27.2
+2026-10-29,2026,Upland,Florida,MIKE,5.1,,19.8
+2026-10-29,2026,Upland,Florida,MIKE,5.2,,10.8
+2026-10-29,2026,Upland,Florida,MIKE,5.3,,0.4
+2026-10-29,2026,Upland,Florida,MIKE,Average For All MIKE,,4.94
+2026-10-29,2026,Upland,Florida,MIKE Range,3.7 - 4.2,,0.1
+2026-10-29,2026,Upland,Florida,MIKE Range,4.3 - 4.9,,41.7
+2026-10-29,2026,Upland,Florida,MIKE Range,5.0 - 5.2,,57.8
+2026-10-29,2026,Upland,Florida,MIKE Range,5.3 & Above,,0.4
+2026-10-29,2026,Upland,Florida,MIKE Range,Average For All MIKERange,,4.94
+2026-10-29,2026,Upland,Florida,Staple,31,,0.1
+2026-10-29,2026,Upland,Florida,Staple,32,,1.2
+2026-10-29,2026,Upland,Florida,Staple,33,,8.7
+2026-10-29,2026,Upland,Florida,Staple,34,,7.9
+2026-10-29,2026,Upland,Florida,Staple,35,,15.3
+2026-10-29,2026,Upland,Florida,Staple,36,,56.8
+2026-10-29,2026,Upland,Florida,Staple,37,,10.1
+2026-10-29,2026,Upland,Florida,Staple,Average Length,,1.1
+2026-10-29,2026,Upland,Florida,Staple,Average Staple,,35.48
+2026-10-29,2026,Upland,Florida,Strength,27,,0.2
+2026-10-29,2026,Upland,Florida,Strength,28,,4.5
+2026-10-29,2026,Upland,Florida,Strength,29,,13.3
+2026-10-29,2026,Upland,Florida,Strength,30,,18.7
+2026-10-29,2026,Upland,Florida,Strength,31,,15.8
+2026-10-29,2026,Upland,Florida,Strength,32,,13.3
+2026-10-29,2026,Upland,Florida,Strength,33,,17.2
+2026-10-29,2026,Upland,Florida,Strength,34,,13.4
+2026-10-29,2026,Upland,Florida,Strength,35,,3.5
+2026-10-29,2026,Upland,Florida,Strength,Average For All Strengths,,31.88
+2026-10-29,2026,Upland,Florida,Trash,02,,2.6
+2026-10-29,2026,Upland,Florida,Trash,03,,22.8
+2026-10-29,2026,Upland,Florida,Trash,04,,36.4
+2026-10-29,2026,Upland,Florida,Trash,05,,23.5
+2026-10-29,2026,Upland,Florida,Trash,06,,10.7
+2026-10-29,2026,Upland,Florida,Trash,07,,2.6
+2026-10-29,2026,Upland,Florida,Trash,08,,0.9
+2026-10-29,2026,Upland,Florida,Trash,09,,0.1
+2026-10-29,2026,Upland,Florida,Trash,10,,0.2
+2026-10-29,2026,Upland,Florida,Trash,11,,0.1
+2026-10-29,2026,Upland,Florida,Trash,Average For All HVITrash,,0.43
+2026-10-29,2026,Upland,Florida,Uniformity,78,,0.4
+2026-10-29,2026,Upland,Florida,Uniformity,79,,2.5
+2026-10-29,2026,Upland,Florida,Uniformity,80,,14.4
+2026-10-29,2026,Upland,Florida,Uniformity,81,,26.1
+2026-10-29,2026,Upland,Florida,Uniformity,82,,46.8
+2026-10-29,2026,Upland,Florida,Uniformity,83,,9.7
+2026-10-29,2026,Upland,Florida,Uniformity,84,,0.1
+2026-10-29,2026,Upland,Florida,Uniformity,Average For All Uniformity,,81.9
+2026-10-29,2026,Upland,Georgia,Extraneous Matter,11,0.4,0.4
+2026-10-29,2026,Upland,Georgia,Extraneous Matter,31,3.2,2.0
+2026-10-29,2026,Upland,Georgia,Leaf Grade,1 - 2,4.7,9.6
+2026-10-29,2026,Upland,Georgia,Leaf Grade,3,47.7,50.6
+2026-10-29,2026,Upland,Georgia,Leaf Grade,4,38.9,33.3
+2026-10-29,2026,Upland,Georgia,Leaf Grade,5,8.0,6.1
+2026-10-29,2026,Upland,Georgia,Leaf Grade,6,0.7,0.4
+2026-10-29,2026,Upland,Georgia,Leaf Grade,Average For All Leaf,3.52,3.37
+2026-10-29,2026,Upland,Georgia,MIKE,3.5,0.1,0.1
+2026-10-29,2026,Upland,Georgia,MIKE,3.6,0.2,0.2
+2026-10-29,2026,Upland,Georgia,MIKE,3.7,0.5,0.5
+2026-10-29,2026,Upland,Georgia,MIKE,3.8,1.1,1.0
+2026-10-29,2026,Upland,Georgia,MIKE,3.9,2.0,1.8
+2026-10-29,2026,Upland,Georgia,MIKE,4.0,3.2,2.9
+2026-10-29,2026,Upland,Georgia,MIKE,4.1,4.5,4.1
+2026-10-29,2026,Upland,Georgia,MIKE,4.2,6.1,5.8
+2026-10-29,2026,Upland,Georgia,MIKE,4.3,8.7,8.2
+2026-10-29,2026,Upland,Georgia,MIKE,4.4,10.3,9.8
+2026-10-29,2026,Upland,Georgia,MIKE,4.5,12.1,11.2
+2026-10-29,2026,Upland,Georgia,MIKE,4.6,12.8,12.5
+2026-10-29,2026,Upland,Georgia,MIKE,4.7,11.5,11.8
+2026-10-29,2026,Upland,Georgia,MIKE,4.8,9.4,10.1
+2026-10-29,2026,Upland,Georgia,MIKE,4.9,7.3,8.1
+2026-10-29,2026,Upland,Georgia,MIKE,5.0,4.8,5.8
+2026-10-29,2026,Upland,Georgia,MIKE,5.1,2.6,3.2
+2026-10-29,2026,Upland,Georgia,MIKE,5.2,1.2,1.4
+2026-10-29,2026,Upland,Georgia,MIKE,5.3,0.7,0.7
+2026-10-29,2026,Upland,Georgia,MIKE,5.4,0.5,0.4
+2026-10-29,2026,Upland,Georgia,MIKE,5.5 & Above,0.3,0.2
+2026-10-29,2026,Upland,Georgia,MIKE,Average For All MIKE,4.55,4.57
+2026-10-29,2026,Upland,Georgia,MIKE Range,3.5 - 3.6,0.4,0.3
+2026-10-29,2026,Upland,Georgia,MIKE Range,3.7 - 4.2,17.5,16.2
+2026-10-29,2026,Upland,Georgia,MIKE Range,4.3 - 4.9,72.2,71.8
+2026-10-29,2026,Upland,Georgia,MIKE Range,5.0 - 5.2,8.6,10.5
+2026-10-29,2026,Upland,Georgia,MIKE Range,5.3 & Above,1.4,1.3
+2026-10-29,2026,Upland,Georgia,MIKE Range,Average For All MIKERange,4.55,4.57
+2026-10-29,2026,Upland,Georgia,Staple,32,0.1,0.1
+2026-10-29,2026,Upland,Georgia,Staple,33,1.4,0.9
+2026-10-29,2026,Upland,Georgia,Staple,34,5.7,5.0
+2026-10-29,2026,Upland,Georgia,Staple,35,20.5,20.2
+2026-10-29,2026,Upland,Georgia,Staple,36,35.3,35.8
+2026-10-29,2026,Upland,Georgia,Staple,37,29.7,31.5
+2026-10-29,2026,Upland,Georgia,Staple,38,6.1,5.7
+2026-10-29,2026,Upland,Georgia,Staple,39,1.1,0.8
+2026-10-29,2026,Upland,Georgia,Staple,40,0.1,0.1
+2026-10-29,2026,Upland,Georgia,Staple,Average Length,1.12,1.13
+2026-10-29,2026,Upland,Georgia,Staple,Average Staple,36.09,36.12
+2026-10-29,2026,Upland,Georgia,Strength,24,0.1,
+2026-10-29,2026,Upland,Georgia,Strength,25,0.4,0.3
+2026-10-29,2026,Upland,Georgia,Strength,26,2.1,1.5
+2026-10-29,2026,Upland,Georgia,Strength,27,7.9,6.1
+2026-10-29,2026,Upland,Georgia,Strength,28,17.2,15.8
+2026-10-29,2026,Upland,Georgia,Strength,29,21.4,22.5
+2026-10-29,2026,Upland,Georgia,Strength,30,18.0,21.0
+2026-10-29,2026,Upland,Georgia,Strength,31,14.1,15.2
+2026-10-29,2026,Upland,Georgia,Strength,32,10.0,9.4
+2026-10-29,2026,Upland,Georgia,Strength,33,5.5,4.9
+2026-10-29,2026,Upland,Georgia,Strength,34,2.2,2.1
+2026-10-29,2026,Upland,Georgia,Strength,35,0.8,0.8
+2026-10-29,2026,Upland,Georgia,Strength,36,0.2,0.2
+2026-10-29,2026,Upland,Georgia,Strength,37,0.1,0.1
+2026-10-29,2026,Upland,Georgia,Strength,Average For All Strengths,30.2,30.28
+2026-10-29,2026,Upland,Georgia,Trash,01,0.3,0.9
+2026-10-29,2026,Upland,Georgia,Trash,02,7.4,12.4
+2026-10-29,2026,Upland,Georgia,Trash,03,23.9,25.8
+2026-10-29,2026,Upland,Georgia,Trash,04,27.8,25.9
+2026-10-29,2026,Upland,Georgia,Trash,05,19.9,17.5
+2026-10-29,2026,Upland,Georgia,Trash,06,11.1,9.5
+2026-10-29,2026,Upland,Georgia,Trash,07,5.3,4.5
+2026-10-29,2026,Upland,Georgia,Trash,08,2.4,1.9
+2026-10-29,2026,Upland,Georgia,Trash,09,1.1,0.9
+2026-10-29,2026,Upland,Georgia,Trash,10,0.5,0.4
+2026-10-29,2026,Upland,Georgia,Trash,11,0.2,0.1
+2026-10-29,2026,Upland,Georgia,Trash,12,0.1,0.1
+2026-10-29,2026,Upland,Georgia,Trash,Average For All HVITrash,0.44,0.41
+2026-10-29,2026,Upland,Georgia,Uniformity,77,0.2,0.2
+2026-10-29,2026,Upland,Georgia,Uniformity,78,2.0,1.5
+2026-10-29,2026,Upland,Georgia,Uniformity,79,10.1,8.3
+2026-10-29,2026,Upland,Georgia,Uniformity,80,27.0,24.9
+2026-10-29,2026,Upland,Georgia,Uniformity,81,31.8,33.2
+2026-10-29,2026,Upland,Georgia,Uniformity,82,21.2,23.5
+2026-10-29,2026,Upland,Georgia,Uniformity,83,6.6,7.7
+2026-10-29,2026,Upland,Georgia,Uniformity,84,0.9,0.8
+2026-10-29,2026,Upland,Georgia,Uniformity,Average For All Uniformity,81.28,81.4
+2026-10-29,2026,Upland,Louisiana,Extraneous Matter,31,,0.6
+2026-10-29,2026,Upland,Louisiana,Leaf Grade,1 - 2,22.8,17.8
+2026-10-29,2026,Upland,Louisiana,Leaf Grade,3,52.3,48.8
+2026-10-29,2026,Upland,Louisiana,Leaf Grade,4,20.9,26.8
+2026-10-29,2026,Upland,Louisiana,Leaf Grade,5,3.6,6.1
+2026-10-29,2026,Upland,Louisiana,Leaf Grade,6,0.3,0.6
+2026-10-29,2026,Upland,Louisiana,Leaf Grade,Average For All Leaf,3.05,3.22
+2026-10-29,2026,Upland,Louisiana,MIKE,3.6,0.1,0.1
+2026-10-29,2026,Upland,Louisiana,MIKE,3.7,0.3,0.3
+2026-10-29,2026,Upland,Louisiana,MIKE,3.8,0.5,0.5
+2026-10-29,2026,Upland,Louisiana,MIKE,3.9,0.9,0.7
+2026-10-29,2026,Upland,Louisiana,MIKE,4.0,0.8,1.0
+2026-10-29,2026,Upland,Louisiana,MIKE,4.1,1.1,2.0
+2026-10-29,2026,Upland,Louisiana,MIKE,4.2,2.1,4.0
+2026-10-29,2026,Upland,Louisiana,MIKE,4.3,2.7,6.0
+2026-10-29,2026,Upland,Louisiana,MIKE,4.4,4.8,8.3
+2026-10-29,2026,Upland,Louisiana,MIKE,4.5,8.9,12.6
+2026-10-29,2026,Upland,Louisiana,MIKE,4.6,15.1,14.7
+2026-10-29,2026,Upland,Louisiana,MIKE,4.7,20.2,16.9
+2026-10-29,2026,Upland,Louisiana,MIKE,4.8,15.1,14.8
+2026-10-29,2026,Upland,Louisiana,MIKE,4.9,12.3,8.8
+2026-10-29,2026,Upland,Louisiana,MIKE,5.0,7.1,4.9
+2026-10-29,2026,Upland,Louisiana,MIKE,5.1,4.2,2.5
+2026-10-29,2026,Upland,Louisiana,MIKE,5.2,2.0,1.2
+2026-10-29,2026,Upland,Louisiana,MIKE,5.3,1.1,0.6
+2026-10-29,2026,Upland,Louisiana,MIKE,5.4,0.4,0.2
+2026-10-29,2026,Upland,Louisiana,MIKE,5.5 & Above,0.2,0.1
+2026-10-29,2026,Upland,Louisiana,MIKE,Average For All MIKE,4.7,4.63
+2026-10-29,2026,Upland,Louisiana,MIKE Range,3.5 - 3.6,0.2,0.1
+2026-10-29,2026,Upland,Louisiana,MIKE Range,3.7 - 4.2,5.8,8.4
+2026-10-29,2026,Upland,Louisiana,MIKE Range,4.3 - 4.9,79.1,82.1
+2026-10-29,2026,Upland,Louisiana,MIKE Range,5.0 - 5.2,13.3,8.6
+2026-10-29,2026,Upland,Louisiana,MIKE Range,5.3 & Above,1.7,0.8
+2026-10-29,2026,Upland,Louisiana,MIKE Range,Average For All MIKERange,4.7,4.63
+2026-10-29,2026,Upland,Louisiana,Staple,33,,0.1
+2026-10-29,2026,Upland,Louisiana,Staple,34,2.0,2.2
+2026-10-29,2026,Upland,Louisiana,Staple,35,12.0,13.5
+2026-10-29,2026,Upland,Louisiana,Staple,36,32.9,29.1
+2026-10-29,2026,Upland,Louisiana,Staple,37,39.3,41.0
+2026-10-29,2026,Upland,Louisiana,Staple,38,11.4,11.8
+2026-10-29,2026,Upland,Louisiana,Staple,39,2.2,2.1
+2026-10-29,2026,Upland,Louisiana,Staple,40,0.1,0.1
+2026-10-29,2026,Upland,Louisiana,Staple,Average Length,1.14,1.14
+2026-10-29,2026,Upland,Louisiana,Staple,Average Staple,36.53,36.53
+2026-10-29,2026,Upland,Louisiana,Strength,26,0.3,0.2
+2026-10-29,2026,Upland,Louisiana,Strength,27,1.4,1.6
+2026-10-29,2026,Upland,Louisiana,Strength,28,6.7,8.3
+2026-10-29,2026,Upland,Louisiana,Strength,29,16.4,16.3
+2026-10-29,2026,Upland,Louisiana,Strength,30,21.4,19.9
+2026-10-29,2026,Upland,Louisiana,Strength,31,21.4,18.0
+2026-10-29,2026,Upland,Louisiana,Strength,32,14.8,14.1
+2026-10-29,2026,Upland,Louisiana,Strength,33,8.2,8.2
+2026-10-29,2026,Upland,Louisiana,Strength,34,3.8,6.0
+2026-10-29,2026,Upland,Louisiana,Strength,35,3.6,4.6
+2026-10-29,2026,Upland,Louisiana,Strength,36,1.7,2.2
+2026-10-29,2026,Upland,Louisiana,Strength,37,0.4,0.6
+2026-10-29,2026,Upland,Louisiana,Strength,38,,0.1
+2026-10-29,2026,Upland,Louisiana,Strength,39,,0.1
+2026-10-29,2026,Upland,Louisiana,Strength,Average For All Strengths,31.32,31.43
+2026-10-29,2026,Upland,Louisiana,Trash,01,4.3,3.1
+2026-10-29,2026,Upland,Louisiana,Trash,02,24.1,19.4
+2026-10-29,2026,Upland,Louisiana,Trash,03,29.8,26.6
+2026-10-29,2026,Upland,Louisiana,Trash,04,19.8,21.8
+2026-10-29,2026,Upland,Louisiana,Trash,05,11.3,14.2
+2026-10-29,2026,Upland,Louisiana,Trash,06,5.7,8.0
+2026-10-29,2026,Upland,Louisiana,Trash,07,2.8,3.9
+2026-10-29,2026,Upland,Louisiana,Trash,08,1.2,1.7
+2026-10-29,2026,Upland,Louisiana,Trash,09,0.6,0.8
+2026-10-29,2026,Upland,Louisiana,Trash,10,0.2,0.3
+2026-10-29,2026,Upland,Louisiana,Trash,11,0.1,0.1
+2026-10-29,2026,Upland,Louisiana,Trash,Average For All HVITrash,0.35,0.38
+2026-10-29,2026,Upland,Louisiana,Uniformity,78,0.6,0.2
+2026-10-29,2026,Upland,Louisiana,Uniformity,79,2.9,3.2
+2026-10-29,2026,Upland,Louisiana,Uniformity,80,18.7,19.6
+2026-10-29,2026,Upland,Louisiana,Uniformity,81,39.4,33.2
+2026-10-29,2026,Upland,Louisiana,Uniformity,82,23.3,24.4
+2026-10-29,2026,Upland,Louisiana,Uniformity,83,14.2,17.8
+2026-10-29,2026,Upland,Louisiana,Uniformity,84,0.8,1.6
+2026-10-29,2026,Upland,Louisiana,Uniformity,Average For All Uniformity,81.72,81.83
+2026-10-29,2026,Upland,Mississippi,Extraneous Matter,31,0.1,0.1
+2026-10-29,2026,Upland,Mississippi,Leaf Grade,1 - 2,15.9,15.0
+2026-10-29,2026,Upland,Mississippi,Leaf Grade,3,46.6,48.1
+2026-10-29,2026,Upland,Mississippi,Leaf Grade,4,29.5,28.6
+2026-10-29,2026,Upland,Mississippi,Leaf Grade,5,7.2,7.1
+2026-10-29,2026,Upland,Mississippi,Leaf Grade,6,0.7,1.0
+2026-10-29,2026,Upland,Mississippi,Leaf Grade,7,,0.2
+2026-10-29,2026,Upland,Mississippi,Leaf Grade,Average For All Leaf,3.3,3.31
+2026-10-29,2026,Upland,Mississippi,MIKE,3.3,,0.1
+2026-10-29,2026,Upland,Mississippi,MIKE,3.4,,0.2
+2026-10-29,2026,Upland,Mississippi,MIKE,3.5,0.2,0.3
+2026-10-29,2026,Upland,Mississippi,MIKE,3.6,0.4,0.5
+2026-10-29,2026,Upland,Mississippi,MIKE,3.7,0.5,0.6
+2026-10-29,2026,Upland,Mississippi,MIKE,3.8,0.6,1.0
+2026-10-29,2026,Upland,Mississippi,MIKE,3.9,1.0,1.3
+2026-10-29,2026,Upland,Mississippi,MIKE,4.0,1.5,2.0
+2026-10-29,2026,Upland,Mississippi,MIKE,4.1,2.1,3.2
+2026-10-29,2026,Upland,Mississippi,MIKE,4.2,3.5,4.2
+2026-10-29,2026,Upland,Mississippi,MIKE,4.3,5.5,5.8
+2026-10-29,2026,Upland,Mississippi,MIKE,4.4,8.4,8.0
+2026-10-29,2026,Upland,Mississippi,MIKE,4.5,11.6,10.8
+2026-10-29,2026,Upland,Mississippi,MIKE,4.6,13.2,13.2
+2026-10-29,2026,Upland,Mississippi,MIKE,4.7,16.5,15.4
+2026-10-29,2026,Upland,Mississippi,MIKE,4.8,13.7,13.5
+2026-10-29,2026,Upland,Mississippi,MIKE,4.9,10.0,9.8
+2026-10-29,2026,Upland,Mississippi,MIKE,5.0,5.6,5.3
+2026-10-29,2026,Upland,Mississippi,MIKE,5.1,2.6,2.6
+2026-10-29,2026,Upland,Mississippi,MIKE,5.2,1.6,1.3
+2026-10-29,2026,Upland,Mississippi,MIKE,5.3,0.9,0.5
+2026-10-29,2026,Upland,Mississippi,MIKE,5.4,0.4,0.2
+2026-10-29,2026,Upland,Mississippi,MIKE,5.5 & Above,0.2,0.1
+2026-10-29,2026,Upland,Mississippi,MIKE,Average For All MIKE,4.63,4.59
+2026-10-29,2026,Upland,Mississippi,MIKE Range,3.3 - 3.4,0.1,0.3
+2026-10-29,2026,Upland,Mississippi,MIKE Range,3.5 - 3.6,0.5,0.9
+2026-10-29,2026,Upland,Mississippi,MIKE Range,3.7 - 4.2,9.2,12.4
+2026-10-29,2026,Upland,Mississippi,MIKE Range,4.3 - 4.9,78.9,76.5
+2026-10-29,2026,Upland,Mississippi,MIKE Range,5.0 - 5.2,9.8,9.2
+2026-10-29,2026,Upland,Mississippi,MIKE Range,5.3 & Above,1.4,0.7
+2026-10-29,2026,Upland,Mississippi,MIKE Range,Average For All MIKERange,4.63,4.59
+2026-10-29,2026,Upland,Mississippi,Staple,33,0.4,0.5
+2026-10-29,2026,Upland,Mississippi,Staple,34,3.9,3.7
+2026-10-29,2026,Upland,Mississippi,Staple,35,17.3,16.6
+2026-10-29,2026,Upland,Mississippi,Staple,36,34.8,34.3
+2026-10-29,2026,Upland,Mississippi,Staple,37,34.7,34.6
+2026-10-29,2026,Upland,Mississippi,Staple,38,7.2,8.4
+2026-10-29,2026,Upland,Mississippi,Staple,39,1.5,1.8
+2026-10-29,2026,Upland,Mississippi,Staple,40,0.2,0.1
+2026-10-29,2026,Upland,Mississippi,Staple,Average Length,1.13,1.13
+2026-10-29,2026,Upland,Mississippi,Staple,Average Staple,36.28,36.32
+2026-10-29,2026,Upland,Mississippi,Strength,26,0.2,0.4
+2026-10-29,2026,Upland,Mississippi,Strength,27,1.7,2.0
+2026-10-29,2026,Upland,Mississippi,Strength,28,6.8,8.0
+2026-10-29,2026,Upland,Mississippi,Strength,29,19.8,20.4
+2026-10-29,2026,Upland,Mississippi,Strength,30,26.1,25.7
+2026-10-29,2026,Upland,Mississippi,Strength,31,20.5,19.8
+2026-10-29,2026,Upland,Mississippi,Strength,32,12.3,11.8
+2026-10-29,2026,Upland,Mississippi,Strength,33,6.8,6.4
+2026-10-29,2026,Upland,Mississippi,Strength,34,3.4,3.0
+2026-10-29,2026,Upland,Mississippi,Strength,35,1.7,1.5
+2026-10-29,2026,Upland,Mississippi,Strength,36,0.5,0.7
+2026-10-29,2026,Upland,Mississippi,Strength,37,0.1,0.2
+2026-10-29,2026,Upland,Mississippi,Strength,Average For All Strengths,30.97,30.89
+2026-10-29,2026,Upland,Mississippi,Trash,01,2.8,2.2
+2026-10-29,2026,Upland,Mississippi,Trash,02,18.2,17.7
+2026-10-29,2026,Upland,Mississippi,Trash,03,25.6,26.0
+2026-10-29,2026,Upland,Mississippi,Trash,04,21.6,22.2
+2026-10-29,2026,Upland,Mississippi,Trash,05,14.4,14.4
+2026-10-29,2026,Upland,Mississippi,Trash,06,8.6,8.3
+2026-10-29,2026,Upland,Mississippi,Trash,07,4.8,4.7
+2026-10-29,2026,Upland,Mississippi,Trash,08,2.3,2.3
+2026-10-29,2026,Upland,Mississippi,Trash,09,1.0,1.1
+2026-10-29,2026,Upland,Mississippi,Trash,10,0.4,0.5
+2026-10-29,2026,Upland,Mississippi,Trash,11,0.2,0.2
+2026-10-29,2026,Upland,Mississippi,Trash,12,0.1,0.1
+2026-10-29,2026,Upland,Mississippi,Trash,Average For All HVITrash,0.39,0.4
+2026-10-29,2026,Upland,Mississippi,Uniformity,77,0.2,0.2
+2026-10-29,2026,Upland,Mississippi,Uniformity,78,1.3,1.1
+2026-10-29,2026,Upland,Mississippi,Uniformity,79,6.6,5.6
+2026-10-29,2026,Upland,Mississippi,Uniformity,80,20.5,18.2
+2026-10-29,2026,Upland,Mississippi,Uniformity,81,34.3,31.3
+2026-10-29,2026,Upland,Mississippi,Uniformity,82,26.3,27.0
+2026-10-29,2026,Upland,Mississippi,Uniformity,83,9.6,14.4
+2026-10-29,2026,Upland,Mississippi,Uniformity,84,1.2,2.1
+2026-10-29,2026,Upland,Mississippi,Uniformity,85 & Above,,0.1
+2026-10-29,2026,Upland,Mississippi,Uniformity,Average For All Uniformity,81.55,81.74
+2026-10-29,2026,Upland,Missouri,Leaf Grade,1 - 2,12.8,18.2
+2026-10-29,2026,Upland,Missouri,Leaf Grade,3,60.7,57.8
+2026-10-29,2026,Upland,Missouri,Leaf Grade,4,23.6,21.6
+2026-10-29,2026,Upland,Missouri,Leaf Grade,5,2.7,2.2
+2026-10-29,2026,Upland,Missouri,Leaf Grade,6,0.2,0.1
+2026-10-29,2026,Upland,Missouri,Leaf Grade,Average For All Leaf,3.17,3.08
+2026-10-29,2026,Upland,Missouri,MIKE,3.8,0.1,0.2
+2026-10-29,2026,Upland,Missouri,MIKE,3.9,0.2,0.4
+2026-10-29,2026,Upland,Missouri,MIKE,4.0,0.5,1.1
+2026-10-29,2026,Upland,Missouri,MIKE,4.1,1.7,2.5
+2026-10-29,2026,Upland,Missouri,MIKE,4.2,4.2,5.3
+2026-10-29,2026,Upland,Missouri,MIKE,4.3,9.4,9.8
+2026-10-29,2026,Upland,Missouri,MIKE,4.4,13.7,13.5
+2026-10-29,2026,Upland,Missouri,MIKE,4.5,18.2,16.7
+2026-10-29,2026,Upland,Missouri,MIKE,4.6,19.2,17.0
+2026-10-29,2026,Upland,Missouri,MIKE,4.7,14.9,15.0
+2026-10-29,2026,Upland,Missouri,MIKE,4.8,9.7,10.0
+2026-10-29,2026,Upland,Missouri,MIKE,4.9,5.4,5.1
+2026-10-29,2026,Upland,Missouri,MIKE,5.0,2.1,2.2
+2026-10-29,2026,Upland,Missouri,MIKE,5.1,0.3,0.9
+2026-10-29,2026,Upland,Missouri,MIKE,5.2,0.1,0.2
+2026-10-29,2026,Upland,Missouri,MIKE,Average For All MIKE,4.55,4.55
+2026-10-29,2026,Upland,Missouri,MIKE Range,3.7 - 4.2,6.9,9.5
+2026-10-29,2026,Upland,Missouri,MIKE Range,4.3 - 4.9,90.6,87.1
+2026-10-29,2026,Upland,Missouri,MIKE Range,5.0 - 5.2,2.4,3.4
+2026-10-29,2026,Upland,Missouri,MIKE Range,Average For All MIKERange,4.55,4.55
+2026-10-29,2026,Upland,Missouri,Staple,33,0.2,0.2
+2026-10-29,2026,Upland,Missouri,Staple,34,1.9,1.6
+2026-10-29,2026,Upland,Missouri,Staple,35,9.6,10.9
+2026-10-29,2026,Upland,Missouri,Staple,36,28.5,29.8
+2026-10-29,2026,Upland,Missouri,Staple,37,55.9,53.4
+2026-10-29,2026,Upland,Missouri,Staple,38,4.0,4.0
+2026-10-29,2026,Upland,Missouri,Staple,39,0.1,0.1
+2026-10-29,2026,Upland,Missouri,Staple,Average Length,1.14,1.14
+2026-10-29,2026,Upland,Missouri,Staple,Average Staple,36.5,36.47
+2026-10-29,2026,Upland,Missouri,Strength,27,0.2,0.2
+2026-10-29,2026,Upland,Missouri,Strength,28,2.3,2.3
+2026-10-29,2026,Upland,Missouri,Strength,29,16.7,19.7
+2026-10-29,2026,Upland,Missouri,Strength,30,44.3,48.9
+2026-10-29,2026,Upland,Missouri,Strength,31,29.0,24.2
+2026-10-29,2026,Upland,Missouri,Strength,32,6.2,4.1
+2026-10-29,2026,Upland,Missouri,Strength,33,0.9,0.5
+2026-10-29,2026,Upland,Missouri,Strength,34,0.3,0.1
+2026-10-29,2026,Upland,Missouri,Strength,Average For All Strengths,30.69,30.55
+2026-10-29,2026,Upland,Missouri,Trash,01,1.3,2.6
+2026-10-29,2026,Upland,Missouri,Trash,02,16.6,20.7
+2026-10-29,2026,Upland,Missouri,Trash,03,32.2,31.3
+2026-10-29,2026,Upland,Missouri,Trash,04,25.8,23.6
+2026-10-29,2026,Upland,Missouri,Trash,05,13.7,12.5
+2026-10-29,2026,Upland,Missouri,Trash,06,6.0,5.5
+2026-10-29,2026,Upland,Missouri,Trash,07,2.5,2.3
+2026-10-29,2026,Upland,Missouri,Trash,08,1.1,0.9
+2026-10-29,2026,Upland,Missouri,Trash,09,0.4,0.4
+2026-10-29,2026,Upland,Missouri,Trash,10,0.2,0.1
+2026-10-29,2026,Upland,Missouri,Trash,11,0.1,0.1
+2026-10-29,2026,Upland,Missouri,Trash,Average For All HVITrash,0.37,0.36
+2026-10-29,2026,Upland,Missouri,Uniformity,77,0.1,0.1
+2026-10-29,2026,Upland,Missouri,Uniformity,78,0.4,0.2
+2026-10-29,2026,Upland,Missouri,Uniformity,79,1.7,1.9
+2026-10-29,2026,Upland,Missouri,Uniformity,80,11.3,11.9
+2026-10-29,2026,Upland,Missouri,Uniformity,81,28.3,28.5
+2026-10-29,2026,Upland,Missouri,Uniformity,82,41.7,42.0
+2026-10-29,2026,Upland,Missouri,Uniformity,83,15.5,14.6
+2026-10-29,2026,Upland,Missouri,Uniformity,84,1.1,0.6
+2026-10-29,2026,Upland,Missouri,Uniformity,85 & Above,0.1,0.1
+2026-10-29,2026,Upland,Missouri,Uniformity,Average For All Uniformity,82.05,82.02
+2026-10-29,2026,Upland,North Carolina,Extraneous Matter,11,1.3,1.1
+2026-10-29,2026,Upland,North Carolina,Extraneous Matter,21,0.2,0.3
+2026-10-29,2026,Upland,North Carolina,Extraneous Matter,31,0.7,0.4
+2026-10-29,2026,Upland,North Carolina,Leaf Grade,1 - 2,4.4,6.0
+2026-10-29,2026,Upland,North Carolina,Leaf Grade,3,44.3,46.9
+2026-10-29,2026,Upland,North Carolina,Leaf Grade,4,42.2,39.0
+2026-10-29,2026,Upland,North Carolina,Leaf Grade,5,8.2,7.5
+2026-10-29,2026,Upland,North Carolina,Leaf Grade,6,0.8,0.6
+2026-10-29,2026,Upland,North Carolina,Leaf Grade,7,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,Leaf Grade,Average For All Leaf,3.57,3.5
+2026-10-29,2026,Upland,North Carolina,MIKE,3.6,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,MIKE,3.7,0.4,0.3
+2026-10-29,2026,Upland,North Carolina,MIKE,3.8,1.2,0.8
+2026-10-29,2026,Upland,North Carolina,MIKE,3.9,1.8,1.5
+2026-10-29,2026,Upland,North Carolina,MIKE,4.0,2.3,2.1
+2026-10-29,2026,Upland,North Carolina,MIKE,4.1,3.5,3.4
+2026-10-29,2026,Upland,North Carolina,MIKE,4.2,5.7,5.3
+2026-10-29,2026,Upland,North Carolina,MIKE,4.3,7.9,7.8
+2026-10-29,2026,Upland,North Carolina,MIKE,4.4,9.9,10.7
+2026-10-29,2026,Upland,North Carolina,MIKE,4.5,9.5,12.1
+2026-10-29,2026,Upland,North Carolina,MIKE,4.6,13.2,14.4
+2026-10-29,2026,Upland,North Carolina,MIKE,4.7,14.3,13.6
+2026-10-29,2026,Upland,North Carolina,MIKE,4.8,13.4,12.1
+2026-10-29,2026,Upland,North Carolina,MIKE,4.9,9.4,7.6
+2026-10-29,2026,Upland,North Carolina,MIKE,5.0,4.3,4.0
+2026-10-29,2026,Upland,North Carolina,MIKE,5.1,1.6,2.2
+2026-10-29,2026,Upland,North Carolina,MIKE,5.2,1.0,1.0
+2026-10-29,2026,Upland,North Carolina,MIKE,5.3,0.3,0.5
+2026-10-29,2026,Upland,North Carolina,MIKE,5.4,0.2,0.3
+2026-10-29,2026,Upland,North Carolina,MIKE,5.5 & Above,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,MIKE,Average For All MIKE,4.57,4.57
+2026-10-29,2026,Upland,North Carolina,MIKE Range,3.5 - 3.6,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,MIKE Range,3.7 - 4.2,14.9,13.4
+2026-10-29,2026,Upland,North Carolina,MIKE Range,4.3 - 4.9,77.6,78.2
+2026-10-29,2026,Upland,North Carolina,MIKE Range,5.0 - 5.2,6.8,7.2
+2026-10-29,2026,Upland,North Carolina,MIKE Range,5.3 & Above,0.5,1.0
+2026-10-29,2026,Upland,North Carolina,MIKE Range,Average For All MIKERange,4.57,4.57
+2026-10-29,2026,Upland,North Carolina,Staple,33,0.2,0.4
+2026-10-29,2026,Upland,North Carolina,Staple,34,2.1,2.1
+2026-10-29,2026,Upland,North Carolina,Staple,35,14.5,11.8
+2026-10-29,2026,Upland,North Carolina,Staple,36,36.4,34.1
+2026-10-29,2026,Upland,North Carolina,Staple,37,37.5,39.2
+2026-10-29,2026,Upland,North Carolina,Staple,38,7.6,9.7
+2026-10-29,2026,Upland,North Carolina,Staple,39,1.4,2.2
+2026-10-29,2026,Upland,North Carolina,Staple,40,0.2,0.4
+2026-10-29,2026,Upland,North Carolina,Staple,Average Length,1.13,1.14
+2026-10-29,2026,Upland,North Carolina,Staple,Average Staple,36.38,36.5
+2026-10-29,2026,Upland,North Carolina,Strength,25,,0.1
+2026-10-29,2026,Upland,North Carolina,Strength,26,0.3,0.4
+2026-10-29,2026,Upland,North Carolina,Strength,27,2.1,1.9
+2026-10-29,2026,Upland,North Carolina,Strength,28,8.3,7.8
+2026-10-29,2026,Upland,North Carolina,Strength,29,20.7,19.0
+2026-10-29,2026,Upland,North Carolina,Strength,30,31.5,30.2
+2026-10-29,2026,Upland,North Carolina,Strength,31,23.7,24.0
+2026-10-29,2026,Upland,North Carolina,Strength,32,8.3,10.7
+2026-10-29,2026,Upland,North Carolina,Strength,33,3.0,3.9
+2026-10-29,2026,Upland,North Carolina,Strength,34,1.4,1.5
+2026-10-29,2026,Upland,North Carolina,Strength,35,0.6,0.5
+2026-10-29,2026,Upland,North Carolina,Strength,36,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,Strength,Average For All Strengths,30.58,30.7
+2026-10-29,2026,Upland,North Carolina,Trash,01,0.3,0.6
+2026-10-29,2026,Upland,North Carolina,Trash,02,6.5,8.0
+2026-10-29,2026,Upland,North Carolina,Trash,03,20.2,21.3
+2026-10-29,2026,Upland,North Carolina,Trash,04,25.3,25.3
+2026-10-29,2026,Upland,North Carolina,Trash,05,21.2,20.1
+2026-10-29,2026,Upland,North Carolina,Trash,06,13.5,12.6
+2026-10-29,2026,Upland,North Carolina,Trash,07,7.1,6.6
+2026-10-29,2026,Upland,North Carolina,Trash,08,3.2,3.1
+2026-10-29,2026,Upland,North Carolina,Trash,09,1.5,1.4
+2026-10-29,2026,Upland,North Carolina,Trash,10,0.7,0.6
+2026-10-29,2026,Upland,North Carolina,Trash,11,0.3,0.3
+2026-10-29,2026,Upland,North Carolina,Trash,12,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,Trash,13,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,Trash,Average For All HVITrash,0.46,0.45
+2026-10-29,2026,Upland,North Carolina,Uniformity,77,0.1,0.1
+2026-10-29,2026,Upland,North Carolina,Uniformity,78,0.6,0.7
+2026-10-29,2026,Upland,North Carolina,Uniformity,79,3.4,3.4
+2026-10-29,2026,Upland,North Carolina,Uniformity,80,11.5,11.7
+2026-10-29,2026,Upland,North Carolina,Uniformity,81,28.3,26.6
+2026-10-29,2026,Upland,North Carolina,Uniformity,82,36.7,35.9
+2026-10-29,2026,Upland,North Carolina,Uniformity,83,17.8,19.2
+2026-10-29,2026,Upland,North Carolina,Uniformity,84,1.5,2.5
+2026-10-29,2026,Upland,North Carolina,Uniformity,85 & Above,,0.1
+2026-10-29,2026,Upland,North Carolina,Uniformity,Average For All Uniformity,82.02,82.06
+2026-10-29,2026,Upland,Oklahoma,Extraneous Matter,11,0.7,0.3
+2026-10-29,2026,Upland,Oklahoma,Extraneous Matter,31,0.5,0.2
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,1 - 2,11.3,24.0
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,3,52.3,50.5
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,4,32.2,21.1
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,5,3.9,4.0
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,6,0.1,0.3
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,7,0.1,
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,8,0.2,0.1
+2026-10-29,2026,Upland,Oklahoma,Leaf Grade,Average For All Leaf,3.3,3.04
+2026-10-29,2026,Upland,Oklahoma,MIKE,2.4 & Below,,0.1
+2026-10-29,2026,Upland,Oklahoma,MIKE,2.5,,0.2
+2026-10-29,2026,Upland,Oklahoma,MIKE,2.6,,0.3
+2026-10-29,2026,Upland,Oklahoma,MIKE,2.7,0.2,0.2
+2026-10-29,2026,Upland,Oklahoma,MIKE,2.8,0.2,0.4
+2026-10-29,2026,Upland,Oklahoma,MIKE,2.9,0.6,0.7
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.0,0.2,0.4
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.1,0.1,1.0
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.2,0.2,1.0
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.3,0.4,1.2
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.4,0.6,1.8
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.5,0.9,2.2
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.6,2.6,3.0
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.7,4.6,5.4
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.8,4.5,4.0
+2026-10-29,2026,Upland,Oklahoma,MIKE,3.9,6.3,5.4
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.0,8.0,10.4
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.1,9.1,11.0
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.2,15.3,13.4
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.3,13.9,11.0
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.4,11.8,12.2
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.5,9.8,6.5
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.6,7.1,4.7
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.7,3.6,3.1
+2026-10-29,2026,Upland,Oklahoma,MIKE,4.8,0.2,0.4
+2026-10-29,2026,Upland,Oklahoma,MIKE,5.0,,0.1
+2026-10-29,2026,Upland,Oklahoma,MIKE,Average For All MIKE,4.18,4.09
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,2.4 & Below,,0.1
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,2.5 - 2.6,,0.5
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,2.7 - 2.9,1.0,1.3
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,3.0 - 3.2,0.5,2.3
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,3.3 - 3.4,1.0,3.0
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,3.5 - 3.6,3.5,5.3
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,3.7 - 4.2,47.6,49.6
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,4.3 - 4.9,46.4,37.9
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,5.0 - 5.2,,0.1
+2026-10-29,2026,Upland,Oklahoma,MIKE Range,Average For All MIKERange,4.18,4.09
+2026-10-29,2026,Upland,Oklahoma,Staple,30,0.2,0.1
+2026-10-29,2026,Upland,Oklahoma,Staple,31,0.4,0.1
+2026-10-29,2026,Upland,Oklahoma,Staple,32,0.2,0.3
+2026-10-29,2026,Upland,Oklahoma,Staple,33,0.7,1.0
+2026-10-29,2026,Upland,Oklahoma,Staple,34,3.8,2.2
+2026-10-29,2026,Upland,Oklahoma,Staple,35,3.9,4.2
+2026-10-29,2026,Upland,Oklahoma,Staple,36,6.9,11.3
+2026-10-29,2026,Upland,Oklahoma,Staple,37,16.5,22.4
+2026-10-29,2026,Upland,Oklahoma,Staple,38,36.0,32.3
+2026-10-29,2026,Upland,Oklahoma,Staple,39,28.5,21.5
+2026-10-29,2026,Upland,Oklahoma,Staple,40,2.9,3.8
+2026-10-29,2026,Upland,Oklahoma,Staple,41,0.1,0.9
+2026-10-29,2026,Upland,Oklahoma,Staple,Average Length,1.18,1.17
+2026-10-29,2026,Upland,Oklahoma,Staple,Average Staple,37.68,37.57
+2026-10-29,2026,Upland,Oklahoma,Strength,22 & Below,0.2,0.1
+2026-10-29,2026,Upland,Oklahoma,Strength,23,,0.1
+2026-10-29,2026,Upland,Oklahoma,Strength,24,0.2,0.1
+2026-10-29,2026,Upland,Oklahoma,Strength,25,0.3,0.2
+2026-10-29,2026,Upland,Oklahoma,Strength,26,0.5,0.3
+2026-10-29,2026,Upland,Oklahoma,Strength,27,0.6,0.3
+2026-10-29,2026,Upland,Oklahoma,Strength,28,2.1,1.3
+2026-10-29,2026,Upland,Oklahoma,Strength,29,2.0,1.8
+2026-10-29,2026,Upland,Oklahoma,Strength,30,2.1,2.2
+2026-10-29,2026,Upland,Oklahoma,Strength,31,1.8,2.6
+2026-10-29,2026,Upland,Oklahoma,Strength,32,2.4,2.8
+2026-10-29,2026,Upland,Oklahoma,Strength,33,5.5,4.7
+2026-10-29,2026,Upland,Oklahoma,Strength,34,6.3,6.2
+2026-10-29,2026,Upland,Oklahoma,Strength,35,16.7,12.5
+2026-10-29,2026,Upland,Oklahoma,Strength,36,23.5,19.7
+2026-10-29,2026,Upland,Oklahoma,Strength,37,20.1,26.3
+2026-10-29,2026,Upland,Oklahoma,Strength,38,9.4,13.7
+2026-10-29,2026,Upland,Oklahoma,Strength,39,5.5,4.7
+2026-10-29,2026,Upland,Oklahoma,Strength,40 & Above,0.9,0.5
+2026-10-29,2026,Upland,Oklahoma,Strength,Average For All Strengths,35.77,36.05
+2026-10-29,2026,Upland,Oklahoma,Trash,01,0.9,5.8
+2026-10-29,2026,Upland,Oklahoma,Trash,02,12.3,22.3
+2026-10-29,2026,Upland,Oklahoma,Trash,03,25.9,26.6
+2026-10-29,2026,Upland,Oklahoma,Trash,04,25.2,20.6
+2026-10-29,2026,Upland,Oklahoma,Trash,05,18.4,12.2
+2026-10-29,2026,Upland,Oklahoma,Trash,06,10.4,6.4
+2026-10-29,2026,Upland,Oklahoma,Trash,07,4.1,2.8
+2026-10-29,2026,Upland,Oklahoma,Trash,08,1.7,1.5
+2026-10-29,2026,Upland,Oklahoma,Trash,09,0.5,0.8
+2026-10-29,2026,Upland,Oklahoma,Trash,10,0.1,0.5
+2026-10-29,2026,Upland,Oklahoma,Trash,11,0.1,0.2
+2026-10-29,2026,Upland,Oklahoma,Trash,12,0.1,0.1
+2026-10-29,2026,Upland,Oklahoma,Trash,14,0.1,0.1
+2026-10-29,2026,Upland,Oklahoma,Trash,Average For All HVITrash,0.41,0.36
+2026-10-29,2026,Upland,Oklahoma,Uniformity,76,0.2,0.2
+2026-10-29,2026,Upland,Oklahoma,Uniformity,77,0.8,0.5
+2026-10-29,2026,Upland,Oklahoma,Uniformity,78,1.8,1.3
+2026-10-29,2026,Upland,Oklahoma,Uniformity,79,4.5,3.7
+2026-10-29,2026,Upland,Oklahoma,Uniformity,80,3.5,6.2
+2026-10-29,2026,Upland,Oklahoma,Uniformity,81,10.1,11.7
+2026-10-29,2026,Upland,Oklahoma,Uniformity,82,25.1,23.4
+2026-10-29,2026,Upland,Oklahoma,Uniformity,83,36.4,32.8
+2026-10-29,2026,Upland,Oklahoma,Uniformity,84,16.5,18.0
+2026-10-29,2026,Upland,Oklahoma,Uniformity,85 & Above,1.1,2.2
+2026-10-29,2026,Upland,Oklahoma,Uniformity,Average For All Uniformity,82.74,82.76
+2026-10-29,2026,Upland,South Carolina,Extraneous Matter,11,2.1,3.9
+2026-10-29,2026,Upland,South Carolina,Extraneous Matter,21,,0.1
+2026-10-29,2026,Upland,South Carolina,Extraneous Matter,31,1.3,0.5
+2026-10-29,2026,Upland,South Carolina,Leaf Grade,1 - 2,3.9,5.1
+2026-10-29,2026,Upland,South Carolina,Leaf Grade,3,47.7,45.1
+2026-10-29,2026,Upland,South Carolina,Leaf Grade,4,37.6,37.9
+2026-10-29,2026,Upland,South Carolina,Leaf Grade,5,10.2,10.6
+2026-10-29,2026,Upland,South Carolina,Leaf Grade,6,0.6,1.1
+2026-10-29,2026,Upland,South Carolina,Leaf Grade,7,,0.1
+2026-10-29,2026,Upland,South Carolina,Leaf Grade,Average For All Leaf,3.56,3.58
+2026-10-29,2026,Upland,South Carolina,MIKE,3.4,,0.1
+2026-10-29,2026,Upland,South Carolina,MIKE,3.5,,0.2
+2026-10-29,2026,Upland,South Carolina,MIKE,3.6,0.2,0.5
+2026-10-29,2026,Upland,South Carolina,MIKE,3.7,0.3,0.4
+2026-10-29,2026,Upland,South Carolina,MIKE,3.8,1.1,1.2
+2026-10-29,2026,Upland,South Carolina,MIKE,3.9,2.1,1.4
+2026-10-29,2026,Upland,South Carolina,MIKE,4.0,2.2,1.8
+2026-10-29,2026,Upland,South Carolina,MIKE,4.1,4.6,3.7
+2026-10-29,2026,Upland,South Carolina,MIKE,4.2,5.5,4.6
+2026-10-29,2026,Upland,South Carolina,MIKE,4.3,7.2,7.3
+2026-10-29,2026,Upland,South Carolina,MIKE,4.4,10.0,10.1
+2026-10-29,2026,Upland,South Carolina,MIKE,4.5,7.6,11.0
+2026-10-29,2026,Upland,South Carolina,MIKE,4.6,10.9,11.1
+2026-10-29,2026,Upland,South Carolina,MIKE,4.7,11.8,10.0
+2026-10-29,2026,Upland,South Carolina,MIKE,4.8,12.7,12.1
+2026-10-29,2026,Upland,South Carolina,MIKE,4.9,10.0,9.8
+2026-10-29,2026,Upland,South Carolina,MIKE,5.0,6.0,6.6
+2026-10-29,2026,Upland,South Carolina,MIKE,5.1,3.2,3.7
+2026-10-29,2026,Upland,South Carolina,MIKE,5.2,1.2,1.9
+2026-10-29,2026,Upland,South Carolina,MIKE,5.3,0.6,1.0
+2026-10-29,2026,Upland,South Carolina,MIKE,5.4,2.6,1.3
+2026-10-29,2026,Upland,South Carolina,MIKE,5.5 & Above,0.2,0.2
+2026-10-29,2026,Upland,South Carolina,MIKE,Average For All MIKE,4.61,4.61
+2026-10-29,2026,Upland,South Carolina,MIKE Range,3.3 - 3.4,,0.2
+2026-10-29,2026,Upland,South Carolina,MIKE Range,3.5 - 3.6,0.3,0.7
+2026-10-29,2026,Upland,South Carolina,MIKE Range,3.7 - 4.2,15.8,13.0
+2026-10-29,2026,Upland,South Carolina,MIKE Range,4.3 - 4.9,70.1,71.4
+2026-10-29,2026,Upland,South Carolina,MIKE Range,5.0 - 5.2,10.4,12.2
+2026-10-29,2026,Upland,South Carolina,MIKE Range,5.3 & Above,3.5,2.5
+2026-10-29,2026,Upland,South Carolina,MIKE Range,Average For All MIKERange,4.61,4.61
+2026-10-29,2026,Upland,South Carolina,Staple,33,0.3,0.2
+2026-10-29,2026,Upland,South Carolina,Staple,34,4.3,3.2
+2026-10-29,2026,Upland,South Carolina,Staple,35,20.2,14.4
+2026-10-29,2026,Upland,South Carolina,Staple,36,29.8,29.5
+2026-10-29,2026,Upland,South Carolina,Staple,37,33.6,39.5
+2026-10-29,2026,Upland,South Carolina,Staple,38,8.0,10.0
+2026-10-29,2026,Upland,South Carolina,Staple,39,3.3,2.7
+2026-10-29,2026,Upland,South Carolina,Staple,40,0.4,0.3
+2026-10-29,2026,Upland,South Carolina,Staple,Average Length,1.13,1.14
+2026-10-29,2026,Upland,South Carolina,Staple,Average Staple,36.31,36.47
+2026-10-29,2026,Upland,South Carolina,Strength,26,,0.1
+2026-10-29,2026,Upland,South Carolina,Strength,27,0.3,0.4
+2026-10-29,2026,Upland,South Carolina,Strength,28,2.8,3.8
+2026-10-29,2026,Upland,South Carolina,Strength,29,15.0,12.1
+2026-10-29,2026,Upland,South Carolina,Strength,30,27.6,26.7
+2026-10-29,2026,Upland,South Carolina,Strength,31,26.4,26.6
+2026-10-29,2026,Upland,South Carolina,Strength,32,13.9,16.2
+2026-10-29,2026,Upland,South Carolina,Strength,33,7.1,7.4
+2026-10-29,2026,Upland,South Carolina,Strength,34,3.6,4.6
+2026-10-29,2026,Upland,South Carolina,Strength,35,2.6,1.7
+2026-10-29,2026,Upland,South Carolina,Strength,36,0.6,0.2
+2026-10-29,2026,Upland,South Carolina,Strength,37,0.1,
+2026-10-29,2026,Upland,South Carolina,Strength,Average For All Strengths,31.31,31.33
+2026-10-29,2026,Upland,South Carolina,Trash,01,0.1,0.2
+2026-10-29,2026,Upland,South Carolina,Trash,02,7.0,7.9
+2026-10-29,2026,Upland,South Carolina,Trash,03,24.0,22.2
+2026-10-29,2026,Upland,South Carolina,Trash,04,26.0,24.5
+2026-10-29,2026,Upland,South Carolina,Trash,05,19.4,18.6
+2026-10-29,2026,Upland,South Carolina,Trash,06,11.2,11.9
+2026-10-29,2026,Upland,South Carolina,Trash,07,6.5,7.2
+2026-10-29,2026,Upland,South Carolina,Trash,08,3.4,4.0
+2026-10-29,2026,Upland,South Carolina,Trash,09,1.4,2.0
+2026-10-29,2026,Upland,South Carolina,Trash,10,0.7,0.9
+2026-10-29,2026,Upland,South Carolina,Trash,11,0.2,0.3
+2026-10-29,2026,Upland,South Carolina,Trash,12,0.1,0.2
+2026-10-29,2026,Upland,South Carolina,Trash,Average For All HVITrash,0.45,0.46
+2026-10-29,2026,Upland,South Carolina,Uniformity,77,0.1,0.1
+2026-10-29,2026,Upland,South Carolina,Uniformity,78,0.4,0.3
+2026-10-29,2026,Upland,South Carolina,Uniformity,79,2.7,3.0
+2026-10-29,2026,Upland,South Carolina,Uniformity,80,10.5,9.4
+2026-10-29,2026,Upland,South Carolina,Uniformity,81,31.0,24.0
+2026-10-29,2026,Upland,South Carolina,Uniformity,82,42.5,41.8
+2026-10-29,2026,Upland,South Carolina,Uniformity,83,11.9,19.8
+2026-10-29,2026,Upland,South Carolina,Uniformity,84,0.8,1.5
+2026-10-29,2026,Upland,South Carolina,Uniformity,Average For All Uniformity,81.97,82.15
+2026-10-29,2026,Upland,Tennessee,Leaf Grade,1 - 2,28.2,36.0
+2026-10-29,2026,Upland,Tennessee,Leaf Grade,3,50.1,47.6
+2026-10-29,2026,Upland,Tennessee,Leaf Grade,4,18.4,14.0
+2026-10-29,2026,Upland,Tennessee,Leaf Grade,5,3.0,2.1
+2026-10-29,2026,Upland,Tennessee,Leaf Grade,6,0.3,0.3
+2026-10-29,2026,Upland,Tennessee,Leaf Grade,Average For All Leaf,2.95,2.79
+2026-10-29,2026,Upland,Tennessee,MIKE,3.3,0.1,0.1
+2026-10-29,2026,Upland,Tennessee,MIKE,3.4,0.2,0.1
+2026-10-29,2026,Upland,Tennessee,MIKE,3.5,0.3,0.2
+2026-10-29,2026,Upland,Tennessee,MIKE,3.6,0.4,0.3
+2026-10-29,2026,Upland,Tennessee,MIKE,3.7,0.8,0.8
+2026-10-29,2026,Upland,Tennessee,MIKE,3.8,3.2,2.0
+2026-10-29,2026,Upland,Tennessee,MIKE,3.9,3.7,2.5
+2026-10-29,2026,Upland,Tennessee,MIKE,4.0,4.6,4.2
+2026-10-29,2026,Upland,Tennessee,MIKE,4.1,7.4,7.2
+2026-10-29,2026,Upland,Tennessee,MIKE,4.2,11.3,10.7
+2026-10-29,2026,Upland,Tennessee,MIKE,4.3,12.9,14.0
+2026-10-29,2026,Upland,Tennessee,MIKE,4.4,13.5,15.3
+2026-10-29,2026,Upland,Tennessee,MIKE,4.5,13.2,13.9
+2026-10-29,2026,Upland,Tennessee,MIKE,4.6,12.6,11.2
+2026-10-29,2026,Upland,Tennessee,MIKE,4.7,8.3,8.2
+2026-10-29,2026,Upland,Tennessee,MIKE,4.8,5.0,5.3
+2026-10-29,2026,Upland,Tennessee,MIKE,4.9,1.5,2.6
+2026-10-29,2026,Upland,Tennessee,MIKE,5.0,0.8,1.0
+2026-10-29,2026,Upland,Tennessee,MIKE,5.1,0.1,0.2
+2026-10-29,2026,Upland,Tennessee,MIKE,Average For All MIKE,4.37,4.39
+2026-10-29,2026,Upland,Tennessee,MIKE Range,3.3 - 3.4,0.4,0.2
+2026-10-29,2026,Upland,Tennessee,MIKE Range,3.5 - 3.6,0.7,0.5
+2026-10-29,2026,Upland,Tennessee,MIKE Range,3.7 - 4.2,30.9,27.5
+2026-10-29,2026,Upland,Tennessee,MIKE Range,4.3 - 4.9,67.1,70.6
+2026-10-29,2026,Upland,Tennessee,MIKE Range,5.0 - 5.2,0.9,1.2
+2026-10-29,2026,Upland,Tennessee,MIKE Range,Average For All MIKERange,4.37,4.39
+2026-10-29,2026,Upland,Tennessee,Staple,33,0.1,0.2
+2026-10-29,2026,Upland,Tennessee,Staple,34,2.4,3.1
+2026-10-29,2026,Upland,Tennessee,Staple,35,16.5,17.2
+2026-10-29,2026,Upland,Tennessee,Staple,36,40.2,43.6
+2026-10-29,2026,Upland,Tennessee,Staple,37,38.6,33.9
+2026-10-29,2026,Upland,Tennessee,Staple,38,2.0,1.8
+2026-10-29,2026,Upland,Tennessee,Staple,39,0.2,0.2
+2026-10-29,2026,Upland,Tennessee,Staple,Average Length,1.13,1.13
+2026-10-29,2026,Upland,Tennessee,Staple,Average Staple,36.21,36.14
+2026-10-29,2026,Upland,Tennessee,Strength,26,0.1,0.1
+2026-10-29,2026,Upland,Tennessee,Strength,27,1.3,1.5
+2026-10-29,2026,Upland,Tennessee,Strength,28,8.0,10.1
+2026-10-29,2026,Upland,Tennessee,Strength,29,28.1,34.0
+2026-10-29,2026,Upland,Tennessee,Strength,30,34.8,32.7
+2026-10-29,2026,Upland,Tennessee,Strength,31,20.0,15.3
+2026-10-29,2026,Upland,Tennessee,Strength,32,5.2,4.2
+2026-10-29,2026,Upland,Tennessee,Strength,33,1.4,1.2
+2026-10-29,2026,Upland,Tennessee,Strength,34,0.8,0.8
+2026-10-29,2026,Upland,Tennessee,Strength,35,0.1,0.1
+2026-10-29,2026,Upland,Tennessee,Strength,Average For All Strengths,30.35,30.17
+2026-10-29,2026,Upland,Tennessee,Trash,01,6.7,10.7
+2026-10-29,2026,Upland,Tennessee,Trash,02,27.5,31.5
+2026-10-29,2026,Upland,Tennessee,Trash,03,27.0,26.6
+2026-10-29,2026,Upland,Tennessee,Trash,04,18.8,16.1
+2026-10-29,2026,Upland,Tennessee,Trash,05,10.6,8.2
+2026-10-29,2026,Upland,Tennessee,Trash,06,5.2,3.8
+2026-10-29,2026,Upland,Tennessee,Trash,07,2.3,1.7
+2026-10-29,2026,Upland,Tennessee,Trash,08,1.0,0.8
+2026-10-29,2026,Upland,Tennessee,Trash,09,0.5,0.4
+2026-10-29,2026,Upland,Tennessee,Trash,10,0.2,0.2
+2026-10-29,2026,Upland,Tennessee,Trash,11,0.1,0.1
+2026-10-29,2026,Upland,Tennessee,Trash,Average For All HVITrash,0.34,0.31
+2026-10-29,2026,Upland,Tennessee,Uniformity,77,0.1,0.1
+2026-10-29,2026,Upland,Tennessee,Uniformity,78,0.6,0.6
+2026-10-29,2026,Upland,Tennessee,Uniformity,79,4.6,3.9
+2026-10-29,2026,Upland,Tennessee,Uniformity,80,18.0,18.6
+2026-10-29,2026,Upland,Tennessee,Uniformity,81,37.0,37.1
+2026-10-29,2026,Upland,Tennessee,Uniformity,82,34.0,33.8
+2026-10-29,2026,Upland,Tennessee,Uniformity,83,5.4,5.5
+2026-10-29,2026,Upland,Tennessee,Uniformity,84,0.4,0.3
+2026-10-29,2026,Upland,Tennessee,Uniformity,Average For All Uniformity,81.62,81.63
+2026-10-29,2026,Upland,Texas,Extraneous Matter,11,3.4,1.1
+2026-10-29,2026,Upland,Texas,Extraneous Matter,21,0.2,1.2
+2026-10-29,2026,Upland,Texas,Extraneous Matter,Plastic - Level 1,,0.1
+2026-10-29,2026,Upland,Texas,Leaf Grade,1 - 2,26.4,29.9
+2026-10-29,2026,Upland,Texas,Leaf Grade,3,41.3,45.1
+2026-10-29,2026,Upland,Texas,Leaf Grade,4,22.8,20.2
+2026-10-29,2026,Upland,Texas,Leaf Grade,5,7.7,4.1
+2026-10-29,2026,Upland,Texas,Leaf Grade,6,1.7,0.6
+2026-10-29,2026,Upland,Texas,Leaf Grade,7,0.2,0.1
+2026-10-29,2026,Upland,Texas,Leaf Grade,Average For All Leaf,3.15,2.96
+2026-10-29,2026,Upland,Texas,MIKE,2.7,0.1,
+2026-10-29,2026,Upland,Texas,MIKE,2.8,0.1,0.1
+2026-10-29,2026,Upland,Texas,MIKE,2.9,0.2,0.1
+2026-10-29,2026,Upland,Texas,MIKE,3.0,0.2,0.1
+2026-10-29,2026,Upland,Texas,MIKE,3.1,0.2,0.2
+2026-10-29,2026,Upland,Texas,MIKE,3.2,0.2,0.3
+2026-10-29,2026,Upland,Texas,MIKE,3.3,0.5,0.5
+2026-10-29,2026,Upland,Texas,MIKE,3.4,0.9,0.7
+2026-10-29,2026,Upland,Texas,MIKE,3.5,1.0,1.0
+2026-10-29,2026,Upland,Texas,MIKE,3.6,1.7,1.6
+2026-10-29,2026,Upland,Texas,MIKE,3.7,2.4,2.2
+2026-10-29,2026,Upland,Texas,MIKE,3.8,3.4,3.1
+2026-10-29,2026,Upland,Texas,MIKE,3.9,4.3,4.2
+2026-10-29,2026,Upland,Texas,MIKE,4.0,5.7,5.8
+2026-10-29,2026,Upland,Texas,MIKE,4.1,7.6,7.7
+2026-10-29,2026,Upland,Texas,MIKE,4.2,8.3,9.2
+2026-10-29,2026,Upland,Texas,MIKE,4.3,9.9,10.6
+2026-10-29,2026,Upland,Texas,MIKE,4.4,10.6,11.6
+2026-10-29,2026,Upland,Texas,MIKE,4.5,11.4,12.1
+2026-10-29,2026,Upland,Texas,MIKE,4.6,10.6,10.8
+2026-10-29,2026,Upland,Texas,MIKE,4.7,7.5,7.8
+2026-10-29,2026,Upland,Texas,MIKE,4.8,5.1,4.8
+2026-10-29,2026,Upland,Texas,MIKE,4.9,3.2,2.5
+2026-10-29,2026,Upland,Texas,MIKE,5.0,2.1,1.3
+2026-10-29,2026,Upland,Texas,MIKE,5.1,1.5,0.7
+2026-10-29,2026,Upland,Texas,MIKE,5.2,0.6,0.4
+2026-10-29,2026,Upland,Texas,MIKE,5.3,0.3,0.2
+2026-10-29,2026,Upland,Texas,MIKE,5.4,0.2,0.1
+2026-10-29,2026,Upland,Texas,MIKE,5.5 & Above,0.1,0.1
+2026-10-29,2026,Upland,Texas,MIKE,Average For All MIKE,4.34,4.33
+2026-10-29,2026,Upland,Texas,MIKE Range,2.7 - 2.9,0.4,0.2
+2026-10-29,2026,Upland,Texas,MIKE Range,3.0 - 3.2,0.6,0.7
+2026-10-29,2026,Upland,Texas,MIKE Range,3.3 - 3.4,1.4,1.2
+2026-10-29,2026,Upland,Texas,MIKE Range,3.5 - 3.6,2.7,2.7
+2026-10-29,2026,Upland,Texas,MIKE Range,3.7 - 4.2,31.6,32.2
+2026-10-29,2026,Upland,Texas,MIKE Range,4.3 - 4.9,58.3,60.2
+2026-10-29,2026,Upland,Texas,MIKE Range,5.0 - 5.2,4.3,2.4
+2026-10-29,2026,Upland,Texas,MIKE Range,5.3 & Above,0.6,0.4
+2026-10-29,2026,Upland,Texas,MIKE Range,Average For All MIKERange,4.34,4.33
+2026-10-29,2026,Upland,Texas,Staple,30,0.1,
+2026-10-29,2026,Upland,Texas,Staple,31,0.3,0.1
+2026-10-29,2026,Upland,Texas,Staple,32,1.7,0.6
+2026-10-29,2026,Upland,Texas,Staple,33,5.5,1.9
+2026-10-29,2026,Upland,Texas,Staple,34,11.1,4.0
+2026-10-29,2026,Upland,Texas,Staple,35,16.2,8.7
+2026-10-29,2026,Upland,Texas,Staple,36,22.4,21.7
+2026-10-29,2026,Upland,Texas,Staple,37,28.9,42.8
+2026-10-29,2026,Upland,Texas,Staple,38,10.1,15.2
+2026-10-29,2026,Upland,Texas,Staple,39,3.0,4.0
+2026-10-29,2026,Upland,Texas,Staple,40,0.7,0.9
+2026-10-29,2026,Upland,Texas,Staple,41,0.1,0.1
+2026-10-29,2026,Upland,Texas,Staple,Average Length,1.12,1.14
+2026-10-29,2026,Upland,Texas,Staple,Average Staple,35.98,36.64
+2026-10-29,2026,Upland,Texas,Strength,22 & Below,0.1,
+2026-10-29,2026,Upland,Texas,Strength,23,0.3,0.1
+2026-10-29,2026,Upland,Texas,Strength,24,0.7,0.2
+2026-10-29,2026,Upland,Texas,Strength,25,1.0,0.5
+2026-10-29,2026,Upland,Texas,Strength,26,2.3,1.1
+2026-10-29,2026,Upland,Texas,Strength,27,4.6,2.8
+2026-10-29,2026,Upland,Texas,Strength,28,8.7,6.8
+2026-10-29,2026,Upland,Texas,Strength,29,16.2,14.4
+2026-10-29,2026,Upland,Texas,Strength,30,20.2,21.3
+2026-10-29,2026,Upland,Texas,Strength,31,16.6,17.9
+2026-10-29,2026,Upland,Texas,Strength,32,11.9,12.1
+2026-10-29,2026,Upland,Texas,Strength,33,8.5,9.7
+2026-10-29,2026,Upland,Texas,Strength,34,4.8,7.1
+2026-10-29,2026,Upland,Texas,Strength,35,2.2,3.7
+2026-10-29,2026,Upland,Texas,Strength,36,1.2,1.5
+2026-10-29,2026,Upland,Texas,Strength,37,0.4,0.6
+2026-10-29,2026,Upland,Texas,Strength,38,0.1,0.2
+2026-10-29,2026,Upland,Texas,Strength,Average For All Strengths,30.84,31.32
+2026-10-29,2026,Upland,Texas,Trash,01,7.0,8.3
+2026-10-29,2026,Upland,Texas,Trash,02,23.3,24.3
+2026-10-29,2026,Upland,Texas,Trash,03,23.4,25.2
+2026-10-29,2026,Upland,Texas,Trash,04,17.9,18.9
+2026-10-29,2026,Upland,Texas,Trash,05,11.8,11.5
+2026-10-29,2026,Upland,Texas,Trash,06,7.2,6.2
+2026-10-29,2026,Upland,Texas,Trash,07,4.2,3.0
+2026-10-29,2026,Upland,Texas,Trash,08,2.5,1.4
+2026-10-29,2026,Upland,Texas,Trash,09,1.3,0.6
+2026-10-29,2026,Upland,Texas,Trash,10,0.6,0.3
+2026-10-29,2026,Upland,Texas,Trash,11,0.4,0.1
+2026-10-29,2026,Upland,Texas,Trash,12,0.2,0.1
+2026-10-29,2026,Upland,Texas,Trash,13,0.1,
+2026-10-29,2026,Upland,Texas,Trash,14,0.1,
+2026-10-29,2026,Upland,Texas,Trash,Average For All HVITrash,0.37,0.35
+2026-10-29,2026,Upland,Texas,Uniformity,75,0.1,
+2026-10-29,2026,Upland,Texas,Uniformity,76,0.4,0.2
+2026-10-29,2026,Upland,Texas,Uniformity,77,2.0,0.8
+2026-10-29,2026,Upland,Texas,Uniformity,78,6.8,2.6
+2026-10-29,2026,Upland,Texas,Uniformity,79,14.0,6.2
+2026-10-29,2026,Upland,Texas,Uniformity,80,25.0,14.2
+2026-10-29,2026,Upland,Texas,Uniformity,81,26.8,28.4
+2026-10-29,2026,Upland,Texas,Uniformity,82,17.5,30.0
+2026-10-29,2026,Upland,Texas,Uniformity,83,6.1,13.8
+2026-10-29,2026,Upland,Texas,Uniformity,84,1.2,3.5
+2026-10-29,2026,Upland,Texas,Uniformity,85 & Above,0.1,0.3
+2026-10-29,2026,Upland,Texas,Uniformity,Average For All Uniformity,80.94,81.76
+2026-10-29,2026,Upland,Virginia,Extraneous Matter,11,0.7,0.4
+2026-10-29,2026,Upland,Virginia,Leaf Grade,1 - 2,5.6,6.4
+2026-10-29,2026,Upland,Virginia,Leaf Grade,3,52.4,53.7
+2026-10-29,2026,Upland,Virginia,Leaf Grade,4,34.2,33.3
+2026-10-29,2026,Upland,Virginia,Leaf Grade,5,7.5,6.3
+2026-10-29,2026,Upland,Virginia,Leaf Grade,6,0.3,0.3
+2026-10-29,2026,Upland,Virginia,Leaf Grade,Average For All Leaf,3.45,3.4
+2026-10-29,2026,Upland,Virginia,MIKE,3.6,0.2,0.1
+2026-10-29,2026,Upland,Virginia,MIKE,3.7,0.7,0.4
+2026-10-29,2026,Upland,Virginia,MIKE,3.8,1.1,0.9
+2026-10-29,2026,Upland,Virginia,MIKE,3.9,1.2,1.1
+2026-10-29,2026,Upland,Virginia,MIKE,4.0,3.6,3.2
+2026-10-29,2026,Upland,Virginia,MIKE,4.1,10.2,10.0
+2026-10-29,2026,Upland,Virginia,MIKE,4.2,15.7,16.3
+2026-10-29,2026,Upland,Virginia,MIKE,4.3,19.2,19.4
+2026-10-29,2026,Upland,Virginia,MIKE,4.4,11.4,14.3
+2026-10-29,2026,Upland,Virginia,MIKE,4.5,9.3,9.6
+2026-10-29,2026,Upland,Virginia,MIKE,4.6,10.2,9.5
+2026-10-29,2026,Upland,Virginia,MIKE,4.7,9.7,8.7
+2026-10-29,2026,Upland,Virginia,MIKE,4.8,5.0,4.1
+2026-10-29,2026,Upland,Virginia,MIKE,4.9,1.5,1.4
+2026-10-29,2026,Upland,Virginia,MIKE,5.0,0.8,0.5
+2026-10-29,2026,Upland,Virginia,MIKE,5.1,0.2,0.1
+2026-10-29,2026,Upland,Virginia,MIKE,5.2,0.1,0.1
+2026-10-29,2026,Upland,Virginia,MIKE,Average For All MIKE,4.38,4.37
+2026-10-29,2026,Upland,Virginia,MIKE Range,3.5 - 3.6,0.2,0.1
+2026-10-29,2026,Upland,Virginia,MIKE Range,3.7 - 4.2,32.5,32.1
+2026-10-29,2026,Upland,Virginia,MIKE Range,4.3 - 4.9,66.2,67.1
+2026-10-29,2026,Upland,Virginia,MIKE Range,5.0 - 5.2,1.1,0.7
+2026-10-29,2026,Upland,Virginia,MIKE Range,Average For All MIKERange,4.38,4.37
+2026-10-29,2026,Upland,Virginia,Staple,33,0.1,0.2
+2026-10-29,2026,Upland,Virginia,Staple,34,2.6,2.3
+2026-10-29,2026,Upland,Virginia,Staple,35,10.1,8.8
+2026-10-29,2026,Upland,Virginia,Staple,36,35.1,37.0
+2026-10-29,2026,Upland,Virginia,Staple,37,46.9,47.1
+2026-10-29,2026,Upland,Virginia,Staple,38,4.8,4.3
+2026-10-29,2026,Upland,Virginia,Staple,39,0.4,0.3
+2026-10-29,2026,Upland,Virginia,Staple,Average Length,1.13,1.13
+2026-10-29,2026,Upland,Virginia,Staple,Average Staple,36.42,36.43
+2026-10-29,2026,Upland,Virginia,Strength,26,0.1,0.1
+2026-10-29,2026,Upland,Virginia,Strength,27,1.0,0.7
+2026-10-29,2026,Upland,Virginia,Strength,28,6.1,5.9
+2026-10-29,2026,Upland,Virginia,Strength,29,19.9,18.7
+2026-10-29,2026,Upland,Virginia,Strength,30,34.3,34.6
+2026-10-29,2026,Upland,Virginia,Strength,31,19.8,20.6
+2026-10-29,2026,Upland,Virginia,Strength,32,8.1,7.2
+2026-10-29,2026,Upland,Virginia,Strength,33,5.9,6.4
+2026-10-29,2026,Upland,Virginia,Strength,34,2.9,3.7
+2026-10-29,2026,Upland,Virginia,Strength,35,1.3,1.5
+2026-10-29,2026,Upland,Virginia,Strength,36,0.4,0.3
+2026-10-29,2026,Upland,Virginia,Strength,37,0.2,0.1
+2026-10-29,2026,Upland,Virginia,Strength,Average For All Strengths,30.86,30.93
+2026-10-29,2026,Upland,Virginia,Trash,01,0.2,0.2
+2026-10-29,2026,Upland,Virginia,Trash,02,6.9,7.3
+2026-10-29,2026,Upland,Virginia,Trash,03,21.3,22.3
+2026-10-29,2026,Upland,Virginia,Trash,04,26.8,27.2
+2026-10-29,2026,Upland,Virginia,Trash,05,20.1,20.2
+2026-10-29,2026,Upland,Virginia,Trash,06,12.3,11.8
+2026-10-29,2026,Upland,Virginia,Trash,07,6.9,6.2
+2026-10-29,2026,Upland,Virginia,Trash,08,3.3,2.8
+2026-10-29,2026,Upland,Virginia,Trash,09,1.6,1.2
+2026-10-29,2026,Upland,Virginia,Trash,10,0.5,0.5
+2026-10-29,2026,Upland,Virginia,Trash,11,0.1,0.1
+2026-10-29,2026,Upland,Virginia,Trash,12,0.1,0.1
+2026-10-29,2026,Upland,Virginia,Trash,Average For All HVITrash,0.46,0.45
+2026-10-29,2026,Upland,Virginia,Uniformity,77,,0.1
+2026-10-29,2026,Upland,Virginia,Uniformity,78,0.5,0.5
+2026-10-29,2026,Upland,Virginia,Uniformity,79,3.1,3.0
+2026-10-29,2026,Upland,Virginia,Uniformity,80,9.8,11.0
+2026-10-29,2026,Upland,Virginia,Uniformity,81,19.5,19.3
+2026-10-29,2026,Upland,Virginia,Uniformity,82,38.4,33.5
+2026-10-29,2026,Upland,Virginia,Uniformity,83,23.7,28.1
+2026-10-29,2026,Upland,Virginia,Uniformity,84,5.0,4.5
+2026-10-29,2026,Upland,Virginia,Uniformity,85 & Above,0.1,0.1
+2026-10-29,2026,Upland,Virginia,Uniformity,Average For All Uniformity,82.29,82.3
