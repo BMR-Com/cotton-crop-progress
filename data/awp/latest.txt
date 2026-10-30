@@ -2,7 +2,7 @@ Announcement
 1400 Independence Ave. SW
 Washington, DC 20250
 FPAC.BC.Press@usda.gov
-UPLAND COTTON ANNOUNCEMENT – October 22, 2026
+UPLAND COTTON ANNOUNCEMENT – October 29, 2026
 Omri Bein
 (832)-431-2620
 omri.bein@usda.gov
@@ -12,34 +12,34 @@ micronaire 3.5-3.6 and 4.3-4.9, strength 26.0-28.9 grams per tex, length uniform
 80.0-81.9 percent upland cotton (base quality), adjusted to U.S. quality and location, fine
 count adjustment (FCA), coarse count adjustment (CCA), and marketing loan gain/loan
 deficiency payment (LDP) rate that will be in effect from 12:01 a.m., Eastern Time, Friday,
-October 23, 2026, through midnight: Eastern Time, Thursday, October 29, 2026. The
+October 30, 2026, through midnight: Eastern Time, Thursday, November 05, 2026. The
 next announcement of the AWP, FCA, CCA, and LDP rate for upland cotton will be on
-Thursday, October 29, 2026, at 4:00 p.m., Eastern Time.
+Thursday, November 05, 2026, at 4:00 p.m., Eastern Time.
 Cents/lb.
-Adjusted World Price (AWP) 65.01
+Adjusted World Price (AWP) 64.51
 Fine Count Adjustment (FCA) 2025 Crop 0.00
 Fine Count Adjustment (FCA) 2026 Crop 0.00
 Coarse Count Adjustment (CCA) 0.00
 Loan Deficiency Payment (LDP) Rate 0.00
 This week’s AWP, FCA, and CCA are determined as follows:
-AWP calculation: Far East (FE) Price 88.47
+AWP calculation: Far East (FE) Price 87.97
 Adjustments:
 Avg. cost to market - 20.51
 SLM 1-1/16 inch cotton - 2.95
 Sum of Adjustments -23.46
-ADJUSTED WORLD PRICE 65.01
+ADJUSTED WORLD PRICE 64.51
 FCA calculation: 2025 2026
 Loan Schedule Premium for SM 1-1/8” Cotton 2.20 2.40
-Less Market Premium (cannot be less than zero) 3.81 3.81
+Less Market Premium (cannot be less than zero) 3.05 3.05
 FINE COUNT ADJUSTMENT (cannot be less than 0.00 0.00
 zero)
 Market Premium for SM 1-1/8” Cotton:
-FE Fine Count Price 92.28
-FE Price - 88.47
-Total: 3.81
+FE Fine Count Price 91.02
+FE Price - 87.97
+Total: 3.05
 CCA calculation:
-FE Price 88.47
-FE Coarse Count Price - 90.43
+FE Price 87.97
+FE Coarse Count Price - 89.75
 Adjustment to SLM 1-1/32 inch - 6.30
 cotton
 COARSE COUNT 0.00
@@ -48,7 +48,7 @@ than zero)
 If sufficient data are not available to determine a CCA for the week, regulations
 governing the CCA require that the latest available CCA will remain in effect. The
 current CCA of 0.00 cents per pound will remain in effect through 12:00 p.m. Eastern
-Time, Thursday, October 29, 2026.
+Time, Thursday, November 05, 2026.
 The Agricultural Act of 2014 provides that the AWP may be further adjusted if the
 Secretary determines adjustment is necessary to 1) minimize potential loan forfeitures,
 2) minimize accumulation of Government stocks, 3) ensure free and competitive
