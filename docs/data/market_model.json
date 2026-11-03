@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-03 00:12 UTC",
+ "generated": "2026-11-03 02:37 UTC",
  "price_date": "2026-11-02",
  "wasde": {
   "my": "2026/27",
@@ -385,7 +385,7 @@
      "yr": 2026,
      "my": "2026/27",
      "x": 3.8,
-     "y": -3.35,
+     "y": -3.352,
      "rate": 4.05,
      "fin": -0.841,
      "n": 23,
@@ -397,7 +397,7 @@
     "yr": 2026,
     "my": "2026/27",
     "x": 3.8,
-    "y": -3.35,
+    "y": -3.352,
     "rate": 4.05,
     "fin": -0.841,
     "n": 23,
@@ -410,14 +410,14 @@
    ],
    "median": -0.393,
    "share_carry": 0.5625,
-   "market": -3.81,
+   "market": -3.85,
    "market_contracts": "Dec26/Mar27",
    "full_carry": -2.69,
-   "back_price": 81.39,
-   "fin_now": -0.819,
+   "back_price": 80.96,
+   "fin_now": -0.814,
    "fv_wasde_stocks_only": 0.1,
-   "fv_wasde_raw": -1.59,
-   "fv_wasde": -1.59
+   "fv_wasde_raw": -1.57,
+   "fv_wasde": -1.57
   },
   "marmay": {
    "label": "Mar \u2212 May",
@@ -656,11 +656,11 @@
    ],
    "median": -0.6615,
    "share_carry": 0.875,
-   "market": -1.66,
+   "market": -1.64,
    "market_contracts": "Mar27/May27",
-   "full_carry": -1.81,
-   "back_price": 83.05,
-   "fin_now": -0.557,
+   "full_carry": -1.8,
+   "back_price": 82.6,
+   "fin_now": -0.554,
    "fv_wasde_stocks_only": -0.24,
    "fv_wasde_raw": -0.87,
    "fv_wasde": -0.87
@@ -915,11 +915,11 @@
    ],
    "median": -0.349,
    "share_carry": 0.7647058823529411,
-   "market": -0.53,
+   "market": -0.52,
    "market_contracts": "May27/Jul27",
    "full_carry": -1.81,
-   "back_price": 83.58,
-   "fin_now": -0.56,
+   "back_price": 83.12,
+   "fin_now": -0.557,
    "fv_wasde_stocks_only": -0.11,
    "fv_wasde_raw": -0.82,
    "fv_wasde": -0.82
@@ -1174,14 +1174,14 @@
    ],
    "median": 1.334,
    "share_carry": 0.29411764705882354,
-   "market": 6.34,
+   "market": 6.16,
    "market_contracts": "Jul27/Dec27",
    "full_carry": -4.42,
-   "back_price": 77.24,
-   "fin_now": -1.295,
+   "back_price": 76.96,
+   "fin_now": -1.29,
    "fv_wasde_stocks_only": 2.47,
-   "fv_wasde_raw": 0.07,
-   "fv_wasde": 0.07
+   "fv_wasde_raw": 0.08,
+   "fv_wasde": 0.08
   }
  }
 }
