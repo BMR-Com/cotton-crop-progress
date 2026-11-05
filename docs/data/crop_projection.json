@@ -1,9 +1,9 @@
 {
- "asof": "2026-11-04",
+ "asof": "2026-11-05",
  "inputs_through": {
   "ginnings": "2026-10-15",
   "crop_progress": "2026-11-01",
-  "drought": "2026-10-27",
+  "drought": "2026-11-03",
   "classing_by_office": "2026-10-30"
  },
  "unit": "million 480-lb bales",
