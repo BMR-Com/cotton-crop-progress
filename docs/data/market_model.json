@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-05 02:29 UTC",
+ "generated": "2026-11-05 21:07 UTC",
  "price_date": "2026-11-04",
  "wasde": {
   "my": "2026/27",
@@ -11,13 +11,13 @@
   "source": "FRED DTB3"
  },
  "floors": {
-  "announce_date": "2026-10-29",
+  "announce_date": "2026-11-05",
   "effective": [
-   "2026-10-30",
-   "2026-11-05"
+   "2026-11-06",
+   "2026-11-12"
   ],
-  "awp": 64.51,
-  "fe_price": 87.97,
+  "awp": 63.57,
+  "fe_price": 87.03,
   "adjustments": 23.46,
   "cost_to_market": 20.51,
   "slm_adj": 2.95,
@@ -28,69 +28,69 @@
   "ccc_rate": 5.0,
   "carry_per_month": 0.8542,
   "pricing_week": [
-   "2026-10-23",
-   "2026-10-29"
+   "2026-10-30",
+   "2026-11-05"
   ],
   "contracts": [
    {
     "contract": "Dec 26",
     "mon": "DEC",
     "year": 2026,
-    "fut_week_avg": 78.79,
-    "wedge": 14.28,
-    "hard": 69.28,
+    "fut_week_avg": 77.66,
+    "wedge": 14.09,
+    "hard": 69.09,
     "loan_months": null,
     "loan_breakeven": null,
     "awp_breakeven": null,
-    "basis_fe": 9.18
+    "basis_fe": 9.37
    },
    {
     "contract": "Mar 27",
     "mon": "MAR",
     "year": 2027,
-    "fut_week_avg": 82.55,
-    "wedge": 18.04,
-    "hard": 73.04,
+    "fut_week_avg": 81.48,
+    "wedge": 17.91,
+    "hard": 72.91,
     "loan_months": 3,
-    "loan_breakeven": 75.61,
+    "loan_breakeven": 75.48,
     "awp_breakeven": 57.56,
-    "basis_fe": 5.42
+    "basis_fe": 5.55
    },
    {
     "contract": "May 27",
     "mon": "MAY",
     "year": 2027,
-    "fut_week_avg": 84.18,
-    "wedge": 19.67,
-    "hard": 74.67,
+    "fut_week_avg": 83.12,
+    "wedge": 19.55,
+    "hard": 74.55,
     "loan_months": 5,
-    "loan_breakeven": 78.94,
+    "loan_breakeven": 78.82,
     "awp_breakeven": 59.27,
-    "basis_fe": 3.79
+    "basis_fe": 3.91
    },
    {
     "contract": "Jul 27",
     "mon": "JUL",
     "year": 2027,
-    "fut_week_avg": 84.67,
-    "wedge": 20.16,
-    "hard": 75.16,
+    "fut_week_avg": 83.61,
+    "wedge": 20.04,
+    "hard": 75.04,
     "loan_months": 7,
-    "loan_breakeven": 81.14,
+    "loan_breakeven": 81.02,
     "awp_breakeven": 60.98,
-    "basis_fe": 3.3
+    "basis_fe": 3.42
    },
    {
     "contract": "Dec 27",
     "mon": "DEC",
     "year": 2027,
-    "fut_week_avg": 78.06,
-    "wedge": 13.55,
-    "hard": 68.55,
+    "fut_week_avg": 77.15,
+    "wedge": 13.58,
+    "hard": 68.58,
     "loan_months": null,
     "loan_breakeven": null,
     "awp_breakeven": null,
-    "basis_fe": 9.91
+    "basis_fe": 9.88
    }
   ],
   "history": [
@@ -148,6 +148,11 @@
     "date": "2026-10-29",
     "awp": 64.51,
     "fe": 87.97
+   },
+   {
+    "date": "2026-11-05",
+    "awp": 63.57,
+    "fe": 87.03
    }
   ]
  },
@@ -164,11 +169,11 @@
     "sigma": 1.631123013616105
    },
    "fit_funding": {
-    "a": -2.669463214722903,
-    "b": 15.367154393014003,
-    "c": 3.6194604732105784,
-    "r2_weighted": 0.7606584349495472,
-    "sigma": 0.6421462283015433,
+    "a": -2.669463214722909,
+    "b": 15.36715439301403,
+    "c": 3.61946047321058,
+    "r2_weighted": 0.7606584349495478,
+    "sigma": 0.6421462283015418,
     "weights": [
      1.0,
      1.0,
@@ -385,7 +390,7 @@
      "yr": 2026,
      "my": "2026/27",
      "x": 3.8,
-     "y": -3.39,
+     "y": -3.391,
      "rate": 4.05,
      "fin": -0.84,
      "n": 25,
@@ -397,7 +402,7 @@
     "yr": 2026,
     "my": "2026/27",
     "x": 3.8,
-    "y": -3.39,
+    "y": -3.391,
     "rate": 4.05,
     "fin": -0.84,
     "n": 25,
@@ -410,14 +415,14 @@
    ],
    "median": -0.393,
    "share_carry": 0.5625,
-   "market": -3.83,
+   "market": -3.85,
    "market_contracts": "Dec26/Mar27",
    "full_carry": -2.7,
-   "back_price": 82.18,
-   "fin_now": -0.826,
+   "back_price": 81.96,
+   "fin_now": -0.824,
    "fv_wasde_stocks_only": 0.1,
-   "fv_wasde_raw": -1.62,
-   "fv_wasde": -1.62
+   "fv_wasde_raw": -1.61,
+   "fv_wasde": -1.61
   },
   "marmay": {
    "label": "Mar \u2212 May",
@@ -433,9 +438,9 @@
    "fit_funding": {
     "a": -3.612289532322036,
     "b": 13.767721402678458,
-    "c": 1.5894952325793783,
-    "r2_weighted": 0.6904524481184687,
-    "sigma": 0.8657360939423637,
+    "c": 1.5894952325793774,
+    "r2_weighted": 0.6904524481184686,
+    "sigma": 0.8657360939423641,
     "weights": [
      1.0,
      1.0,
@@ -656,11 +661,11 @@
    ],
    "median": -0.6615,
    "share_carry": 0.875,
-   "market": -1.63,
+   "market": -1.6,
    "market_contracts": "Mar27/May27",
    "full_carry": -1.81,
-   "back_price": 83.81,
-   "fin_now": -0.562,
+   "back_price": 83.56,
+   "fin_now": -0.56,
    "fv_wasde_stocks_only": -0.24,
    "fv_wasde_raw": -0.88,
    "fv_wasde": -0.88
@@ -677,11 +682,11 @@
     "sigma": 1.8795287600329988
    },
    "fit_funding": {
-    "a": -3.4036377260482924,
-    "b": 12.528742786678022,
-    "c": 1.2735649285548005,
-    "r2_weighted": 0.3435822790836167,
-    "sigma": 1.1776525916480256,
+    "a": -3.4036377260482933,
+    "b": 12.528742786678027,
+    "c": 1.2735649285547987,
+    "r2_weighted": 0.3435822790836165,
+    "sigma": 1.1776525916480232,
     "weights": [
      0.96,
      0.23,
@@ -915,11 +920,11 @@
    ],
    "median": -0.349,
    "share_carry": 0.7647058823529411,
-   "market": -0.36,
+   "market": -0.46,
    "market_contracts": "May27/Jul27",
    "full_carry": -1.81,
-   "back_price": 84.17,
-   "fin_now": -0.564,
+   "back_price": 84.02,
+   "fin_now": -0.563,
    "fv_wasde_stocks_only": -0.11,
    "fv_wasde_raw": -0.82,
    "fv_wasde": -0.82
@@ -936,10 +941,10 @@
     "sigma": 5.590113643783704
    },
    "fit_funding": {
-    "a": -8.353081650127935,
-    "b": 41.319084096228906,
-    "c": 1.8905898200420395,
-    "r2_weighted": 0.47385865847866193,
+    "a": -8.35308165012796,
+    "b": 41.31908409622898,
+    "c": 1.890589820042031,
+    "r2_weighted": 0.47385865847866204,
     "sigma": 2.266341346820838,
     "weights": [
      1.0,
@@ -1174,14 +1179,14 @@
    ],
    "median": 1.334,
    "share_carry": 0.29411764705882354,
-   "market": 7.14,
+   "market": 6.81,
    "market_contracts": "Jul27/Dec27",
    "full_carry": -4.42,
-   "back_price": 77.03,
-   "fin_now": -1.291,
+   "back_price": 77.21,
+   "fin_now": -1.294,
    "fv_wasde_stocks_only": 2.47,
-   "fv_wasde_raw": 0.08,
-   "fv_wasde": 0.08
+   "fv_wasde_raw": 0.07,
+   "fv_wasde": 0.07
   }
  }
 }
