@@ -50018,7 +50018,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,MO,,4,Hail,23.23,8784.0,1.0,23.23
 2025,MO,,5,Cold Wet Weather,2118.0950000000003,144187.0,5.0,2118.0950000000003
 2025,MO,,5,Excess Moisture/Precipitation/Rain,26147.32775,6455065.5,221.0,26100.21075675
-2025,MO,,5,Hail,1761.0585,978797.0,8.0,1761.0585
+2025,MO,,5,Hail,1761.0584999999999,978797.0,8.0,1761.0584999999999
 2025,MO,,6,Cold Wet Weather,3095.7250000000004,675053.0,5.0,3095.7250000000004
 2025,MO,,6,Excess Moisture/Precipitation/Rain,13080.59185,3209298.95,82.0,13078.092763249999
 2025,MO,,6,Hail,654.407,117717.0,4.0,654.407
@@ -50043,7 +50043,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,MS,,4,Excess Moisture/Precipitation/Rain,12083.0184,2219198.0,74.0,12083.0185
 2025,MS,,4,Flood,378.7,69356.0,2.0,378.7
 2025,MS,,5,Earthquake,5.06,1248.0,1.0,5.06
-2025,MS,,5,Excess Moisture/Precipitation/Rain,89219.1822,21877267.02,388.0,89219.18197
+2025,MS,,5,Excess Moisture/Precipitation/Rain,88967.3822,21782712.02,387.0,88967.38197
 2025,MS,,5,Failure of Irrigation Equipment,5.2,1302.0,1.0,5.2
 2025,MS,,5,Flood,706.75,301502.5,2.0,706.75
 2025,MS,,6,Drought,210.44,47391.2,2.0,210.44
@@ -50090,7 +50090,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,NC,,10,Drought,355.94,114228.4,4.0,355.94
 2025,NC,,10,Excess Moisture/Precipitation/Rain,112.41,15514.0,1.0,112.41
 2025,NC,,10,Heat,64.232,12017.599999999999,3.0,64.232
-2025,NC,,11,Decline in Price,5.542,334.5000000000001,4.0,5.542
+2025,NC,,11,Decline in Price,5.542,334.5,4.0,5.542
 2025,NC,,11,Drought,25.66,4659.4,1.0,25.66
 2025,NC,,11,Excess Moisture/Precipitation/Rain,2.308,48.8,1.0,2.308
 2025,NC,,12,Decline in Price,125.9565,14671.35,3.0,125.9565
@@ -50134,7 +50134,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,OK,,6,Wind/Excess Wind,476.90999999999997,223410.0,4.0,476.90999999999997
 2025,OK,,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,22524.9141,2375663.0,48.0,0.0
 2025,OK,,7,Drought,4476.92,370393.75,20.0,4476.92
-2025,OK,,7,Excess Moisture/Precipitation/Rain,2279.128,469459.0,13.0,2279.12798
+2025,OK,,7,Excess Moisture/Precipitation/Rain,2279.1279999999997,469459.0,13.0,2279.1279799999998
 2025,OK,,7,Hail,3312.80638,736472.1,15.0,3312.806376
 2025,OK,,7,Heat,1320.5913,436387.0,7.0,1320.59125
 2025,OK,,7,Hot Wind,707.6700000000001,160098.0,9.0,678.4300000000001
@@ -50147,7 +50147,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,OK,,8,Hot Wind,959.485,188301.5,11.0,900.43
 2025,OK,,8,Wind/Excess Wind,117.75,9139.0,1.0,117.75
 2025,OK,,9,All Other Causes,17.3575,882.25,1.0,17.3575
-2025,OK,,9,Drought,9413.42475,1133625.85,77.0,9499.797692
+2025,OK,,9,Drought,9413.42475,1133625.8499999999,77.0,9499.797691999998
 2025,OK,,9,Excess Moisture/Precipitation/Rain,39.82,1923.0,2.0,39.82
 2025,OK,,9,Freeze,103.33,2318.0,1.0,103.33
 2025,OK,,9,Hot Wind,1265.50766,354430.2,7.0,1265.507672
@@ -50312,7 +50312,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Calhoun,9,Excess Moisture/Precipitation/Rain,475.1104,63017.0,4.0,475.1104
 2025,TX,Cameron,2,Failure of Irrigation Supply,777.7505,254141.0,5.0,777.7505
 2025,TX,Cameron,3,Earthquake,43.65,20786.85,1.0,43.65
-2025,TX,Cameron,3,Excess Moisture/Precipitation/Rain,13121.7595,4395917.7,67.0,13121.7595
+2025,TX,Cameron,3,Excess Moisture/Precipitation/Rain,14179.489500000001,4746998.7,68.0,14179.489500000001
 2025,TX,Cameron,3,Failure of Irrigation Equipment,210.995,70668.25,2.0,210.995
 2025,TX,Cameron,3,Failure of Irrigation Supply,12426.77,4824079.2,28.0,12423.6425
 2025,TX,Cameron,4,Excess Moisture/Precipitation/Rain,3659.3295000000003,1320504.0,22.0,3659.3295000000003
@@ -50496,12 +50496,12 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Crosby,6,Cold Wet Weather,47.25,2179.0,1.0,47.25
 2025,TX,Crosby,6,Decline in Price,1867.5725,121562.0,4.0,1867.5725
 2025,TX,Crosby,6,Drought,114.43,17823.0,4.0,114.43
-2025,TX,Crosby,6,Excess Moisture/Precipitation/Rain,10296.470985,2230348.3899999997,96.0,10296.470965
+2025,TX,Crosby,6,Excess Moisture/Precipitation/Rain,10289.761484999999,2229725.6399999997,96.0,10289.761465
 2025,TX,Crosby,6,Federal or State Ordered Destruction,37.9325,2095.0,1.0,37.9325
-2025,TX,Crosby,6,Hail,53097.381592,12330835.120000001,337.0,52469.411131400004
+2025,TX,Crosby,6,Hail,53046.988591999994,12319532.22,337.0,52419.0181314
 2025,TX,Crosby,6,Heat,579.55,43921.5,6.0,579.55
 2025,TX,Crosby,6,Hot Wind,2095.6949999999997,191766.09,10.0,2095.6949999999997
-2025,TX,Crosby,6,Wind/Excess Wind,4776.244823,647561.8899999999,48.0,4776.244775
+2025,TX,Crosby,6,Wind/Excess Wind,4761.357323,643340.54,47.0,4761.357275
 2025,TX,Crosby,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,4804.3377,2681781.0,710.0,0.0
 2025,TX,Crosby,7,Drought,1085.87,70317.0,18.0,1085.87
 2025,TX,Crosby,7,Excess Moisture/Precipitation/Rain,40.4,4071.0,2.0,40.4
@@ -50563,13 +50563,13 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Dawson,5,Hot Wind,214.5,101107.5,3.0,214.5
 2025,TX,Dawson,5,Wind/Excess Wind,1193.3249999999998,243797.0,14.0,1193.3249999999998
 2025,TX,Dawson,6,Cold Wet Weather,247.3,36288.0,1.0,247.3
-2025,TX,Dawson,6,Drought,41510.04455,5960650.5,185.0,41509.744529
+2025,TX,Dawson,6,Drought,41510.044550000006,5960650.5,185.0,41509.744529
 2025,TX,Dawson,6,Excess Moisture/Precipitation/Rain,6820.414125,1483200.73,52.0,6793.881575
-2025,TX,Dawson,6,Hail,19473.926225,4296040.1,115.0,18108.6785865
+2025,TX,Dawson,6,Hail,19473.926225000003,4296040.1,115.0,18108.6785865
 2025,TX,Dawson,6,Heat,6476.462485,873556.4099999999,27.0,6476.462425
 2025,TX,Dawson,6,Hot Wind,17553.29084,4922580.42,83.0,17553.2905
 2025,TX,Dawson,6,Tornado,61.184,21034.8,2.0,61.184
-2025,TX,Dawson,6,Wind/Excess Wind,89989.38567,16487471.120000001,404.0,85612.5132475
+2025,TX,Dawson,6,Wind/Excess Wind,89989.38566999999,16487471.12,404.0,85612.5132475
 2025,TX,Dawson,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,27005.7165,15822844.0,1053.0,0.0
 2025,TX,Dawson,7,Drought,319.18399999999997,32163.5,8.0,319.18399999999997
 2025,TX,Dawson,7,Hail,1107.525,190588.5,4.0,1107.525
@@ -50729,7 +50729,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Gaines,6,Cold Wet Weather,1594.655,258415.75,5.0,1594.655
 2025,TX,Gaines,6,Drought,9886.093499999999,1696622.95,25.0,9886.062249999999
 2025,TX,Gaines,6,Excess Moisture/Precipitation/Rain,5107.02836,1127127.8,25.0,5156.96836
-2025,TX,Gaines,6,Hail,19736.41571,5960561.2299999995,55.0,19730.99571
+2025,TX,Gaines,6,Hail,19736.41571,5960561.23,55.0,19730.99571
 2025,TX,Gaines,6,Heat,2701.73575,308354.28,8.0,2701.73575
 2025,TX,Gaines,6,Hot Wind,31893.1008,8038435.609999999,93.0,32133.069499999998
 2025,TX,Gaines,6,"Other (Snow, Lightning, Etc.)",217.09,387.0,1.0,217.09
@@ -50805,7 +50805,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Glasscock,6,"Other (Snow, Lightning, Etc.)",135.172,-5493.0,4.0,135.172
 2025,TX,Glasscock,6,Wind/Excess Wind,14029.2,4045821.95,25.0,14029.2
 2025,TX,Glasscock,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,23563.6467,9499733.0,390.0,0.0
-2025,TX,Glasscock,7,Drought,4094.4972,383518.5,9.0,4094.497168
+2025,TX,Glasscock,7,Drought,4094.4971999999993,383518.5,9.0,4094.497168
 2025,TX,Glasscock,7,Heat,205.67,17150.0,7.0,205.67
 2025,TX,Glasscock,7,Wind/Excess Wind,308.97,72130.5,1.0,308.97
 2025,TX,Glasscock,8,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,32.85,103148.0,4.0,0.0
@@ -50902,7 +50902,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Hansford,6,Hail,14989.382500000002,6307701.0,39.0,14989.382456000001
 2025,TX,Hansford,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,18273.6326,1962646.0,34.0,0.0
 2025,TX,Hansford,7,Cold Wet Weather,45.4379,4097.0,1.0,45.43785
-2025,TX,Hansford,7,Excess Moisture/Precipitation/Rain,196.4833,56658.0,7.0,196.483346
+2025,TX,Hansford,7,Excess Moisture/Precipitation/Rain,196.48329999999999,56658.0,7.0,196.483346
 2025,TX,Hardeman,1,Heat,429.06,41842.0,1.0,429.06
 2025,TX,Hardeman,6,Excess Moisture/Precipitation/Rain,1642.5875,459986.25,11.0,1642.5874999999999
 2025,TX,Hardeman,6,Failure of Irrigation Supply,31.9,7376.0,1.0,31.9
@@ -50928,9 +50928,9 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Haskell,6,Drought,253.4,16608.0,10.0,253.4
 2025,TX,Haskell,6,Excess Moisture/Precipitation/Rain,14147.534625,1492809.25,92.0,14147.533801000001
 2025,TX,Haskell,6,Hot Wind,1396.35314,138131.3,21.0,1396.35314
-2025,TX,Haskell,6,Wind/Excess Wind,4042.3734749999994,926485.75,14.0,4042.373361
+2025,TX,Haskell,6,Wind/Excess Wind,4042.373475,926485.75,14.0,4042.373361
 2025,TX,Haskell,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,0.0,1170238.0,108.0,0.0
-2025,TX,Haskell,7,Drought,982.9525000000001,51084.5,15.0,982.94
+2025,TX,Haskell,7,Drought,982.9525,51084.5,15.0,982.9399999999999
 2025,TX,Haskell,7,Excess Moisture/Precipitation/Rain,4059.7186500000003,525265.5,41.0,4059.71835
 2025,TX,Haskell,8,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,0.0,3890.0,1.0,0.0
 2025,TX,Haskell,8,Drought,2713.01355,170704.5,23.0,2713.013305
@@ -50958,7 +50958,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Hidalgo,3,Failure of Irrigation Supply,12830.1307,4826606.0,37.0,12830.130625
 2025,TX,Hidalgo,4,Excess Moisture/Precipitation/Rain,1720.742,593306.0,10.0,1720.742
 2025,TX,Hidalgo,4,Failure of Irrigation Equipment,71.65,27321.0,2.0,71.65
-2025,TX,Hidalgo,4,Failure of Irrigation Supply,8988.69,3418586.0,28.0,8988.69
+2025,TX,Hidalgo,4,Failure of Irrigation Supply,8988.689999999999,3418586.0,28.0,8988.689999999999
 2025,TX,Hidalgo,5,Excess Moisture/Precipitation/Rain,20.0,-9141.0,1.0,20.0
 2025,TX,Hidalgo,5,Failure of Irrigation Supply,22.424,10071.0,1.0,22.424
 2025,TX,Hidalgo,6,Excess Moisture/Precipitation/Rain,82.0,12713.0,2.0,82.0
@@ -51209,7 +51209,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Lynn,6,Hail,13600.94119,2604740.9000000004,140.0,13452.8198482
 2025,TX,Lynn,6,Heat,1307.6786,52487.0,8.0,1307.6786
 2025,TX,Lynn,6,Hot Wind,917.09208,172946.84,23.0,917.0920289999999
-2025,TX,Lynn,6,Wind/Excess Wind,22182.36847,2726025.5500000003,159.0,21774.6299864
+2025,TX,Lynn,6,Wind/Excess Wind,22182.36847,2726025.55,159.0,21774.6299864
 2025,TX,Lynn,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,1918.4963,1501496.0,175.0,0.0
 2025,TX,Lynn,7,Drought,2496.51435,257740.0,20.0,2496.51433
 2025,TX,Lynn,7,Hail,200.5488,55693.0,8.0,200.54874999999998
@@ -51245,7 +51245,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Martin,1,Wind/Excess Wind,68.2375,4811.0,3.0,68.2375
 2025,TX,Martin,4,Drought,6443.4995499999995,1137843.95,63.0,6443.49955
 2025,TX,Martin,5,Drought,4612.644405,684854.25,21.0,4612.6443822500005
-2025,TX,Martin,6,Drought,85665.845091,11791228.68,328.0,85641.77801950001
+2025,TX,Martin,6,Drought,85665.845091,11791228.68,328.0,85641.7780195
 2025,TX,Martin,6,Excess Moisture/Precipitation/Rain,395.28125,71493.0,8.0,395.28125
 2025,TX,Martin,6,Hail,4471.753356,835509.4,24.0,4471.0252
 2025,TX,Martin,6,Heat,998.3075,105821.0,4.0,998.3075
@@ -51708,7 +51708,7 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,TX,Yoakum,6,Excess Moisture/Precipitation/Rain,1013.191375,393349.12,11.0,1013.1913750000001
 2025,TX,Yoakum,6,Hail,11596.953625,1639928.2,76.0,10366.227325
 2025,TX,Yoakum,6,Heat,2131.6975,210338.5,6.0,2125.6975
-2025,TX,Yoakum,6,Hot Wind,8850.48328,1291166.84,34.0,8850.483250000001
+2025,TX,Yoakum,6,Hot Wind,8850.48328,1291166.84,34.0,8850.48325
 2025,TX,Yoakum,6,Wind/Excess Wind,31038.74192,6080539.29,121.0,31039.141799999998
 2025,TX,Yoakum,7,ARPI/SCO/ECO/STAX/MP/PACE Crops Only,14176.6176,7059026.0,335.0,0.0
 2025,TX,Yoakum,7,Cold Wet Weather,25.7565,4540.8,1.0,25.7565
@@ -51765,19 +51765,22 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2025,VA,,12,Decline in Price,99.35,5058.8,3.0,99.35
 2026,AL,,4,Excess Moisture/Precipitation/Rain,46.0152,3314.8,1.0,46.0152
 2026,AL,,5,Drought,37.608,8689.2,1.0,37.608
-2026,AL,,5,Excess Moisture/Precipitation/Rain,2533.1062,552527.45,25.0,2533.1062
+2026,AL,,5,Excess Moisture/Precipitation/Rain,2601.7312,578880.45,27.0,2601.7312
 2026,AL,,5,Flood,24.725,2100.25,1.0,24.725
-2026,AL,,6,Excess Moisture/Precipitation/Rain,1824.5386,578485.1,20.0,1824.5386
-2026,AL,,6,Wildlife,8.64,4198.8,1.0,8.64
-2026,AL,,7,Drought,38.5,7929.5,2.0,38.5
-2026,AL,,7,Heat,16.0,2264.8,1.0,16.0
+2026,AL,,6,Excess Moisture/Precipitation/Rain,1826.0386,623289.0,21.0,1826.0386
+2026,AL,,6,Wildlife,8.64,4756.8,1.0,8.64
+2026,AL,,7,Drought,38.5,9103.5,2.0,38.5
+2026,AL,,7,Heat,16.0,2626.0,1.0,16.0
+2026,AL,,8,Drought,8.6,1493.8,2.0,8.6
+2026,AL,,8,Heat,6.1,1321.3,2.0,6.1
 2026,AL,,8,Wildlife,14.4,3245.0,1.0,14.4
-2026,AL,,10,Hurricane (HIP-WI only).,0.0,3868873.0,145.0,0.0
-2026,AL,,10,"Hurricane, Tropical Depression, Tropical Storm (not HIP-WI).",58.5,30599.1,1.0,58.5
+2026,AL,,10,Hurricane (HIP-WI only).,0.0,3985953.0,148.0,0.0
+2026,AL,,10,"Hurricane, Tropical Depression, Tropical Storm (not HIP-WI).",76.3,37534.9,2.0,76.3
+2026,AL,,11,Hurricane (HIP-WI only).,0.0,5056651.0,110.0,0.0
 2026,AR,,4,Excess Moisture/Precipitation/Rain,703.8528,206238.5,5.0,703.85275
-2026,AR,,5,Excess Moisture/Precipitation/Rain,2527.319,667562.7,21.0,2527.319
+2026,AR,,5,Excess Moisture/Precipitation/Rain,2767.419,832695.7,24.0,2767.419
 2026,AR,,5,Failure of Irrigation Supply,189.75,41111.0,1.0,189.75
-2026,AR,,6,Excess Moisture/Precipitation/Rain,1023.978,226128.8,4.0,1023.978
+2026,AR,,6,Excess Moisture/Precipitation/Rain,1023.978,248701.8,4.0,1023.978
 2026,AR,,12,Excess Moisture/Precipitation/Rain,80.69,2747.0,1.0,80.69
 2026,AZ,,1,Failure of Irrigation Supply,251.6,115778.0,1.0,251.6
 2026,AZ,,2,Failure of Irrigation Supply,15759.1,7355815.0,38.0,15759.1
@@ -51791,67 +51794,70 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2026,AZ,,12,Failure of Irrigation Supply,14967.7,7878190.0,25.0,14967.7
 2026,CA,,2,Excess Moisture/Precipitation/Rain,1172.4,1021747.0,1.0,1172.4
 2026,CA,,2,Failure of Irrigation Supply,323.4,357354.0,1.0,323.4
-2026,CA,,3,Failure of Irrigation Supply,8759.98,7708781.0,26.0,8759.98
+2026,CA,,3,Failure of Irrigation Supply,9015.98,7878893.0,27.0,9015.98
 2026,CA,,4,Cold Wet Weather,699.1,505742.0,6.0,699.1
-2026,CA,,4,Excess Moisture/Precipitation/Rain,1097.1100000000001,961646.5,9.0,1097.1100000000001
-2026,CA,,4,Failure of Irrigation Supply,38345.23,36182742.0,63.0,38345.23
+2026,CA,,4,Excess Moisture/Precipitation/Rain,1220.1100000000001,1056053.5,10.0,1220.1100000000001
+2026,CA,,4,Failure of Irrigation Supply,38439.23,36282027.0,65.0,38439.23
 2026,CA,,4,Heat,156.8,224147.0,1.0,156.8
 2026,CA,,5,Cold Wet Weather,335.8,316919.0,1.0,335.8
 2026,CA,,5,Failure of Irrigation Equipment,83.6,68093.0,1.0,83.6
-2026,CA,,5,Failure of Irrigation Supply,1766.3000000000002,1606967.5,7.0,1766.3000000000002
+2026,CA,,5,Failure of Irrigation Supply,1766.3000000000002,1612076.5,8.0,1766.3000000000002
 2026,CO,,7,Failure of Irrigation Supply,21.92,6186.0,1.0,21.92
 2026,CO,,7,Hot Wind,21.92,6186.0,1.0,21.92
 2026,FL,,5,Excess Moisture/Precipitation/Rain,158.73,40820.0,3.0,158.73
 2026,FL,,6,Drought,26.5,3915.0,1.0,26.5
-2026,FL,,6,Excess Moisture/Precipitation/Rain,727.68,225357.0,6.0,727.68
+2026,FL,,6,Excess Moisture/Precipitation/Rain,727.68,240992.0,6.0,727.68
 2026,FL,,7,Excess Moisture/Precipitation/Rain,90.69,12050.0,1.0,90.69
-2026,FL,,10,Hurricane (HIP-WI only).,0.0,2687143.0,76.0,0.0
+2026,FL,,10,Hurricane (HIP-WI only).,0.0,2964625.0,83.0,0.0
+2026,FL,,11,Hurricane (HIP-WI only).,0.0,1211638.0,28.0,0.0
 2026,GA,,4,Drought,15.48,645.0,1.0,15.48
 2026,GA,,4,Excess Moisture/Precipitation/Rain,46.62,9313.0,1.0,46.62
-2026,GA,,5,Drought,47.104,13825.2,3.0,47.104
-2026,GA,,5,Excess Moisture/Precipitation/Rain,934.256,198289.8,12.0,934.256
-2026,GA,,6,Drought,11.95,2542.25,1.0,11.95
-2026,GA,,6,Excess Moisture/Precipitation/Rain,1524.8,441675.0,11.0,1524.8
-2026,GA,,6,Wildlife,35.85,7626.75,1.0,35.85
-2026,GA,,7,Drought,70.46000000000001,28239.0,2.0,70.46000000000001
+2026,GA,,5,Drought,47.104,15101.4,3.0,47.104
+2026,GA,,5,Excess Moisture/Precipitation/Rain,934.256,199140.6,12.0,934.256
+2026,GA,,6,Drought,11.95,2879.5,1.0,11.95
+2026,GA,,6,Excess Moisture/Precipitation/Rain,1652.05,488669.5,12.0,1652.05
+2026,GA,,6,Wildlife,35.85,8638.5,1.0,35.85
+2026,GA,,7,Drought,197.71,74258.5,3.0,197.71
 2026,GA,,7,Excess Moisture/Precipitation/Rain,118.0,30858.0,1.0,118.0
-2026,GA,,7,Wildlife,73.625,6595.75,2.0,73.625
-2026,GA,,8,Drought,8.9,3742.0,1.0,8.9
-2026,GA,,9,Heat,34.875,13172.25,1.0,34.875
-2026,GA,,10,Excess Moisture/Precipitation/Rain,7.5600000000000005,3013.7999999999997,2.0,7.5600000000000005
-2026,GA,,10,Heat,39.14,15797.199999999999,3.0,39.14
+2026,GA,,7,Wildlife,73.625,7471.0,2.0,73.625
+2026,GA,,8,Drought,8.9,4238.5,1.0,8.9
+2026,GA,,9,Heat,34.875,14919.0,1.0,34.875
+2026,GA,,10,Excess Moisture/Precipitation/Rain,7.5600000000000005,3413.6,2.0,7.5600000000000005
+2026,GA,,10,Heat,39.14,17892.899999999998,3.0,39.14
 2026,KS,,4,Drought,311.67784,37062.4,4.0,311.6778708
 2026,KS,,4,Excess Moisture/Precipitation/Rain,277.89,68261.0,1.0,277.89
 2026,KS,,5,Drought,721.4112299999999,120853.3,8.0,721.4113082
 2026,KS,,5,Excess Moisture/Precipitation/Rain,332.41900000000004,88264.0,4.0,332.41900000000004
 2026,KS,,5,Hail,23.0,13992.0,1.0,23.0
 2026,KS,,6,Drought,873.3787299999999,198737.3,6.0,873.3787299999999
-2026,KS,,6,Excess Moisture/Precipitation/Rain,2276.8361999999997,675667.0,9.0,2276.836228
+2026,KS,,6,Excess Moisture/Precipitation/Rain,2661.2862,806810.0,12.0,2661.286228
 2026,KS,,6,Hail,148.1107,27192.0,2.0,148.110712
-2026,KS,,7,Drought,533.44425,192486.5,4.0,533.4442085
-2026,KS,,8,Drought,598.73425,171432.5,4.0,598.7342085
+2026,KS,,7,Drought,764.8742500000001,293738.5,5.0,764.8742085
+2026,KS,,8,Drought,637.09425,181781.5,5.0,637.0942084999999
 2026,KS,,8,Heat,46.08,6938.0,1.0,46.08
 2026,LA,,3,Excess Moisture/Precipitation/Rain,23.0,4604.0,1.0,23.0
-2026,LA,,5,Excess Moisture/Precipitation/Rain,2231.39,527161.0,20.0,2231.39
-2026,LA,,6,Drought,38.83,14053.5,1.0,38.83
-2026,LA,,6,Excess Moisture/Precipitation/Rain,634.77,258485.0,8.0,634.77
-2026,LA,,7,Heat,38.83,14053.5,1.0,38.83
-2026,LA,,8,Heat,1215.688,288317.0,3.0,1215.688
+2026,LA,,5,Excess Moisture/Precipitation/Rain,2231.39,544592.0,20.0,2231.39
+2026,LA,,6,Drought,38.83,15885.0,1.0,38.83
+2026,LA,,6,Excess Moisture/Precipitation/Rain,634.77,296386.0,8.0,634.77
+2026,LA,,7,Heat,38.83,15885.0,1.0,38.83
+2026,LA,,8,Drought,211.04,46444.0,2.0,211.04
+2026,LA,,8,Heat,2395.42,539910.0,7.0,2395.42
 2026,MO,,4,Excess Moisture/Precipitation/Rain,16.9,2839.0,1.0,16.9
-2026,MO,,5,Drought,92.44,34001.0,1.0,92.44
-2026,MO,,5,Excess Moisture/Precipitation/Rain,564.49,189370.0,6.0,564.49
-2026,MO,,6,Excess Moisture/Precipitation/Rain,826.1,235153.0,5.0,763.5
-2026,MS,,5,Excess Moisture/Precipitation/Rain,5705.933,1445388.0,34.0,5705.933
-2026,MS,,5,Wildlife,79.77,50559.0,1.0,79.77
-2026,MS,,6,Excess Moisture/Precipitation/Rain,1986.42,351570.0,20.0,1986.42
-2026,MS,,6,Heat,106.36,67412.0,1.0,106.36
+2026,MO,,5,Drought,92.44,38387.0,1.0,92.44
+2026,MO,,5,Excess Moisture/Precipitation/Rain,947.49,460574.0,12.0,947.49
+2026,MO,,6,Excess Moisture/Precipitation/Rain,959.9,303037.0,6.0,897.3
+2026,MS,,5,Excess Moisture/Precipitation/Rain,5885.933,1478829.2,35.0,5885.933
+2026,MS,,5,Wildlife,79.77,57166.2,1.0,79.77
+2026,MS,,6,Excess Moisture/Precipitation/Rain,2015.06,358341.0,21.0,2015.06
+2026,MS,,6,Heat,106.36,76221.6,1.0,106.36
 2026,MS,,7,Excess Moisture/Precipitation/Rain,11.025,2838.0,1.0,11.025
-2026,MS,,8,Heat,264.74,6388.0,1.0,264.74
+2026,MS,,8,Heat,264.74,7407.0,1.0,264.74
 2026,NC,,5,Drought,199.321,59603.0,2.0,199.321
-2026,NC,,5,Excess Moisture/Precipitation/Rain,105.13,64927.0,1.0,105.13
+2026,NC,,5,Excess Moisture/Precipitation/Rain,105.13,73488.0,1.0,105.13
 2026,NM,,4,Failure of Irrigation Equipment,86.58,20588.0,1.0,86.58
-2026,NM,,4,Failure of Irrigation Supply,215.4211,126733.0,6.0,215.421088
+2026,NM,,4,Failure of Irrigation Supply,719.1851,473181.0,10.0,719.185088
 2026,NM,,5,Drought,53.182,9085.6,1.0,53.182
+2026,NM,,5,Failure of Irrigation Supply,2.53,822.0,1.0,2.53
 2026,NM,,6,Drought,53.182,9085.6,1.0,53.182
 2026,NM,,6,Excess Moisture/Precipitation/Rain,407.3,42492.0,2.0,407.3
 2026,NM,,6,Hail,557.472,98057.6,1.0,557.472
@@ -51867,29 +51873,30 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2026,OK,,5,Heat,159.56,42570.0,1.0,159.56
 2026,OK,,5,Hot Wind,28.377,18564.3,1.0,28.377
 2026,OK,,5,Insects,3.153,2062.7,1.0,3.153
-2026,OK,,6,Drought,7630.5656,1908971.4,40.0,7630.415780400001
-2026,OK,,6,Excess Moisture/Precipitation/Rain,4744.23,1468510.25,25.0,4744.08
-2026,OK,,6,Failure of Irrigation Supply,25.21125,16387.2,1.0,25.21125
+2026,OK,,6,Drought,12208.1156,3840396.4,47.0,12207.9657804
+2026,OK,,6,Excess Moisture/Precipitation/Rain,4848.68575,1494393.04,27.0,4848.53575
+2026,OK,,6,Failure of Irrigation Supply,1025.7125,934622.4,17.0,1025.7125
 2026,OK,,6,Hail,2013.765,1160797.6,9.0,2013.765
 2026,OK,,6,Heat,334.91,97530.5,6.0,334.91
 2026,OK,,6,Hot Wind,796.91125,189710.0,6.0,796.91125
 2026,OK,,6,Wildlife,38.175,18883.25,1.0,38.175
 2026,OK,,6,Wind/Excess Wind,224.402,74758.4,3.0,224.402
-2026,OK,,7,Drought,17126.258700000002,4362782.0,74.0,17126.258700000002
+2026,OK,,7,Drought,20213.5438,5041519.25,86.0,20213.5435
 2026,OK,,7,Excess Moisture/Precipitation/Rain,38.35,7158.0,2.0,38.35
-2026,OK,,7,Failure of Irrigation Equipment,52.332,23675.4,1.0,52.332
-2026,OK,,7,Failure of Irrigation Supply,246.04256,197996.8,1.0,246.0425984
+2026,OK,,7,Failure of Irrigation Equipment,236.13,164314.8,5.0,236.13
+2026,OK,,7,Failure of Irrigation Supply,2045.29325,1762983.75,9.0,2045.29325
 2026,OK,,7,Hail,114.36,24407.0,1.0,114.36
-2026,OK,,7,Heat,3578.1615899999997,1105780.05,28.0,3578.1616016
-2026,OK,,7,Hot Wind,1235.4831,649139.75,8.0,1235.4831
-2026,OK,,8,Drought,16407.879390000002,4282635.9,91.0,16407.8794
+2026,OK,,7,Heat,3586.32345,1112136.05,29.0,3586.3234519999996
+2026,OK,,7,Hot Wind,1617.4881,861107.75,10.0,1617.4881
+2026,OK,,8,Drought,27477.32689,8090003.91,139.0,27477.326915999998
 2026,OK,,8,Failure of Irrigation Equipment,81.558,50938.2,1.0,81.558
-2026,OK,,8,Failure of Irrigation Supply,2410.58454,1974053.7999999998,13.0,2410.584414
-2026,OK,,8,Heat,3109.007165,1478834.2,31.0,3109.006927
-2026,OK,,8,Hot Wind,3405.860855,2319583.9,49.0,3405.8606689999997
-2026,OK,,9,Drought,2683.925,711974.0,14.0,2683.925
+2026,OK,,8,Failure of Irrigation Supply,3130.0915400000004,2402696.6,21.0,3130.091414
+2026,OK,,8,Heat,6777.996115,3629157.5,50.0,6777.162027
+2026,OK,,8,Hot Wind,8540.968555,5712481.6,89.0,8540.134619
+2026,OK,,9,Drought,3798.52,938154.5,19.0,3798.52
 2026,OK,,9,Heat,95.296,52726.4,2.0,95.296
-2026,OK,,9,Hot Wind,46.324,19519.4,3.0,46.324
+2026,OK,,9,Hot Wind,323.865,82144.5,5.0,323.865
+2026,OK,,10,Drought,80.0,15871.0,1.0,80.0
 2026,OK,,10,Failure of Irrigation Supply,37.45,33942.3,1.0,37.45
 2026,OK,,10,Heat,96.3,87280.8,1.0,96.3
 2026,OK,,10,Hot Wind,140.69400000000002,104673.9,4.0,140.69400000000002
@@ -51900,77 +51907,84 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2026,SC,,5,Drought,2676.9635000000003,567478.0,32.0,2676.1199
 2026,SC,,5,Excess Moisture/Precipitation/Rain,670.9499999999999,70411.5,5.0,670.9499999999999
 2026,SC,,5,Heat,182.97750000000002,25601.0,4.0,182.97750000000002
-2026,SC,,6,Drought,1113.318,237255.2,15.0,1113.318
-2026,SC,,6,Excess Moisture/Precipitation/Rain,32.25,17664.0,1.0,32.25
-2026,SC,,6,Heat,103.25,29209.6,3.0,103.25
-2026,SC,,7,Drought,30.16,9833.0,2.0,30.16
-2026,SC,,7,Wildlife,28.1,17164.0,1.0,28.1
+2026,SC,,6,Drought,1113.318,242225.2,15.0,1113.318
+2026,SC,,6,Excess Moisture/Precipitation/Rain,32.25,20015.25,1.0,32.25
+2026,SC,,6,Heat,103.25,31339.6,3.0,103.25
+2026,SC,,7,Drought,49.81,13868.25,3.0,49.81
+2026,SC,,7,Wildlife,28.1,19449.0,1.0,28.1
+2026,SC,,8,Drought,19.65,3251.5,1.0,19.65
 2026,SC,,9,Heat,7.03,1610.0,1.0,7.03
 2026,TN,,4,Excess Moisture/Precipitation/Rain,197.3575,59608.0,2.0,197.3575
-2026,TN,,5,Excess Moisture/Precipitation/Rain,1353.76,284390.0,10.0,1353.76
+2026,TN,,5,Excess Moisture/Precipitation/Rain,1353.76,308779.0,10.0,1353.76
 2026,TN,,6,Drought,1840.165,193286.0,1.0,1840.165
 2026,TN,,6,Excess Moisture/Precipitation/Rain,82.7875,6456.0,3.0,82.7875
 2026,TN,,7,Wildlife,30.0,6132.0,1.0,30.0
-2026,TX,Archer,7,Drought,88.61,13640.0,1.0,88.61
-2026,TX,Armstrong,4,Drought,330.0,45921.0,2.0,330.0
-2026,TX,Armstrong,5,Drought,5870.3021,1417448.0,10.0,5870.302098
+2026,TX,Archer,7,Drought,88.61,15432.0,1.0,88.61
+2026,TX,Archer,9,Drought,476.14,143372.0,2.0,476.14
+2026,TX,Armstrong,4,Drought,330.0,51956.0,2.0,330.0
+2026,TX,Armstrong,5,Drought,3325.8471999999997,928221.0,8.0,3325.847198
 2026,TX,Armstrong,5,Wind/Excess Wind,115.9,42767.0,2.0,115.9
-2026,TX,Armstrong,6,Drought,2087.224,437335.8,9.0,2087.224
+2026,TX,Armstrong,6,Drought,2087.224,494635.6,9.0,2087.224
 2026,TX,Armstrong,6,Hot Wind,193.45,30943.0,1.0,193.45
-2026,TX,Armstrong,6,Wind/Excess Wind,57.86,11115.2,5.0,57.86
-2026,TX,Armstrong,7,Drought,218.3,48406.0,1.0,218.3
+2026,TX,Armstrong,6,Wind/Excess Wind,57.86,12535.400000000001,5.0,57.86
+2026,TX,Armstrong,7,Drought,218.3,54769.0,1.0,218.3
 2026,TX,Austin,4,Excess Moisture/Precipitation/Rain,299.6475,75535.0,2.0,299.6475
 2026,TX,Austin,5,Excess Moisture/Precipitation/Rain,8.425,1967.0,1.0,8.425
-2026,TX,Austin,6,Excess Moisture/Precipitation/Rain,79.28,11589.0,3.0,79.28
+2026,TX,Austin,6,Excess Moisture/Precipitation/Rain,79.28,11904.0,3.0,79.28
 2026,TX,Austin,8,Excess Moisture/Precipitation/Rain,25.1775,7146.0,1.0,25.1775
-2026,TX,Bailey,5,Excess Moisture/Precipitation/Rain,802.385,212615.0,3.0,802.385
-2026,TX,Bailey,5,Heat,22.5,6233.5,1.0,22.5
-2026,TX,Bailey,6,Drought,1932.3109,211330.2,9.0,1932.3110000000001
-2026,TX,Bailey,6,Hail,1016.72375,265396.34,4.0,1016.72375
-2026,TX,Bailey,6,Heat,40.0,17448.5,1.0,40.0
-2026,TX,Bailey,6,Hot Wind,155.25,20166.0,2.0,155.25
-2026,TX,Bailey,6,Wind/Excess Wind,615.91025,234083.46,4.0,615.91025
-2026,TX,Bailey,8,Drought,608.049,63002.4,3.0,608.049
-2026,TX,Bailey,8,Heat,108.366,39396.6,2.0,108.366
+2026,TX,Bailey,5,Excess Moisture/Precipitation/Rain,809.135,243087.0,4.0,809.135
+2026,TX,Bailey,5,Heat,22.5,7052.5,1.0,22.5
+2026,TX,Bailey,6,Drought,2403.3309,356113.6,10.0,2403.331
+2026,TX,Bailey,6,Excess Moisture/Precipitation/Rain,1208.13,349565.0,1.0,1208.13
+2026,TX,Bailey,6,Hail,1016.72375,300257.8,4.0,1016.72375
+2026,TX,Bailey,6,Heat,40.0,19741.0,1.0,40.0
+2026,TX,Bailey,6,Hot Wind,155.25,22816.0,2.0,155.25
+2026,TX,Bailey,6,Wind/Excess Wind,615.91025,264836.1,4.0,615.91025
+2026,TX,Bailey,8,Drought,608.049,71278.2,3.0,608.049
+2026,TX,Bailey,8,Heat,108.366,44571.8,2.0,108.366
+2026,TX,Bailey,9,Drought,130.9,39837.0,1.0,130.9
 2026,TX,Bee,3,Drought,274.69,92379.0,4.0,274.69
-2026,TX,Bee,4,Drought,2200.4325,615913.0,13.0,2200.4325
+2026,TX,Bee,4,Drought,2409.105,658305.0,14.0,2409.105
 2026,TX,Bee,4,Excess Moisture/Precipitation/Rain,5.886,3836.36,1.0,5.886
 2026,TX,Bee,4,Heat,10.998,4582.0,1.0,10.998
-2026,TX,Bee,5,Excess Moisture/Precipitation/Rain,406.134,264708.84,1.0,406.134
+2026,TX,Bee,5,Excess Moisture/Precipitation/Rain,848.406,435328.84,3.0,848.406
 2026,TX,Bee,6,Excess Moisture/Precipitation/Rain,176.58,115090.8,1.0,176.58
 2026,TX,Bell,5,Excess Moisture/Precipitation/Rain,356.975,76156.0,3.0,356.975
-2026,TX,Bell,6,Excess Moisture/Precipitation/Rain,187.2475,43164.0,4.0,187.2475
-2026,TX,Borden,6,Drought,4999.165,830335.0,14.0,4999.139999999999
-2026,TX,Borden,6,Wind/Excess Wind,84.75,44678.0,1.0,84.75
-2026,TX,Borden,7,Drought,1066.975,251205.2,3.0,1066.975
-2026,TX,Borden,7,Heat,23.1,1699.8,1.0,23.1
-2026,TX,Borden,8,Drought,3152.1958,805401.0,13.0,3152.19575
-2026,TX,Borden,8,Heat,411.8475,73900.0,1.0,411.8475
-2026,TX,Bowie,7,Drought,108.8,30871.0,1.0,108.8
-2026,TX,Bowie,7,Heat,108.8,30871.0,1.0,108.8
+2026,TX,Bell,6,Excess Moisture/Precipitation/Rain,187.2475,45520.0,4.0,187.2475
+2026,TX,Borden,6,Drought,4999.165,939439.0,14.0,4999.139999999999
+2026,TX,Borden,6,Wind/Excess Wind,84.75,50547.0,1.0,84.75
+2026,TX,Borden,7,Drought,1066.975,284214.4,3.0,1066.975
+2026,TX,Borden,7,Heat,23.1,1923.6,1.0,23.1
+2026,TX,Borden,8,Drought,5483.6208,1423064.0,20.0,5483.62075
+2026,TX,Borden,8,Heat,411.8475,83605.0,1.0,411.8475
+2026,TX,Borden,9,Drought,290.37,54979.0,4.0,290.37
+2026,TX,Bowie,7,Drought,108.8,34928.0,1.0,108.8
+2026,TX,Bowie,7,Heat,108.8,34928.0,1.0,108.8
 2026,TX,Brazos,5,Excess Moisture/Precipitation/Rain,126.4,30407.0,1.0,126.4
-2026,TX,Briscoe,5,Cold Wet Weather,10306.9505,3117219.7,8.0,10306.9505
-2026,TX,Briscoe,5,Wind/Excess Wind,770.4225,202335.0,2.0,770.4225
-2026,TX,Briscoe,6,Cold Wet Weather,2838.9887,770420.8,13.0,2838.9887034
-2026,TX,Briscoe,6,Drought,6175.712600000001,1227680.0,18.0,6175.712500000001
-2026,TX,Briscoe,6,Excess Moisture/Precipitation/Rain,75.0058,28085.8,2.0,75.0057966
-2026,TX,Briscoe,6,Failure of Irrigation Equipment,26.06825,9058.5,1.0,26.06825
-2026,TX,Briscoe,6,Hot Wind,554.355,235955.0,2.0,554.355
-2026,TX,Briscoe,7,Drought,83.32,7192.0,1.0,83.32
-2026,TX,Briscoe,7,Heat,153.2025,20783.0,1.0,153.2025
-2026,TX,Briscoe,8,Drought,372.215,50603.0,2.0,372.215
-2026,TX,Briscoe,8,Heat,1510.36,507146.7,10.0,1510.36
-2026,TX,Briscoe,9,Heat,187.0,71883.0,1.0,187.0
-2026,TX,Briscoe,9,Hot Wind,26.06825,9058.5,1.0,26.06825
-2026,TX,Briscoe,10,Drought,79.0325,24284.0,1.0,79.0325
-2026,TX,Briscoe,10,Hot Wind,30.75,20233.0,1.0,30.75
-2026,TX,Burleson,6,Excess Moisture/Precipitation/Rain,115.049,78045.0,2.0,115.049
+2026,TX,Briscoe,5,Cold Wet Weather,10592.853,3510462.0,8.0,10592.853
+2026,TX,Briscoe,5,Wind/Excess Wind,770.4225,228924.0,2.0,770.4225
+2026,TX,Briscoe,6,Cold Wet Weather,2846.23445,872714.3,13.0,2846.2344534
+2026,TX,Briscoe,6,Drought,6822.270100000001,1461630.0,21.0,6822.27
+2026,TX,Briscoe,6,Excess Moisture/Precipitation/Rain,75.0058,31774.6,2.0,75.0057966
+2026,TX,Briscoe,6,Failure of Irrigation Equipment,26.06825,10248.5,1.0,26.06825
+2026,TX,Briscoe,6,Hot Wind,554.355,266959.0,2.0,554.355
+2026,TX,Briscoe,6,Wind/Excess Wind,314.54,193865.0,3.0,314.54
+2026,TX,Briscoe,7,Drought,83.32,8136.0,1.0,83.32
+2026,TX,Briscoe,7,Heat,153.2025,23513.0,1.0,153.2025
+2026,TX,Briscoe,8,Drought,372.215,57253.0,2.0,372.215
+2026,TX,Briscoe,8,Heat,2256.32425,732923.1,10.0,2256.32425
+2026,TX,Briscoe,9,Heat,187.0,81327.0,1.0,187.0
+2026,TX,Briscoe,9,Hot Wind,26.06825,10248.5,1.0,26.06825
+2026,TX,Briscoe,10,Drought,219.0025,70990.0,5.0,219.0025
+2026,TX,Briscoe,10,Hot Wind,30.75,22892.0,1.0,30.75
+2026,TX,Burleson,6,Excess Moisture/Precipitation/Rain,128.919,93386.0,3.0,128.919
 2026,TX,Calhoun,3,Drought,228.05,133666.8,2.0,228.05
 2026,TX,Calhoun,4,Drought,899.788,620027.4,5.0,899.788
-2026,TX,Calhoun,5,Excess Moisture/Precipitation/Rain,1955.81,890000.2,6.0,1955.81
+2026,TX,Calhoun,5,Excess Moisture/Precipitation/Rain,2264.9249999999997,1062000.7,8.0,2264.925
 2026,TX,Calhoun,6,Drought,77.1,58233.0,1.0,77.1
+2026,TX,Calhoun,6,Excess Moisture/Precipitation/Rain,703.835,342300.5,3.0,703.835
 2026,TX,Calhoun,7,Drought,114.225,26308.0,1.0,114.225
-2026,TX,Calhoun,7,Excess Moisture/Precipitation/Rain,630.6865,329137.0,4.0,630.6865
+2026,TX,Calhoun,7,Excess Moisture/Precipitation/Rain,1505.0465,563967.0,8.0,1505.0465
 2026,TX,Calhoun,8,Drought,1131.9575,141095.0,2.0,1131.9575
 2026,TX,Calhoun,8,Excess Moisture/Precipitation/Rain,265.45,174472.0,3.0,265.45
 2026,TX,Calhoun,9,Drought,489.592,123331.6,2.0,489.592
@@ -51985,574 +51999,618 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2026,TX,Cameron,5,Failure of Irrigation Supply,26.255,5831.0,2.0,26.255
 2026,TX,Cameron,5,Hail,18.0,1859.0,1.0,18.0
 2026,TX,Cameron,5,Heat,51.0,20420.0,1.0,51.0
-2026,TX,Cameron,6,Excess Moisture/Precipitation/Rain,32.25,4539.0,1.0,32.25
+2026,TX,Cameron,6,Excess Moisture/Precipitation/Rain,116.79,21524.0,3.0,116.79
 2026,TX,Cameron,7,Drought,695.5,257033.0,2.0,695.5
 2026,TX,Cameron,7,Excess Moisture/Precipitation/Rain,16.22,5373.0,1.0,16.22
 2026,TX,Cameron,7,Heat,44.9,18426.0,1.0,44.9
 2026,TX,Cameron,7,Hot Wind,488.25,35126.0,1.0,488.25
 2026,TX,Cameron,8,Drought,7.0,2930.0,1.0,7.0
-2026,TX,Carson,3,Drought,628.0613,147494.0,3.0,628.06125
-2026,TX,Carson,4,Drought,1647.0075,556010.0,10.0,1647.0075
-2026,TX,Carson,5,Drought,7776.9924599999995,2044417.1,17.0,7776.992469999999
-2026,TX,Carson,5,Hot Wind,1092.8,198888.0,1.0,1092.8
-2026,TX,Carson,6,Drought,5740.3442,1627722.0,29.0,5740.344213
-2026,TX,Carson,6,Excess Moisture/Precipitation/Rain,184.5087,95298.0,4.0,184.5087
-2026,TX,Carson,6,Hail,333.92,133164.0,3.0,333.92
-2026,TX,Carson,6,Hot Wind,1743.59694,420900.9,10.0,1743.59694
-2026,TX,Carson,7,Drought,369.9163,107423.0,3.0,369.916303
-2026,TX,Carson,7,Heat,211.86,115919.0,2.0,211.86
-2026,TX,Carson,8,Drought,250.2,66618.0,2.0,250.2
-2026,TX,Carson,8,Heat,72.0,45338.0,1.0,72.0
-2026,TX,Castro,5,Drought,404.335,90163.0,2.0,404.335
-2026,TX,Castro,5,Hail,26.1312,4574.4,1.0,26.1312
-2026,TX,Castro,5,Wind/Excess Wind,249.8325,131326.5,2.0,249.8325
-2026,TX,Castro,6,Drought,3624.8475,503236.5,4.0,3624.8475
-2026,TX,Castro,6,Excess Moisture/Precipitation/Rain,265.9116,75865.8,3.0,265.9116
-2026,TX,Castro,6,Hail,511.908,262914.5,9.0,511.908
-2026,TX,Castro,6,Hot Wind,869.4825,423201.4,3.0,869.4825
-2026,TX,Castro,6,Wind/Excess Wind,2410.0,1359818.6,7.0,2222.5
-2026,TX,Castro,7,Drought,1163.42,229697.0,3.0,1163.42
-2026,TX,Castro,7,Heat,170.0,66874.0,1.0,170.0
-2026,TX,Castro,7,Hot Wind,30.0,13977.0,1.0,30.0
-2026,TX,Castro,8,Heat,677.775,416913.75,4.0,677.775
-2026,TX,Castro,8,Hot Wind,439.125,296071.75,3.0,439.125
-2026,TX,Castro,9,Hail,563.6852,293227.8,7.0,563.6852
-2026,TX,Castro,9,Heat,325.0,136919.0,1.0,325.0
-2026,TX,Childress,6,Excess Moisture/Precipitation/Rain,230.445,59844.75,4.0,230.445
-2026,TX,Childress,6,Hail,789.3,171772.0,4.0,789.3
-2026,TX,Childress,6,Hot Wind,675.3407,199863.0,1.0,675.340669
-2026,TX,Childress,6,Wildlife,50.475,25312.75,1.0,50.475
-2026,TX,Childress,6,Wind/Excess Wind,100.95,50625.5,1.0,100.95
-2026,TX,Childress,7,Drought,3196.6075,679309.0,15.0,3196.6075
-2026,TX,Childress,7,Heat,187.5,130293.0,1.0,187.5
-2026,TX,Childress,7,Wind/Excess Wind,331.44,68540.0,1.0,331.44
-2026,TX,Childress,8,Drought,1292.5733799999998,234577.6,8.0,1292.5733739999998
-2026,TX,Childress,8,Heat,1759.56288,1044520.2,7.0,1759.562862
-2026,TX,Childress,8,Hot Wind,1085.27884,462948.2,5.0,1085.278824
-2026,TX,Childress,9,Drought,329.1,56589.0,2.0,329.1
-2026,TX,Cochran,5,Drought,424.2375,43263.0,1.0,424.2375
-2026,TX,Cochran,5,Heat,341.4125,77540.0,2.0,341.4125
-2026,TX,Cochran,6,Drought,2123.294,257096.0,7.0,2123.294
-2026,TX,Cochran,6,Excess Moisture/Precipitation/Rain,809.7375,192686.0,3.0,809.7375
-2026,TX,Cochran,6,Hail,3824.2488,628808.35,14.0,3824.2488
+2026,TX,Carson,3,Drought,628.0613,166874.0,3.0,628.06125
+2026,TX,Carson,4,Drought,1704.0513,642456.0,11.0,1704.05125
+2026,TX,Carson,5,Drought,7837.32496,2332210.0,18.0,7837.32497
+2026,TX,Carson,5,Hot Wind,1092.8,225011.0,1.0,1092.8
+2026,TX,Carson,6,Drought,5371.2442,1736310.25,28.0,5371.244213
+2026,TX,Carson,6,Excess Moisture/Precipitation/Rain,184.5087,107820.0,4.0,184.5087
+2026,TX,Carson,6,Hail,333.92,150664.0,3.0,333.92
+2026,TX,Carson,6,Hot Wind,1743.59694,476198.75,10.0,1743.59694
+2026,TX,Carson,7,Drought,369.9163,121536.0,3.0,369.916303
+2026,TX,Carson,7,Heat,211.86,131151.0,2.0,211.86
+2026,TX,Carson,8,Drought,250.2,75371.0,2.0,250.2
+2026,TX,Carson,8,Heat,96.232,65755.0,2.0,96.232
+2026,TX,Castro,5,Drought,404.335,102011.0,2.0,404.335
+2026,TX,Castro,5,Hail,26.1312,5175.2,1.0,26.1312
+2026,TX,Castro,5,Wind/Excess Wind,249.8325,148582.5,2.0,249.8325
+2026,TX,Castro,6,Drought,3624.8475,569353.5,4.0,3624.8475
+2026,TX,Castro,6,Excess Moisture/Precipitation/Rain,700.1416,325810.4,5.0,700.1416
+2026,TX,Castro,6,Hail,511.908,297458.6,9.0,511.908
+2026,TX,Castro,6,Hot Wind,869.4825,478807.6,3.0,869.4825
+2026,TX,Castro,6,Wind/Excess Wind,2410.0,1538478.4,7.0,2222.5
+2026,TX,Castro,7,Drought,1163.42,259875.0,3.0,1163.42
+2026,TX,Castro,7,Heat,188.3425,78320.5,2.0,188.3425
+2026,TX,Castro,7,Hot Wind,48.3425,18470.5,2.0,48.3425
+2026,TX,Castro,8,Heat,677.775,471693.25,4.0,677.775
+2026,TX,Castro,8,Hot Wind,439.125,334973.25,3.0,439.125
+2026,TX,Castro,9,Hail,563.6852,331752.3,7.0,563.6852
+2026,TX,Castro,9,Heat,325.0,154908.0,1.0,325.0
+2026,TX,Childress,6,Drought,111.2303,49645.0,2.0,111.230261
+2026,TX,Childress,6,Excess Moisture/Precipitation/Rain,230.445,67708.5,4.0,230.445
+2026,TX,Childress,6,Hail,789.3,194343.0,4.0,789.3
+2026,TX,Childress,6,Wildlife,50.475,28638.5,1.0,50.475
+2026,TX,Childress,6,Wind/Excess Wind,100.95,57277.0,1.0,100.95
+2026,TX,Childress,7,Drought,3437.6738,844911.0,17.0,3437.67375
+2026,TX,Childress,7,Heat,187.5,147412.0,1.0,187.5
+2026,TX,Childress,7,Wind/Excess Wind,331.44,77545.0,1.0,331.44
+2026,TX,Childress,8,Drought,1292.5733799999998,264610.0,8.0,1292.5733739999998
+2026,TX,Childress,8,Heat,1759.56288,1181752.7,7.0,1759.562862
+2026,TX,Childress,8,Hot Wind,1085.27884,523775.3,5.0,1085.278824
+2026,TX,Childress,9,Drought,418.6333,101854.0,8.0,418.6333
+2026,TX,Cochran,5,Drought,424.2375,48949.5,1.0,424.2375
+2026,TX,Cochran,5,Heat,341.4125,87725.0,2.0,341.4125
+2026,TX,Cochran,6,Drought,1628.1589999999999,226144.0,6.0,1628.1589999999999
+2026,TX,Cochran,6,Excess Moisture/Precipitation/Rain,862.9225,236287.0,4.0,862.9225
+2026,TX,Cochran,6,Hail,3824.2488,711437.01,14.0,3824.2488
 2026,TX,Cochran,6,Heat,134.82,60502.0,3.0,134.82
-2026,TX,Cochran,6,Hot Wind,6292.3523,1269279.4,19.0,6292.352
-2026,TX,Cochran,6,Wind/Excess Wind,4619.3918,1009822.65,18.0,4619.3918
-2026,TX,Cochran,7,Drought,26.25,2415.0,1.0,26.25
-2026,TX,Cochran,7,Heat,1488.255,307162.0,4.0,1488.255
-2026,TX,Cochran,8,Drought,825.4374,89832.6,1.0,825.4374
-2026,TX,Cochran,8,Heat,65.16,13262.4,1.0,65.16
-2026,TX,Cochran,8,Wind/Excess Wind,16.29,3315.6,1.0,16.29
-2026,TX,Coke,6,Drought,120.76,10008.0,1.0,120.76
-2026,TX,Coleman,8,Drought,294.0,35302.0,2.0,293.9
-2026,TX,Collingsworth,6,Excess Moisture/Precipitation/Rain,257.355,169443.5,2.0,257.355
-2026,TX,Collingsworth,6,Hot Wind,104.255,71446.5,1.0,104.255
-2026,TX,Collingsworth,7,Drought,991.5,195245.5,4.0,991.5
-2026,TX,Collingsworth,8,Drought,772.78455,169758.5,15.0,772.78455
-2026,TX,Collingsworth,8,Heat,402.32805,136049.99,7.0,402.32805
-2026,TX,Collingsworth,8,Hot Wind,332.8485,124562.49,6.0,332.8485
-2026,TX,Collingsworth,9,Drought,1081.3375,275296.5,3.0,1081.3375
-2026,TX,Collingsworth,9,Hot Wind,18.275,3122.5,2.0,18.275
-2026,TX,Collingsworth,10,Hail,87.292,37653.52,2.0,87.292
+2026,TX,Cochran,6,Hot Wind,6292.3523,1436045.6,19.0,6292.352
+2026,TX,Cochran,6,Wind/Excess Wind,4145.1193,994245.49,16.0,4145.1193
+2026,TX,Cochran,7,Drought,26.25,2733.0,1.0,26.25
+2026,TX,Cochran,7,Heat,1488.255,347516.0,4.0,1488.255
+2026,TX,Cochran,8,Drought,825.4374,101636.4,1.0,825.4374
+2026,TX,Cochran,8,Heat,65.16,15004.0,1.0,65.16
+2026,TX,Cochran,8,Wind/Excess Wind,16.29,3751.0,1.0,16.29
+2026,TX,Coke,6,Drought,120.76,11323.0,1.0,120.76
+2026,TX,Coleman,8,Drought,294.0,39944.0,2.0,293.9
+2026,TX,Collingsworth,6,Excess Moisture/Precipitation/Rain,257.355,187241.0,2.0,257.355
+2026,TX,Collingsworth,6,Hot Wind,104.255,76370.0,1.0,104.255
+2026,TX,Collingsworth,7,Drought,1222.2225,278381.0,5.0,1222.2225
+2026,TX,Collingsworth,8,Drought,1533.07455,460203.8,16.0,1533.07455
+2026,TX,Collingsworth,8,Heat,410.46555,158527.97,8.0,410.46555
+2026,TX,Collingsworth,8,Hot Wind,340.986,145529.67,7.0,340.986
+2026,TX,Collingsworth,9,Drought,1425.5975,434872.5,4.0,1425.5975
+2026,TX,Collingsworth,9,Hot Wind,18.275,3532.5,2.0,18.275
+2026,TX,Collingsworth,10,Hail,87.292,42600.56,2.0,87.292
 2026,TX,Colorado,4,Excess Moisture/Precipitation/Rain,122.39,32183.0,1.0,122.39
-2026,TX,Colorado,5,Excess Moisture/Precipitation/Rain,2159.27,873779.0,7.0,2159.27
+2026,TX,Colorado,5,Excess Moisture/Precipitation/Rain,2159.27,969181.0,7.0,2159.27
 2026,TX,Colorado,6,Excess Moisture/Precipitation/Rain,86.605,14936.0,1.0,86.605
-2026,TX,Concho,7,Drought,334.0775,103950.0,1.0,334.0775
-2026,TX,Concho,8,Drought,1477.205,383165.5,6.0,1477.205
-2026,TX,Concho,8,Heat,160.565,36898.5,2.0,160.565
-2026,TX,Cottle,5,Drought,3063.4475,482505.0,4.0,3063.4225
-2026,TX,Cottle,6,Drought,4705.727150000001,648986.85,34.0,4705.727150000001
-2026,TX,Cottle,6,Heat,4.848,564.12,1.0,4.848
-2026,TX,Cottle,6,Hot Wind,2242.12665,317915.03,28.0,2242.12665
-2026,TX,Cottle,7,Drought,7219.294975000001,1558979.75,16.0,7219.2951760000005
-2026,TX,Cottle,7,Heat,762.0542999999999,169493.44,5.0,762.0542999999999
-2026,TX,Cottle,7,Hot Wind,1589.446325,342748.81,9.0,1589.446325
-2026,TX,Cottle,8,Drought,25.772,1383.0,1.0,25.772
-2026,TX,Cottle,9,Drought,9.74,864.0,1.0,9.74
-2026,TX,Crosby,6,Drought,9194.53645,1583914.6,46.0,9194.536430999999
-2026,TX,Crosby,6,Excess Moisture/Precipitation/Rain,275.73,112880.0,4.0,275.73
-2026,TX,Crosby,6,Hail,10175.50035,4104839.5,72.0,9698.93045
-2026,TX,Crosby,6,Heat,77.42625,20257.6,1.0,77.42625
-2026,TX,Crosby,6,Hot Wind,669.1385,311567.9,8.0,669.1385
-2026,TX,Crosby,6,Wind/Excess Wind,255.82875,86032.4,6.0,255.82875
-2026,TX,Crosby,7,Drought,4115.055,968438.2,32.0,4114.875
-2026,TX,Crosby,7,Heat,1212.635,236758.0,7.0,1212.635
-2026,TX,Crosby,7,Hot Wind,200.25,79110.0,1.0,200.25
-2026,TX,Crosby,8,Drought,3891.0625,672853.0,19.0,3891.0625
-2026,TX,Crosby,8,Heat,966.635,295016.8,21.0,966.59
-2026,TX,Crosby,8,Hot Wind,58.2375,20121.0,1.0,58.2375
-2026,TX,Crosby,9,Drought,2132.9021,460987.0,6.0,2132.902
-2026,TX,Crosby,9,Heat,4121.885,656113.0,2.0,4121.885
-2026,TX,Crosby,9,Hot Wind,319.9275,40036.0,3.0,319.9275
+2026,TX,Concho,7,Drought,334.0775,117606.0,1.0,334.0775
+2026,TX,Concho,8,Drought,3036.9451,989208.5,12.0,3036.945
+2026,TX,Concho,8,Heat,160.565,42171.5,2.0,160.565
+2026,TX,Cottle,5,Drought,3063.4475,545898.0,4.0,3063.4225
+2026,TX,Cottle,6,Drought,4705.727150000001,734283.35,34.0,4705.727150000001
+2026,TX,Cottle,6,Heat,4.848,638.28,1.0,4.848
+2026,TX,Cottle,6,Hot Wind,2242.12665,359709.37,28.0,2242.12665
+2026,TX,Cottle,7,Drought,7820.0349750000005,1898274.25,17.0,7820.035176
+2026,TX,Cottle,7,Heat,762.0542999999999,191627.30000000002,5.0,762.0542999999999
+2026,TX,Cottle,7,Hot Wind,1589.446325,387634.45,9.0,1589.446325
+2026,TX,Cottle,8,Drought,25.772,1565.0,1.0,25.772
+2026,TX,Cottle,9,Drought,9.74,978.0,1.0,9.74
+2026,TX,Crosby,6,Drought,14426.907449999999,2751052.1,53.0,14426.811931
+2026,TX,Crosby,6,Excess Moisture/Precipitation/Rain,275.73,127710.0,4.0,275.73
+2026,TX,Crosby,6,Hail,10068.52235,4570569.0,77.0,9591.952401999999
+2026,TX,Crosby,6,Hot Wind,669.1385,352500.8,8.0,669.1385
+2026,TX,Crosby,6,Wind/Excess Wind,192.48,78582.0,5.0,192.48
+2026,TX,Crosby,7,Drought,7725.775,1976064.1,54.0,7725.594999999999
+2026,TX,Crosby,7,Heat,2984.3825,838542.0,22.0,2984.3825
+2026,TX,Crosby,7,Hot Wind,219.665,97350.0,2.0,219.665
+2026,TX,Crosby,8,Drought,8330.7822,1512285.0,36.0,8330.782122
+2026,TX,Crosby,8,Failure of Irrigation Equipment,44.352,17435.4,1.0,44.352
+2026,TX,Crosby,8,Heat,4349.857,1494457.0,32.0,4348.82
+2026,TX,Crosby,8,Hot Wind,319.1125,148586.6,7.0,319.112435
+2026,TX,Crosby,9,Drought,1461.4797,358288.0,8.0,1461.4795
+2026,TX,Crosby,9,Heat,4121.885,742328.0,2.0,4121.885
+2026,TX,Crosby,9,Hot Wind,376.6525,88078.0,3.0,376.6525
 2026,TX,Culberson,5,Hail,1096.0,1090465.0,1.0,1096.0
-2026,TX,Dallam,5,Drought,468.075,64803.75,1.0,468.075
-2026,TX,Dallam,7,Hot Wind,156.025,21601.25,1.0,156.025
-2026,TX,Dawson,6,Drought,3981.1625,667961.0,18.0,3981.1625
-2026,TX,Dawson,6,Hot Wind,673.9855,119935.0,3.0,673.9855
-2026,TX,Dawson,6,Wind/Excess Wind,109.725,13603.0,1.0,109.725
-2026,TX,Dawson,7,Drought,2125.348,319297.0,16.0,2125.348
-2026,TX,Dawson,7,Hail,26.30625,6725.25,1.0,26.30625
-2026,TX,Dawson,7,Heat,875.28525,133939.25,12.0,875.28525
-2026,TX,Dawson,7,Hot Wind,995.28525,180467.25,13.0,995.28525
-2026,TX,Dawson,7,Wind/Excess Wind,90.91875,8496.25,2.0,90.91875
-2026,TX,Dawson,8,Drought,1451.09,292022.5,9.0,1451.09
-2026,TX,Dawson,8,Heat,130.9125,22748.5,1.0,130.9125
-2026,TX,Deaf Smith,5,Drought,722.0063,112488.0,4.0,722.00631
-2026,TX,Deaf Smith,6,Drought,6244.2976,1449255.0,21.0,6244.297500000001
-2026,TX,Deaf Smith,7,Drought,60.0,14870.0,1.0,60.0
-2026,TX,Deaf Smith,7,Heat,120.0,41592.0,1.0,120.0
-2026,TX,Denton,5,Excess Moisture/Precipitation/Rain,50.82,10295.0,1.0,50.82
-2026,TX,Dickens,5,Drought,421.95,76593.0,1.0,421.95
-2026,TX,Dickens,6,Drought,5753.78875,1107935.5,17.0,5753.16375
-2026,TX,Dickens,6,Heat,29.625,17484.0,1.0,29.625
-2026,TX,Dickens,7,Drought,1228.0149999999999,200153.0,11.0,1228.0149999999999
-2026,TX,Dickens,7,Hail,1590.22875,296547.5,8.0,1590.22875
-2026,TX,Dickens,7,Heat,972.525,232134.0,7.0,971.9
-2026,TX,Dickens,7,Hot Wind,78.7,26496.0,4.0,78.7
-2026,TX,Dickens,8,Drought,579.75,124022.0,9.0,579.75
-2026,TX,Dickens,8,Heat,108.0,28924.0,1.0,108.0
-2026,TX,Dickens,9,Drought,2856.55,941289.0,6.0,2856.55
-2026,TX,Donley,5,Drought,360.14,63474.0,1.0,360.14
-2026,TX,Donley,6,Drought,1077.252,232870.4,8.0,1077.252
-2026,TX,Donley,6,Hail,328.39,96801.0,2.0,328.39
-2026,TX,Donley,6,Wind/Excess Wind,174.24,42160.6,4.0,174.24
-2026,TX,Donley,7,Drought,476.35,83199.0,2.0,476.35
+2026,TX,Dallam,5,Drought,468.075,73320.0,1.0,468.075
+2026,TX,Dallam,7,Hot Wind,156.025,24440.0,1.0,156.025
+2026,TX,Dawson,6,Drought,3981.1625,752931.0,18.0,3981.1625
+2026,TX,Dawson,6,Heat,62.76,6476.0,1.0,62.76
+2026,TX,Dawson,6,Hot Wind,673.9855,135695.5,3.0,673.9855
+2026,TX,Dawson,6,Wind/Excess Wind,109.725,15389.5,1.0,109.725
+2026,TX,Dawson,7,Drought,5275.08485,1190570.0,41.0,5275.08485
+2026,TX,Dawson,7,Hail,26.30625,7188.0,1.0,26.30625
+2026,TX,Dawson,7,Heat,2450.153675,566387.0,37.0,2450.153675
+2026,TX,Dawson,7,Hot Wind,2570.153675,619027.0,38.0,2570.153675
+2026,TX,Dawson,7,Wind/Excess Wind,90.91875,9473.0,2.0,90.91875
+2026,TX,Dawson,8,Drought,9066.503,1965829.5,28.0,9066.480296
+2026,TX,Dawson,8,Heat,148.075,29718.5,2.0,148.075
+2026,TX,Dawson,8,Hot Wind,17.1625,3982.0,1.0,17.1625
+2026,TX,Deaf Smith,5,Drought,722.0063,127269.0,4.0,722.00631
+2026,TX,Deaf Smith,6,Drought,6244.2976,1639667.0,21.0,6244.297500000001
+2026,TX,Deaf Smith,7,Drought,60.0,16824.0,1.0,60.0
+2026,TX,Deaf Smith,7,Heat,120.0,47057.0,1.0,120.0
+2026,TX,Denton,5,Excess Moisture/Precipitation/Rain,50.82,11648.0,1.0,50.82
+2026,TX,Dickens,5,Drought,421.95,86652.0,1.0,421.95
+2026,TX,Dickens,6,Drought,5753.78875,1253505.5,17.0,5753.16375
+2026,TX,Dickens,6,Heat,29.625,19781.0,1.0,29.625
+2026,TX,Dickens,7,Drought,1250.9025000000001,232626.0,12.0,1250.9025000000001
+2026,TX,Dickens,7,Hail,1590.22875,335509.5,8.0,1590.22875
+2026,TX,Dickens,7,Heat,995.4125,268813.0,8.0,994.7875
+2026,TX,Dickens,7,Hot Wind,78.7,29977.0,4.0,78.7
+2026,TX,Dickens,8,Drought,579.75,140319.0,9.0,579.75
+2026,TX,Dickens,8,Heat,108.0,32726.0,1.0,108.0
+2026,TX,Dickens,9,Drought,2856.55,1064960.0,6.0,2856.55
+2026,TX,Dickens,10,Hail,22.8,12268.0,1.0,22.8
+2026,TX,Donley,5,Drought,360.14,71814.0,1.0,360.14
+2026,TX,Donley,6,Drought,420.512,84905.6,6.0,420.512
+2026,TX,Donley,6,Hail,328.39,109525.0,2.0,328.39
+2026,TX,Donley,6,Wind/Excess Wind,26.24,5217.4,3.0,26.24
+2026,TX,Donley,7,Drought,476.35,94127.0,2.0,476.35
+2026,TX,Donley,8,Drought,582.79,111721.0,1.0,582.79
 2026,TX,Duval,4,Drought,122.69,27731.0,1.0,122.69
 2026,TX,Duval,5,Drought,3114.9,619186.0,1.0,3114.9
 2026,TX,El Paso,2,Failure of Irrigation Supply,1726.825,951115.0,6.0,1726.825
 2026,TX,El Paso,3,Failure of Irrigation Supply,1324.93,763994.0,4.0,1324.93
-2026,TX,El Paso,4,Failure of Irrigation Supply,2472.5425,1400798.0,18.0,2472.5425
-2026,TX,El Paso,5,Failure of Irrigation Supply,435.2,303002.0,7.0,435.2
-2026,TX,Erath,9,Drought,100.35,14779.0,1.0,100.35
+2026,TX,El Paso,4,Failure of Irrigation Supply,3910.4325,2348355.0,23.0,3910.4325
+2026,TX,El Paso,5,Failure of Irrigation Supply,1419.53,1048712.0,8.0,1419.53
+2026,TX,Ellis,6,Excess Moisture/Precipitation/Rain,22.5075,3867.0,1.0,22.5075
+2026,TX,Ellis,8,Drought,49.9675,1768.0,1.0,49.9675
+2026,TX,Erath,9,Drought,100.35,16722.0,1.0,100.35
 2026,TX,Fannin,6,Excess Moisture/Precipitation/Rain,36.46,4478.0,1.0,36.46
 2026,TX,Fannin,12,Excess Moisture/Precipitation/Rain,24.0,2616.0,1.0,24.0
-2026,TX,Fisher,5,Drought,2354.44,368459.0,6.0,2354.44
-2026,TX,Fisher,6,Drought,5384.332899999999,1279927.5,21.0,5384.333224
-2026,TX,Fisher,7,Drought,1711.1174999999998,342994.0,5.0,1711.1174999999998
-2026,TX,Fisher,7,Hot Wind,125.66,60069.0,2.0,125.66
-2026,TX,Fisher,8,Drought,13.4,1146.5,1.0,13.4
-2026,TX,Floyd,5,Cold Wet Weather,1755.1145,427533.8,8.0,1755.1145
-2026,TX,Floyd,5,Drought,70.23,6622.0,1.0,70.23
-2026,TX,Floyd,5,Wind/Excess Wind,146.25,109122.0,2.0,146.25
-2026,TX,Floyd,6,Cold Wet Weather,707.9808,180992.3,9.0,707.98075
-2026,TX,Floyd,6,Drought,14611.435,2700683.2,66.0,14610.556838
-2026,TX,Floyd,6,Excess Moisture/Precipitation/Rain,495.3375,288240.0,5.0,494.7375
-2026,TX,Floyd,6,Failure of Irrigation Equipment,54.0675,26897.4,1.0,54.0675
-2026,TX,Floyd,6,Hail,7537.85635,4061086.5,63.0,7485.000965
-2026,TX,Floyd,6,Heat,156.2425,55985.4,2.0,156.2425
-2026,TX,Floyd,6,Hot Wind,1126.27625,568358.0,12.0,1126.27625
-2026,TX,Floyd,6,Wind/Excess Wind,949.762,267550.6,6.0,949.762
-2026,TX,Floyd,7,Drought,6254.26615,1646316.5,30.0,6254.266069
-2026,TX,Floyd,7,Failure of Irrigation Equipment,150.1715,74736.0,3.0,150.1715
-2026,TX,Floyd,7,Hail,1274.4915999999998,468365.5,17.0,1274.4915
-2026,TX,Floyd,7,Heat,1376.28705,274863.5,12.0,1376.28705
-2026,TX,Floyd,7,Hot Wind,568.9725,87328.0,3.0,568.9725
-2026,TX,Floyd,8,Drought,1122.8928,205193.3,9.0,1122.8928
-2026,TX,Floyd,8,Failure of Irrigation Supply,26.775,4683.7,1.0,26.775
-2026,TX,Floyd,8,Heat,1412.133,533596.8,7.0,1412.133
-2026,TX,Floyd,8,Hot Wind,270.99,199583.0,2.0,270.99
-2026,TX,Floyd,9,Drought,4787.3952,1055184.5,23.0,4787.395
-2026,TX,Floyd,9,Hail,15.0,5653.0,1.0,7.5
-2026,TX,Foard,7,Wind/Excess Wind,320.19,38235.0,1.0,320.19
-2026,TX,Fort Bend,6,Excess Moisture/Precipitation/Rain,615.225,79155.0,3.0,615.225
-2026,TX,Gaines,5,Hail,598.71,559801.2,1.0,598.71
-2026,TX,Gaines,6,Drought,1461.225,488423.0,3.0,1461.225
-2026,TX,Gaines,6,Excess Moisture/Precipitation/Rain,1830.64,242242.7,1.0,1830.64
-2026,TX,Gaines,6,Hail,872.9085,219063.0,6.0,872.9085
-2026,TX,Gaines,6,Heat,1572.2365,898902.0,4.0,1572.2365
-2026,TX,Gaines,6,Hot Wind,129.0375,24457.0,1.0,129.0375
-2026,TX,Gaines,6,Wind/Excess Wind,957.07,292071.3,5.0,957.07
-2026,TX,Gaines,7,Drought,1252.6775,145643.5,4.0,1252.6775
-2026,TX,Gaines,7,Heat,2049.44625,1104701.05,7.0,2049.44625
-2026,TX,Gaines,7,Hot Wind,870.25625,323880.25,6.0,870.25625
-2026,TX,Gaines,8,Hail,1201.3,760050.0,1.0,1201.3
-2026,TX,Gaines,8,Heat,225.0,41450.0,1.0,225.0
-2026,TX,Garza,6,Drought,2558.6122,456700.0,25.0,2558.612
-2026,TX,Garza,6,Hail,100.64,75774.0,1.0,100.64
-2026,TX,Garza,6,Hot Wind,152.7825,82512.0,3.0,152.7825
-2026,TX,Garza,7,Drought,209.74,62019.5,4.0,209.74
-2026,TX,Garza,7,Heat,173.65,39848.5,2.0,173.65
-2026,TX,Garza,8,Drought,586.602,134692.0,15.0,586.602
-2026,TX,Garza,8,Heat,258.92,51120.0,2.0,258.92
-2026,TX,Glasscock,7,Drought,96.645,22203.0,1.0,96.645
-2026,TX,Glasscock,9,Drought,1191.275,273968.0,3.0,1191.275
+2026,TX,Fisher,5,Drought,2354.44,416874.0,6.0,2354.44
+2026,TX,Fisher,6,Drought,5384.332899999999,1448052.5,21.0,5384.333224
+2026,TX,Fisher,7,Drought,1711.1174999999998,388058.0,5.0,1711.1174999999998
+2026,TX,Fisher,7,Hot Wind,125.66,67962.0,2.0,125.66
+2026,TX,Fisher,8,Drought,13.4,1329.5,1.0,13.4
+2026,TX,Floyd,5,Cold Wet Weather,1755.1145,483706.0,8.0,1755.1145
+2026,TX,Floyd,5,Drought,70.23,7493.0,1.0,70.23
+2026,TX,Floyd,5,Wind/Excess Wind,146.25,123457.0,2.0,146.25
+2026,TX,Floyd,6,Cold Wet Weather,616.9383,167084.7,8.0,616.93825
+2026,TX,Floyd,6,Drought,12141.762,2665211.35,65.0,12140.883838000002
+2026,TX,Floyd,6,Excess Moisture/Precipitation/Rain,495.3375,326110.0,5.0,494.7375
+2026,TX,Floyd,6,Failure of Irrigation Equipment,54.0675,30432.0,1.0,54.0675
+2026,TX,Floyd,6,Hail,7286.14635,4442437.6,61.0,7254.145965
+2026,TX,Floyd,6,Heat,156.2425,63340.2,2.0,156.2425
+2026,TX,Floyd,6,Hot Wind,1326.40625,754690.5,14.0,1326.40625
+2026,TX,Floyd,6,Wind/Excess Wind,949.762,302700.2,6.0,949.762
+2026,TX,Floyd,7,Drought,6642.60215,1950507.0,37.0,6642.600069
+2026,TX,Floyd,7,Failure of Irrigation Equipment,150.1715,84556.0,3.0,150.1715
+2026,TX,Floyd,7,Hail,1443.3165999999999,626763.2,18.0,1443.3165
+2026,TX,Floyd,7,Heat,434.73705,106024.5,12.0,434.73705
+2026,TX,Floyd,7,Hot Wind,568.9725,98800.0,3.0,568.9725
+2026,TX,Floyd,8,Drought,2208.2008,424934.25,14.0,2208.2008
+2026,TX,Floyd,8,Failure of Irrigation Supply,26.775,5299.0,1.0,26.775
+2026,TX,Floyd,8,Heat,2276.285,832785.8,10.0,2276.285
+2026,TX,Floyd,8,Hot Wind,270.99,225807.0,2.0,270.99
+2026,TX,Floyd,9,Drought,7947.6437,2111304.2,44.0,7947.6431
+2026,TX,Floyd,9,Hail,15.0,6395.5,1.0,7.5
+2026,TX,Floyd,9,Heat,117.37,3378.0,2.0,117.37
+2026,TX,Floyd,10,Heat,88.5325,19795.0,1.0,88.5325
+2026,TX,Foard,7,Wind/Excess Wind,320.19,43259.0,1.0,320.19
+2026,TX,Fort Bend,6,Excess Moisture/Precipitation/Rain,637.325,92896.0,5.0,637.325
+2026,TX,Gaines,5,Hail,598.7099999999999,629496.7,2.0,598.71
+2026,TX,Gaines,6,Drought,1461.225,552576.5,3.0,1461.225
+2026,TX,Gaines,6,Excess Moisture/Precipitation/Rain,1830.64,274077.3,1.0,1830.64
+2026,TX,Gaines,6,Hail,872.9085,239624.4,6.0,872.9085
+2026,TX,Gaines,6,Heat,2301.3465,1217432.3,6.0,2301.3465
+2026,TX,Gaines,6,Hot Wind,129.0375,27671.0,1.0,129.0375
+2026,TX,Gaines,6,Wind/Excess Wind,957.07,315709.0,5.0,957.07
+2026,TX,Gaines,7,Drought,1325.315,179982.5,4.0,1325.315
+2026,TX,Gaines,7,Heat,2085.765,1253480.3,8.0,2085.765
+2026,TX,Gaines,7,Hot Wind,906.575,371720.0,6.0,906.575
+2026,TX,Gaines,8,Drought,1605.3,137026.0,2.0,1605.3
+2026,TX,Gaines,8,Hail,1201.3,859909.0,1.0,1201.3
+2026,TX,Gaines,8,Heat,1259.6,504922.0,3.0,1259.6
+2026,TX,Gaines,9,Drought,30.702,3143.0,1.0,30.702
+2026,TX,Garza,6,Drought,2558.6122,516705.0,25.0,2558.612
+2026,TX,Garza,6,Hail,100.64,85730.0,1.0,100.64
+2026,TX,Garza,6,Hot Wind,152.7825,93352.0,3.0,152.7825
+2026,TX,Garza,7,Drought,209.74,70168.5,4.0,209.74
+2026,TX,Garza,7,Heat,173.65,45082.5,2.0,173.65
+2026,TX,Garza,8,Drought,2397.2275,427962.8,18.0,2397.2275
+2026,TX,Garza,8,Heat,727.84,140322.2,4.0,727.84
+2026,TX,Glasscock,7,Drought,96.645,25122.0,1.0,96.645
+2026,TX,Glasscock,9,Drought,1666.2089999999998,387386.0,5.0,1666.2089999999998
 2026,TX,Goliad,7,Drought,832.74,156546.0,2.0,832.74
-2026,TX,Gray,5,Drought,158.4,37248.0,1.0,158.4
-2026,TX,Gray,6,Drought,3456.6326,1077869.0,16.0,3456.6324999999997
-2026,TX,Gray,6,Hail,48.4848,17154.0,2.0,48.4848
-2026,TX,Gray,6,Hot Wind,155.0,37106.0,3.0,155.0
-2026,TX,Gray,7,Drought,119.3,17072.0,1.0,119.3
-2026,TX,Gray,7,Hot Wind,102.3,28514.5,1.0,102.3
-2026,TX,Gray,8,Drought,765.492,211044.0,4.0,765.492
-2026,TX,Gray,8,Heat,102.3,28514.5,1.0,102.3
-2026,TX,Gray,9,Drought,190.476,38109.0,1.0,190.476
-2026,TX,Gray,9,Heat,126.984,25406.0,1.0,126.984
-2026,TX,Grayson,5,Excess Moisture/Precipitation/Rain,419.72,114447.0,1.0,419.72
-2026,TX,Hale,4,Drought,2998.34663,440531.2,31.0,3033.346625
-2026,TX,Hale,5,Cold Wet Weather,582.8,173841.9,3.0,582.8
-2026,TX,Hale,5,Drought,2194.4683800000003,494192.0,10.0,2194.4683750000004
-2026,TX,Hale,5,Hail,584.89175,343093.8,2.0,584.89175
-2026,TX,Hale,5,Heat,1062.442,270955.0,1.0,1062.442
-2026,TX,Hale,5,Wind/Excess Wind,156.06075,112793.2,3.0,156.06075
-2026,TX,Hale,6,Cold Wet Weather,642.796,236641.3,7.0,642.796
-2026,TX,Hale,6,Drought,22966.9291,3919730.0,71.0,22966.928890000003
-2026,TX,Hale,6,Excess Moisture/Precipitation/Rain,2515.95694,846645.3,18.0,2515.74694
-2026,TX,Hale,6,Hail,4695.068560000001,1831475.6800000002,52.0,4694.858560000001
-2026,TX,Hale,6,Heat,1271.5309,320680.4,8.0,1271.5309
-2026,TX,Hale,6,Hot Wind,6189.8858,2470476.3000000003,33.0,6189.8857499999995
-2026,TX,Hale,6,Wind/Excess Wind,1031.184,191663.52,7.0,1031.004
-2026,TX,Hale,7,Drought,1974.03004,288627.7,14.0,1974.03
-2026,TX,Hale,7,Failure of Irrigation Supply,18.75,5574.0,1.0,18.75
-2026,TX,Hale,7,Heat,607.7040000000001,242390.69999999998,10.0,607.7040000000001
-2026,TX,Hale,7,Hot Wind,306.45,134317.0,3.0,306.45
-2026,TX,Hale,7,Wind/Excess Wind,49.9625,14267.4,2.0,49.9625
-2026,TX,Hale,8,Drought,1856.6377999999997,288766.6,20.0,1856.6377499999999
-2026,TX,Hale,8,Hail,30.6,4638.4,1.0,30.6
-2026,TX,Hale,8,Heat,626.23225,119940.90000000001,10.0,626.23225
-2026,TX,Hale,8,Hot Wind,7.5,772.5,1.0,7.5
-2026,TX,Hale,9,Drought,1269.6035000000002,306821.8,4.0,1269.6035000000002
-2026,TX,Hale,9,Hail,478.669,238203.9,9.0,478.669
-2026,TX,Hale,9,Hot Wind,212.93,99927.0,3.0,212.93
-2026,TX,Hale,9,Wind/Excess Wind,139.44,63248.5,5.0,139.44
-2026,TX,Hale,10,Drought,212.285,45151.0,2.0,212.285
-2026,TX,Hale,10,Hot Wind,629.0485,117340.0,2.0,629.0185
-2026,TX,Hall,6,Drought,130.89,38356.0,1.0,130.89
-2026,TX,Hall,6,Hail,53.58,19112.0,1.0,53.58
-2026,TX,Hall,7,Drought,394.38,84354.0,3.0,394.38
-2026,TX,Hall,8,Drought,1376.425,226533.0,5.0,1376.425
-2026,TX,Hall,8,Heat,390.6525,194868.6,3.0,390.6525
-2026,TX,Hall,8,Hot Wind,78.7125,14301.0,1.0,78.7125
-2026,TX,Hall,9,Heat,413.62,84681.0,2.0,413.62
-2026,TX,Hall,10,Hot Wind,207.96,120378.4,2.0,207.96
-2026,TX,Hansford,5,Drought,1492.0568,320942.0,2.0,1492.0568
-2026,TX,Hansford,6,Drought,3848.9508,897203.5,11.0,3848.950772
-2026,TX,Hansford,6,Excess Moisture/Precipitation/Rain,120.0,71983.2,1.0,120.0
-2026,TX,Hansford,6,Hot Wind,311.45,88945.5,2.0,311.45
-2026,TX,Hansford,6,Wind/Excess Wind,80.0,47988.8,1.0,80.0
-2026,TX,Hansford,7,Drought,506.6532,143749.0,2.0,506.6532
-2026,TX,Hansford,8,Drought,168.6,30910.0,1.0,168.6
-2026,TX,Hansford,8,Heat,168.6,30910.0,1.0,168.6
-2026,TX,Hardeman,7,Excess Moisture/Precipitation/Rain,194.0,26626.0,1.0,194.0
-2026,TX,Hardeman,8,Hot Wind,204.8,90071.0,1.0,204.8
-2026,TX,Hardeman,9,Drought,77.62,8776.0,1.0,77.62
-2026,TX,Hardeman,9,Heat,1578.9125,337370.0,4.0,1578.9125
-2026,TX,Hardeman,9,Hot Wind,152.8,70719.0,1.0,152.8
-2026,TX,Hardeman,10,Drought,408.42,77812.0,2.0,408.42
-2026,TX,Hartley,5,Drought,1968.9,306120.75,1.0,1968.9
+2026,TX,Gray,5,Drought,158.4,42144.0,1.0,158.4
+2026,TX,Gray,6,Drought,3456.6326,1219599.0,16.0,3456.6324999999997
+2026,TX,Gray,6,Hail,48.4848,19408.0,2.0,48.4848
+2026,TX,Gray,6,Hot Wind,155.0,41982.0,3.0,155.0
+2026,TX,Gray,7,Drought,119.3,19315.0,1.0,119.3
+2026,TX,Gray,7,Hot Wind,102.3,32261.5,1.0,102.3
+2026,TX,Gray,8,Drought,765.492,238771.0,4.0,765.492
+2026,TX,Gray,8,Heat,102.3,32261.5,1.0,102.3
+2026,TX,Gray,9,Drought,190.476,43116.6,1.0,190.476
+2026,TX,Gray,9,Heat,126.984,28744.4,1.0,126.984
+2026,TX,Grayson,5,Excess Moisture/Precipitation/Rain,419.72,129482.0,1.0,419.72
+2026,TX,Hale,4,Drought,2998.34663,496348.5,31.0,3033.346625
+2026,TX,Hale,5,Cold Wet Weather,582.8,196685.4,3.0,582.8
+2026,TX,Hale,5,Drought,2212.1783800000003,562908.8,14.0,2212.178375
+2026,TX,Hale,5,Hail,596.26675,393868.7,3.0,596.26675
+2026,TX,Hale,5,Heat,1062.442,306555.0,1.0,1062.442
+2026,TX,Hale,5,Wind/Excess Wind,160.93575,130055.3,4.0,160.93575
+2026,TX,Hale,6,Cold Wet Weather,642.796,267728.7,7.0,642.796
+2026,TX,Hale,6,Drought,14750.0786,2741616.2,77.0,14750.07839
+2026,TX,Hale,6,Excess Moisture/Precipitation/Rain,2515.95694,957926.45,18.0,2515.74694
+2026,TX,Hale,6,Hail,5391.15856,2352750.84,58.0,5390.94856
+2026,TX,Hale,6,Heat,2714.0309,1110748.6,13.0,2714.0309
+2026,TX,Hale,6,Hot Wind,5348.0458,2378612.8,30.0,5348.04575
+2026,TX,Hale,6,Wind/Excess Wind,1031.184,216774.71,7.0,1031.004
+2026,TX,Hale,7,Drought,2371.78004,377050.5,16.0,2371.78
+2026,TX,Hale,7,Failure of Irrigation Supply,18.75,6306.0,1.0,18.75
+2026,TX,Hale,7,Heat,677.4215,309253.3,10.0,677.4215
+2026,TX,Hale,7,Hot Wind,306.45,151964.0,3.0,306.45
+2026,TX,Hale,7,Wind/Excess Wind,49.9625,16142.7,2.0,49.9625
+2026,TX,Hale,8,Drought,3849.6303000000003,714631.0,29.0,3849.63025
+2026,TX,Hale,8,Hail,30.6,5247.2,1.0,30.6
+2026,TX,Hale,8,Heat,791.97425,199189.0,15.0,791.97425
+2026,TX,Hale,8,Hot Wind,117.758,48661.7,4.0,117.758
+2026,TX,Hale,9,Drought,1637.3348,411130.8,8.0,1637.33475
+2026,TX,Hale,9,Hail,478.669,269500.3,9.0,478.669
+2026,TX,Hale,9,Hot Wind,212.93,113056.0,3.0,212.93
+2026,TX,Hale,9,Wind/Excess Wind,139.44,71559.5,5.0,139.44
+2026,TX,Hale,10,Drought,212.285,51086.0,2.0,212.285
+2026,TX,Hale,10,Hot Wind,634.0485,133361.0,3.0,634.0185
+2026,TX,Hall,6,Drought,130.89,43395.0,1.0,130.89
+2026,TX,Hall,6,Hail,53.58,21623.0,1.0,53.58
+2026,TX,Hall,7,Drought,394.38,95436.0,3.0,394.38
+2026,TX,Hall,8,Drought,1376.425,256303.0,5.0,1376.425
+2026,TX,Hall,8,Heat,390.6525,220472.8,3.0,390.6525
+2026,TX,Hall,8,Hot Wind,78.7125,16180.0,1.0,78.7125
+2026,TX,Hall,9,Drought,307.4913,74848.0,4.0,307.491155
+2026,TX,Hall,9,Heat,413.62,95808.0,2.0,413.62
+2026,TX,Hall,10,Hot Wind,207.96,136195.2,2.0,207.96
+2026,TX,Hansford,5,Drought,1492.0568,363836.0,2.0,1492.0568
+2026,TX,Hansford,6,Drought,4242.5405,1119701.5,13.0,4242.540472
+2026,TX,Hansford,6,Excess Moisture/Precipitation/Rain,120.0,81441.0,1.0,120.0
+2026,TX,Hansford,6,Hot Wind,311.45,100632.5,2.0,311.45
+2026,TX,Hansford,6,Wind/Excess Wind,80.0,54294.0,1.0,80.0
+2026,TX,Hansford,7,Drought,506.6532,162631.0,2.0,506.6532
+2026,TX,Hansford,7,Heat,146.6,51770.0,1.0,146.6
+2026,TX,Hansford,7,Hot Wind,146.6,51770.0,1.0,146.6
+2026,TX,Hansford,8,Drought,168.6,34973.0,1.0,168.6
+2026,TX,Hansford,8,Heat,168.6,34973.0,1.0,168.6
+2026,TX,Hansford,8,Hot Wind,226.79,63384.0,1.0,226.79
+2026,TX,Hardeman,7,Excess Moisture/Precipitation/Rain,194.0,30126.0,1.0,194.0
+2026,TX,Hardeman,8,Drought,600.39,135522.1,1.0,600.39
+2026,TX,Hardeman,8,Hot Wind,462.11,159985.9,2.0,462.11
+2026,TX,Hardeman,9,Drought,77.62,9929.0,1.0,77.62
+2026,TX,Hardeman,9,Heat,1578.9125,381967.0,4.0,1578.9125
+2026,TX,Hardeman,9,Hot Wind,152.8,80013.0,1.0,152.8
+2026,TX,Hardeman,10,Drought,408.42,88034.0,2.0,408.42
+2026,TX,Hartley,5,Drought,1968.9,346342.5,1.0,1968.9
 2026,TX,Hartley,6,Hail,874.0,461152.0,1.0,874.0
-2026,TX,Hartley,6,Hot Wind,989.125,153401.5,2.0,989.125
-2026,TX,Hartley,7,Drought,2967.375,460204.5,2.0,2967.375
-2026,TX,Hartley,7,Hot Wind,656.3,102040.25,1.0,656.3
-2026,TX,Haskell,4,Drought,250.2777,49818.0,2.0,250.27769
-2026,TX,Haskell,5,Drought,2758.6226,522754.0,17.0,2758.6225
-2026,TX,Haskell,6,Drought,10622.302599999999,2626471.0,43.0,10622.302477000001
-2026,TX,Haskell,6,Heat,175.0,102114.0,1.0,175.0
-2026,TX,Haskell,6,Wind/Excess Wind,255.96,74158.0,1.0,255.96
-2026,TX,Haskell,7,Drought,735.48,198749.0,4.0,735.48
-2026,TX,Haskell,8,Drought,121.34,14520.0,1.0,121.34
+2026,TX,Hartley,6,Hot Wind,989.125,173557.0,2.0,989.125
+2026,TX,Hartley,7,Drought,2967.375,520671.0,2.0,2967.375
+2026,TX,Hartley,7,Hot Wind,656.3,115447.5,1.0,656.3
+2026,TX,Hartley,8,Heat,1291.6095,739160.43,2.0,1291.6095
+2026,TX,Hartley,10,Freeze,160.9405,87934.42,1.0,160.9405
+2026,TX,Hartley,10,Heat,56.1,29970.15,1.0,56.1
+2026,TX,Haskell,4,Drought,360.0453,83055.0,4.0,360.04519
+2026,TX,Haskell,5,Drought,2758.6226,591431.0,17.0,2758.6225
+2026,TX,Haskell,6,Drought,10622.302599999999,2971195.0,43.0,10622.302477000001
+2026,TX,Haskell,6,Heat,175.0,115531.0,1.0,175.0
+2026,TX,Haskell,7,Drought,1186.79,317486.0,6.0,1186.79
+2026,TX,Haskell,8,Drought,318.87,57888.0,2.0,318.87
 2026,TX,Hidalgo,1,Failure of Irrigation Supply,53.7,16702.0,1.0,53.7
 2026,TX,Hidalgo,3,Drought,2270.42,744628.0,6.0,2270.52
 2026,TX,Hidalgo,3,Failure of Irrigation Supply,12583.662,4183867.0,32.0,12583.562000000002
-2026,TX,Hidalgo,4,Drought,8202.2605,6077922.0,16.0,8202.2605
-2026,TX,Hidalgo,4,Excess Moisture/Precipitation/Rain,3989.176,1269948.8,6.0,3989.176
+2026,TX,Hidalgo,4,Drought,9056.271,6314494.0,19.0,9056.271
+2026,TX,Hidalgo,4,Excess Moisture/Precipitation/Rain,4076.2129999999997,1315955.7,8.0,4076.2129999999997
 2026,TX,Hidalgo,4,Failure of Irrigation Supply,11055.686399999999,3608982.0,39.0,11055.686399999999
+2026,TX,Hidalgo,4,Heat,14.42,10264.1,1.0,14.42
 2026,TX,Hidalgo,4,Hot Wind,57.43,12577.0,2.0,57.43
 2026,TX,Hidalgo,6,Excess Moisture/Precipitation/Rain,5.375,1302.0,1.0,5.375
-2026,TX,Hidalgo,7,Heat,195.014,32692.2,2.0,195.014
-2026,TX,Hockley,4,Drought,192.6,27556.0,1.0,192.6
-2026,TX,Hockley,4,Wind/Excess Wind,105.465,36389.0,1.0,105.465
-2026,TX,Hockley,5,Drought,4212.155,616213.5,24.0,4212.155
-2026,TX,Hockley,5,Hail,344.64,57998.0,1.0,344.64
-2026,TX,Hockley,5,Heat,213.55,61039.0,2.0,203.55
-2026,TX,Hockley,5,Hot Wind,53.9838,19175.0,2.0,53.9838
-2026,TX,Hockley,6,Drought,11490.4971,1806977.4,69.0,11490.496749999998
-2026,TX,Hockley,6,Excess Moisture/Precipitation/Rain,2299.01615,574836.73,17.0,2299.016
-2026,TX,Hockley,6,Hail,14068.461545,4197261.48,88.0,14058.4613346
-2026,TX,Hockley,6,Heat,656.6805,210646.2,2.0,656.6805
-2026,TX,Hockley,6,Hot Wind,2389.99429,452764.2,36.0,2389.9941224
-2026,TX,Hockley,6,Wind/Excess Wind,9645.554165,2750862.74,63.0,9645.554013
-2026,TX,Hockley,7,Drought,1829.225,367579.3,9.0,1829.225
-2026,TX,Hockley,7,Hail,125.78125,52576.35,2.0,125.78125
-2026,TX,Hockley,7,Heat,3820.535,551149.5,13.0,3820.535
-2026,TX,Hockley,7,Hot Wind,10.375,3416.0,1.0,10.375
-2026,TX,Hockley,7,Wind/Excess Wind,150.3338,24312.0,1.0,150.33375
-2026,TX,Hockley,8,Drought,8897.490679999999,1467826.0,37.0,8897.490359
-2026,TX,Hockley,8,Heat,1291.85872,225762.2,13.0,1291.85875
-2026,TX,Hockley,8,Hot Wind,142.8,36410.4,2.0,142.8
-2026,TX,Hockley,9,Drought,12.44,1260.0,1.0,12.44
-2026,TX,Hockley,9,Hail,334.412,114656.0,4.0,334.412
-2026,TX,Hockley,9,Wind/Excess Wind,42.0405,11814.0,1.0,42.0405
-2026,TX,Howard,4,Drought,1655.9978,327812.0,14.0,1655.9978
-2026,TX,Howard,5,Drought,1559.775,232446.0,2.0,1559.775
-2026,TX,Howard,6,Drought,21293.103000000003,4029373.0,64.0,21292.803
-2026,TX,Howard,6,Heat,149.64,68059.0,2.0,149.64
-2026,TX,Howard,7,Drought,1884.825,355642.0,13.0,1884.825
-2026,TX,Howard,7,Heat,820.65,150978.5,12.0,820.65
-2026,TX,Howard,7,Hot Wind,820.65,150978.5,12.0,820.65
-2026,TX,Howard,8,Drought,5953.8809,1218325.0,33.0,5953.8808
-2026,TX,Howard,8,Heat,151.295,16628.0,2.0,151.295
-2026,TX,Howard,9,Drought,226.9,18911.0,1.0,226.9
-2026,TX,Howard,10,Drought,192.7251,44712.0,3.0,192.7251
+2026,TX,Hidalgo,7,Heat,229.667,50524.2,3.0,229.667
+2026,TX,Hockley,4,Drought,192.6,31179.0,1.0,192.6
+2026,TX,Hockley,4,Wind/Excess Wind,105.465,41168.0,1.0,105.465
+2026,TX,Hockley,5,Drought,4212.155,697035.25,24.0,4212.155
+2026,TX,Hockley,5,Hail,344.64,65619.0,1.0,344.64
+2026,TX,Hockley,5,Heat,213.55,69059.0,2.0,203.55
+2026,TX,Hockley,5,Hot Wind,53.9838,21695.0,2.0,53.9838
+2026,TX,Hockley,6,Drought,12138.7772,2131638.7,80.0,12138.77695
+2026,TX,Hockley,6,Excess Moisture/Precipitation/Rain,3152.4636499999997,857434.61,18.0,3152.4635
+2026,TX,Hockley,6,Hail,14310.208835,4884069.26,91.0,14300.208650999999
+2026,TX,Hockley,6,Heat,290.088,47866.8,1.0,290.088
+2026,TX,Hockley,6,Hot Wind,5342.4606,987979.6,44.0,5342.460249999999
+2026,TX,Hockley,6,Wind/Excess Wind,9240.581665,2934402.98,62.0,9240.581513
+2026,TX,Hockley,7,Drought,1829.225,412655.8,9.0,1829.225
+2026,TX,Hockley,7,Hail,125.78125,59484.8,2.0,125.78125
+2026,TX,Hockley,7,Heat,3820.535,614378.0,13.0,3820.535
+2026,TX,Hockley,7,Hot Wind,10.375,3864.0,1.0,10.375
+2026,TX,Hockley,7,Wind/Excess Wind,150.3338,27504.0,1.0,150.33375
+2026,TX,Hockley,8,Drought,9878.653579999998,1849867.7,45.0,9878.653234
+2026,TX,Hockley,8,Heat,1172.32272,240661.4,12.0,1172.32275
+2026,TX,Hockley,8,Hot Wind,163.3,43637.6,3.0,163.3
+2026,TX,Hockley,8,Wind/Excess Wind,433.3,167571.0,4.0,433.3
+2026,TX,Hockley,9,Drought,12.44,1425.0,1.0,12.44
+2026,TX,Hockley,9,Hail,709.1564,222342.1,7.0,709.156375
+2026,TX,Hockley,9,Wind/Excess Wind,42.0405,13366.4,1.0,42.0405
+2026,TX,Hockley,10,Wind/Excess Wind,37.5,5363.0,1.0,37.5
+2026,TX,Howard,4,Drought,1655.9978,372065.0,14.0,1655.9978
+2026,TX,Howard,5,Drought,1559.775,262979.0,2.0,1559.775
+2026,TX,Howard,6,Drought,21293.103000000003,4557671.0,64.0,21292.803
+2026,TX,Howard,6,Heat,149.64,77002.0,2.0,149.64
+2026,TX,Howard,7,Drought,1884.825,402366.0,13.0,1884.825
+2026,TX,Howard,7,Heat,820.65,170814.0,12.0,820.65
+2026,TX,Howard,7,Hot Wind,820.65,170814.0,12.0,820.65
+2026,TX,Howard,8,Drought,7835.1847,1804926.0,50.0,7835.1846
+2026,TX,Howard,8,Heat,151.295,18813.0,2.0,151.295
+2026,TX,Howard,9,Drought,226.9,21396.0,1.0,226.9
+2026,TX,Howard,10,Drought,192.7251,50762.0,3.0,192.7251
 2026,TX,Hudspeth,3,Failure of Irrigation Supply,374.97,183267.0,2.0,374.97
-2026,TX,Hudspeth,4,Failure of Irrigation Supply,1687.98,781537.0,9.0,1687.98
+2026,TX,Hudspeth,4,Failure of Irrigation Supply,1887.5399000000002,874318.0,18.0,1887.5399000000002
 2026,TX,Hudspeth,5,Failure of Irrigation Supply,55.82,25462.0,1.0,55.82
-2026,TX,Hudspeth,6,Excess Moisture/Precipitation/Rain,91.33,47200.0,1.0,91.33
+2026,TX,Hudspeth,6,Excess Moisture/Precipitation/Rain,91.33,53400.0,1.0,91.33
 2026,TX,Hudspeth,6,Failure of Irrigation Supply,553.14,297829.0,6.0,553.14
-2026,TX,Hutchinson,5,Drought,713.2149999999999,106762.5,5.0,713.2149999999999
-2026,TX,Hutchinson,6,Drought,517.65,108787.0,1.0,517.65
-2026,TX,Hutchinson,6,Excess Moisture/Precipitation/Rain,361.53,56940.5,1.0,361.53
-2026,TX,Hutchinson,6,Hail,482.9282,115323.0,3.0,482.928222
-2026,TX,Hutchinson,6,Heat,90.4,11777.0,1.0,159.35
-2026,TX,Hutchinson,7,Drought,598.3499,76931.0,2.0,688.7499
-2026,TX,Hutchinson,8,Drought,85.6845,11451.5,2.0,85.6845
-2026,TX,Hutchinson,8,Heat,35.6845,5044.5,1.0,35.6845
-2026,TX,Irion,7,Drought,240.0,16684.0,1.0,240.0
+2026,TX,Hutchinson,5,Drought,713.2149999999999,120791.5,5.0,713.2149999999999
+2026,TX,Hutchinson,6,Drought,969.0,260958.0,2.0,969.0
+2026,TX,Hutchinson,6,Excess Moisture/Precipitation/Rain,361.53,64421.5,1.0,361.53
+2026,TX,Hutchinson,6,Hail,1429.8857,775401.0,6.0,1429.885722
+2026,TX,Hutchinson,6,Heat,90.4,13324.0,1.0,159.35
+2026,TX,Hutchinson,7,Drought,598.3499,87039.0,2.0,688.7499
+2026,TX,Hutchinson,8,Drought,85.6845,12115.0,2.0,85.6845
+2026,TX,Hutchinson,8,Heat,35.6845,5708.0,1.0,35.6845
+2026,TX,Hutchinson,8,Hot Wind,451.35,137879.0,1.0,451.35
+2026,TX,Irion,7,Drought,240.0,18875.0,1.0,240.0
 2026,TX,Jackson,4,Excess Moisture/Precipitation/Rain,425.05,180859.0,2.0,425.05
 2026,TX,Jackson,4,Hail,82.0,38862.0,1.0,82.0
 2026,TX,Jackson,7,Excess Moisture/Precipitation/Rain,664.5,34379.0,1.0,664.5
 2026,TX,Jackson,9,Excess Moisture/Precipitation/Rain,270.6,-5744.0,0.0,0.0
 2026,TX,Jim Wells,3,Drought,2076.8945,908395.25,8.0,2076.8945
 2026,TX,Jim Wells,4,Cold Wet Weather,1094.388,462248.25,11.0,1094.388
-2026,TX,Jim Wells,4,Drought,10513.9517,4582136.1,24.0,10513.8516
+2026,TX,Jim Wells,4,Drought,16973.3697,6919067.1,26.0,16973.2696
 2026,TX,Jim Wells,5,Cold Wet Weather,17.826,2903.4,1.0,17.826
 2026,TX,Jim Wells,5,Drought,6179.35,2057435.0,3.0,6179.35
-2026,TX,Jones,5,Drought,1422.11,274306.0,6.0,1422.11
-2026,TX,Jones,6,Drought,5816.8751,1124079.0,21.0,5816.875
-2026,TX,Jones,7,Drought,966.8805,283082.0,7.0,966.8805
-2026,TX,Jones,8,Drought,561.55,105050.0,2.0,561.55
-2026,TX,Jones,9,Drought,232.3701,47293.0,4.0,232.37
+2026,TX,Jones,5,Drought,1422.11,310345.0,6.0,1422.11
+2026,TX,Jones,6,Drought,5751.4351,1256126.0,20.0,5751.4349999999995
+2026,TX,Jones,7,Drought,4038.3100000000004,985546.0,14.0,4038.3100000000004
+2026,TX,Jones,8,Drought,561.55,118852.0,2.0,561.55
+2026,TX,Jones,9,Drought,232.3701,53505.0,4.0,232.37
 2026,TX,Karnes,5,Cold Wet Weather,299.5125,145857.0,1.0,299.5125
 2026,TX,Kleberg,4,Cold Wet Weather,434.57,235858.0,1.0,434.57
-2026,TX,Kleberg,4,Drought,2179.8178,1187401.0,29.0,2179.817466
+2026,TX,Kleberg,4,Drought,9035.9323,4762693.0,36.0,9035.931966
 2026,TX,Kleberg,5,Drought,675.0925,73453.0,7.0,675.0925
-2026,TX,Kleberg,8,Drought,52.3888,21257.0,1.0,52.38875
-2026,TX,Knox,7,Drought,746.885,118606.0,3.0,746.885
-2026,TX,Knox,7,Hail,47.886,22769.4,1.0,47.886
-2026,TX,Knox,7,Wind/Excess Wind,111.734,53128.6,1.0,111.734
+2026,TX,Kleberg,8,Drought,58.9238,23126.0,2.0,58.92375
+2026,TX,Knox,7,Drought,746.885,134185.0,3.0,746.885
+2026,TX,Knox,7,Hail,47.886,25761.6,1.0,47.886
+2026,TX,Knox,7,Wind/Excess Wind,111.734,60110.4,1.0,111.734
+2026,TX,Knox,8,Drought,11.4525,3126.0,1.0,11.4525
 2026,TX,Lamar,5,Excess Moisture/Precipitation/Rain,100.998,12739.0,1.0,100.998
-2026,TX,Lamb,4,Drought,1739.9,544558.0,3.0,1739.9
-2026,TX,Lamb,5,Cold Wet Weather,563.825,301628.0,3.0,563.825
-2026,TX,Lamb,5,Drought,2556.6169,343411.5,26.0,2556.617
-2026,TX,Lamb,5,Excess Moisture/Precipitation/Rain,2158.27625,561434.8,9.0,2158.27625
-2026,TX,Lamb,5,Hail,127.2025,36710.1,4.0,95.995
-2026,TX,Lamb,5,Heat,1328.713,668102.0,8.0,1328.713
-2026,TX,Lamb,5,Hot Wind,1331.90625,264354.5,11.0,1331.90625
-2026,TX,Lamb,6,Cold Wet Weather,2167.505,741304.5,7.0,2167.505
-2026,TX,Lamb,6,Drought,7126.4681,1289989.5,59.0,7126.468000000001
-2026,TX,Lamb,6,Excess Moisture/Precipitation/Rain,5225.896,1424534.75,36.0,5102.286
-2026,TX,Lamb,6,Hail,5198.834,1107602.45,37.0,5198.834
-2026,TX,Lamb,6,Heat,2968.37,1684276.5,4.0,2968.37
-2026,TX,Lamb,6,Hot Wind,9095.975,2986876.5999999996,32.0,9095.975
-2026,TX,Lamb,6,Wind/Excess Wind,3298.74,702943.0,16.0,3298.74
-2026,TX,Lamb,7,Drought,654.7775,76201.0,8.0,654.7775
-2026,TX,Lamb,7,Excess Moisture/Precipitation/Rain,45.5,11503.8,1.0,45.5
-2026,TX,Lamb,7,Heat,5835.775,815277.0,22.0,5835.775
-2026,TX,Lamb,8,Drought,3969.59,740640.0,18.0,3969.59
-2026,TX,Lamb,8,Heat,1410.2825,382323.0,5.0,1410.2825
-2026,TX,Lamb,8,Hot Wind,10.0,4909.9,2.0,10.0
-2026,TX,Lamb,9,Drought,517.4375,117630.0,2.0,517.4375
-2026,TX,Lamb,9,Excess Moisture/Precipitation/Rain,9.0,1507.0,1.0,9.0
-2026,TX,Lamb,9,Hail,90.0,44189.1,2.0,90.0
-2026,TX,Lamb,9,Heat,1020.8875,266148.5,2.0,1020.8875
-2026,TX,Lamb,9,Hot Wind,527.35,154637.5,3.0,527.35
-2026,TX,Lavaca,7,Excess Moisture/Precipitation/Rain,107.93,28531.0,1.0,107.93
+2026,TX,Lamb,4,Drought,1739.9,616107.0,3.0,1739.9
+2026,TX,Lamb,5,Cold Wet Weather,563.825,341258.0,3.0,563.825
+2026,TX,Lamb,5,Drought,2518.3669,383496.30000000005,25.0,2518.367
+2026,TX,Lamb,5,Excess Moisture/Precipitation/Rain,2101.7625,633142.9,9.0,2101.7625
+2026,TX,Lamb,5,Hail,127.2025,41533.4,4.0,95.995
+2026,TX,Lamb,5,Heat,1328.713,755885.5,8.0,1328.713
+2026,TX,Lamb,5,Hot Wind,1279.6425,289362.0,10.0,1279.6425
+2026,TX,Lamb,6,Cold Wet Weather,2167.505,838703.0,7.0,2167.505
+2026,TX,Lamb,6,Drought,7332.4141,1506566.0,60.0,7332.414000000001
+2026,TX,Lamb,6,Excess Moisture/Precipitation/Rain,5225.896,1611373.3499999999,36.0,5102.286
+2026,TX,Lamb,6,Hail,5650.099,1461451.45,37.0,5650.099
+2026,TX,Lamb,6,Heat,2968.37,1905573.0,4.0,2968.37
+2026,TX,Lamb,6,Hot Wind,9210.435,3434992.1,34.0,9210.435
+2026,TX,Lamb,6,Wind/Excess Wind,3800.3,878513.9,18.0,3800.3
+2026,TX,Lamb,7,Drought,673.2925,89457.0,9.0,673.2925
+2026,TX,Lamb,7,Excess Moisture/Precipitation/Rain,45.5,13015.1,1.0,45.5
+2026,TX,Lamb,7,Heat,5835.775,922382.0,22.0,5835.775
+2026,TX,Lamb,7,Wind/Excess Wind,491.2525,92074.0,2.0,491.2525
+2026,TX,Lamb,8,Drought,4240.115,886668.0,21.0,4240.115
+2026,TX,Lamb,8,Heat,1420.9075,436546.0,6.0,1420.9075
+2026,TX,Lamb,8,Hot Wind,10.0,5555.1,2.0,10.0
+2026,TX,Lamb,9,Drought,532.4375,134713.5,3.0,532.4375
+2026,TX,Lamb,9,Excess Moisture/Precipitation/Rain,9.0,1705.0,1.0,9.0
+2026,TX,Lamb,9,Hail,90.0,49995.9,2.0,90.0
+2026,TX,Lamb,9,Heat,1035.8875,302747.5,3.0,1035.8875
+2026,TX,Lamb,9,Hot Wind,527.35,174961.0,3.0,527.35
+2026,TX,Lavaca,7,Excess Moisture/Precipitation/Rain,107.93,32279.0,1.0,107.93
+2026,TX,Live Oak,5,Excess Moisture/Precipitation/Rain,31.315,1268.0,1.0,31.315
+2026,TX,Live Oak,6,Drought,51.8125,1010.0,1.0,51.8125
 2026,TX,Live Oak,7,Drought,383.64,82611.0,3.0,383.64
-2026,TX,Lubbock,4,Drought,446.078,65239.0,3.0,446.078
-2026,TX,Lubbock,5,Drought,508.28083,64091.1,11.0,508.28075
-2026,TX,Lubbock,5,Heat,131.75,52936.0,2.0,131.75
-2026,TX,Lubbock,5,Wind/Excess Wind,94.625,30041.8,3.0,94.625
-2026,TX,Lubbock,6,Drought,6660.754805,1086603.87,48.0,6660.687225
-2026,TX,Lubbock,6,Excess Moisture/Precipitation/Rain,449.46125,206759.6,6.0,449.46125
-2026,TX,Lubbock,6,Hail,589.596,184400.35,12.0,589.596
-2026,TX,Lubbock,6,Heat,615.0963,123142.0,6.0,615.09625
-2026,TX,Lubbock,6,Hot Wind,4680.515965,1177254.3399999999,19.0,4680.515955
-2026,TX,Lubbock,6,Wind/Excess Wind,1007.3125,398281.95,12.0,1007.3125
-2026,TX,Lubbock,7,Drought,4353.69275,849014.5,24.0,4353.99275
-2026,TX,Lubbock,7,Heat,632.635,152843.0,4.0,632.635
-2026,TX,Lubbock,7,Wind/Excess Wind,324.33,47750.0,1.0,324.33
-2026,TX,Lubbock,8,Drought,3603.93478,726080.65,24.0,3603.93478
-2026,TX,Lubbock,8,Heat,3806.380445,733277.4,36.0,3806.455445
-2026,TX,Lubbock,8,Hot Wind,583.720875,108832.9,5.0,583.720875
-2026,TX,Lubbock,8,Wildlife,10.6085,1345.54,1.0,10.6085
-2026,TX,Lubbock,9,Drought,2244.99,320927.0,15.0,2244.99
-2026,TX,Lubbock,9,Heat,180.0,64951.0,1.0,180.0
-2026,TX,Lynn,4,Drought,117.825,25366.0,1.0,117.825
-2026,TX,Lynn,5,Drought,2223.82959,566842.4,18.0,2223.829554
-2026,TX,Lynn,5,Hail,97.92712,61029.32,2.0,97.92712
-2026,TX,Lynn,5,Heat,267.7325,154150.5,3.0,267.7325
-2026,TX,Lynn,6,Drought,9346.927625,2496225.95,36.0,9346.927625
-2026,TX,Lynn,6,Excess Moisture/Precipitation/Rain,18.28125,6307.25,1.0,18.28125
-2026,TX,Lynn,6,Hail,2900.9478499999996,1276605.44,26.0,2900.9478299999996
-2026,TX,Lynn,6,Heat,629.940375,215292.1,9.0,629.940375
-2026,TX,Lynn,6,Hot Wind,2086.3682599999997,589175.5,17.0,2086.368206
-2026,TX,Lynn,6,Wind/Excess Wind,1831.78085,505092.65,15.0,1831.78075
-2026,TX,Lynn,7,Drought,3802.947465,1028596.6,15.0,3802.947425
-2026,TX,Lynn,7,Heat,190.28,56667.5,2.0,190.28
-2026,TX,Lynn,7,Hot Wind,111.345625,53071.26,4.0,111.345625
-2026,TX,Lynn,8,Drought,12186.34865,3063457.1,32.0,12186.3485
-2026,TX,Lynn,8,Heat,5009.432940000001,1506962.25,24.0,5009.432900000001
-2026,TX,Lynn,8,Hot Wind,306.2264,95056.18,3.0,306.2264
-2026,TX,Martin,6,Drought,2447.29,521649.0,12.0,2447.29
-2026,TX,Martin,6,Hot Wind,56.49,10644.5,1.0,56.49
-2026,TX,Martin,6,Wind/Excess Wind,56.49,10644.5,1.0,56.49
-2026,TX,Martin,7,Drought,1130.48095,263310.0,11.0,1130.48095
-2026,TX,Martin,7,Heat,743.396875,156908.5,8.0,743.396875
-2026,TX,Martin,7,Hot Wind,345.884375,77867.5,6.0,345.884375
-2026,TX,Martin,7,Wind/Excess Wind,397.5125,79041.0,2.0,397.5125
-2026,TX,Martin,8,Drought,1144.7375,215180.0,5.0,1144.7375
+2026,TX,Lubbock,4,Drought,446.078,73805.85,3.0,446.078
+2026,TX,Lubbock,5,Drought,586.12483,90411.7,13.0,586.12475
+2026,TX,Lubbock,5,Heat,131.75,59891.0,2.0,131.75
+2026,TX,Lubbock,5,Wind/Excess Wind,94.625,33989.9,3.0,94.625
+2026,TX,Lubbock,6,Drought,7680.338804999999,1378254.0,50.0,7680.2712249999995
+2026,TX,Lubbock,6,Excess Moisture/Precipitation/Rain,449.46125,233925.55,6.0,449.46125
+2026,TX,Lubbock,6,Hail,650.30975,231203.4,16.0,650.30975
+2026,TX,Lubbock,6,Heat,2650.4188,800104.0,10.0,2650.41875
+2026,TX,Lubbock,6,Hot Wind,4759.403464999999,1340452.6400000001,20.0,4759.403455
+2026,TX,Lubbock,6,Wind/Excess Wind,1632.8108,601096.95,17.0,1632.810727
+2026,TX,Lubbock,7,Drought,4514.56375,1002879.65,29.0,4514.86375
+2026,TX,Lubbock,7,Heat,632.635,172923.8,4.0,632.635
+2026,TX,Lubbock,7,Wind/Excess Wind,324.33,54024.0,1.0,324.33
+2026,TX,Lubbock,8,Drought,4383.68853,946332.1,33.0,4383.68853
+2026,TX,Lubbock,8,Heat,4651.65607,1001729.15,45.0,4651.73107
+2026,TX,Lubbock,8,Hot Wind,711.81375,158500.95,11.0,711.81375
+2026,TX,Lubbock,8,Wildlife,10.6085,1522.36,1.0,10.6085
+2026,TX,Lubbock,9,Drought,2295.4225,370213.0,16.0,2295.4225
+2026,TX,Lubbock,9,Heat,229.355,95929.0,2.0,229.355
+2026,TX,Lubbock,10,Heat,19.7225,10498.0,1.0,19.7225
+2026,TX,Lynn,4,Drought,462.925,77930.0,1.0,462.925
+2026,TX,Lynn,5,Drought,2246.32959,645465.9,20.0,2246.329554
+2026,TX,Lynn,5,Hail,97.92712,69047.78,2.0,97.92712
+2026,TX,Lynn,5,Heat,267.7325,174403.6,3.0,267.7325
+2026,TX,Lynn,6,Drought,9648.425125,2836495.25,38.0,9648.425125
+2026,TX,Lynn,6,Excess Moisture/Precipitation/Rain,18.28125,7135.75,1.0,18.28125
+2026,TX,Lynn,6,Hail,2826.4323499999996,1397624.4,26.0,2826.4323299999996
+2026,TX,Lynn,6,Heat,629.940375,238397.69,9.0,629.940375
+2026,TX,Lynn,6,Hot Wind,2086.3682599999997,661219.16,17.0,2086.368206
+2026,TX,Lynn,6,Wind/Excess Wind,1845.73685,573786.65,16.0,1845.73675
+2026,TX,Lynn,7,Drought,3900.594465,1178523.15,19.0,3900.594425
+2026,TX,Lynn,7,Heat,252.148,79716.2,5.0,252.148
+2026,TX,Lynn,7,Hot Wind,111.345625,60043.78,4.0,111.345625
+2026,TX,Lynn,8,Drought,24215.66595,7051325.2,58.0,24215.665342999997
+2026,TX,Lynn,8,Heat,5518.1734400000005,1827251.5,31.0,5518.173400000001
+2026,TX,Lynn,8,Hot Wind,321.2264,110394.99,5.0,321.2264
+2026,TX,Lynn,10,Drought,26.2425,4004.0,1.0,26.2425
+2026,TX,Martin,6,Drought,2447.29,590187.0,12.0,2447.29
+2026,TX,Martin,6,Hot Wind,56.49,11377.5,1.0,56.49
+2026,TX,Martin,6,Wind/Excess Wind,56.49,11377.5,1.0,56.49
+2026,TX,Martin,7,Drought,2384.64345,529817.0,16.0,2384.64345
+2026,TX,Martin,7,Heat,1422.378125,338656.5,13.0,1422.378125
+2026,TX,Martin,7,Hot Wind,1024.865625,249233.0,11.0,1024.865625
+2026,TX,Martin,7,Wind/Excess Wind,397.5125,89423.5,2.0,397.5125
+2026,TX,Martin,8,Drought,2240.5,436306.0,11.0,2240.5
 2026,TX,Matagorda,3,Excess Moisture/Precipitation/Rain,27.93,6548.0,1.0,27.93
-2026,TX,Matagorda,5,Excess Moisture/Precipitation/Rain,335.37,126800.0,1.0,335.37
+2026,TX,Matagorda,5,Drought,3031.54,99784.0,1.0,3031.54
+2026,TX,Matagorda,5,Excess Moisture/Precipitation/Rain,335.37,143456.0,1.0,335.37
 2026,TX,Matagorda,6,Excess Moisture/Precipitation/Rain,291.0,131576.0,1.0,291.0
-2026,TX,Matagorda,9,Excess Moisture/Precipitation/Rain,399.03,110769.0,1.0,399.03
-2026,TX,Mcculloch,6,Excess Moisture/Precipitation/Rain,306.77,39266.0,1.0,306.77
-2026,TX,Midland,6,Drought,3502.9449999999997,501954.0,15.0,3502.9449999999997
-2026,TX,Midland,6,Heat,475.0375,85638.5,1.0,475.0375
-2026,TX,Midland,6,Hot Wind,475.0375,85638.5,1.0,475.0375
+2026,TX,Matagorda,9,Excess Moisture/Precipitation/Rain,399.03,125321.0,1.0,399.03
+2026,TX,Mcculloch,6,Excess Moisture/Precipitation/Rain,306.77,44429.0,1.0,306.77
+2026,TX,Midland,6,Drought,3502.9449999999997,567917.0,15.0,3502.9449999999997
+2026,TX,Midland,6,Heat,475.0375,96888.0,1.0,475.0375
+2026,TX,Midland,6,Hot Wind,475.0375,96888.0,1.0,475.0375
+2026,TX,Midland,7,Drought,1049.65,140259.7,2.0,1049.65
+2026,TX,Midland,7,Hot Wind,81.585,59127.6,1.0,81.585
+2026,TX,Midland,8,Heat,484.815,85451.7,2.0,484.815
 2026,TX,Milam,4,Excess Moisture/Precipitation/Rain,45.25,7198.0,1.0,45.25
 2026,TX,Milam,5,Excess Moisture/Precipitation/Rain,45.25,7198.0,1.0,45.25
-2026,TX,Milam,6,Flood,30.129,11674.74,1.0,30.129
-2026,TX,Milam,7,Drought,30.129,11674.74,1.0,30.129
-2026,TX,Milam,8,Drought,31.042,12028.52,1.0,31.042
-2026,TX,Mitchell,6,Drought,708.75005,66116.5,9.0,708.75
-2026,TX,Mitchell,6,Hot Wind,15.60625,2169.5,1.0,15.60625
-2026,TX,Mitchell,7,Drought,38.6,7792.0,1.0,38.6
-2026,TX,Moore,5,Drought,901.94,147247.0,2.0,901.94
-2026,TX,Moore,8,Drought,149.52,43303.0,1.0,149.52
-2026,TX,Motley,6,Drought,1581.1001,276758.0,14.0,1581.1
-2026,TX,Motley,6,Hot Wind,80.0,24510.0,1.0,80.0
-2026,TX,Motley,7,Drought,1003.5025,128716.0,5.0,1003.5025
-2026,TX,Motley,8,Drought,36.6675,4178.0,1.0,36.6675
-2026,TX,Motley,8,Heat,67.5,23333.0,1.0,67.5
-2026,TX,Motley,9,Heat,337.9475,71618.0,2.0,337.9475
+2026,TX,Milam,6,Flood,30.129,13208.58,1.0,30.129
+2026,TX,Milam,7,Drought,30.129,13208.58,1.0,30.129
+2026,TX,Milam,8,Drought,31.042,13608.84,1.0,31.042
+2026,TX,Mitchell,6,Drought,708.75005,74806.5,9.0,708.75
+2026,TX,Mitchell,6,Hot Wind,15.60625,2454.5,1.0,15.60625
+2026,TX,Mitchell,7,Drought,38.6,8815.0,1.0,38.6
+2026,TX,Mitchell,8,Drought,3117.5475,566685.0,6.0,3117.5475
+2026,TX,Mitchell,9,Drought,371.75,33402.0,1.0,371.75
+2026,TX,Moore,5,Drought,901.94,166590.0,2.0,901.94
+2026,TX,Moore,8,Drought,355.52,126532.0,3.0,355.52
+2026,TX,Motley,6,Drought,5383.6576000000005,1219984.5,23.0,5383.657499999999
+2026,TX,Motley,6,Hot Wind,218.735,100935.0,2.0,218.735
+2026,TX,Motley,7,Drought,1079.6625,170848.0,7.0,1079.6625
+2026,TX,Motley,8,Drought,221.7425,42472.5,2.0,221.7425
+2026,TX,Motley,8,Heat,67.5,26400.0,1.0,67.5
+2026,TX,Motley,9,Heat,369.7,91795.0,3.0,369.7
 2026,TX,Navarro,6,Excess Moisture/Precipitation/Rain,174.85,33039.0,2.0,174.85
-2026,TX,Nolan,6,Drought,178.37,22525.0,2.0,178.37
-2026,TX,Nolan,7,Drought,382.66,52972.0,2.0,382.66
-2026,TX,Nueces,3,Drought,9277.11264,4378046.1,15.0,9277.1125
+2026,TX,Navarro,9,Drought,264.28,28208.0,1.0,264.28
+2026,TX,Nolan,6,Drought,178.37,25483.0,2.0,178.37
+2026,TX,Nolan,7,Drought,382.66,59935.0,2.0,382.66
+2026,TX,Nolan,8,Drought,117.15,21186.0,1.0,117.15
+2026,TX,Nueces,3,Drought,10640.25764,5226448.2,20.0,10640.2575
 2026,TX,Nueces,3,Excess Moisture/Precipitation/Rain,273.9,168505.0,1.0,273.9
 2026,TX,Nueces,4,Cold Wet Weather,4825.98956,2384226.3,24.0,4825.9895
-2026,TX,Nueces,4,Drought,3582.33252,2108872.6,33.0,3582.9824200000003
-2026,TX,Nueces,5,Drought,3.115,1122.0,1.0,3.115
+2026,TX,Nueces,4,Drought,7055.906419999999,4070815.6,37.0,7056.55632
+2026,TX,Nueces,4,Excess Moisture/Precipitation/Rain,584.205,363600.9,5.0,584.205
+2026,TX,Nueces,5,Drought,543.915,51007.0,2.0,543.915
 2026,TX,Nueces,5,Excess Moisture/Precipitation/Rain,132.675,65470.0,3.0,132.675
-2026,TX,Nueces,6,Drought,9934.2489,799322.0,13.0,9934.2489
-2026,TX,Nueces,6,Excess Moisture/Precipitation/Rain,5523.22604,3337384.0,24.0,5527.7759399999995
+2026,TX,Nueces,6,Drought,10282.1989,849700.0,16.0,10282.1989
+2026,TX,Nueces,6,Excess Moisture/Precipitation/Rain,6411.386039999999,3388799.0,27.0,6415.93594
 2026,TX,Nueces,7,Drought,19.565,445.0,1.0,19.565
+2026,TX,Nueces,7,Excess Moisture/Precipitation/Rain,818.3925,254827.0,1.0,818.3925
 2026,TX,Nueces,8,Drought,1330.19884,906372.0,15.0,1331.49884
 2026,TX,Nueces,9,Excess Moisture/Precipitation/Rain,37.39,1468.0,1.0,37.39
-2026,TX,Ochiltree,6,Drought,4595.035,875727.5,12.0,4595.035
-2026,TX,Ochiltree,6,Hot Wind,546.15,106016.5,1.0,546.15
-2026,TX,Ochiltree,7,Drought,370.9,79779.0,1.0,370.9
-2026,TX,Oldham,6,Drought,6361.2519,1388149.0,11.0,6361.251867999999
-2026,TX,Parmer,3,Drought,124.552,17825.0,1.0,124.552
-2026,TX,Parmer,5,Drought,42.5,4390.0,3.0,42.5
-2026,TX,Parmer,5,Hail,72.5,39940.0,1.0,72.5
-2026,TX,Parmer,6,Drought,5354.2647,949718.0,19.0,5354.264594
-2026,TX,Parmer,6,Excess Moisture/Precipitation/Rain,563.36,174852.8,3.0,563.36
-2026,TX,Parmer,6,Hail,1117.51,276066.5,3.0,1117.51
-2026,TX,Parmer,6,Hot Wind,50.0,20611.5,1.0,50.0
-2026,TX,Parmer,6,Wind/Excess Wind,501.7825,135839.0,3.0,501.7825
-2026,TX,Parmer,7,Hail,120.0,60976.0,1.0,120.0
-2026,TX,Parmer,7,Heat,141.9075,66372.0,1.0,141.9075
-2026,TX,Parmer,8,Heat,129.34,30181.5,3.0,129.34
-2026,TX,Parmer,8,Hot Wind,27.84,12398.7,1.0,27.84
-2026,TX,Parmer,9,Hail,240.0,133216.0,1.0,240.0
-2026,TX,Potter,6,Drought,210.4026,49702.0,2.0,210.402556
-2026,TX,Potter,8,Drought,20.0,1574.0,1.0,20.0
-2026,TX,Randall,5,Drought,155.87,16841.0,1.0,155.87
-2026,TX,Randall,6,Drought,1550.2261,262704.0,3.0,1550.22604
-2026,TX,Randall,6,Hot Wind,440.9,139583.0,1.0,440.9
-2026,TX,Randall,6,Wind/Excess Wind,457.32,154323.0,1.0,457.32
-2026,TX,Randall,8,Drought,12.0,502.0,1.0,12.0
-2026,TX,Reagan,7,Drought,1256.16,125664.0,1.0,1256.16
-2026,TX,Reagan,8,Drought,910.08,77078.0,2.0,910.08
-2026,TX,Reagan,9,Drought,498.735,96812.0,1.0,498.735
+2026,TX,Ochiltree,6,Drought,4595.035,1003228.0,12.0,4595.035
+2026,TX,Ochiltree,6,Heat,174.6,18908.0,1.0,174.6
+2026,TX,Ochiltree,6,Hot Wind,546.15,119943.0,1.0,546.15
+2026,TX,Ochiltree,7,Drought,370.9,90264.0,1.0,370.9
+2026,TX,Oldham,6,Drought,6361.2519,1566291.0,11.0,6361.251867999999
+2026,TX,Parmer,3,Drought,124.552,20166.0,1.0,124.552
+2026,TX,Parmer,5,Drought,42.5,4966.0,3.0,42.5
+2026,TX,Parmer,5,Hail,72.5,45187.5,1.0,72.5
+2026,TX,Parmer,6,Drought,5776.304700000001,1206304.0,20.0,5776.304594
+2026,TX,Parmer,6,Excess Moisture/Precipitation/Rain,1013.9,317494.8,4.0,1013.9
+2026,TX,Parmer,6,Hail,1117.51,312342.0,3.0,1117.51
+2026,TX,Parmer,6,Hot Wind,50.0,23320.0,1.0,50.0
+2026,TX,Parmer,6,Wind/Excess Wind,501.7825,153690.0,3.0,501.7825
+2026,TX,Parmer,7,Hail,120.0,68988.0,1.0,120.0
+2026,TX,Parmer,7,Heat,141.9075,75091.0,1.0,141.9075
+2026,TX,Parmer,8,Heat,129.34,34147.0,3.0,129.34
+2026,TX,Parmer,8,Hot Wind,27.84,14027.7,1.0,27.84
+2026,TX,Parmer,9,Hail,240.0,150719.0,1.0,240.0
+2026,TX,Potter,6,Drought,210.4026,56232.0,2.0,210.402556
+2026,TX,Potter,8,Drought,20.0,1781.0,1.0,20.0
+2026,TX,Randall,5,Drought,155.87,19053.0,1.0,155.87
+2026,TX,Randall,6,Drought,1550.2261,297213.0,3.0,1550.22604
+2026,TX,Randall,6,Hot Wind,440.9,157922.0,1.0,440.9
+2026,TX,Randall,6,Wind/Excess Wind,457.32,174597.0,1.0,457.32
+2026,TX,Randall,8,Drought,12.0,568.0,1.0,12.0
+2026,TX,Reagan,7,Drought,1256.16,142186.0,1.0,1256.16
+2026,TX,Reagan,8,Drought,910.08,87209.0,2.0,910.08
+2026,TX,Reagan,9,Drought,776.395,143207.0,2.0,776.395
 2026,TX,Red River,5,Excess Moisture/Precipitation/Rain,166.58,23709.0,1.0,166.58
 2026,TX,Reeves,6,Hail,483.5,131026.0,1.0,483.5
 2026,TX,Refugio,3,Drought,1410.55849,1073113.9,5.0,1410.558505
 2026,TX,Refugio,4,Drought,2018.08565,357083.5,9.0,2018.085627
 2026,TX,Refugio,4,Excess Moisture/Precipitation/Rain,350.88345999999996,250178.8,3.0,350.883468
 2026,TX,Refugio,5,Drought,33.7875,10392.0,2.0,33.7875
-2026,TX,Refugio,5,Excess Moisture/Precipitation/Rain,373.52115000000003,33960.8,3.0,373.52115000000003
-2026,TX,Refugio,5,Hail,116.35625,5511.0,2.0,116.35625
-2026,TX,Refugio,6,Drought,139.4164,33476.0,8.0,139.4164
-2026,TX,Refugio,6,Excess Moisture/Precipitation/Rain,3105.8944020000004,483950.21,28.0,3105.8945150000004
+2026,TX,Refugio,5,Excess Moisture/Precipitation/Rain,1872.77115,902287.55,5.0,1872.77115
+2026,TX,Refugio,5,Hail,616.10625,294953.25,4.0,616.10625
+2026,TX,Refugio,6,Drought,992.1664,163905.0,10.0,992.1664
+2026,TX,Refugio,6,Excess Moisture/Precipitation/Rain,3432.2370020000003,528430.21,30.0,3432.2371200000002
+2026,TX,Refugio,7,Drought,10.5,387.0,1.0,10.5
 2026,TX,Refugio,8,Drought,631.458198,263654.79,3.0,631.4581
 2026,TX,Refugio,8,Excess Moisture/Precipitation/Rain,1655.6,1200257.0,2.0,1655.6
 2026,TX,Refugio,9,Drought,553.835,133028.0,1.0,553.835
-2026,TX,Roberts,6,Drought,418.224475,104433.75,6.0,418.224495
-2026,TX,Roberts,6,Hot Wind,1254.673425,313301.25,6.0,1254.673485
-2026,TX,Roberts,8,Drought,156.9,27324.0,2.0,156.9
-2026,TX,Runnels,7,Drought,1519.9888,356457.0,3.0,1519.98875
-2026,TX,Runnels,7,Hail,18.57,4726.4,1.0,18.57
-2026,TX,Runnels,7,Wind/Excess Wind,111.6326,26031.6,3.0,111.6325
-2026,TX,Runnels,8,Drought,558.2925,122929.0,3.0,558.2925
+2026,TX,Roberts,6,Drought,418.224475,118154.25,6.0,418.224495
+2026,TX,Roberts,6,Hot Wind,1254.673425,354462.75,6.0,1254.673485
+2026,TX,Roberts,8,Drought,156.9,30914.0,2.0,156.9
+2026,TX,Runnels,7,Drought,1823.2311,473913.0,4.0,1823.231
+2026,TX,Runnels,7,Hail,18.57,5347.4,1.0,18.57
+2026,TX,Runnels,7,Wind/Excess Wind,111.6326,29453.6,3.0,111.6325
+2026,TX,Runnels,8,Drought,724.4685,172394.8,5.0,724.4685
+2026,TX,Runnels,8,Heat,110.784,22209.2,2.0,110.784
 2026,TX,San Patricio,3,Drought,806.5525,514002.0,2.0,806.5525
-2026,TX,San Patricio,4,Drought,2861.5274,756626.25,26.0,2861.5274
-2026,TX,San Patricio,5,Drought,948.5045,249533.75,10.0,948.5045
+2026,TX,San Patricio,4,Drought,3381.2924000000003,868109.25,27.0,3381.2924000000003
+2026,TX,San Patricio,5,Drought,970.0295,256530.75,11.0,970.0295
 2026,TX,San Patricio,5,Excess Moisture/Precipitation/Rain,938.7515,281419.0,8.0,938.7515
-2026,TX,San Patricio,6,Drought,2012.942,352799.0,12.0,2012.942
-2026,TX,San Patricio,6,Excess Moisture/Precipitation/Rain,2370.0445,528545.0,15.0,2370.044308
+2026,TX,San Patricio,6,Drought,2256.567,389436.5,15.0,2256.567
+2026,TX,San Patricio,6,Excess Moisture/Precipitation/Rain,2689.776,626345.5,28.0,2689.775558
 2026,TX,San Patricio,7,Excess Moisture/Precipitation/Rain,161.5951,27960.0,14.0,161.595
-2026,TX,San Patricio,8,Excess Moisture/Precipitation/Rain,295.905,56483.0,2.0,295.905
+2026,TX,San Patricio,8,Excess Moisture/Precipitation/Rain,624.23,171472.0,3.0,624.23
 2026,TX,San Patricio,9,Excess Moisture/Precipitation/Rain,22.422,1692.0,5.0,22.422
-2026,TX,Scurry,6,Drought,2660.0905000000002,325042.0,19.0,2660.0905000000002
-2026,TX,Scurry,7,Drought,50.886,3578.0,1.0,50.886
-2026,TX,Scurry,8,Drought,375.9,43548.0,2.0,375.8
-2026,TX,Sherman,6,Drought,109.2835,11647.0,2.0,109.2835
+2026,TX,Scurry,6,Drought,2660.0905000000002,367751.0,19.0,2660.0905000000002
+2026,TX,Scurry,7,Drought,1115.1215,239126.0,3.0,1115.1215
+2026,TX,Scurry,8,Drought,375.9,49268.0,2.0,375.8
+2026,TX,Sherman,6,Drought,109.2835,13176.0,2.0,109.2835
 2026,TX,Sherman,6,Excess Moisture/Precipitation/Rain,975.2,139181.0,1.0,975.2
-2026,TX,Sherman,6,Hail,36.4,4995.9,1.0,36.4
-2026,TX,Sherman,7,Drought,63.0013,8740.0,3.0,63.0013
-2026,TX,Sherman,7,Heat,15.6,2141.1,1.0,15.6
-2026,TX,Sherman,10,Drought,1589.6,190759.0,1.0,1589.6
+2026,TX,Sherman,6,Hail,36.4,5652.5,1.0,36.4
+2026,TX,Sherman,7,Drought,232.4013,85941.0,4.0,232.4013
+2026,TX,Sherman,7,Heat,15.6,2422.5,1.0,15.6
+2026,TX,Sherman,10,Drought,1589.6,215833.0,1.0,1589.6
 2026,TX,Starr,4,Drought,592.05,82945.0,2.0,592.05
 2026,TX,Starr,4,Excess Moisture/Precipitation/Rain,133.81,18503.0,1.0,133.81
 2026,TX,Starr,4,Failure of Irrigation Supply,419.88,93296.0,1.0,419.88
-2026,TX,Stonewall,5,Drought,72.2625,27322.0,2.0,72.2625
-2026,TX,Stonewall,6,Drought,5238.4339,1073827.0,31.0,5238.433817
-2026,TX,Stonewall,7,Drought,63.2925,17807.0,1.0,63.2925
-2026,TX,Swisher,5,Cold Wet Weather,2636.5913,822885.0,9.0,2636.59125
-2026,TX,Swisher,5,Drought,2539.7225,654149.0,8.0,2539.7225
-2026,TX,Swisher,5,Excess Moisture/Precipitation/Rain,28.815,9532.0,1.0,28.815
-2026,TX,Swisher,5,Hot Wind,611.93375,322814.5,3.0,611.93375
-2026,TX,Swisher,5,Wind/Excess Wind,1860.70125,1058228.5,3.0,1860.70125
-2026,TX,Swisher,6,Drought,9209.0775,1823216.0,19.0,9209.0775
-2026,TX,Swisher,6,Hail,584.904,231139.6,3.0,584.904
-2026,TX,Swisher,6,Heat,566.78625,258942.5,3.0,566.78625
-2026,TX,Swisher,6,Hot Wind,735.9875,403200.5,7.0,735.9875
-2026,TX,Swisher,6,Wind/Excess Wind,342.49225,154524.4,3.0,342.49225
-2026,TX,Swisher,7,Drought,3259.43285,961440.35,19.0,3259.432375
-2026,TX,Swisher,7,Heat,548.23825,194867.45,9.0,548.238125
-2026,TX,Swisher,7,Wind/Excess Wind,40.0,22536.0,1.0,40.0
-2026,TX,Swisher,8,Heat,252.65225,110043.3,3.0,252.65225
-2026,TX,Swisher,9,Hail,1462.08505,522283.9,6.0,1462.08475
-2026,TX,Swisher,9,Hot Wind,366.855,214677.0,1.0,366.855
-2026,TX,Taylor,6,Drought,416.39,50358.0,3.0,416.39
-2026,TX,Taylor,9,Drought,391.5,37773.0,1.0,391.5
-2026,TX,Terry,4,Drought,35.9,4978.0,2.0,35.9
-2026,TX,Terry,5,Drought,1064.925075,218592.1,9.0,1064.925
-2026,TX,Terry,5,Hot Wind,17.325,5209.65,1.0,17.325
-2026,TX,Terry,6,Drought,3613.5265,620328.0,21.0,3613.5262500000003
-2026,TX,Terry,6,Excess Moisture/Precipitation/Rain,565.43,110942.0,3.0,565.43
-2026,TX,Terry,6,Hail,5309.4913,1800231.6,37.0,5260.9913
-2026,TX,Terry,6,Heat,983.5225,260626.5,10.0,983.0225
-2026,TX,Terry,6,Hot Wind,4302.542975,1378382.55,24.0,4302.54285
-2026,TX,Terry,6,Wind/Excess Wind,1249.42,503308.7,12.0,1248.42
-2026,TX,Terry,7,Drought,320.92,37884.0,1.0,320.92
-2026,TX,Terry,7,Heat,1309.76875,464355.0,3.0,1309.76875
-2026,TX,Terry,7,Hot Wind,450.53,203993.9,5.0,450.53
-2026,TX,Terry,8,All Other Causes,725.1075,165539.0,4.0,725.1075
-2026,TX,Terry,8,Drought,2314.8395,515392.2,13.0,2314.8395
-2026,TX,Terry,8,Heat,573.803,120057.8,5.0,573.803
-2026,TX,Terry,8,Hot Wind,1551.925,186716.0,1.0,1551.825
-2026,TX,Terry,9,Drought,200.175,33155.25,1.0,200.175
-2026,TX,Terry,9,Heat,400.35,66310.5,1.0,400.35
-2026,TX,Terry,9,Hot Wind,200.175,33155.25,1.0,200.175
-2026,TX,Tom Green,6,Drought,25.4,5404.0,1.0,25.4
-2026,TX,Tom Green,6,Hot Wind,144.685,57523.5,1.0,144.685
+2026,TX,Stonewall,5,Drought,72.2625,30911.0,2.0,72.2625
+2026,TX,Stonewall,6,Drought,4171.4339,1000506.0,29.0,4171.433817
+2026,TX,Stonewall,7,Drought,63.2925,20146.0,1.0,63.2925
+2026,TX,Swisher,5,Cold Wet Weather,2952.40655,988908.2,10.0,2952.4065
+2026,TX,Swisher,5,Drought,2539.7225,740100.0,8.0,2539.7225
+2026,TX,Swisher,5,Excess Moisture/Precipitation/Rain,28.815,10784.0,1.0,28.815
+2026,TX,Swisher,5,Hot Wind,611.93375,365230.0,3.0,611.93375
+2026,TX,Swisher,5,Wind/Excess Wind,1860.70125,1197269.0,3.0,1860.70125
+2026,TX,Swisher,6,Drought,9133.3275,2045957.0,18.0,9133.3275
+2026,TX,Swisher,6,Hail,584.904,261507.55,3.0,584.904
+2026,TX,Swisher,6,Heat,566.78625,292968.0,3.0,566.78625
+2026,TX,Swisher,6,Hot Wind,690.9875,419510.25,6.0,690.9875
+2026,TX,Swisher,6,Wind/Excess Wind,342.49225,174827.2,3.0,342.49225
+2026,TX,Swisher,7,Drought,3912.88545,1220619.45,25.0,3912.884875
+2026,TX,Swisher,7,Heat,548.23825,220468.75,9.0,548.238125
+2026,TX,Swisher,7,Wind/Excess Wind,40.0,25497.0,1.0,40.0
+2026,TX,Swisher,8,Heat,326.4095,168131.7,4.0,326.4095
+2026,TX,Swisher,9,Hail,1462.08505,590893.9,6.0,1462.08475
+2026,TX,Swisher,9,Hot Wind,366.855,242884.0,1.0,366.855
+2026,TX,Taylor,6,Drought,416.39,56975.0,3.0,416.39
+2026,TX,Taylor,7,Drought,943.125,168754.0,2.0,943.125
+2026,TX,Taylor,9,Drought,391.5,42738.0,1.0,391.5
+2026,TX,Terry,4,Drought,35.9,5633.0,2.0,35.9
+2026,TX,Terry,5,Drought,1064.925075,246906.6,9.0,1064.925
+2026,TX,Terry,5,Hot Wind,17.325,5893.65,1.0,17.325
+2026,TX,Terry,6,Drought,3613.5265,701817.5,21.0,3613.5262500000003
+2026,TX,Terry,6,Excess Moisture/Precipitation/Rain,565.43,125524.0,3.0,565.43
+2026,TX,Terry,6,Hail,5309.4913,2001528.45,37.0,5260.9913
+2026,TX,Terry,6,Heat,1667.3775,445447.8,13.0,1666.8775
+2026,TX,Terry,6,Hot Wind,4302.542975,1558611.6,24.0,4302.54285
+2026,TX,Terry,6,Wind/Excess Wind,1185.98,543184.9,11.0,1184.98
+2026,TX,Terry,7,Drought,490.12,65777.0,2.0,490.12
+2026,TX,Terry,7,Heat,1543.80715,571828.0,7.0,1543.807183
+2026,TX,Terry,7,Hot Wind,535.13,242253.0,6.0,535.13
+2026,TX,Terry,8,All Other Causes,725.1075,186885.75,4.0,725.1075
+2026,TX,Terry,8,Drought,1501.562,400710.35,11.0,1501.562
+2026,TX,Terry,8,Heat,356.003,165902.4,5.0,356.003
+2026,TX,Terry,8,Hot Wind,1551.925,211256.0,1.0,1551.825
+2026,TX,Terry,9,Drought,283.125,49844.75,2.0,283.125
+2026,TX,Terry,9,Heat,400.35,75023.5,1.0,400.35
+2026,TX,Terry,9,Hot Wind,200.175,37511.75,1.0,200.175
+2026,TX,Tom Green,5,Drought,47.8175,8234.0,1.0,47.8175
+2026,TX,Tom Green,6,Drought,25.4,6113.0,1.0,25.4
+2026,TX,Tom Green,6,Hot Wind,144.685,65083.5,1.0,144.685
+2026,TX,Tom Green,7,Drought,485.725,169000.0,1.0,485.725
 2026,TX,Tom Green,7,Flood,53.5425,6675.0,1.0,53.5425
-2026,TX,Tom Green,8,Drought,2186.595,970505.5,6.0,2186.595
-2026,TX,Tom Green,8,Heat,79.97,21434.0,1.0,79.97
-2026,TX,Upton,7,Drought,308.68,21201.0,1.0,308.68
-2026,TX,Upton,8,Drought,1546.37,86740.0,1.0,1546.37
+2026,TX,Tom Green,8,Drought,2602.29,1216985.5,6.0,2602.29
+2026,TX,Tom Green,8,Heat,621.485,199799.0,2.0,621.485
+2026,TX,Tom Green,8,Hot Wind,119.05,110185.0,1.0,119.05
+2026,TX,Upton,7,Drought,308.68,23985.0,1.0,308.68
+2026,TX,Upton,8,Drought,1546.37,98141.0,1.0,1546.37
 2026,TX,Uvalde,4,Failure of Irrigation Supply,234.05,90600.0,1.0,234.05
 2026,TX,Victoria,5,Excess Moisture/Precipitation/Rain,177.56,129524.0,1.0,177.56
 2026,TX,Victoria,5,Hail,64.74545,23428.479999999996,3.0,64.74545
@@ -52560,27 +52618,33 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2026,TX,Victoria,6,Excess Moisture/Precipitation/Rain,227.9707,114022.23,4.0,227.9707
 2026,TX,Victoria,8,Drought,205.0993,107100.77,3.0,205.0993
 2026,TX,Waller,5,Excess Moisture/Precipitation/Rain,258.02,64825.0,1.0,258.02
-2026,TX,Wharton,3,Drought,41.175,13439.25,1.0,41.175
-2026,TX,Wharton,4,Excess Moisture/Precipitation/Rain,209.665,67918.75,3.0,209.665
-2026,TX,Wharton,5,Excess Moisture/Precipitation/Rain,1934.715,854808.0,8.0,1934.715
-2026,TX,Wharton,6,Excess Moisture/Precipitation/Rain,29.75,5748.0,1.0,29.75
-2026,TX,Wheeler,6,Drought,256.4,61900.0,1.0,256.4
-2026,TX,Wheeler,6,Hail,1183.1,508529.0,5.0,1183.1
-2026,TX,Wheeler,7,Drought,782.8,209530.0,2.0,782.8
-2026,TX,Wheeler,7,Hot Wind,782.8,209530.0,2.0,782.8
-2026,TX,Wichita,8,Drought,289.3,59365.0,2.0,289.3
-2026,TX,Wichita,9,Drought,2023.075,531981.0,8.0,2023.075
-2026,TX,Wilbarger,6,Drought,552.9525,96231.0,7.0,616.4625
-2026,TX,Wilbarger,6,Excess Moisture/Precipitation/Rain,288.68,36299.0,3.0,288.68
-2026,TX,Wilbarger,6,Heat,48.32,26987.0,1.0,48.32
-2026,TX,Wilbarger,7,Drought,3184.5626,857130.6,20.0,3341.0325
-2026,TX,Wilbarger,7,Hot Wind,214.48,57056.4,3.0,214.48
-2026,TX,Wilbarger,9,Drought,532.8525,104358.0,4.0,532.8525
-2026,TX,Wilbarger,9,Heat,47.79,7947.0,1.0,47.79
-2026,TX,Willacy,3,Drought,826.913,332416.19999999995,9.0,826.913
+2026,TX,Wharton,3,Drought,41.175,15582.0,1.0,41.175
+2026,TX,Wharton,4,Excess Moisture/Precipitation/Rain,220.915,68695.0,4.0,220.915
+2026,TX,Wharton,5,Excess Moisture/Precipitation/Rain,1934.715,957602.0,8.0,1934.715
+2026,TX,Wharton,6,Excess Moisture/Precipitation/Rain,297.75,92361.0,2.0,297.75
+2026,TX,Wheeler,6,Drought,256.4,70035.0,1.0,256.4
+2026,TX,Wheeler,6,Hail,1183.1,576529.0,5.0,1183.1
+2026,TX,Wheeler,7,Drought,782.8,237057.5,2.0,782.8
+2026,TX,Wheeler,7,Hot Wind,782.8,237057.5,2.0,782.8
+2026,TX,Wheeler,8,Drought,40.1,13377.0,1.0,40.1
+2026,TX,Wichita,6,Drought,69.17,14293.0,1.0,69.17
+2026,TX,Wichita,8,Drought,1167.13,292483.0,8.0,1167.13
+2026,TX,Wichita,9,Drought,2725.6425,844361.0,13.0,2725.6425
+2026,TX,Wichita,10,Drought,126.09,53860.0,1.0,126.09
+2026,TX,Wilbarger,6,Drought,566.4125,111505.0,8.0,629.9225
+2026,TX,Wilbarger,6,Excess Moisture/Precipitation/Rain,288.68,40764.0,3.0,288.68
+2026,TX,Wilbarger,6,Heat,48.32,30532.0,1.0,48.32
+2026,TX,Wilbarger,7,Drought,3216.2926,973709.8,21.0,3372.7625
+2026,TX,Wilbarger,7,Hot Wind,214.48,65911.2,3.0,214.48
+2026,TX,Wilbarger,8,Drought,1016.9843,318373.0,10.0,1016.9843
+2026,TX,Wilbarger,8,Heat,500.4,125862.0,2.0,500.4
+2026,TX,Wilbarger,8,Hot Wind,768.3179,265078.0,7.0,768.3179
+2026,TX,Wilbarger,9,Drought,1670.805,399760.0,7.0,1670.805
+2026,TX,Wilbarger,9,Heat,47.79,9214.0,1.0,47.79
+2026,TX,Willacy,3,Drought,1291.03,574881.2,11.0,1291.03
 2026,TX,Willacy,3,Failure of Irrigation Supply,136.15,27753.0,1.0,136.15
 2026,TX,Willacy,3,Heat,24.0,8917.6,1.0,24.0
-2026,TX,Willacy,4,Drought,6911.998,3130016.0,32.0,6911.823
+2026,TX,Willacy,4,Drought,7925.31,3420305.0,36.0,7925.135
 2026,TX,Willacy,4,Excess Moisture/Precipitation/Rain,29.1,25651.2,1.0,29.1
 2026,TX,Willacy,4,Failure of Irrigation Supply,257.49,68407.0,4.0,257.49
 2026,TX,Willacy,5,Drought,2397.65,218499.0,3.0,2397.65
@@ -52589,17 +52653,17 @@ year,state,county,month,cause,determined_acres,indemnity,policies_indemnified,pl
 2026,TX,Willacy,7,Excess Moisture/Precipitation/Rain,148.9875,47763.0,1.0,148.9875
 2026,TX,Wilson,3,Drought,234.21,14078.0,1.0,234.21
 2026,TX,Wilson,5,Cold Wet Weather,141.86,48214.0,1.0,141.86
-2026,TX,Yoakum,5,Drought,2005.22925,263722.1,15.0,2005.22925
-2026,TX,Yoakum,5,Hot Wind,258.552,50293.35,3.0,258.552
-2026,TX,Yoakum,6,Drought,13746.1801,1907004.15,49.0,13743.705
-2026,TX,Yoakum,6,Heat,340.7,89456.0,5.0,340.7
-2026,TX,Yoakum,6,Hot Wind,2623.701,534332.7,18.0,2623.701
-2026,TX,Yoakum,6,Wind/Excess Wind,1181.21125,273486.5,10.0,1180.38625
-2026,TX,Yoakum,7,Drought,1410.4701,166228.0,4.0,1410.47
-2026,TX,Yoakum,7,Heat,30.0,16758.5,1.0,30.0
-2026,TX,Yoakum,7,Hot Wind,30.0,16758.5,1.0,30.0
-2026,TX,Yoakum,8,Drought,1687.834,252910.2,8.0,1687.834
-2026,TX,Yoakum,8,Heat,109.7,30958.0,2.0,109.7
-2026,TX,Yoakum,8,Hot Wind,20.0,7299.0,1.0,20.0
+2026,TX,Yoakum,5,Drought,2005.22925,298376.85,15.0,2005.22925
+2026,TX,Yoakum,5,Hot Wind,258.552,56901.6,3.0,258.552
+2026,TX,Yoakum,6,Drought,14660.9941,2332836.55,50.0,14658.519
+2026,TX,Yoakum,6,Heat,587.02,175180.9,6.0,587.02
+2026,TX,Yoakum,6,Hot Wind,2623.701,594657.5,18.0,2623.701
+2026,TX,Yoakum,6,Wind/Excess Wind,1181.21125,309419.0,10.0,1180.38625
+2026,TX,Yoakum,7,Drought,1410.4701,184755.0,4.0,1410.47
+2026,TX,Yoakum,7,Heat,30.0,17913.5,1.0,30.0
+2026,TX,Yoakum,7,Hot Wind,30.0,17913.5,1.0,30.0
+2026,TX,Yoakum,8,Drought,2553.45,455370.6,12.0,2553.45
+2026,TX,Yoakum,8,Heat,109.7,35026.0,2.0,109.7
+2026,TX,Yoakum,8,Hot Wind,20.0,8258.0,1.0,20.0
 2026,TX,Zapata,4,Drought,1429.18,160302.0,3.0,1429.18
 2026,TX,Zavala,7,Flood,195.41,95008.0,1.0,195.41
