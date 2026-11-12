@@ -1,10 +1,10 @@
 {
- "generated": "2026-11-11 23:46 UTC",
- "price_date": "2026-11-10",
+ "generated": "2026-11-12 03:02 UTC",
+ "price_date": "2026-11-11",
  "wasde": {
   "my": "2026/27",
   "end_stocks": 3.7,
-  "updated": "2026-11-11"
+  "updated": "2026-11-12"
  },
  "rate": {
   "now": 4.03,
@@ -390,10 +390,10 @@
      "yr": 2026,
      "my": "2026/27",
      "x": 3.75,
-     "y": -3.446,
+     "y": -3.459,
      "rate": 4.05,
-     "fin": -0.839,
-     "n": 29,
+     "fin": -0.838,
+     "n": 30,
      "complete": false,
      "contracts": "Dec26/Mar27"
     }
@@ -402,10 +402,10 @@
     "yr": 2026,
     "my": "2026/27",
     "x": 3.75,
-    "y": -3.446,
+    "y": -3.459,
     "rate": 4.05,
-    "fin": -0.839,
-    "n": 29,
+    "fin": -0.838,
+    "n": 30,
     "complete": false,
     "contracts": "Dec26/Mar27"
    },
@@ -415,14 +415,14 @@
    ],
    "median": -0.393,
    "share_carry": 0.5625,
-   "market": -3.82,
+   "market": -3.84,
    "market_contracts": "Dec26/Mar27",
-   "full_carry": -2.71,
-   "back_price": 82.51,
-   "fin_now": -0.831,
+   "full_carry": -2.7,
+   "back_price": 82.16,
+   "fin_now": -0.827,
    "fv_wasde_stocks_only": 0.16,
-   "fv_wasde_raw": -1.52,
-   "fv_wasde": -1.52
+   "fv_wasde_raw": -1.51,
+   "fv_wasde": -1.51
   },
   "marmay": {
    "label": "Mar \u2212 May",
@@ -661,11 +661,11 @@
    ],
    "median": -0.6615,
    "share_carry": 0.875,
-   "market": -1.58,
+   "market": -1.68,
    "market_contracts": "Mar27/May27",
    "full_carry": -1.81,
-   "back_price": 84.09,
-   "fin_now": -0.564,
+   "back_price": 83.84,
+   "fin_now": -0.563,
    "fv_wasde_stocks_only": -0.14,
    "fv_wasde_raw": -0.79,
    "fv_wasde": -0.79
@@ -920,11 +920,11 @@
    ],
    "median": -0.349,
    "share_carry": 0.7647058823529411,
-   "market": -0.45,
+   "market": -0.43,
    "market_contracts": "May27/Jul27",
    "full_carry": -1.82,
-   "back_price": 84.54,
-   "fin_now": -0.567,
+   "back_price": 84.27,
+   "fin_now": -0.566,
    "fv_wasde_stocks_only": 0.05,
    "fv_wasde_raw": -0.74,
    "fv_wasde": -0.74
@@ -935,31 +935,31 @@
    "carry_months": 5,
    "fit": {
     "form": "inv",
-    "a": -13.744074394828377,
-    "b": 61.98911117299026,
-    "r2": 0.47417304839753904,
-    "sigma": 5.563539320477469
+    "a": -14.028172122434368,
+    "b": 62.70761788697816,
+    "r2": 0.47754468302393516,
+    "sigma": 5.590113643783704
    },
    "fit_funding": {
-    "a": -8.06216499205064,
-    "b": 40.32971134707033,
-    "c": 1.690610269395549,
-    "r2_weighted": 0.4523860580130684,
-    "sigma": 2.364866915538236,
+    "a": -8.35308165012796,
+    "b": 41.31908409622898,
+    "c": 1.890589820042031,
+    "r2_weighted": 0.47385865847866204,
+    "sigma": 2.266341346820838,
     "weights": [
      1.0,
-     0.24,
+     0.23,
      1.0,
      1.0,
      1.0,
      1.0,
      1.0,
      1.0,
+     0.9,
      1.0,
      1.0,
-     1.0,
-     0.77,
-     0.19,
+     0.74,
+     0.18,
      1.0,
      1.0,
      1.0,
@@ -989,7 +989,7 @@
      "n": 33,
      "complete": true,
      "contracts": "Jul11/Dec11",
-     "weight": 0.24
+     "weight": 0.23
     },
     {
      "yr": 2012,
@@ -1073,7 +1073,7 @@
      "n": 34,
      "complete": true,
      "contracts": "Jul18/Dec18",
-     "weight": 1.0
+     "weight": 0.9
     },
     {
      "yr": 2019,
@@ -1109,7 +1109,7 @@
      "n": 32,
      "complete": true,
      "contracts": "Jul21/Dec21",
-     "weight": 0.77
+     "weight": 0.74
     },
     {
      "yr": 2022,
@@ -1121,7 +1121,7 @@
      "n": 33,
      "complete": true,
      "contracts": "Jul22/Dec22",
-     "weight": 0.19
+     "weight": 0.18
     },
     {
      "yr": 2023,
@@ -1163,10 +1163,10 @@
      "yr": 2026,
      "my": "2025/26",
      "x": 4.4,
-     "y": -0.705,
+     "y": -2.045,
      "rate": 3.61,
-     "fin": -1.263,
-     "n": 15,
+     "fin": -1.221,
+     "n": 31,
      "complete": true,
      "contracts": "Jul26/Dec26",
      "weight": 1.0
@@ -1179,14 +1179,14 @@
    ],
    "median": 1.334,
    "share_carry": 0.29411764705882354,
-   "market": 6.95,
+   "market": 6.91,
    "market_contracts": "Jul27/Dec27",
-   "full_carry": -4.43,
-   "back_price": 77.59,
-   "fin_now": -1.302,
-   "fv_wasde_stocks_only": 3.01,
-   "fv_wasde_raw": 0.64,
-   "fv_wasde": 0.64
+   "full_carry": -4.42,
+   "back_price": 77.36,
+   "fin_now": -1.298,
+   "fv_wasde_stocks_only": 2.92,
+   "fv_wasde_raw": 0.36,
+   "fv_wasde": 0.36
   }
  }
 }
