@@ -1,10 +1,10 @@
 {
- "asof": "2026-11-12",
+ "asof": "2026-11-13",
  "inputs_through": {
   "ginnings": "2026-11-01",
   "crop_progress": "2026-11-08",
   "drought": "2026-11-10",
-  "classing_by_office": "2026-11-06"
+  "classing_by_office": "2026-11-13"
  },
  "unit": "million 480-lb bales",
  "us_upland": {
@@ -253,7 +253,7 @@
   "tx": 4.1,
   "tx_abandonment": 0.339
  },
- "texas_regions": "Classing by office to Nov 06: South Texas (Corpus Christi) 1,092k bales classed; West Texas (Lubbock 156k, Lamesa 57k, Abilene 70k) 282k. West Texas classing is now well under way.",
+ "texas_regions": "Classing by office to Nov 13: South Texas (Corpus Christi) 1,161k bales classed; West Texas (Lubbock 224k, Lamesa 85k, Abilene 91k) 400k. West Texas classing is now well under way.",
  "conditional": {
   "tx_abandonment": {
    "central": 0.456,
