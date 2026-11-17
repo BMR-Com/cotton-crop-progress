@@ -49,3 +49,14 @@ API keys are read from repository secrets (`USDA_API_KEY`, `AMS_API_KEY`) and ne
 - The page data is rebuilt after each data update and every weekday after the ICE close (prices and technicals)
 
 Research output only; not investment advice.
+
+
+---
+
+## Copyright
+
+© 2026 BMR-Com. All rights reserved.
+
+The code, models, data compilations, charts and written analysis in this repository are the property of BMR-Com. No licence is granted. You may view the published pages for your own information; you may not copy, modify, redistribute, republish or use any part of this work commercially without written permission from BMR-Com.
+
+Source data remains the property of its original publishers (USDA, CFTC, ICE, EIA, NOAA and others) and is subject to their terms. Nothing here is investment advice.
