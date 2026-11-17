@@ -309,8 +309,7 @@
   "what": "Texas built as planted acres x (1 - abandonment) x USDA's in-season yield; abandonment from drought, ratings and FSA failed acres so far; ranges from past seasons' joint abandonment and yield misses; other states as in the headline."
  },
  "notes": [
-  "Texas FSA failed acres (November release) are 14.7% of planted. Failed acres are reported to FSA with a lag and the December\u2013January releases settle them, so the abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons.",
-  "Seasons with Texas poor+very poor at 45% or more in late October (7 since 2001) ended with final Texas abandonment of 42\u201375% (average 56%)."
+  "Texas FSA failed acres (November release) are 14.7% of planted. Failed acres are reported to FSA with a lag and the December\u2013January releases settle them, so the abandonment projection uses this season's drought and ratings readings against what similar readings meant for final abandonment in past seasons."
  ],
  "variables": [
   "NASS crop progress by state: squaring, setting bolls, bolls opening, harvested",
