@@ -276,7 +276,7 @@ out = {
              "tx_abandonment": round(1 - tx_hv / tx_pl, 3) if np.isfinite(tx_hv) and np.isfinite(tx_pl) else None},
     "texas_regions": regions,
     "conditional": None,
-    "notes": ([fsa_note] if fsa_note else []) + ([f"Seasons with Texas poor+very poor at {analog['pvp_from']:.0f}% or more in late October ({analog['n']} since 2001) ended with final Texas abandonment of {analog['min'] * 100:.0f}–{analog['max'] * 100:.0f}% (average {analog['mean'] * 100:.0f}%)."] if analog else []),
+    "notes": ([fsa_note] if fsa_note else []),   # analog read kept out of the public file (outputs only)
     "variables": ["NASS crop progress by state: squaring, setting bolls, bolls opening, harvested",
                   "NASS crop condition ratings by state",
                   "US Drought Monitor, share of cotton area in D2–D4, weighted by crop stage, through October",

@@ -1,7 +1,7 @@
 name: Crop projection
 on:
   workflow_run:
-    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage"]
+    workflows: ["Update Cotton Data", "Ginnings, classing and FSA acreage", "Cotton-area drought (Ag in Drought) and AWP"]
     types: [completed]
   schedule:
     - cron: '40 15 * * 2'   # Tuesday, after Monday's crop progress and its Tuesday catch-up
