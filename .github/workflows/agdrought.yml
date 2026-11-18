@@ -1,7 +1,9 @@
 name: Cotton-area drought (Ag in Drought) and AWP
 on:
   schedule:
+    - cron: '47 13 * * 4'   # USDM posts Thursday 8:30 ET: 8:47/9:47 ET
     - cron: '20 14 * * 4'   # USDM maps post Thursday mornings
+    - cron: '7 17 * * 4'
     - cron: '20 14 * * 5'   # Friday catch-up
     - cron: '45 21 * * 4'   # Thursday evening: FSA posts the AWP after 4 pm ET
   workflow_dispatch:
@@ -15,10 +17,12 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: pip install requests pandas pdfplumber
-      - run: python scripts/fetch_agdrought.py || echo 'drought fetch failed'
-      - run: python scripts/fetch_awp.py || echo 'AWP fetch failed'
+      - run: python scripts/fetch_agdrought.py || { echo "::error::drought fetch failed"; echo x >> "$RUNNER_TEMP/failed"; }
+      - run: python scripts/fetch_awp.py || { echo "::error::AWP fetch failed"; echo x >> "$RUNNER_TEMP/failed"; }
       - run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/drought data/awp
-          git commit -m "Update cotton-area drought / AWP $(date -u +%Y-%m-%d)" || exit 0
-          for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done
+          if git commit -m "Update cotton-area drought / AWP $(date -u +%Y-%m-%d)"; then
+            for i in 1 2 3; do git pull --rebase -q origin main && git push && break; sleep 10; done
+          fi
+          if [ -s "$RUNNER_TEMP/failed" ]; then echo "::error::a fetch failed above (data that did update is committed)"; exit 1; fi
